@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "Brad-Pitt-in-12-Monkeys.jpg",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}
