@@ -14,9 +14,9 @@ class CommunitiesTableViewController: UITableViewController {
     @IBOutlet var addGroup: UIBarButtonItem!
     let operationQueue: OperationQueue = {
         let q = OperationQueue()
-        q.maxConcurrentOperationCount = 4
+//        q.maxConcurrentOperationCount = 4
 //        q.name = "asych.groups.load.parsing.savingToRealm.operation"
-        q.qualityOfService = .userInitiated
+//        q.qualityOfService = .userInitiated
         return q
     }()
     var groupsfromRealm: Results<GroupsRealm>? {
@@ -48,17 +48,22 @@ class CommunitiesTableViewController: UITableViewController {
     }
     
     private func asyncOperationGroups() {
-        let networkOperation = NetworkGroupsAsyncOperation(token: token)
-//        operationQueue.addOperation(networkOperation)
+        
+     
+        let networkOperation = NetworkGroupsAsyncOperation(parameters: <#T##URLComponents#>,
+                                                           session: <#T##URLSession#>)
+        operationQueue.addOperation(networkOperation)
 
         let parsingOperation = ParsingData()
         parsingOperation.addDependency(networkOperation)
-
+        operationQueue.addOperation(parsingOperation)
+//        OperationQueue.main.addOperation(parsingOperation)
         
         let saveToRealm = SavingGroupsToRealmAsyncOperation()
         saveToRealm.addDependency(parsingOperation)
-
-        operationQueue.addOperations([networkOperation, parsingOperation, saveToRealm], waitUntilFinished: false)
+        operationQueue.addOperation(saveToRealm)
+//        OperationQueue.main.addOperation(saveToRealm)
+//        operationQueue.addOperations([networkOperation, parsingOperation, saveToRealm], waitUntilFinished: false)
     }
     
     private func loadFromDB() {
