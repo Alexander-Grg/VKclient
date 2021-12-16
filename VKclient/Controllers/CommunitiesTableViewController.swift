@@ -12,30 +12,59 @@ import RealmSwift
 class CommunitiesTableViewController: UITableViewController {
    
     @IBOutlet var addGroup: UIBarButtonItem!
+    let operationQueue: OperationQueue = {
+        let q = OperationQueue()
+        q.maxConcurrentOperationCount = 4
+//        q.name = "asych.groups.load.parsing.savingToRealm.operation"
+        q.qualityOfService = .userInitiated
+        return q
+    }()
     var groupsfromRealm: Results<GroupsRealm>? {
         didSet {
             self.tableView.reloadData()
         }
     }
     var groupsNotification: NotificationToken?
-    private let network = NetworkService()
+//    private let networkGroupsAsyncOperation = NetworkGroupsAsyncOperation()
     private let token = Session.instance.token
     private var groupsHolder = [GroupsObjects]() {
         didSet {
             self.tableView.reloadData()
         }
     }
+    
+//    override func viewWillAppear(_ animated: Bool) {
+//        super.viewWillAppear(animated)
+//        asyncOperationGroups()
+//    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.tableView.reloadData()
         //                loadGroupsFromNetwork()
+        asyncOperationGroups()
         loadFromDB()
     }
     
+    private func asyncOperationGroups() {
+        let networkOperation = NetworkGroupsAsyncOperation(token: token)
+//        operationQueue.addOperation(networkOperation)
+
+        let parsingOperation = ParsingData()
+        parsingOperation.addDependency(networkOperation)
+
+        
+        let saveToRealm = SavingGroupsToRealmAsyncOperation()
+        saveToRealm.addDependency(parsingOperation)
+
+        operationQueue.addOperations([networkOperation, parsingOperation, saveToRealm], waitUntilFinished: false)
+    }
+    
     private func loadFromDB() {
-        network.loadGroups(token: token)
+        
+//        network.loadGroups(token: token)
+        
         
         groupsfromRealm = try? RealmService.load(typeOf: GroupsRealm.self)
         
