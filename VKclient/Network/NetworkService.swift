@@ -21,7 +21,42 @@ final class NetworkService {
     private static let configuration = URLSessionConfiguration.default
     private static let session = URLSession(configuration: configuration)
     
-    //    MARK: Load groups method
+//    MARK: Load groups with AF method
+//    func loadGroups(token: String)
+//       //                    completionHandler: @escaping ((Swift.Result<[GroupsObjects], Error>) -> Void))
+//       {
+//           let path = "https://api.vk.com/method/groups.get"
+//           let params: Parameters = [
+//               "access_token": token,
+//               "extended": "1",
+//               "fields": "photo_100",
+//               "v": "5.92"
+//           ]
+//           
+//           AF.request(NetworkService.baseUrl + path, method: .get, parameters: params).responseData { response in
+//               switch response.result {
+//               case let .success(data):
+//                   do {
+//                       let groupsResponse = try JSONDecoder().decode(GroupsResponse.self, from: data)
+//                       let groups = groupsResponse.response.items
+//                       //                        completionHandler(.success(groups))
+//                       let groupsRealm = groups.map { GroupsRealm(groups: $0)}
+//                       DispatchQueue.main.async {
+//                           try? RealmService.save(items: groupsRealm)
+//                       }
+//                   } catch {
+//                       //                        completionHandler(.failure(error))
+//                       print(error)
+//                   }
+//               case let .failure(error):
+//                   print(error)
+//                   //                    completionHandler(.failure(error))
+//               }
+//           }
+//       }
+           
+    
+    //    MARK: Load groups method URL SESSION
 //    func loadGroups(
 //        token: String)
 //    {

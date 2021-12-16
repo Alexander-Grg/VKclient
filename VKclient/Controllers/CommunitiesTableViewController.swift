@@ -12,11 +12,11 @@ import RealmSwift
 class CommunitiesTableViewController: UITableViewController {
    
     @IBOutlet var addGroup: UIBarButtonItem!
-    let operationQueue: OperationQueue = {
+    let myQueue: OperationQueue = {
         let q = OperationQueue()
-//        q.maxConcurrentOperationCount = 4
-//        q.name = "asych.groups.load.parsing.savingToRealm.operation"
-//        q.qualityOfService = .userInitiated
+        q.maxConcurrentOperationCount = 4
+        q.name = "asych.groups.load.parsing.savingToRealm.operation"
+        q.qualityOfService = .userInitiated
         return q
     }()
     var groupsfromRealm: Results<GroupsRealm>? {
@@ -25,51 +25,42 @@ class CommunitiesTableViewController: UITableViewController {
         }
     }
     var groupsNotification: NotificationToken?
-//    private let networkGroupsAsyncOperation = NetworkGroupsAsyncOperation()
     private let token = Session.instance.token
     private var groupsHolder = [GroupsObjects]() {
         didSet {
             self.tableView.reloadData()
         }
     }
-    
-//    override func viewWillAppear(_ animated: Bool) {
-//        super.viewWillAppear(animated)
-//        asyncOperationGroups()
-//    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.tableView.reloadData()
-        //                loadGroupsFromNetwork()
         asyncOperationGroups()
         loadFromDB()
     }
     
     private func asyncOperationGroups() {
-        
-     
-        let networkOperation = NetworkGroupsAsyncOperation(parameters: <#T##URLComponents#>,
-                                                           session: <#T##URLSession#>)
-        operationQueue.addOperation(networkOperation)
+        let networkOperation = NetworkGroupsAsyncOperation(url: URL(string: "https://api.vk.com/method/groups.get")!,
+                                                           method: .get,
+                                                           parameters: [
+                                                            "access_token": token,
+                                                            "extended": "1",
+                                                            "fields": "photo_100",
+                                                            "v": "5.92"
+                                                        ])
+        myQueue.addOperation(networkOperation)
 
         let parsingOperation = ParsingData()
         parsingOperation.addDependency(networkOperation)
-        operationQueue.addOperation(parsingOperation)
-//        OperationQueue.main.addOperation(parsingOperation)
+        myQueue.addOperation(parsingOperation)
         
         let saveToRealm = SavingGroupsToRealmAsyncOperation()
         saveToRealm.addDependency(parsingOperation)
-        operationQueue.addOperation(saveToRealm)
-//        OperationQueue.main.addOperation(saveToRealm)
-//        operationQueue.addOperations([networkOperation, parsingOperation, saveToRealm], waitUntilFinished: false)
+        myQueue.addOperation(saveToRealm)
     }
     
     private func loadFromDB() {
-        
-//        network.loadGroups(token: token)
-        
         
         groupsfromRealm = try? RealmService.load(typeOf: GroupsRealm.self)
         
@@ -77,7 +68,6 @@ class CommunitiesTableViewController: UITableViewController {
             switch realmChange {
             case .initial(let objects):
                 if objects.count > 0 {
-                    //                self.groupsfromRealm = objects
                     self.tableView.reloadData()
                 }
                 print(objects)
@@ -104,14 +94,6 @@ class CommunitiesTableViewController: UITableViewController {
         super.viewWillDisappear(animated)
         groupsNotification?.invalidate()
     }
-    //        private func loadGroupsFromNetwork() {
-    //            network.loadGroups(token: token) { [weak self] groupsHolder in
-    //                guard let self = self else { return }
-    //                self.groupsHolder = groupsHolder
-    //            }
-    //            tableView.reloadData()
-    //        }
-    
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         //        groupsHolder.count
