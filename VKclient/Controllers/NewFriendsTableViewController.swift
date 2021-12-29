@@ -55,6 +55,7 @@ class NewFriendsTableViewController: UIViewController, UISearchBarDelegate {
     
     private func loadFromDB() {
         networkService.loadFriends(token: token)
+       
         
         friendsFromRealm = try? RealmService.load(typeOf: UserRealm.self)
         

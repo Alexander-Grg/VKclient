@@ -10,7 +10,11 @@ import UIKit
 import RealmSwift
 import Alamofire
 import SwiftyJSON
+import PromiseKit
 
+enum PromiseErrors: Error {
+    case urlError, dataTaskError, decoderError
+}
 final class NetworkService {
     
     private let url: String = "https://api.vk.com/method"
@@ -18,8 +22,30 @@ final class NetworkService {
     let dispatchGroup = DispatchGroup()
     private static let baseUrl = "https://api.vk.com"
     // MARK: Network configuration/session
-    private static let configuration = URLSessionConfiguration.default
-    private static let session = URLSession(configuration: configuration)
+    private let session = URLSession.shared
+    var urlConstructor: URLComponents = {
+        var constructor = URLComponents()
+        constructor.scheme = "https"
+        constructor.host = "api.vk.com"
+        return constructor
+    }()
+
+//    MARK: DataTaskRequest
+    private func dataTaskRequest(_ request: URLRequest) -> Promise<Data> {
+        return Promise { seal in
+            session.dataTask(with: request) { responseData, urlResponse, error in
+                if let response = urlResponse as? HTTPURLResponse {
+                    print(response.statusCode)
+                }
+                guard
+                    error == nil,
+                    let responseData = responseData else
+                    { return seal.reject(PromiseErrors.dataTaskError) }
+                seal.fulfill(responseData)
+            } .resume()
+        }
+    }
+    
     
     //    MARK: Load groups method
     func loadGroups(
@@ -71,54 +97,37 @@ final class NetworkService {
         .resume()
     }
     
+    
+    
     func loadFriends(
-        token: String)
-    //        completion: @escaping ([UserObject]) -> Void)
+        token: String) -> Promise<[UserRealm]>
     {
-        let configuration = URLSessionConfiguration.default
-        let session =  URLSession(configuration: configuration)
-        
-        var urlConstructor = URLComponents()
-        urlConstructor.scheme = "https"
-        urlConstructor.host = "api.vk.com"
-        urlConstructor.path = "/method/friends.get"
-        urlConstructor.queryItems = [
-            URLQueryItem(name: "access_token", value: token),
-            URLQueryItem(name: "order", value: "random"),
-            URLQueryItem(name: "fields", value: "nickname, photo_100"),
-            URLQueryItem(name: "v", value: "5.92"),
-        ]
-        //        completion([])
-        guard let url = urlConstructor.url else { return }
-        var request = URLRequest(url: url)
-        request.timeoutInterval = 50.0
-        request.setValue(
-            "",
-            forHTTPHeaderField: "Token")
-        
-        session.dataTask(with: request) { responseData, urlResponse, error in
-            if let response = urlResponse as? HTTPURLResponse {
-                print(response.statusCode)
-            }
-            guard
-                error == nil,
-                let responseData = responseData
-            else { return }
-            do {
-                let user = try JSONDecoder().decode(UserResponse.self,
-                                                    from: responseData).response.items
-                
-                let friendsRealm = user.map { UserRealm(user: $0) }
-                
-                DispatchQueue.main.async {
-                    try? RealmService.save(items: friendsRealm)
+        return Promise { seal in
+            urlConstructor.path = "/method/friends.get"
+            urlConstructor.queryItems = [
+                URLQueryItem(name: "access_token", value: token),
+                URLQueryItem(name: "order", value: "random"),
+                URLQueryItem(name: "fields", value: "nickname, photo_100"),
+                URLQueryItem(name: "v", value: "5.92"),
+            ]
+            
+            guard let url = urlConstructor.url else { return }
+            var request = URLRequest(url: url)
+            request.timeoutInterval = 50.0
+            request.setValue(
+                "",
+                forHTTPHeaderField: "Token")
+            dataTaskRequest(request)
+                .map(on: .global()) { data in
+                 let user = try JSONDecoder().decode(UserResponse.self,from: data).response.items
+                 let groupRealm = user.map { UserRealm(user: $0) }
+                    try? RealmService.save(items: groupRealm)
                 }
-            } catch {
-                print(error)
-            }
-        }
-        .resume()
+                .catch { _ in seal.reject(PromiseErrors.decoderError)}
     }
+        }
+
+    
     
     // MARK: Load photos method
     func loadPhotos(token: String, ownerID: String)
