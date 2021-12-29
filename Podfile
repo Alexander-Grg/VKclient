@@ -10,5 +10,6 @@ pod 'SwiftyJSON'
 pod 'SDWebImage'
 pod 'Alamofire'
 pod 'RealmSwift'
+pod 'PromiseKit'
 
 end
