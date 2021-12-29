@@ -5,10 +5,10 @@ target 'VKclient' do
   # Comment the next line if you don't want to use dynamic frameworks
   use_frameworks!
 
-  # Pods for Vkclient
+  # Pods for VKclient
 pod 'SwiftyJSON'
 pod 'SDWebImage'
 pod 'Alamofire'
 pod 'RealmSwift'
-pod 'PromiseKit'
+
 end
