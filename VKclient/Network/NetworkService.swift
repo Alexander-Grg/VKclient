@@ -21,55 +21,90 @@ final class NetworkService {
     private static let configuration = URLSessionConfiguration.default
     private static let session = URLSession(configuration: configuration)
     
-    //    MARK: Load groups method
-    func loadGroups(
-        token: String)
-    {
-        let configuration = URLSessionConfiguration.default
-        let session =  URLSession(configuration: configuration)
-        
-        var urlConstructor = URLComponents()
-        urlConstructor.scheme = "https"
-        urlConstructor.host = "api.vk.com"
-        urlConstructor.path = "/method/groups.get"
-        urlConstructor.queryItems = [
-            URLQueryItem(name: "access_token", value: token),
-            URLQueryItem(name: "extended", value: "1"),
-            URLQueryItem(name: "fields", value: "photo_100"),
-            URLQueryItem(name: "v", value: "5.92"),
-        ]
-        
-        guard let url = urlConstructor.url else { return }
-        var request = URLRequest(url: url)
-        request.timeoutInterval = 50.0
-        request.setValue(
-            "",
-            forHTTPHeaderField: "Token")
-        
-        session.dataTask(with: request) { responseData, urlResponse, error in
-            if let response = urlResponse as? HTTPURLResponse {
-                print(response.statusCode)
-            }
-            guard
-                error == nil,
-                let responseData = responseData
-            else { return }
-            do {
-                let user = try JSONDecoder().decode(GroupsResponse.self,
-                                                    from: responseData).response.items
-                
-                let groupRealm = user.map { GroupsRealm(groups: $0) }
-                
-                DispatchQueue.main.async {
-                    try? RealmService.save(items: groupRealm)
-                }
-                
-            } catch {
-                print(error)
-            }
-        }
-        .resume()
-    }
+//    MARK: Load groups with AF method
+//    func loadGroups(token: String)
+//       //                    completionHandler: @escaping ((Swift.Result<[GroupsObjects], Error>) -> Void))
+//       {
+//           let path = "https://api.vk.com/method/groups.get"
+//           let params: Parameters = [
+//               "access_token": token,
+//               "extended": "1",
+//               "fields": "photo_100",
+//               "v": "5.92"
+//           ]
+//           
+//           AF.request(NetworkService.baseUrl + path, method: .get, parameters: params).responseData { response in
+//               switch response.result {
+//               case let .success(data):
+//                   do {
+//                       let groupsResponse = try JSONDecoder().decode(GroupsResponse.self, from: data)
+//                       let groups = groupsResponse.response.items
+//                       //                        completionHandler(.success(groups))
+//                       let groupsRealm = groups.map { GroupsRealm(groups: $0)}
+//                       DispatchQueue.main.async {
+//                           try? RealmService.save(items: groupsRealm)
+//                       }
+//                   } catch {
+//                       //                        completionHandler(.failure(error))
+//                       print(error)
+//                   }
+//               case let .failure(error):
+//                   print(error)
+//                   //                    completionHandler(.failure(error))
+//               }
+//           }
+//       }
+           
+    
+    //    MARK: Load groups method URL SESSION
+//    func loadGroups(
+//        token: String)
+//    {
+//        let configuration = URLSessionConfiguration.default
+//        let session =  URLSession(configuration: configuration)
+//
+//        var urlConstructor = URLComponents()
+//        urlConstructor.scheme = "https"
+//        urlConstructor.host = "api.vk.com"
+//        urlConstructor.path = "/method/groups.get"
+//        urlConstructor.queryItems = [
+//            URLQueryItem(name: "access_token", value: token),
+//            URLQueryItem(name: "extended", value: "1"),
+//            URLQueryItem(name: "fields", value: "photo_100"),
+//            URLQueryItem(name: "v", value: "5.92"),
+//        ]
+//
+//        guard let url = urlConstructor.url else { return }
+//        var request = URLRequest(url: url)
+//        request.timeoutInterval = 50.0
+//        request.setValue(
+//            "",
+//            forHTTPHeaderField: "Token")
+//
+//        session.dataTask(with: request) { responseData, urlResponse, error in
+//            if let response = urlResponse as? HTTPURLResponse {
+//                print(response.statusCode)
+//            }
+//            guard
+//                error == nil,
+//                let responseData = responseData
+//            else { return }
+//            do {
+//                let user = try JSONDecoder().decode(GroupsResponse.self,
+//                                                    from: responseData).response.items
+//
+//                let groupRealm = user.map { GroupsRealm(groups: $0) }
+//
+//                DispatchQueue.main.async {
+//                    try? RealmService.save(items: groupRealm)
+//                }
+//
+//            } catch {
+//                print(error)
+//            }
+//        }
+//        .resume()
+//    }
     
     func loadFriends(
         token: String)

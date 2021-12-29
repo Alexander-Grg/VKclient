@@ -12,7 +12,6 @@ class AsyncOperationClass: Operation {
     
     enum State: String {
         case ready, executing, finished
-        
         fileprivate var keyPath: String {
             return "is" + rawValue.capitalized
         }
@@ -29,18 +28,20 @@ class AsyncOperationClass: Operation {
         }
     }
     
-    override var isExecuting: Bool {
-        return state == .executing
-    }
-    
-    override var isFinished: Bool {
-        return state == .finished
+    override var isAsynchronous: Bool {
+        return true
     }
     
     override var isReady: Bool {
-        return state == .finished
+        return super.isReady && state == .ready
     }
     
+    override var isExecuting: Bool {
+        return state == .executing
+    }
+    override var isFinished: Bool {
+        return state == .finished
+    }
     override func start() {
         if isCancelled {
             state = .finished
@@ -49,13 +50,9 @@ class AsyncOperationClass: Operation {
             state = .executing
         }
     }
-    
     override func cancel() {
         super.cancel()
         state = .finished
     }
 }
 
-
-// to create a pull request
-// to create a pull request in the new repo
