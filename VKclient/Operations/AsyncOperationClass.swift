@@ -55,3 +55,4 @@ class AsyncOperationClass: Operation {
         state = .finished
     }
 }
+
