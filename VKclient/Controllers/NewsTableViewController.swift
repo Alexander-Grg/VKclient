@@ -108,14 +108,14 @@ extension NewsTableViewController: UITableViewDataSource {
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         switch newsPost?[indexPath.section].rowsCounter[indexPath.row] {
-        case .header:
-            return 75
-        case .footer:
-            return 40
-        default:
-            return UITableView.automaticDimension
-        }
-    }
+         case .header:
+             return 75
+         case .footer:
+             return 40
+         default:
+             return UITableView.automaticDimension
+         }
+     }
 }
 
 extension NewsTableViewController: UITableViewDelegate {

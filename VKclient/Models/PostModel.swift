@@ -31,7 +31,6 @@ class PostNews {
     var url: URL? { urlString.flatMap { URL(string: $0) }}
     var urlString: String?
     
-    
     var urlProtocol: NewsSource?
     
     var rowsCounter: [NewsTypes] {
@@ -63,6 +62,7 @@ class PostNews {
         self.reposts = json["reposts"]["count"].intValue
         self.views = json["views"]["count"].intValue
         self.type = json["type"].stringValue
+
         
         self.urlString = json["attachments"].arrayValue.first(where: { $0["type"] == "photo" })?["photo"]["sizes"].arrayValue.last?["url"].stringValue
     }
