@@ -30,6 +30,10 @@ class PostNews {
     var views: Int
     var url: URL? { urlString.flatMap { URL(string: $0) }}
     var urlString: String?
+    var nextFrom: String
+    var width: Float
+    var height: Float
+    var aspectRatio: Float { width/height }
     
     var urlProtocol: NewsSource?
     
@@ -62,9 +66,12 @@ class PostNews {
         self.reposts = json["reposts"]["count"].intValue
         self.views = json["views"]["count"].intValue
         self.type = json["type"].stringValue
+        self.nextFrom = json["next_from"].stringValue
 
         
         self.urlString = json["attachments"].arrayValue.first(where: { $0["type"] == "photo" })?["photo"]["sizes"].arrayValue.last?["url"].stringValue
+        self.height = json["attachments"].arrayValue.first(where: { $0["type"] == "photo" })?["photo"]["sizes"].arrayValue.last?["height"].floatValue ?? 0
+        self.width = json["attachments"].arrayValue.first(where: { $0["type"] == "photo" })?["photo"]["sizes"].arrayValue.last?["width"].floatValue ?? 0
     }
 }
 

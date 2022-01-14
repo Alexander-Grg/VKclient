@@ -265,15 +265,20 @@ final class NetworkService {
         .resume()
     }
     
-    func loadNewsFeed(_ completion: @escaping ([PostNews]) -> Void) {
+    func loadNewsFeed(startFrom: String = "", startTime: Double? = nil, _ completion: @escaping ([PostNews], String) -> Void) {
         let path = "/method/newsfeed.get"
         
-        let params: Parameters = [
+        var params: Parameters = [
             "access_token": Session.instance.token,
             "v": "5.92",
             "filters": "post, photo",
-            "count": "50"
+            "count": "10",
+            "start_from": startFrom
         ]
+        
+        if let startTime = startTime {
+            params["start_time"] = startTime
+        }
         
         AF.request(NetworkService.baseUrl + path,
                    method: .get,
@@ -285,7 +290,8 @@ final class NetworkService {
                     var posts: [PostNews] = []
                     var profiles: [UserNews] = []
                     var groups: [GroupNews] = []
-                    
+                    let nextFrom = JSON(data)["response"]["nextFrom"].stringValue
+
                     DispatchQueue.global().async(group: self.dispatchGroup, qos: .userInitiated) {
                         let postJSONs = JSON(data)["response"]["items"].arrayValue
                         posts = postJSONs.compactMap(PostNews.init)
@@ -318,7 +324,7 @@ final class NetworkService {
                             }
                         }
                         DispatchQueue.main.async {
-                            completion(newsWithSources)
+                            completion(newsWithSources, nextFrom)
                         }
                     }
                     

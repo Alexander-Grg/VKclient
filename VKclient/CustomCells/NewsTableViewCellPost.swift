@@ -1,52 +1,42 @@
 //
-//  NewsCollectionViewCell.swift
-//  MyFirstApp
+//  NewsTableViewCellPost.swift
+//  VKclient
 //
-//  Created by Alexander Grigoryev on 16.09.2021.
+//  Created by Alexander Grigoryev on 30.12.2021.
 //
 
 import UIKit
 
 class NewsTableViewCellPost: UITableViewCell {
     
+    @IBOutlet var textForPost: UILabel! {
+        didSet {
+            textForPost.translatesAutoresizingMaskIntoConstraints = false
+        }
+    }
+    @IBOutlet var showTextButton: UIButton! {
+        didSet {
+            showTextButton.translatesAutoresizingMaskIntoConstraints = false
+        }
+    }
     static let reusedIdentifier = "NewsPostCell"
-    
-    let label: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.textAlignment = .center
-        label.textColor = .black
-        label.lineBreakMode = .byClipping
-        label.contentMode = .scaleToFill
-        label.numberOfLines = 0
-        return label
-    }()
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        setUpViews()
-        
+        // Initialization code
     }
-    
-    private func setUpViews() {
-        
-        contentView.addSubview(label)
-        
-        NSLayoutConstraint.activate([
-            label.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 0),
-            label.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: 0),
-            label.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: 0),
-            label.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 0)
-        ])
+
+    override func setSelected(_ selected: Bool, animated: Bool) {
+        super.setSelected(selected, animated: animated)
+
+        // Configure the view for the selected state
     }
+//    override func prepareForReuse() {
+//        textForPost.text = nil
+//    }
     
     func configure(_ text: PostNews) {
-        label.text = text.text
+        textForPost.text = text.text
     }
     
-    override func prepareForReuse() {
-        label.text = nil
-    }
 }
-
-
