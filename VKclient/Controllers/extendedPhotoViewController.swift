@@ -54,15 +54,16 @@ class extendedPhotoViewController: UIViewController {
     
     func imagesSettings(){
         
+        
         var leftPhotoIndex = indexOfSelectedPhoto - 1
         let mainPhotoIndex = indexOfSelectedPhoto
         var rightPhotoIndex = indexOfSelectedPhoto + 1
         
-        if leftPhotoIndex < 0 {
+        if leftPhotoIndex < 0, !arrayOfPhotosFromDB.isEmpty {
             leftPhotoIndex = arrayOfPhotosFromDB.count - 1
             
         }
-        if rightPhotoIndex > arrayOfPhotosFromDB.count - 1 {
+        if rightPhotoIndex > arrayOfPhotosFromDB.count - 1, !arrayOfPhotosFromDB.isEmpty {
             rightPhotoIndex = 0
         }
         view.subviews.forEach({ $0.removeFromSuperview() })

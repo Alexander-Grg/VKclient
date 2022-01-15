@@ -41,11 +41,12 @@
                                         </state>
                                         <connections>
                                             <action selector="EnterActionButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="7c2-uX-My0"/>
-                                            <segue destination="ERg-R5-WR1" kind="showDetail" identifier="loginSegue" id="pCW-Yc-1om"/>
+                                            <segue destination="ERg-R5-WR1" kind="presentation" identifier="loginSegue" modalPresentationStyle="fullScreen" id="pCW-Yc-1om"/>
                                         </connections>
                                     </button>
                                     <textField opaque="NO" contentMode="scaleToFill" verticalCompressionResistancePriority="752" contentHorizontalAlignment="center" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Password" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ZcY-du-Rje" userLabel="PasswordEntryField">
                                         <rect key="frame" x="135" y="183" width="144" height="34"/>
+                                        <color key="textColor" white="0.46000000000000002" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
                                     </textField>
@@ -372,12 +373,12 @@
                     </view>
                     <connections>
                         <outlet property="webView" destination="1h8-vV-leE" id="IUT-mF-cMa"/>
-                        <segue destination="ERg-R5-WR1" kind="presentation" identifier="toTabBar" modalPresentationStyle="fullScreen" id="BQY-X2-RL8"/>
+                        <segue destination="BYZ-38-t0r" kind="presentation" identifier="toSecondLoginScreen" modalPresentationStyle="fullScreen" id="tSG-H5-W3R"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="VsL-VN-B6p" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="938" y="761"/>
+            <point key="canvasLocation" x="54" y="73"/>
         </scene>
         <!--News-->
         <scene sceneID="ytT-6x-dxH">
@@ -460,6 +461,7 @@
                                     <segue destination="aC5-DL-P5u" kind="unwind" unwindAction="unwindToMainMenuWithSender:" id="NHA-dM-dm7"/>
                                 </connections>
                             </button>
+                            <color key="tintColor" red="0.68280968637454986" green="0.92554961742997977" blue="0.38436126708984375" alpha="1" colorSpace="calibratedRGB"/>
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" style="done" systemItem="add" id="mRm-XM-Iq9">
                             <connections>
@@ -576,9 +578,6 @@
             <point key="canvasLocation" x="3642.0289855072465" y="-287.27678571428572"/>
         </scene>
     </scenes>
-    <inferredMetricsTieBreakers>
-        <segue reference="BQY-X2-RL8"/>
-    </inferredMetricsTieBreakers>
     <resources>
         <image name="circle.fill" catalog="system" width="128" height="121"/>
         <image name="circle.grid.3x3" catalog="system" width="128" height="110"/>

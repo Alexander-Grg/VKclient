@@ -49,12 +49,17 @@ class LoginViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        animationLoading1()
+//        animationLoading1()
         
         let hideKeyboardGesture = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
         
         scrollView?.addGestureRecognizer(hideKeyboardGesture)
-        
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        animationLoading1()
+    }
         func animationLoading1() {
             
             self.circle1.alpha = 0
@@ -78,23 +83,24 @@ class LoginViewController: UIViewController {
                                     completion: nil)
         }
         
-        //        func animationLoading1() {
-        //            UIView.animateKeyframes(withDuration: 3,
-        //                                    delay: 0,
-        //                                    options: [.repeat, .autoreverse],
-        //                                    animations: {
-        //                UIView.addKeyframe(withRelativeStartTime: 0,
-        //                                   relativeDuration: 0.33,
-        //                                   animations: { self.circle1.alpha = 1 })
-        //                UIView.addKeyframe(withRelativeStartTime: 0.33,
-        //                                   relativeDuration: 0.33,
-        //                                   animations: { self.circle2.alpha = 1 })
-        //                UIView.addKeyframe(withRelativeStartTime: 0.66,
-        //                                   relativeDuration: 0.33,
-        //                                   animations: { self.circle3.alpha = 1 })
-        //            })
-        //        }
-    }
+//                func animationLoading1() {
+//                    UIView.animateKeyframes(withDuration: 3,
+//                                            delay: 0,
+//                                            options: [.repeat, .autoreverse],
+//                                            animations: {
+//                        UIView.addKeyframe(withRelativeStartTime: 0,
+//                                           relativeDuration: 0.33,
+//                                           animations: { self.circle1.alpha = 1 })
+//                        UIView.addKeyframe(withRelativeStartTime: 0.33,
+//                                           relativeDuration: 0.33,
+//                                           animations: { self.circle2.alpha = 1 })
+//                        UIView.addKeyframe(withRelativeStartTime: 0.66,
+//                                           relativeDuration: 0.33,
+//                                           animations: { self.circle3.alpha = 1 })
+//                    })
+//                }
+
+    
     
     override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
         let checkResult = checkUserData()
@@ -105,14 +111,14 @@ class LoginViewController: UIViewController {
         return checkResult
     }
     func checkUserData() -> Bool {
-        //        guard let login = loginEntryField.text,
-        //              let password = passwordEntryField.text else { return false }
-        //
-        //        if login == "admin" && password == "1234" {
+                guard let login = loginEntryField.text,
+                      let password = passwordEntryField.text else { return false }
+        
+                if login == "a" && password == "1" {
         return true
-        //        } else {
-        //            return false
-        //        }
+                } else {
+                    return false
+                }
     }
     func showLoginError() {
         let alert = UIAlertController(title: "Ошибка", message: "Введены некорректные данные", preferredStyle: .alert)

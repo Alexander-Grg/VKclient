@@ -63,7 +63,7 @@ extension VKLoginController: WKNavigationDelegate {
               }
         
         Session.instance.token = token
-        performSegue(withIdentifier: "toTabBar", sender: nil)
+        performSegue(withIdentifier: "toSecondLoginScreen", sender: nil)
         decisionHandler(.cancel)
     }
 }
