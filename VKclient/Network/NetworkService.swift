@@ -290,7 +290,7 @@ final class NetworkService {
                     var posts: [PostNews] = []
                     var profiles: [UserNews] = []
                     var groups: [GroupNews] = []
-                    let nextFrom = JSON(data)["response"]["nextFrom"].stringValue
+                    let nextFrom = JSON(data)["response"]["next_from"].stringValue
 
                     DispatchQueue.global().async(group: self.dispatchGroup, qos: .userInitiated) {
                         let postJSONs = JSON(data)["response"]["items"].arrayValue

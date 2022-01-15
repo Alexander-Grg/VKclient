@@ -88,9 +88,10 @@ class PhotoViewController: UIViewController, UICollectionViewDelegateFlowLayout 
         else { return }
         
         guard let value = photosFromDB?[indexPath.row].sizes else { return }
+
         //        let value1 = photosFromDB?[indexPath.item].sizes
         //        let value2 = value1?.value(forKey: "x") as! String
-        dataDestination.sortedPhotosDB = value.values
+        dataDestination.arrayOfPhotosFromDB = value.values
         dataDestination.friendID = friendID
         dataDestination.indexOfSelectedPhoto = Int(indexPath.item)
     }

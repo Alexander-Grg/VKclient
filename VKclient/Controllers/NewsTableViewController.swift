@@ -47,11 +47,7 @@ class NewsTableViewController: UIViewController {
     @IBOutlet var tableView: UITableView!
     let token = Session.instance.token
     let networkService = NetworkService()
-    var newsPost: [PostNews]? {
-        didSet {
-            self.tableView.reloadData()
-        }
-    }
+    var newsPost: [PostNews]?
 //    var dictOfUsers: [String: [UserRealm]] = [:]
     var IDs = [Int]()
     var groupsForHeader: [GroupNews] = []
@@ -73,6 +69,7 @@ class NewsTableViewController: UIViewController {
         networkService.loadNewsFeed { [weak self] newsPost, nextFrom  in
             guard let self = self else { return }
             self.newsPost = newsPost
+            self.tableView.reloadData()
         }
     }
     
