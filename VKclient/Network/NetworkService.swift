@@ -15,14 +15,15 @@ import PromiseKit
 enum PromiseErrors: Error {
     case urlError, dataTaskError, decoderError
 }
+
 final class NetworkService {
     
     private let url: String = "https://api.vk.com/method"
     private let apiVersion: String = "5.92"
     let dispatchGroup = DispatchGroup()
-    private static let baseUrl = "https://api.vk.com"
+    static let baseUrl = "https://api.vk.com"
     // MARK: Network configuration/session
-    private let session = URLSession.shared
+    let session = URLSession.shared
     var urlConstructor: URLComponents = {
         var constructor = URLComponents()
         constructor.scheme = "https"
@@ -31,7 +32,7 @@ final class NetworkService {
     }()
 
 //    MARK: DataTaskRequest
-    private func dataTaskRequest(_ request: URLRequest) -> Promise<Data> {
+     func dataTaskRequest(_ request: URLRequest) -> Promise<Data> {
         return Promise { seal in
             session.dataTask(with: request) { responseData, urlResponse, error in
                 if let response = urlResponse as? HTTPURLResponse {
@@ -58,7 +59,7 @@ final class NetworkService {
 //               "fields": "photo_100",
 //               "v": "5.92"
 //           ]
-//           
+//
 //           AF.request(NetworkService.baseUrl + path, method: .get, parameters: params).responseData { response in
 //               switch response.result {
 //               case let .success(data):
@@ -80,7 +81,7 @@ final class NetworkService {
 //               }
 //           }
 //       }
-           
+//
     
     //    MARK: Load groups method URL SESSION
 //    func loadGroups(

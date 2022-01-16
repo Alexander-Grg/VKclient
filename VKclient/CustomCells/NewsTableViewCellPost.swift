@@ -50,6 +50,12 @@ class NewsTableViewCellPost: UITableViewCell {
     
     func configure(_ text: PostNews) {
         textForPost.text = text.text
+        textForPost.textAlignment = .center
+        textForPost.textColor = .black
+        textForPost.lineBreakMode = .byClipping
+        textForPost.contentMode = .scaleToFill
+        textForPost.numberOfLines = 0
+
     }
 //    
 //    private func calculateTextSize(text: String, font: UIFont) -> CGSize {
