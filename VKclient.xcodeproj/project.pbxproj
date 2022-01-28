@@ -53,6 +53,7 @@
 		62E39E9A277E03C5000215E0 /* NewsTableViewCellPost.xib in Resources */ = {isa = PBXBuildFile; fileRef = 62E39E98277E03C5000215E0 /* NewsTableViewCellPost.xib */; };
 		62E56F3326D6742800F825A7 /* CommunitiesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62E56F3226D6742800F825A7 /* CommunitiesTableViewController.swift */; };
 		62E8F54E274EC4250037A9A7 /* PostModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62E8F54D274EC4250037A9A7 /* PostModel.swift */; };
+		62ECB19427A3FFEB00DCF2E5 /* LoggingProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62ECB19327A3FFEB00DCF2E5 /* LoggingProxy.swift */; };
 		62F69BBD27329D4E0090B3BC /* NewFriendsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62F69BBC27329D4E0090B3BC /* NewFriendsTableViewController.swift */; };
 		62F69BBF27329E130090B3BC /* NewFriendsViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62F69BBE27329E130090B3BC /* NewFriendsViewCell.swift */; };
 /* End PBXBuildFile section */
@@ -106,6 +107,7 @@
 		62E39E98277E03C5000215E0 /* NewsTableViewCellPost.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NewsTableViewCellPost.xib; sourceTree = "<group>"; };
 		62E56F3226D6742800F825A7 /* CommunitiesTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunitiesTableViewController.swift; sourceTree = "<group>"; };
 		62E8F54D274EC4250037A9A7 /* PostModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostModel.swift; sourceTree = "<group>"; };
+		62ECB19327A3FFEB00DCF2E5 /* LoggingProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoggingProxy.swift; sourceTree = "<group>"; };
 		62F69BBC27329D4E0090B3BC /* NewFriendsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewFriendsTableViewController.swift; sourceTree = "<group>"; };
 		62F69BBE27329E130090B3BC /* NewFriendsViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewFriendsViewCell.swift; sourceTree = "<group>"; };
 		B2228B1F54965860723410CE /* Pods_VKclient.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_VKclient.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -251,6 +253,7 @@
 			children = (
 				62BA53FE2704AFB5000F790A /* SessionPattern.swift */,
 				6225222927A2D706001F9FC8 /* PatternDecoratorTest.swift */,
+				62ECB19327A3FFEB00DCF2E5 /* LoggingProxy.swift */,
 			);
 			path = Patterns;
 			sourceTree = "<group>";
@@ -429,6 +432,7 @@
 			files = (
 				62BA53FF2704AFB5000F790A /* SessionPattern.swift in Sources */,
 				62BBDB6E26CA6A3700144345 /* LoginViewController.swift in Sources */,
+				62ECB19427A3FFEB00DCF2E5 /* LoggingProxy.swift in Sources */,
 				620CAE30270899980090CB77 /* NetworkService.swift in Sources */,
 				628E853B26FFABD400FB5FAE /* customNavigator.swift in Sources */,
 				62E39E99277E03C5000215E0 /* NewsTableViewCellPost.swift in Sources */,

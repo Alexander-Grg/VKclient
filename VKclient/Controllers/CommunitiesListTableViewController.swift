@@ -40,10 +40,16 @@ class CommunitiesListTableViewController: UITableViewController, UISearchBarDele
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         
-        network.SearchForGroups(token: token, search: searchText) { [weak self] groupsHolder2 in
+        
+        let proxy = ProxyNetworkServiceGroupSearch(networkService: network)
+        proxy.SearchForGroups(token: token, search: searchText) { [weak self] groupsHolder2 in
             guard let self = self else { return }
             self.groupsHolder2 = groupsHolder2
         }
+//        network.SearchForGroups(token: token, search: searchText) { [weak self] groupsHolder2 in
+//            guard let self = self else { return }
+//            self.groupsHolder2 = groupsHolder2
+//        }
         tableView.reloadData()
     }
 }

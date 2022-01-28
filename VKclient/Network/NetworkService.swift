@@ -15,7 +15,7 @@ import PromiseKit
 enum PromiseErrors: Error {
     case urlError, dataTaskError, decoderError
 }
-final class NetworkService {
+final class NetworkService: NetworkGroupsServiceInterface {
     
     private let url: String = "https://api.vk.com/method"
     private let apiVersion: String = "5.92"
