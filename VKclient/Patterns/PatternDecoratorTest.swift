@@ -2,7 +2,7 @@
 //  PatternDecoratorTest.swift
 //  VKclient
 //
-//  Created by Alexander Grigoryev on 27.01.2022.
+//  Created by Alexander Grigoryev on 28.01.2022.
 //
 
 import Foundation
@@ -64,4 +64,3 @@ let milkCoffee = Milk(cost: coffee)
 let coffeeWithSyrupAndMilk = Syrup(cost: milkCoffee)
 
 let coffeeWithSyrupMilkAndEspresso = AdditionalEspresso(cost: coffeeWithSyrupAndMilk)
-
