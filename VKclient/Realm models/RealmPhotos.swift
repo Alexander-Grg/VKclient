@@ -7,7 +7,6 @@
 
 import RealmSwift
 
-
 class RealmPhotos: Object {
     
     @Persisted(primaryKey: true) var id: Int = 0
@@ -20,4 +19,6 @@ class RealmPhotos: Object {
         self.ownerID = photos.ownerID
         self.sizes = photos.sizes
     }
+    
 }
+
