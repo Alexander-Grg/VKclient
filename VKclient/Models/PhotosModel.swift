@@ -49,7 +49,6 @@ struct PhotosObject: Decodable {
 }
 
 
-
 //MARK: JSON response
 //{
 //    "response": {

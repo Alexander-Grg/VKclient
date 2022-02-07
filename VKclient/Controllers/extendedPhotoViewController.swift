@@ -14,17 +14,12 @@ class extendedPhotoViewController: UIViewController {
     let network = NetworkService()
     let token = Session.instance.token
     var friendID = 0
-    //   lazy var photosFromRealm: Results<RealmPhotos>? =
-    //    try? Realm(configuration: RealmService.deleteIfMigration)
-    //        .objects(RealmPhotos.self)
-    //        .filter(NSPredicate(format: "ownerID == %d", friendID))
-    //
-    //
-    //    var arrayOfRealm: [String] = []
     var indexOfSelectedPhoto = 0
-    var userPhotosDB: [String] = []
-//    var sortedPhotosDB: [String] = []
-    var arrayOfPhotosFromDB: [String] = []
+    var arrayOfPhotosFromDB: [String] = [] {
+        didSet {
+            self.view.reloadInputViews()
+        }
+    }
     var leftImage: UIImageView!
     var mainImage: UIImageView!
     var rightImage: UIImageView!
@@ -34,8 +29,6 @@ class extendedPhotoViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        //        loadPhotosFromNetwork()
-        //        objectsFromRealm()
     }
     
     
@@ -62,7 +55,7 @@ class extendedPhotoViewController: UIViewController {
             leftPhotoIndex = arrayOfPhotosFromDB.count - 1
             
         }
-        if rightPhotoIndex > arrayOfPhotosFromDB.count - 1 {
+        if rightPhotoIndex > arrayOfPhotosFromDB.count - 1  {
             rightPhotoIndex = 0
         }
         view.subviews.forEach({ $0.removeFromSuperview() })
@@ -98,11 +91,12 @@ class extendedPhotoViewController: UIViewController {
             rightImage.heightAnchor.constraint(equalTo: mainImage.heightAnchor),
             rightImage.widthAnchor.constraint(equalTo: mainImage.widthAnchor),
         ])
+
+            leftImage.sd_setImage(with: URL(string: arrayOfPhotosFromDB[leftPhotoIndex]))
+            mainImage.sd_setImage(with: URL(string: arrayOfPhotosFromDB[mainPhotoIndex]))
+            rightImage.sd_setImage(with: URL(string: arrayOfPhotosFromDB[rightPhotoIndex]))
+     
         
-      
-        leftImage.sd_setImage(with: URL(string: arrayOfPhotosFromDB[leftPhotoIndex]))
-        mainImage.sd_setImage(with: URL(string: arrayOfPhotosFromDB[mainPhotoIndex]))
-        rightImage.sd_setImage(with: URL(string: arrayOfPhotosFromDB[rightPhotoIndex]))
         
         mainImage.layer.cornerRadius = 8
         rightImage.layer.cornerRadius = 8

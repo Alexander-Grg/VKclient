@@ -514,22 +514,6 @@
             </objects>
             <point key="canvasLocation" x="5442.0289855072469" y="375"/>
         </scene>
-        <!--Test View Controller-->
-        <scene sceneID="ewZ-y1-gai">
-            <objects>
-                <viewController id="U7I-UQ-jVa" customClass="TestViewController" customModule="VKclient" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="iuf-pr-pqa">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <viewLayoutGuide key="safeArea" id="zpk-BE-vvP"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                    </view>
-                    <navigationItem key="navigationItem" id="78K-pO-tGR"/>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="VWp-Sr-N4G" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="7342" y="-287"/>
-        </scene>
         <!--Communities-->
         <scene sceneID="U9w-Us-fSg">
             <objects>

@@ -166,7 +166,7 @@ final class NetworkService {
     
     // MARK: Load photos method
     func loadPhotos(token: String, ownerID: String)
-    //                        completion: @escaping ([PhotosObject]) -> Void)
+//                    completion: @escaping ([PhotosObject]) -> Void)
     {
         let configuration = URLSessionConfiguration.default
         let session =  URLSession(configuration: configuration)
@@ -204,7 +204,8 @@ final class NetworkService {
                 let user = try JSONDecoder().decode(PhotosResponse.self,
                                                     from: responseData).response.items
                 
-                let groupRealm = user.map { RealmPhotos(photos: $0) }
+                let groupRealm = user.map { RealmPhotos(photos: $0)
+                }
                 DispatchQueue.main.async {
                     try? RealmService.save(items: groupRealm)
                 }
