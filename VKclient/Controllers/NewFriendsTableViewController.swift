@@ -54,7 +54,7 @@ class NewFriendsTableViewController: UIViewController, UISearchBarDelegate {
     }
     
     private func loadFromDB() {
-        networkService.loadFriends(token: token)
+//        networkService.loadFriends(token: token)
         tableView.reloadData()
        
         
@@ -70,7 +70,7 @@ class NewFriendsTableViewController: UIViewController, UISearchBarDelegate {
                 }
                 print(objects)
                 
-            case let .update(groupsRealm, deletions, insertions, modifications ):
+            case let .update(_, deletions, insertions, modifications ):
                 self.tableView.beginUpdates()
                 self.usersFilteredFromRealm(with: self.friendsFromRealm)
                 self.tableView.insertRows(at: insertions.map({ IndexPath(row: $0, section: 0)}),
@@ -80,6 +80,7 @@ class NewFriendsTableViewController: UIViewController, UISearchBarDelegate {
                 self.tableView.deleteRows(at: deletions.map({ IndexPath(row: $0, section: 0)}),
                                           with: .none)
                 self.tableView.endUpdates()
+                self.tableView.reloadData()
                 
             case .error(let error):
                 print(error)
