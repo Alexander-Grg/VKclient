@@ -66,9 +66,6 @@ final class SavingGroupsToRealmAsyncOperation: Operation {
         else { return }
         let groupsRealm = data.map {GroupsRealm(groups: $0)}
         try? RealmService.save(items: groupsRealm)
-        
-        
     }
-    
 }
 

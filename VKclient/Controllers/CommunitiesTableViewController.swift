@@ -72,7 +72,7 @@ class CommunitiesTableViewController: UITableViewController {
                 }
                 print(objects)
                 
-            case let .update(groupsRealm, deletions, insertions, modifications ):
+            case let .update(_, deletions, insertions, modifications ):
                 self.tableView.beginUpdates()
                 self.tableView.insertRows(at: insertions.map({ IndexPath(row: $0, section: 0)}),
                                           with: .none)
@@ -81,7 +81,7 @@ class CommunitiesTableViewController: UITableViewController {
                 self.tableView.deleteRows(at: deletions.map({ IndexPath(row: $0, section: 0)}),
                                           with: .none)
                 self.tableView.endUpdates()
-                
+                self.tableView.reloadData()
             case .error(let error):
                 print(error)
                 
@@ -96,21 +96,13 @@ class CommunitiesTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        //        groupsHolder.count
         groupsfromRealm?.count ?? 0
-        //        return myCommunities.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "myGroupsCells", for: indexPath)
-        //        cell.textLabel?.text = groupsHolder[indexPath.row].name
-        //        cell.imageView?.sd_setImage(with: URL(string: groupsHolder[indexPath.row].photo))
         cell.textLabel?.text = groupsfromRealm?[indexPath.row].name
         cell.imageView?.sd_setImage(with: URL(string: (groupsfromRealm?[indexPath.row].photo)!))
-        //        let groups = myCommunities[indexPath.row]
-        //        cell.imageView?.image = groups.image
-        //        cell.textLabel?.text = groups.name
-        
         return cell
     }
     
@@ -121,28 +113,6 @@ class CommunitiesTableViewController: UITableViewController {
         do { tableView.deselectRow(at: indexPath, animated: true)}
         
     }
-    
-    //    MARK: Method to add froup from all groups screen
-    //    @IBAction func addGroup(_ segue: UIStoryboardSegue) {
-    //        guard
-    //            segue.identifier == "addGroup",
-    //            let sourceController = segue.source as? CommunitiesListTableViewController,
-    //            let indexPath = sourceController.tableView.indexPathForSelectedRow
-    //        else {
-    //            return
-    //        }
-    //        let group = sourceController.communitiesAll[indexPath.row]
-    //        if !myCommunities.contains(where: { $0.name == group.name }) {
-    //            myCommunities.append(group)
-    //            tableView.reloadData()
-    //        }
-    //    }
-    //    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-    //        if editingStyle == .delete {
-    //            myCommunities.remove(at: indexPath.row)
-    //            tableView.deleteRows(at: [indexPath], with: .fade)
-    //        }
-    //    }
 }
 
 

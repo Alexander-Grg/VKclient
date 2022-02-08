@@ -20,14 +20,7 @@ class PhotoViewController: UIViewController, UICollectionViewDelegateFlowLayout 
             self.photoCollection.reloadData()
         }
     }
-    
 
-    var friendsPhotos = [UIImage?]()
-    var userPhotosNetwork: [String] = [] {
-        didSet {
-            photoCollection.reloadData()
-        }
-    }
     private let network = NetworkService()
     private let token = Session.instance.token
     
@@ -36,28 +29,11 @@ class PhotoViewController: UIViewController, UICollectionViewDelegateFlowLayout 
         let layout = UICollectionViewFlowLayout()
         layout.itemSize = CGSize(width: 120, height: 120)
         photoCollection.collectionViewLayout = layout
-//        photosFromDBtoArray()
         loadFromDB()
     }
     
-//    private func photosFromDBtoArray() {
-//        guard  let photos = photosFromDB else { return }
-//        for photo in photos {
-//            self.arrayOfRealm.append(photo.sizes["x"]!)
-//                }
-//    }
-    
     private func loadFromDB() {
-
-
         network.loadPhotos(token: token, ownerID: String(friendID))
-         
-//            guard  let photos = self.photosFromDB else { return }
-//                 for photo in photos {
-//                     self.arrayOfRealm.append(photo.sizes["x"]!)
-//                         }
-//            self.photoCollection.reloadData()
-//
 
         photosFromDB = try! RealmService.load(typeOf: RealmPhotos.self).filter(NSPredicate(format: "ownerID == %d", friendID))
 
@@ -70,7 +46,7 @@ class PhotoViewController: UIViewController, UICollectionViewDelegateFlowLayout 
                 }
                 print(objects)
 
-            case let .update(groupsRealm, deletions, insertions, modifications ):
+            case let .update(_, deletions, insertions, modifications ):
                 self.photoCollection.performBatchUpdates {
                     let delete = deletions.map {IndexPath(
                         item: $0,
@@ -95,20 +71,7 @@ class PhotoViewController: UIViewController, UICollectionViewDelegateFlowLayout 
             }
         })
     }
-//
-//  private  func toArray(_ result: Map<String, String>) -> [String] {
-//        var some: [String] = []
-//
-//        for element in result {
-//            if element.key == "x" {
-//                while some.count < result.count{
-//                    some.append(element.value)
-//                }
-//            }
-//        }
-//        return some
-//    }
-    
+
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         guard
             segue.identifier == "toExtendedPhotos",
