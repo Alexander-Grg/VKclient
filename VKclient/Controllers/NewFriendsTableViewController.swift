@@ -54,7 +54,7 @@ class NewFriendsTableViewController: UIViewController, UISearchBarDelegate {
     }
     
     private func loadFromDB() {
-//        networkService.loadFriends(token: token)
+        networkService.loadFriends(token: token)
         tableView.reloadData()
        
         

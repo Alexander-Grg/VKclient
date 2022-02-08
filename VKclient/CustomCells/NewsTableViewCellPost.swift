@@ -27,7 +27,6 @@ class NewsTableViewCellPost: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         self.configureUI()
-        
     }
     
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -41,7 +40,7 @@ class NewsTableViewCellPost: UITableViewCell {
         textForPost.lineBreakMode = .byClipping
         textForPost.contentMode = .scaleToFill
         textForPost.numberOfLines = 0
-
+    }
     
     //    MARK: - Configuring UI
     
@@ -110,5 +109,5 @@ class NewsTableViewCellPost: UITableViewCell {
         isPressed ? "Show Less": "Show More"
     }
     
-}
+    }
 
