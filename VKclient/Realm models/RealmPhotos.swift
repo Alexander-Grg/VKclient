@@ -4,7 +4,7 @@
 //
 //  Created by Alexander Grigoryev on 17.10.2021.
 //
-
+//
 import RealmSwift
 
 class RealmPhotos: Object {
@@ -17,8 +17,6 @@ class RealmPhotos: Object {
         self.init()
         self.id = photos.id
         self.ownerID = photos.ownerID
-        self.sizes = photos.sizes
-    }
-    
+        self.sizes = photos.sizes    }
 }
 

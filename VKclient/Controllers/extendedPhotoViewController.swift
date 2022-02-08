@@ -15,17 +15,12 @@ class extendedPhotoViewController: UIViewController {
     let network = NetworkService()
     let token = Session.instance.token
     var friendID = 0
-    //   lazy var photosFromRealm: Results<RealmPhotos>? =
-    //    try? Realm(configuration: RealmService.deleteIfMigration)
-    //        .objects(RealmPhotos.self)
-    //        .filter(NSPredicate(format: "ownerID == %d", friendID))
-    //
-    //
-    //    var arrayOfRealm: [String] = []
     var indexOfSelectedPhoto = 0
-    var userPhotosDB: [String] = []
-//    var sortedPhotosDB: [String] = []
-    var arrayOfPhotosFromDB: [String] = []
+    var arrayOfPhotosFromDB: [String] = [] {
+        didSet {
+            self.view.reloadInputViews()
+        }
+    }
     var leftImage: UIImageView!
     var mainImage: UIImageView!
     var rightImage: UIImageView!
@@ -35,8 +30,6 @@ class extendedPhotoViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        //        loadPhotosFromNetwork()
-        //        objectsFromRealm()
     }
 
 

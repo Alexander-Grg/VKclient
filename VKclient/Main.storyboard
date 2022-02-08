@@ -153,6 +153,7 @@
                                             <subviews>
                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="G3o-Ng-tTg">
                                                     <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
+                                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 </imageView>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YYQ-cW-yeb" customClass="LikeControl" customModule="VKclient" customModuleProvider="target">
                                                     <rect key="frame" x="83" y="98" width="37" height="22"/>
@@ -295,6 +296,7 @@
                                                     </constraints>
                                                 </view>
                                             </subviews>
+                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <constraints>
                                                 <constraint firstItem="W6T-LZ-b8c" firstAttribute="leading" secondItem="pqR-xp-in9" secondAttribute="leading" constant="12" id="DuV-kR-zrS"/>
                                                 <constraint firstItem="4zY-bb-tTI" firstAttribute="centerY" secondItem="pqR-xp-in9" secondAttribute="centerY" id="HhD-9P-2BC"/>
@@ -398,6 +400,17 @@
                                             <rect key="frame" x="0.0" y="0.0" width="414" height="170"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </tableViewCellContentView>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="NewsPostCell" rowHeight="170" id="dKn-fl-MEz" customClass="NewsTableViewCellPost" customModule="VKclient" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="214.5" width="414" height="170"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="dKn-fl-MEz" id="BKd-nw-YJ5">
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="170"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        </tableViewCellContentView>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     </tableViewCell>
                                 </prototypes>
                                 <connections>
@@ -417,6 +430,7 @@
                     </view>
                     <tabBarItem key="tabBarItem" title="News" selectedImage="circle.grid.3x3.fill" catalog="system" id="7VV-CK-tGo">
                         <imageReference key="image" image="circle.grid.3x3" catalog="system" symbolScale="medium"/>
+                        <color key="badgeColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     </tabBarItem>
                     <connections>
                         <outlet property="tableView" destination="76R-Lb-vku" id="xni-aM-f49"/>
@@ -442,6 +456,7 @@
                                     <rect key="frame" x="0.0" y="0.0" width="414" height="94"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </tableViewCell>
                         </prototypes>
                         <sections/>
@@ -461,9 +476,10 @@
                                     <segue destination="aC5-DL-P5u" kind="unwind" unwindAction="unwindToMainMenuWithSender:" id="NHA-dM-dm7"/>
                                 </connections>
                             </button>
-                            <color key="tintColor" red="0.68280968637454986" green="0.92554961742997977" blue="0.38436126708984375" alpha="1" colorSpace="calibratedRGB"/>
+                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" style="done" systemItem="add" id="mRm-XM-Iq9">
+                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <connections>
                                 <segue destination="XAZ-dL-LXt" kind="show" identifier="addGroup" id="GfR-MF-TFQ"/>
                             </connections>
@@ -496,6 +512,7 @@
                                     <rect key="frame" x="0.0" y="0.0" width="414" height="43.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <connections>
                                     <segue destination="7mf-Jh-faf" kind="unwind" identifier="addGroup" unwindAction="addGroup:" id="9kH-BI-PDW"/>
                                 </connections>
@@ -516,33 +533,27 @@
             </objects>
             <point key="canvasLocation" x="5442.0289855072469" y="375"/>
         </scene>
-        <!--Test View Controller-->
-        <scene sceneID="ewZ-y1-gai">
-            <objects>
-                <viewController id="U7I-UQ-jVa" customClass="TestViewController" customModule="VKclient" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="iuf-pr-pqa">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <viewLayoutGuide key="safeArea" id="zpk-BE-vvP"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                    </view>
-                    <navigationItem key="navigationItem" id="78K-pO-tGR"/>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="VWp-Sr-N4G" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="7342" y="-287"/>
-        </scene>
         <!--Communities-->
         <scene sceneID="U9w-Us-fSg">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="zPY-H0-Zfc" customClass="CustomNavigatorController" customModule="VKclient" customModuleProvider="target" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Communities" selectedImage="person.3.fill" catalog="system" id="gfN-le-GK4">
                         <imageReference key="image" image="person.3" catalog="system" symbolScale="medium"/>
+                        <color key="badgeColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     </tabBarItem>
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="5cC-m7-xkq">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" barStyle="black" id="5cC-m7-xkq">
                         <rect key="frame" x="0.0" y="44" width="414" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="barTintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <textAttributes key="titleTextAttributes">
+                            <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        </textAttributes>
+                        <textAttributes key="largeTitleTextAttributes">
+                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <color key="textShadowColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        </textAttributes>
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
@@ -559,11 +570,17 @@
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="7dY-nh-NYe" customClass="CustomNavigatorController" customModule="VKclient" customModuleProvider="target" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Friends" selectedImage="person.fill" catalog="system" id="mbW-Oe-yYV">
                         <imageReference key="image" image="person" catalog="system" symbolScale="medium"/>
+                        <color key="badgeColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     </tabBarItem>
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="3Vb-tY-rcL">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" barStyle="black" id="3Vb-tY-rcL">
                         <rect key="frame" x="0.0" y="44" width="414" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="barTintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <textAttributes key="titleTextAttributes">
+                            <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        </textAttributes>
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <toolbar key="toolbar" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="knz-JH-Vxb">

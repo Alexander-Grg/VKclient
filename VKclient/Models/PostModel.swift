@@ -42,6 +42,7 @@ class PostNews {
         
         rowsCounter.append(.header)
         
+
         if !text.isEmpty {
             rowsCounter.append(.text)
         }

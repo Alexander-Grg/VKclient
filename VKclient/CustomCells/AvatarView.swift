@@ -75,7 +75,7 @@ class AvatarView: UIView {
         shadowView.layer.cornerRadius = bounds.height / 2
         shadowView.layer.shadowColor = UIColor.black.cgColor
         shadowView.layer.shadowOffset = CGSize(width: 5, height: 5)
-        shadowView.layer.shadowOpacity = 0.9
+        shadowView.layer.shadowOpacity = 1.0
         shadowView.layer.shadowRadius = 8
     }
 }

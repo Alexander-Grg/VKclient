@@ -54,12 +54,14 @@ class NewsTableViewController: UIViewController {
     var usersForHeader: [UserNews] = []
     var nextFrom = ""
     var isLoading = false
+    private let textCellFont = UIFont(name: "Avenir-Light", size: 16.0)!
+    private let defaultCellHeight: CGFloat = 200
     
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.register(UINib(nibName: "NewsHeaderSection", bundle: nil), forCellReuseIdentifier: "NewsHeaderSection")
         tableView.register(UINib(nibName: "NewsFooterSection", bundle: nil), forCellReuseIdentifier: "NewsFooter")
-        tableView.register(UINib(nibName: "NewsTableViewCellPost", bundle: nil), forCellReuseIdentifier: NewsTableViewCellPost.reusedIdentifier)
+ 
         loadNews()
         tableView.prefetchDataSource = self
         configRefreshControl()
@@ -96,9 +98,11 @@ extension NewsTableViewController: UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+     
         
         guard
             let news = newsPost?[indexPath.section] else { return NewsTableViewCellPost() }
+        
         
         switch news.rowsCounter[indexPath.row] {
         case .header:
@@ -107,7 +111,10 @@ extension NewsTableViewController: UITableViewDataSource {
             return cell
         case .text:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "NewsPostCell") as? NewsTableViewCellPost else { return NewsTableViewCellPost() }
-            cell.configure(news)
+            let textHeight = news.text.heightWithConstrainedWidth(width: tableView.frame.width, font: textCellFont)
+            cell.configure(news, isTapped: textHeight > defaultCellHeight)
+            cell.delegate = self
+           
             return cell
         case .photo:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "NewsPhotoCell") as? NewsTableViewCellPhoto else { return NewsTableViewCellPhoto() }
@@ -126,19 +133,22 @@ extension NewsTableViewController: UITableViewDataSource {
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         switch newsPost?[indexPath.section].rowsCounter[indexPath.row] {
-              case .header:
-                  return 75
-              case .footer:
-                  return 40
-              case .photo:
-                  let tableWidth = tableView.bounds.width
-                  let newsRatio = newsPost?[indexPath.section].aspectRatio ?? 0
-                  let newsCGfloatRatio = CGFloat(newsRatio)
-                  return newsCGfloatRatio * tableWidth
-              default:
-                  return UITableView.automaticDimension
-              }
-     }
+        case .header:
+            return 75
+        case .footer:
+            return 40
+        case .photo:
+            let tableWidth = tableView.bounds.width
+            let newsRatio = newsPost?[indexPath.section].aspectRatio ?? 0
+            let newsCGfloatRatio = CGFloat(newsRatio)
+            return newsCGfloatRatio * tableWidth
+        case .text:
+            let cell = tableView.cellForRow(at: indexPath) as? NewsTableViewCellPost
+            return (cell?.isPressed ?? false) ? UITableView.automaticDimension : defaultCellHeight
+        default:
+            return UITableView.automaticDimension
+        }
+    }
 }
 
 extension NewsTableViewController: UITableViewDelegate {
@@ -190,6 +200,13 @@ extension NewsTableViewController: UITableViewDataSourcePrefetching {
 //            tableView.reloadData()
 //            self.isLoading = false
 //        }
+    }
+}
+
+extension NewsTableViewController: NewsDelegate {
+    func buttonTapped(cell: NewsTableViewCellPost) {
+        tableView.beginUpdates()
+        tableView.endUpdates()
     }
     
     
