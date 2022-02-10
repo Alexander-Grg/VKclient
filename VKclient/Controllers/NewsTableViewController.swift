@@ -59,7 +59,6 @@ class NewsTableViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.register(UINib(nibName: "NewsHeaderSection", bundle: nil), forCellReuseIdentifier: "NewsHeaderSection")
         tableView.register(UINib(nibName: "NewsFooterSection", bundle: nil), forCellReuseIdentifier: "NewsFooter")
  
         loadNews()
@@ -107,7 +106,7 @@ extension NewsTableViewController: UITableViewDataSource {
         switch news.rowsCounter[indexPath.row] {
         case .header:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "NewsHeaderSection") as? NewsHeaderSection else { return NewsHeaderSection() }
-            cell.configure(news)
+            cell.configureCell(news)
             return cell
         case .text:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "NewsPostCell") as? NewsTableViewCellPost else { return NewsTableViewCellPost() }

@@ -33,15 +33,6 @@ class NewsTableViewCellPost: UITableViewCell {
         super.setSelected(selected, animated: animated)
     }
     
-    func configure(_ text: PostNews) {
-        textForPost.text = text.text
-        textForPost.textAlignment = .center
-        textForPost.textColor = .black
-        textForPost.lineBreakMode = .byClipping
-        textForPost.contentMode = .scaleToFill
-        textForPost.numberOfLines = 0
-    }
-    
     //    MARK: - Configuring UI
     
     private func configureUI() {
@@ -57,6 +48,7 @@ class NewsTableViewCellPost: UITableViewCell {
         textForPost.lineBreakMode = .byClipping
         textForPost.contentMode = .scaleToFill
         textForPost.numberOfLines = 0
+        textForPost.textAlignment = .center
         textForPost.sizeToFit()
         self.addSubview(self.textForPost)
     }

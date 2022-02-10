@@ -3,11 +3,10 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 51;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0F63387BE7F4E39A9BF9141D /* Pods_VKclient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C567930E45F1AF948E0FDA7 /* Pods_VKclient.framework */; };
 		6201BB512708C33400036E76 /* VKLoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6201BB502708C33400036E76 /* VKLoginController.swift */; };
 		620687F127934CDB00F94706 /* ColorFlyweight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 620687F027934CDB00F94706 /* ColorFlyweight.swift */; };
 		62074C602752766F005D0418 /* UserNewsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62074C5F2752766F005D0418 /* UserNewsModel.swift */; };
@@ -16,6 +15,12 @@
 		620CAE30270899980090CB77 /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 620CAE2F270899980090CB77 /* NetworkService.swift */; };
 		620FC6B427A4309100B9F20D /* PatternDecoratorTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 620FC6B327A4309100B9F20D /* PatternDecoratorTest.swift */; };
 		621A17F42716CE2B008DF60C /* SearchGroupsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 621A17F32716CE2B008DF60C /* SearchGroupsModel.swift */; };
+		621A26A027B50F28001693BC /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 621A269F27B50F28001693BC /* SwiftyJSON */; };
+		621A26A327B50F49001693BC /* PromiseKit in Frameworks */ = {isa = PBXBuildFile; productRef = 621A26A227B50F49001693BC /* PromiseKit */; };
+		621A26A627B50F98001693BC /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 621A26A527B50F98001693BC /* Alamofire */; };
+		621A26A927B50FE3001693BC /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = 621A26A827B50FE3001693BC /* SDWebImage */; };
+		621A26AC27B510EC001693BC /* Realm in Frameworks */ = {isa = PBXBuildFile; productRef = 621A26AB27B510EC001693BC /* Realm */; };
+		621A26AE27B510EC001693BC /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 621A26AD27B510EC001693BC /* RealmSwift */; };
 		621C4E4A276523D800F2BB41 /* AsyncOperationClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 621C4E49276523D800F2BB41 /* AsyncOperationClass.swift */; };
 		622C30842794841E00DD63A9 /* Factory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 622C30832794841E00DD63A9 /* Factory.swift */; };
 		62317872271C96C700A42097 /* RealmService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62317871271C96C700A42097 /* RealmService.swift */; };
@@ -40,7 +45,6 @@
 		628E853426FF887200FB5FAE /* basicAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 628E853326FF887200FB5FAE /* basicAnimator.swift */; };
 		628E853826FFA94F00FB5FAE /* popAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 628E853726FFA94F00FB5FAE /* popAnimator.swift */; };
 		628E853B26FFABD400FB5FAE /* customNavigator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 628E853A26FFABD400FB5FAE /* customNavigator.swift */; };
-		6291937827443099007CCD20 /* NewsHeaderSection.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6291937727443099007CCD20 /* NewsHeaderSection.xib */; };
 		62A2D25427B2E04D0089FA9A /* GroupsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62A2D25327B2E04D0089FA9A /* GroupsTableViewCell.swift */; };
 		62A2D25627B2E0560089FA9A /* GroupsTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 62A2D25527B2E0560089FA9A /* GroupsTableViewCell.xib */; };
 		62B22A08279340BF009C65AA /* NetworkAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62B22A07279340BF009C65AA /* NetworkAdapter.swift */; };
@@ -63,8 +67,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		27E60687FA63081172BC8847 /* Pods-VKclient.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VKclient.debug.xcconfig"; path = "Target Support Files/Pods-VKclient/Pods-VKclient.debug.xcconfig"; sourceTree = "<group>"; };
-		5681945A650F439F7C2459D7 /* Pods-VKclient.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VKclient.release.xcconfig"; path = "Target Support Files/Pods-VKclient/Pods-VKclient.release.xcconfig"; sourceTree = "<group>"; };
 		6201BB502708C33400036E76 /* VKLoginController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VKLoginController.swift; sourceTree = "<group>"; };
 		620687F027934CDB00F94706 /* ColorFlyweight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorFlyweight.swift; sourceTree = "<group>"; };
 		62074C5F2752766F005D0418 /* UserNewsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserNewsModel.swift; sourceTree = "<group>"; };
@@ -87,7 +89,7 @@
 		6247DF3527458EA800D515B7 /* NewsFooterSection.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NewsFooterSection.xib; sourceTree = "<group>"; };
 		6249009F271C57360060FAA6 /* RealmGroups.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmGroups.swift; sourceTree = "<group>"; };
 		6260D6AD26E7F8730003E12E /* PhotosCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotosCollectionViewCell.swift; sourceTree = "<group>"; };
-		626610C0270CDE030089C651 /* VKclient.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VKclient.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		626610C0270CDE030089C651 /* VKclient.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = VKclient.app; path = "/Users/westlaw/Desktop/VKclient/build/Debug-iphoneos/VKclient.app"; sourceTree = "<absolute>"; };
 		626610C1270CF15E0089C651 /* UserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserModel.swift; sourceTree = "<group>"; };
 		626A00E5270F785A000E8F4C /* PhotosModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotosModel.swift; sourceTree = "<group>"; };
 		626A00E8270F78A1000E8F4C /* GroupsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupsModel.swift; sourceTree = "<group>"; };
@@ -100,7 +102,6 @@
 		628E853326FF887200FB5FAE /* basicAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = basicAnimator.swift; sourceTree = "<group>"; };
 		628E853726FFA94F00FB5FAE /* popAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = popAnimator.swift; sourceTree = "<group>"; };
 		628E853A26FFABD400FB5FAE /* customNavigator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = customNavigator.swift; sourceTree = "<group>"; };
-		6291937727443099007CCD20 /* NewsHeaderSection.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NewsHeaderSection.xib; sourceTree = "<group>"; };
 		62A2D25327B2E04D0089FA9A /* GroupsTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GroupsTableViewCell.swift; sourceTree = "<group>"; };
 		62A2D25527B2E0560089FA9A /* GroupsTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = GroupsTableViewCell.xib; sourceTree = "<group>"; };
 		62B22A07279340BF009C65AA /* NetworkAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkAdapter.swift; sourceTree = "<group>"; };
@@ -122,7 +123,6 @@
 		62ECB19327A3FFEB00DCF2E5 /* LoggingProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoggingProxy.swift; sourceTree = "<group>"; };
 		62F69BBC27329D4E0090B3BC /* NewFriendsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewFriendsTableViewController.swift; sourceTree = "<group>"; };
 		62F69BBE27329E130090B3BC /* NewFriendsViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewFriendsViewCell.swift; sourceTree = "<group>"; };
-		9C567930E45F1AF948E0FDA7 /* Pods_VKclient.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_VKclient.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -130,22 +130,18 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0F63387BE7F4E39A9BF9141D /* Pods_VKclient.framework in Frameworks */,
+				621A26AE27B510EC001693BC /* RealmSwift in Frameworks */,
+				621A26A627B50F98001693BC /* Alamofire in Frameworks */,
+				621A26A027B50F28001693BC /* SwiftyJSON in Frameworks */,
+				621A26A927B50FE3001693BC /* SDWebImage in Frameworks */,
+				621A26A327B50F49001693BC /* PromiseKit in Frameworks */,
+				621A26AC27B510EC001693BC /* Realm in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		556BEFF1A07E4AB878F30E8B /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				27E60687FA63081172BC8847 /* Pods-VKclient.debug.xcconfig */,
-				5681945A650F439F7C2459D7 /* Pods-VKclient.release.xcconfig */,
-			);
-			path = Pods;
-			sourceTree = "<group>";
-		};
 		620CAE2E270899810090CB77 /* Network */ = {
 			isa = PBXGroup;
 			children = (
@@ -238,7 +234,6 @@
 			isa = PBXGroup;
 			children = (
 				62B572D1273C452D001B4689 /* NewsHeaderSection.swift */,
-				6291937727443099007CCD20 /* NewsHeaderSection.xib */,
 				62B572D3273C4574001B4689 /* NewsFooterSection.swift */,
 				6247DF3527458EA800D515B7 /* NewsFooterSection.xib */,
 			);
@@ -287,10 +282,7 @@
 			isa = PBXGroup;
 			children = (
 				62BBDB6826CA6A3700144345 /* VKclient */,
-				626610C0270CDE030089C651 /* VKclient.app */,
-				556BEFF1A07E4AB878F30E8B /* Pods */,
 				620FC6B027A42FF100B9F20D /* Recovered References */,
-				AA14BB77DAC13A900DA87850 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -331,14 +323,6 @@
 			path = Controllers;
 			sourceTree = "<group>";
 		};
-		AA14BB77DAC13A900DA87850 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				9C567930E45F1AF948E0FDA7 /* Pods_VKclient.framework */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -346,17 +330,23 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 62BBDB7A26CA6A3800144345 /* Build configuration list for PBXNativeTarget "VKclient" */;
 			buildPhases = (
-				F68D11152CEB54C6F399FD50 /* [CP] Check Pods Manifest.lock */,
 				62BBDB6226CA6A3700144345 /* Sources */,
 				62BBDB6326CA6A3700144345 /* Frameworks */,
 				62BBDB6426CA6A3700144345 /* Resources */,
-				EB2E41037127F3E1A8C28741 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			name = VKclient;
+			packageProductDependencies = (
+				621A269F27B50F28001693BC /* SwiftyJSON */,
+				621A26A227B50F49001693BC /* PromiseKit */,
+				621A26A527B50F98001693BC /* Alamofire */,
+				621A26A827B50FE3001693BC /* SDWebImage */,
+				621A26AB27B510EC001693BC /* Realm */,
+				621A26AD27B510EC001693BC /* RealmSwift */,
+			);
 			productName = ProjectTestLocalUI;
 			productReference = 626610C0270CDE030089C651 /* VKclient.app */;
 			productType = "com.apple.product-type.application";
@@ -384,6 +374,13 @@
 				Base,
 			);
 			mainGroup = 62BBDB5D26CA6A3700144345;
+			packageReferences = (
+				621A269E27B50F28001693BC /* XCRemoteSwiftPackageReference "SwiftyJSON" */,
+				621A26A127B50F49001693BC /* XCRemoteSwiftPackageReference "PromiseKit" */,
+				621A26A427B50F98001693BC /* XCRemoteSwiftPackageReference "Alamofire" */,
+				621A26A727B50FE3001693BC /* XCRemoteSwiftPackageReference "SDWebImage" */,
+				621A26AA27B510EC001693BC /* XCRemoteSwiftPackageReference "realm-swift" */,
+			);
 			productRefGroup = 62BBDB5D26CA6A3700144345;
 			projectDirPath = "";
 			projectRoot = "";
@@ -400,7 +397,6 @@
 			files = (
 				62081C9E270200670068B97C /* Main.storyboard in Resources */,
 				62A2D25627B2E0560089FA9A /* GroupsTableViewCell.xib in Resources */,
-				6291937827443099007CCD20 /* NewsHeaderSection.xib in Resources */,
 				62BBDB7626CA6A3800144345 /* LaunchScreen.storyboard in Resources */,
 				6247DF3627458EA800D515B7 /* NewsFooterSection.xib in Resources */,
 				62BBDB7326CA6A3800144345 /* Assets.xcassets in Resources */,
@@ -408,48 +404,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		EB2E41037127F3E1A8C28741 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-VKclient/Pods-VKclient-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-VKclient/Pods-VKclient-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-VKclient/Pods-VKclient-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		F68D11152CEB54C6F399FD50 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-VKclient-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		62BBDB6226CA6A3700144345 /* Sources */ = {
@@ -637,7 +591,6 @@
 		};
 		62BBDB7B26CA6A3800144345 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 27E60687FA63081172BC8847 /* Pods-VKclient.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -657,7 +610,6 @@
 		};
 		62BBDB7C26CA6A3800144345 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5681945A650F439F7C2459D7 /* Pods-VKclient.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -697,6 +649,82 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		621A269E27B50F28001693BC /* XCRemoteSwiftPackageReference "SwiftyJSON" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SwiftyJSON/SwiftyJSON";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.0;
+			};
+		};
+		621A26A127B50F49001693BC /* XCRemoteSwiftPackageReference "PromiseKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/mxcl/PromiseKit";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 6.0.0;
+			};
+		};
+		621A26A427B50F98001693BC /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.0;
+			};
+		};
+		621A26A727B50FE3001693BC /* XCRemoteSwiftPackageReference "SDWebImage" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SDWebImage/SDWebImage.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.0;
+			};
+		};
+		621A26AA27B510EC001693BC /* XCRemoteSwiftPackageReference "realm-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/realm/realm-swift.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		621A269F27B50F28001693BC /* SwiftyJSON */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 621A269E27B50F28001693BC /* XCRemoteSwiftPackageReference "SwiftyJSON" */;
+			productName = SwiftyJSON;
+		};
+		621A26A227B50F49001693BC /* PromiseKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 621A26A127B50F49001693BC /* XCRemoteSwiftPackageReference "PromiseKit" */;
+			productName = PromiseKit;
+		};
+		621A26A527B50F98001693BC /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 621A26A427B50F98001693BC /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
+		};
+		621A26A827B50FE3001693BC /* SDWebImage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 621A26A727B50FE3001693BC /* XCRemoteSwiftPackageReference "SDWebImage" */;
+			productName = SDWebImage;
+		};
+		621A26AB27B510EC001693BC /* Realm */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 621A26AA27B510EC001693BC /* XCRemoteSwiftPackageReference "realm-swift" */;
+			productName = Realm;
+		};
+		621A26AD27B510EC001693BC /* RealmSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 621A26AA27B510EC001693BC /* XCRemoteSwiftPackageReference "realm-swift" */;
+			productName = RealmSwift;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 62BBDB5E26CA6A3700144345 /* Project object */;
 }
