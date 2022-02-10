@@ -12,7 +12,6 @@ import UIKit
 struct GroupsViewModel {
     var name: String
     var photo: URL!
-    
 }
 
 final class GroupsViewModelFactory {

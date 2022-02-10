@@ -48,8 +48,8 @@ class NewsTableViewCellPost: UITableViewCell {
         textForPost.lineBreakMode = .byClipping
         textForPost.contentMode = .scaleToFill
         textForPost.numberOfLines = 0
-        textForPost.textAlignment = .center
-        textForPost.sizeToFit()
+        textForPost.textAlignment = .left
+//        textForPost.sizeToFit()
         self.addSubview(self.textForPost)
     }
     

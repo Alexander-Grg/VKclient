@@ -22,9 +22,7 @@ class NewsHeaderSection: UITableViewCell {
         override func awakeFromNib() {
             super.awakeFromNib()
             self.configureUI()
-
         }
-        
         
         override func prepareForReuse() {
             super.prepareForReuse()
@@ -62,7 +60,8 @@ class NewsHeaderSection: UITableViewCell {
         private func addUserNameLabel() {
             self.userName.translatesAutoresizingMaskIntoConstraints = false
             self.userName.font = UIFont.systemFont(ofSize: 14.0)
-            self.userName.numberOfLines = 1
+            self.userName.numberOfLines = 2
+            self.userName.lineBreakMode = .byWordWrapping
             self.userName.textColor = .black
             self.userName.textAlignment = .left
             self.addSubview(self.userName)
@@ -98,8 +97,7 @@ class NewsHeaderSection: UITableViewCell {
                 avatarView.sd_setImage(with: URL(string: "Error"))
                 userName.text = "Error, data not found"
             }
-            userName.numberOfLines = 2
-            userName.lineBreakMode = .byWordWrapping
+        
             let dateFormatter = DateFormatter()
             dateFormatter.timeStyle = .medium
             postTimeLabel.text = dateFormatter.string(from: news.date)

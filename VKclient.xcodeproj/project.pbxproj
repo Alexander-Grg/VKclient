@@ -30,7 +30,6 @@
 		623AEA6E26F33EFD00F87BD5 /* NewsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 623AEA6D26F33EFD00F87BD5 /* NewsTableViewController.swift */; };
 		6240974427AD5A0A000BBD40 /* LoggingProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6240974327AD5A0A000BBD40 /* LoggingProxy.swift */; };
 		62461FF02755533F007318E5 /* LikeControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62461FEF2755533F007318E5 /* LikeControl.swift */; };
-		6247DF3627458EA800D515B7 /* NewsFooterSection.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6247DF3527458EA800D515B7 /* NewsFooterSection.xib */; };
 		624900A0271C57360060FAA6 /* RealmGroups.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6249009F271C57360060FAA6 /* RealmGroups.swift */; };
 		6260D6AE26E7F8730003E12E /* PhotosCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6260D6AD26E7F8730003E12E /* PhotosCollectionViewCell.swift */; };
 		626610C2270CF15E0089C651 /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 626610C1270CF15E0089C651 /* UserModel.swift */; };
@@ -86,11 +85,10 @@
 		6240974127AD5133000BBD40 /* LoggingProxy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoggingProxy.swift; sourceTree = "<group>"; };
 		6240974327AD5A0A000BBD40 /* LoggingProxy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoggingProxy.swift; sourceTree = "<group>"; };
 		62461FEF2755533F007318E5 /* LikeControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeControl.swift; sourceTree = "<group>"; };
-		6247DF3527458EA800D515B7 /* NewsFooterSection.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NewsFooterSection.xib; sourceTree = "<group>"; };
 		6249009F271C57360060FAA6 /* RealmGroups.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmGroups.swift; sourceTree = "<group>"; };
 		6260D6AD26E7F8730003E12E /* PhotosCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotosCollectionViewCell.swift; sourceTree = "<group>"; };
-		626610C0270CDE030089C651 /* VKclient.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = VKclient.app; path = "/Users/westlaw/Desktop/VKclient/build/Debug-iphoneos/VKclient.app"; sourceTree = "<absolute>"; };
 		626610C1270CF15E0089C651 /* UserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserModel.swift; sourceTree = "<group>"; };
+		6267A7D227B5223B000FCDC9 /* VKclient.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VKclient.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		626A00E5270F785A000E8F4C /* PhotosModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotosModel.swift; sourceTree = "<group>"; };
 		626A00E8270F78A1000E8F4C /* GroupsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupsModel.swift; sourceTree = "<group>"; };
 		62840106270A25D300E19405 /* AlphabetControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlphabetControl.swift; sourceTree = "<group>"; };
@@ -235,7 +233,6 @@
 			children = (
 				62B572D1273C452D001B4689 /* NewsHeaderSection.swift */,
 				62B572D3273C4574001B4689 /* NewsFooterSection.swift */,
-				6247DF3527458EA800D515B7 /* NewsFooterSection.xib */,
 			);
 			path = HeadersAndFooters;
 			sourceTree = "<group>";
@@ -283,6 +280,7 @@
 			children = (
 				62BBDB6826CA6A3700144345 /* VKclient */,
 				620FC6B027A42FF100B9F20D /* Recovered References */,
+				6267A7D227B5223B000FCDC9 /* VKclient.app */,
 			);
 			sourceTree = "<group>";
 		};
@@ -348,7 +346,7 @@
 				621A26AD27B510EC001693BC /* RealmSwift */,
 			);
 			productName = ProjectTestLocalUI;
-			productReference = 626610C0270CDE030089C651 /* VKclient.app */;
+			productReference = 6267A7D227B5223B000FCDC9 /* VKclient.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -398,7 +396,6 @@
 				62081C9E270200670068B97C /* Main.storyboard in Resources */,
 				62A2D25627B2E0560089FA9A /* GroupsTableViewCell.xib in Resources */,
 				62BBDB7626CA6A3800144345 /* LaunchScreen.storyboard in Resources */,
-				6247DF3627458EA800D515B7 /* NewsFooterSection.xib in Resources */,
 				62BBDB7326CA6A3800144345 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

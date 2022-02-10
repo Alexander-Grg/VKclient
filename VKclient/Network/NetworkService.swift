@@ -326,6 +326,7 @@ final class NetworkService: NetworkGroupsServiceInterface {
                         }
                         DispatchQueue.main.async {
                             completion(newsWithSources, nextFrom)
+                            print(newsWithSources)
                         }
                     }
                     
