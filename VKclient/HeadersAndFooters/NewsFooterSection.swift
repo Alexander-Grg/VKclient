@@ -12,16 +12,35 @@ class NewsFooterSection: UITableViewCell {
     //    MARK: - Properties
     
     static let reuseIdentifier = "NewsFooter"
-    let repostButton = UIButton()
-    let commentsButton = UIButton()
-    let likesButton = UIButton()
-    let viewsCounter = UIButton()
+    var repostButton = UIButton()
+    var commentsButton = UIButton()
+    var likesButton = UIButton()
+    var viewsCounter = UIButton()
+    var isLiked: Bool = false
+    
+    var likesCount: Int = 0 {
+        didSet {
+            likesButton.setTitle("\(self.likesCount)", for: .normal)
+            UIView.transition(with: self.likesButton,
+                              duration: 0.2,
+                              options: [.transitionFlipFromBottom]) {
+                self.likesButton.setTitle("\(self.likesCount)", for: .normal)
+            }
+            let image = self.isLiked ? UIImage(systemName: "heart.fill") : UIImage(systemName: "heart")
+            let textColor = self.isLiked ? UIColor.red : UIColor.secondaryLabel
+            self.likesButton.setImage(image, for: .normal)
+            self.likesButton.setTitleColor(textColor, for: .normal)
+        }
+    }
+    
+    
     
     //    MARK: - Lifecycle
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         self.configureUI()
+        
         
     }
     
@@ -30,9 +49,6 @@ class NewsFooterSection: UITableViewCell {
         self.configureUI()
     }
     
-//    override func layoutSubviews() {
-//        super.layoutSubviews()
-//    }
     
     override func prepareForReuse() {
         super.prepareForReuse()
@@ -70,8 +86,17 @@ class NewsFooterSection: UITableViewCell {
         self.likesButton.translatesAutoresizingMaskIntoConstraints = false
         self.likesButton.setImage(UIImage(systemName: "heart.fill"), for: .normal)
         self.likesButton.tintColor = .red
+        self.likesButton.addTarget(self, action: #selector(likeButtonHadler), for: .touchUpInside)
+        self.likesButton.setTitle("\(likesCount)", for: .selected)
         self.addSubview(self.likesButton)
+        
     }
+    
+    @objc func likeButtonHadler(_ sender: UIButton) {
+        isLiked.toggle()
+        isLiked ? self.likesCount += 1 : self.likesCount > 0 ? self.likesCount -= 1 : nil
+    }
+
     
     private func addViewsCounter() {
         self.viewsCounter.translatesAutoresizingMaskIntoConstraints = false
@@ -108,4 +133,3 @@ class NewsFooterSection: UITableViewCell {
     }
     
 }
-
