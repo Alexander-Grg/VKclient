@@ -16,7 +16,6 @@ class LikeControl: UIControl {
         }
     }
     
-    
     var isLiked: Bool = false
     
     var likesCount: Int = 0 {
@@ -50,5 +49,4 @@ class LikeControl: UIControl {
         isLiked.toggle()
         isLiked ? self.likesCount += 1 : self.likesCount > 0 ? self.likesCount -= 1 : nil
     }
-    
 }

@@ -38,9 +38,9 @@ class NewFriendsViewCell: UITableViewCell {
                        animations: {
             self.avatarView.transform = CGAffineTransform(scaleX: 1, y: 1)}
                        ,completion: nil)
-        
     }
-    //    MARK: UserRealm for loading from R, UserObject for Network.
+    //    MARK: - UserRealm for loading from R, UserObject for Network.
+    
     func configure(_ friend: UserRealm) {
         nameView.text = "\(friend.firstName) \(friend.lastName)"
         let photoURL = URL(string: friend.avatar)

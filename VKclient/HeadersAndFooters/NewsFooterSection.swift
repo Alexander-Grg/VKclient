@@ -16,7 +16,6 @@ class NewsFooterSection: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        
     }
     
     override func prepareForReuse() {
@@ -31,6 +30,5 @@ class NewsFooterSection: UITableViewCell {
         repostButton.setTitle("\(data.reposts)", for: .normal)
         commentsButton.setTitle("\(data.comments)", for: .normal)
     }
-    
 }
 

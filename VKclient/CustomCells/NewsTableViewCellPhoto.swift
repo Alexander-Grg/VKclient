@@ -21,6 +21,7 @@ class NewsTableViewCellPhoto: UITableViewCell{
         photo.alpha = 1
         photo.autoresizesSubviews = true
         photo.clipsToBounds = true
+        
         return photo
     }()
     

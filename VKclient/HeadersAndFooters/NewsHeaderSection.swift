@@ -18,13 +18,10 @@ class NewsHeaderSection: UITableViewCell {
         
     //    MARK: - Lifecycle
         
-        
         override func awakeFromNib() {
             super.awakeFromNib()
             self.configureUI()
-
         }
-        
         
         override func prepareForReuse() {
             super.prepareForReuse()
@@ -42,7 +39,6 @@ class NewsHeaderSection: UITableViewCell {
             self.setupConstraints()
         }
 
-        
         private func addImageView() {
             self.avatarView.translatesAutoresizingMaskIntoConstraints = false
             self.avatarView.layer.cornerRadius = 10.0
@@ -70,25 +66,24 @@ class NewsHeaderSection: UITableViewCell {
         
         private func setupConstraints() {
             
+            let l = safeAreaLayoutGuide
+            
             NSLayoutConstraint.activate([
-                self.avatarView.leftAnchor.constraint(equalTo: safeAreaLayoutGuide.leftAnchor, constant: 5),
-                self.avatarView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 5),
+                self.avatarView.leftAnchor.constraint(equalTo: l.leftAnchor, constant: 5),
+                self.avatarView.topAnchor.constraint(equalTo: l.topAnchor, constant: 5),
                 self.avatarView.rightAnchor.constraint(equalTo: userName.leftAnchor),
                 self.avatarView.widthAnchor.constraint(equalToConstant: 60),
                 self.avatarView.heightAnchor.constraint(equalToConstant: 60),
                 
                 self.userName.leftAnchor.constraint(equalTo: avatarView.rightAnchor),
-                self.userName.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 5),
-                self.userName.rightAnchor.constraint(equalTo: safeAreaLayoutGuide.rightAnchor, constant: 0),
+                self.userName.topAnchor.constraint(equalTo: l.topAnchor, constant: 5),
+                self.userName.rightAnchor.constraint(equalTo: l.rightAnchor, constant: 0),
                 
                 self.postTimeLabel.leftAnchor.constraint(equalTo: avatarView.rightAnchor),
                 self.postTimeLabel.topAnchor.constraint(equalTo: userName.bottomAnchor, constant: 5),
-                self.postTimeLabel.rightAnchor.constraint(equalTo: safeAreaLayoutGuide.rightAnchor, constant: 0)
-            
-            
+                self.postTimeLabel.rightAnchor.constraint(equalTo: l.rightAnchor, constant: 0)
             ])
         }
-        
         
         func configureCell(_ news: PostNews) {
             if let exactNews = news.urlProtocol {

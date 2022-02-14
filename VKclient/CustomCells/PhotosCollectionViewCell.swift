@@ -9,7 +9,6 @@ import UIKit
 
 class PhotosCollectionViewCell: UICollectionViewCell {
     
-    
     @IBOutlet var likeControl: LikeControl!
     static private let reusedIdentifier = "PhotosCell"
     @IBOutlet var collectionViewCell: UIView!
@@ -18,9 +17,7 @@ class PhotosCollectionViewCell: UICollectionViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         likeControl.backgroundColor = nil
-
     }
-    
     
     func configure(image: UIImage?) {
     }

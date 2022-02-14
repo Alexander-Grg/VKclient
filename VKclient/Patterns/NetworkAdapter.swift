@@ -14,18 +14,16 @@ struct GroupsAdapterObject {
      var name: String
      var photo: String
      var id: Int
-
 }
 
 final class NetworkGroupsAdapter {
     
     private let networkService = NetworkService()
 
-    
     func getFriendsData(token: String, completion: @escaping ([GroupsObjects]) -> Void) {
         
         let configuration = URLSessionConfiguration.default
-          let session =  URLSession(configuration: configuration)
+        let session =  URLSession(configuration: configuration)
   
           var urlConstructor = URLComponents()
           urlConstructor.scheme = "https"
