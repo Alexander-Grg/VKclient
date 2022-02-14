@@ -11,8 +11,30 @@ import SDWebImage
 class NewsHeaderSection: UITableViewCell {
     //    MARK: - Properties
         
-        let avatarView = UIImageView()
-        let postTimeLabel = UILabel()
+//        let avatarView = UIImageView()
+        
+    let avatarView: UIImageView = {
+        let avatar = UIImageView()
+        avatar.translatesAutoresizingMaskIntoConstraints = false
+        avatar.layer.cornerRadius = 10.0
+        avatar.clipsToBounds = true
+        
+        return avatar
+    }()
+    
+    let postTimeLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont.systemFont(ofSize: 14.0)
+        label.numberOfLines = 2
+        label.lineBreakMode = .byWordWrapping
+        label.textColor = .black
+        label.textAlignment = .left
+        
+        return label
+    }()
+    
+//        let postTimeLabel = UILabel()
         let userName = UILabel()
         static let reuseIdentifier = "NewsHeaderSection"
         
@@ -31,6 +53,8 @@ class NewsHeaderSection: UITableViewCell {
         }
         
     //    MARK: - UI
+    
+//    MARK: - ADD subviews + constraints
         
         private func configureUI() {
             self.addImageView()
@@ -39,13 +63,7 @@ class NewsHeaderSection: UITableViewCell {
             self.setupConstraints()
         }
 
-        
-        private func addImageView() {
-            self.avatarView.translatesAutoresizingMaskIntoConstraints = false
-            self.avatarView.layer.cornerRadius = 10.0
-            self.avatarView.clipsToBounds = true
-            self.addSubview(self.avatarView)
-        }
+   
         
         private func addTimeLabel() {
             self.postTimeLabel.translatesAutoresizingMaskIntoConstraints = false
