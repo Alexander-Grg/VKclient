@@ -390,7 +390,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleAspectFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="100" sectionFooterHeight="100" translatesAutoresizingMaskIntoConstraints="NO" id="76R-Lb-vku">
+                            <tableView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="100" sectionFooterHeight="100" translatesAutoresizingMaskIntoConstraints="NO" id="76R-Lb-vku">
                                 <rect key="frame" x="0.0" y="44" width="414" height="769"/>
                                 <connections>
                                     <outlet property="dataSource" destination="C8n-hQ-EP8" id="YaO-Xy-UmC"/>

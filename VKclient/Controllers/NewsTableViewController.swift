@@ -113,17 +113,17 @@ extension NewsTableViewController: UITableViewDataSource {
         case .text:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "NewsPostCell") as? NewsTableViewCellPost else { return NewsTableViewCellPost() }
             let textHeight = news.text.heightWithConstrainedWidth(width: tableView.frame.width, font: textCellFont)
-            cell.configureCell(news, isTapped: textHeight > defaultCellHeight)
+            cell.configure(news, isTapped: textHeight > defaultCellHeight)
             cell.delegate = self
             
             return cell
         case .photo:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "NewsPhotoCell") as? NewsTableViewCellPhoto else { return NewsTableViewCellPhoto() }
-            cell.configureCell(news)
+            cell.configure(news)
             
             return cell
         case .footer:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: NewsFooterSection.reuseIdentifier, for: indexPath) as? NewsFooterSection
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: NewsFooterSection.reuseIdentifier) as? NewsFooterSection
             else { return NewsFooterSection() }
             cell.configureCell(news)
             
