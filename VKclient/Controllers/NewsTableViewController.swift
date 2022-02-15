@@ -62,6 +62,8 @@ class NewsTableViewController: UIViewController {
         loadNews()
         tableView.prefetchDataSource = self
         configRefreshControl()
+        
+        self.tableView.register(NewsFooterSection.self, forCellReuseIdentifier: NewsFooterSection.reuseIdentifier)
     }
     
     private func loadNews() {
@@ -103,22 +105,27 @@ extension NewsTableViewController: UITableViewDataSource {
         case .header:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "NewsHeaderSection") as? NewsHeaderSection else { return NewsHeaderSection() }
             cell.configureCell(news)
+            
             return cell
         case .text:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "NewsPostCell") as? NewsTableViewCellPost else { return NewsTableViewCellPost() }
             let textHeight = news.text.heightWithConstrainedWidth(width: tableView.frame.width, font: textCellFont)
             cell.configure(news, isTapped: textHeight > defaultCellHeight)
             cell.delegate = self
-           
+            
             return cell
         case .photo:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "NewsPhotoCell") as? NewsTableViewCellPhoto else { return NewsTableViewCellPhoto() }
             cell.configure(news)
+            
             return cell
         case .footer:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: "NewsFooter") as? NewsFooterSection
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: NewsFooterSection.reuseIdentifier, for: indexPath) as? NewsFooterSection
             else { return NewsFooterSection() }
+//            guard let cell = tableView.dequeueReusableCell(withIdentifier: NewsFooterSection.reuseIdentifier) as? NewsFooterSection
+           
             cell.configureCell(news)
+            
             return cell
         }
     }
