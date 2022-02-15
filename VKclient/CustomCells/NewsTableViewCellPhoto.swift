@@ -9,10 +9,10 @@ import UIKit
 import SDWebImage
 
 class NewsTableViewCellPhoto: UITableViewCell{
-    
+//    MARK: - Properties
     static let reuseIdentifier = "NewsPhotoCell"
     
-    let newsPhoto: UIImageView = {
+let newsPhoto: UIImageView = {
         let photo = UIImageView()
         photo.translatesAutoresizingMaskIntoConstraints = false
         photo.contentMode = .center
@@ -21,17 +21,40 @@ class NewsTableViewCellPhoto: UITableViewCell{
         photo.alpha = 1
         photo.autoresizesSubviews = true
         photo.clipsToBounds = true
+        
         return photo
     }()
     
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        setView()
+//    MARK: - Lifecycle
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        self.configureUI()
+        
     }
     
-    func setView() {
-        contentView.addSubview(newsPhoto)
-        
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        self.configureUI()
+    }
+//    
+//    override func prepareForReuse() {
+//        super.prepareForReuse()
+//        newsPhoto.image = nil
+//    }
+    
+//    MARK: - UI
+    
+    private func configureUI() {
+        self.addSubviews()
+        self.setupConstraints()
+    }
+    
+    private func addSubviews() {
+        self.addSubview(self.newsPhoto)
+    }
+    
+    func setupConstraints() {
+      
         NSLayoutConstraint.activate([
             newsPhoto.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 1),
             newsPhoto.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: 1),
@@ -40,13 +63,8 @@ class NewsTableViewCellPhoto: UITableViewCell{
         ])
     }
     
-    func configure(_ image: PostNews) {
+    func configureCell(_ image: PostNews) {
         guard let imageURL = URL(string: image.urlString ?? "Error") else { return }
         newsPhoto.sd_setImage(with: imageURL)
-    }
-    
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        newsPhoto.image = nil
     }
 }

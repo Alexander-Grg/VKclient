@@ -48,8 +48,14 @@ class NewsHeaderSection: UITableViewCell {
     
     //    MARK: - Lifecycle
     
-    override func awakeFromNib() {
-        super.awakeFromNib()
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        self.configureUI()
+        
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
         self.configureUI()
     }
     

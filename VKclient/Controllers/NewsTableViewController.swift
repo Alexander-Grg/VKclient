@@ -48,7 +48,6 @@ class NewsTableViewController: UIViewController {
     let token = Session.instance.token
     let networkService = NetworkService()
     var newsPost: [PostNews]?
-//    var dictOfUsers: [String: [UserRealm]] = [:]
     var IDs = [Int]()
     var groupsForHeader: [GroupNews] = []
     var usersForHeader: [UserNews] = []
@@ -63,7 +62,11 @@ class NewsTableViewController: UIViewController {
         tableView.prefetchDataSource = self
         configRefreshControl()
         
+        self.tableView.register(NewsHeaderSection.self, forCellReuseIdentifier: NewsHeaderSection.reuseIdentifier)
+        self.tableView.register(NewsTableViewCellPost.self, forCellReuseIdentifier: NewsTableViewCellPost.reusedIdentifier)
+        self.tableView.register(NewsTableViewCellPhoto.self, forCellReuseIdentifier: NewsTableViewCellPhoto.reuseIdentifier)
         self.tableView.register(NewsFooterSection.self, forCellReuseIdentifier: NewsFooterSection.reuseIdentifier)
+   
     }
     
     private func loadNews() {
@@ -110,20 +113,18 @@ extension NewsTableViewController: UITableViewDataSource {
         case .text:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "NewsPostCell") as? NewsTableViewCellPost else { return NewsTableViewCellPost() }
             let textHeight = news.text.heightWithConstrainedWidth(width: tableView.frame.width, font: textCellFont)
-            cell.configure(news, isTapped: textHeight > defaultCellHeight)
+            cell.configureCell(news, isTapped: textHeight > defaultCellHeight)
             cell.delegate = self
             
             return cell
         case .photo:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "NewsPhotoCell") as? NewsTableViewCellPhoto else { return NewsTableViewCellPhoto() }
-            cell.configure(news)
+            cell.configureCell(news)
             
             return cell
         case .footer:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: NewsFooterSection.reuseIdentifier, for: indexPath) as? NewsFooterSection
             else { return NewsFooterSection() }
-//            guard let cell = tableView.dequeueReusableCell(withIdentifier: NewsFooterSection.reuseIdentifier) as? NewsFooterSection
-           
             cell.configureCell(news)
             
             return cell
