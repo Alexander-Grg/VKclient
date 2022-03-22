@@ -8,6 +8,7 @@
 import UIKit
 import SDWebImage
 import RealmSwift
+import PromiseKit
 
 class NewFriendsTableViewController: UIViewController, UISearchBarDelegate {
     
@@ -26,7 +27,7 @@ class NewFriendsTableViewController: UIViewController, UISearchBarDelegate {
     var dictOfUsers: [Character: [UserRealm]] = [:]
     var firstLetters = [Character]()
     
-    //    MARK: - function for TableViewHeaderSection
+    //    MARK: - function for TableViewSection
     private func usersFilteredFromRealm(with friends: Results<UserRealm>?) {
         self.dictOfUsers.removeAll()
         self.firstLetters.removeAll()
@@ -50,43 +51,33 @@ class NewFriendsTableViewController: UIViewController, UISearchBarDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         searchBar.delegate = self
-        loadFromDB()
+        updatesFromRealm()
+        usersFilteredFromRealm(with: friendsFromRealm)
     }
     
-    private func loadFromDB() {
-        networkService.loadFriends(token: token)
-        tableView.reloadData()
-       
-        
-        friendsFromRealm = try? RealmService.load(typeOf: UserRealm.self)
-        
-        notificationFriends = friendsFromRealm?.observe(on: .main, { realmChange in
-            switch realmChange {
-            case .initial(let objects):
-                if objects.count > 0 {
-                    self.usersFilteredFromRealm(with: self.friendsFromRealm)
-                    //                self.groupsfromRealm = objects
-                    self.tableView.reloadData()
-                }
-                print(objects)
-                
-            case let .update(_, deletions, insertions, modifications ):
-                self.tableView.beginUpdates()
-                self.usersFilteredFromRealm(with: self.friendsFromRealm)
-                self.tableView.insertRows(at: insertions.map({ IndexPath(row: $0, section: 0)}),
-                                          with: .none)
-                self.tableView.reloadRows(at: modifications.map({ IndexPath(row: $0, section: 0)}),
-                                          with: .none)
-                self.tableView.deleteRows(at: deletions.map({ IndexPath(row: $0, section: 0)}),
-                                          with: .none)
-                self.tableView.endUpdates()
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        let promise = networkService.loadFriends(token: token)
+        promise.done { friends in
+            try? RealmService.save(items: friends)
+        }.catch { error in
+            print(error)
+        }
+    }
+
+
+    private func updatesFromRealm() {
+        notificationFriends = friendsFromRealm?.observe { [weak self] changes in
+            guard let self = self else { return }
+            switch changes {
+            case .initial:
+                break
+            case .update:
                 self.tableView.reloadData()
-                
-            case .error(let error):
+            case let .error(error):
                 print(error)
-                
             }
-        })
+        }
     }
     
     //        MARK: - Segue to transfer photos to the PhotoCollectionView
@@ -160,6 +151,21 @@ extension NewFriendsTableViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         defer { tableView.deselectRow(at: indexPath, animated: true)}
+    }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete,
+           let friendToDelete = friendsFromRealm?[indexPath.row] {
+            do {
+                let realm = try Realm(configuration: Realm.Configuration(deleteRealmIfMigrationNeeded: true))
+                try realm.write {
+                    realm.delete(friendToDelete)
+                }
+                tableView.deleteRows(at: [indexPath], with: .fade)
+            } catch {
+                print(error)
+            }
+        }
     }
 }
 extension NewFriendsTableViewController: UIGestureRecognizerDelegate {

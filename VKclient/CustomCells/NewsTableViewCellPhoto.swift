@@ -25,21 +25,15 @@ class NewsTableViewCellPhoto: UITableViewCell{
         return photo
     }()
     
-//    override func awakeFromNib() {
-//        super.awakeFromNib()
-//        setView()
-//    }
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
           super.init(style: style, reuseIdentifier: reuseIdentifier)
-//          self.configureUI()
         self.setView()
   
       }
   
       required init?(coder aDecoder: NSCoder) {
           super.init(coder: aDecoder)
-//          self.configureUI()
           self.setView()
       }
     

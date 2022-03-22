@@ -6,17 +6,15 @@
 //
 
 import Foundation
-import UIKit
-import RealmSwift
 import Alamofire
 import SwiftyJSON
 import PromiseKit
 
-enum PromiseErrors: Error {
-    case urlError, dataTaskError, decoderError
-}
 final class NetworkService: NetworkGroupsServiceInterface {
-    
+
+    enum PromiseErrors: Error {
+        case urlError, dataTaskError, decoderError
+    }
     private let url: String = "https://api.vk.com/method"
     private let apiVersion: String = "5.92"
     let dispatchGroup = DispatchGroup()
@@ -47,97 +45,10 @@ final class NetworkService: NetworkGroupsServiceInterface {
     }
     
     
-//    MARK: Load groups with AF method
-//    func loadGroups(token: String)
-//       //                    completionHandler: @escaping ((Swift.Result<[GroupsObjects], Error>) -> Void))
-//       {
-//           let path = "https://api.vk.com/method/groups.get"
-//           let params: Parameters = [
-//               "access_token": token,
-//               "extended": "1",
-//               "fields": "photo_100",
-//               "v": "5.92"
-//           ]
-//
-//           AF.request(NetworkService.baseUrl + path, method: .get, parameters: params).responseData { response in
-//               switch response.result {
-//               case let .success(data):
-//                   do {
-//                       let groupsResponse = try JSONDecoder().decode(GroupsResponse.self, from: data)
-//                       let groups = groupsResponse.response.items
-//                       //                        completionHandler(.success(groups))
-//                       let groupsRealm = groups.map { GroupsRealm(groups: $0)}
-//                       DispatchQueue.main.async {
-//                           try? RealmService.save(items: groupsRealm)
-//                       }
-//                   } catch {
-//                       //                        completionHandler(.failure(error))
-//                       print(error)
-//                   }
-//               case let .failure(error):
-//                   print(error)
-//                   //                    completionHandler(.failure(error))
-//               }
-//           }
-//       }
-//
-    
-    //    MARK: Load groups method URL SESSION
-//    func loadGroups(
-//        token: String)
-//    {
-//        let configuration = URLSessionConfiguration.default
-//        let session =  URLSession(configuration: configuration)
-//
-//        var urlConstructor = URLComponents()
-//        urlConstructor.scheme = "https"
-//        urlConstructor.host = "api.vk.com"
-//        urlConstructor.path = "/method/groups.get"
-//        urlConstructor.queryItems = [
-//            URLQueryItem(name: "access_token", value: token),
-//            URLQueryItem(name: "extended", value: "1"),
-//            URLQueryItem(name: "fields", value: "photo_100"),
-//            URLQueryItem(name: "v", value: "5.92"),
-//        ]
-//
-//        guard let url = urlConstructor.url else { return }
-//        var request = URLRequest(url: url)
-//        request.timeoutInterval = 50.0
-//        request.setValue(
-//            "",
-//            forHTTPHeaderField: "Token")
-//
-//        session.dataTask(with: request) { responseData, urlResponse, error in
-//            if let response = urlResponse as? HTTPURLResponse {
-//                print(response.statusCode)
-//            }
-//            guard
-//                error == nil,
-//                let responseData = responseData
-//            else { return }
-//            do {
-//                let user = try JSONDecoder().decode(GroupsResponse.self,
-//                                                    from: responseData).response.items
-//
-//                let groupRealm = user.map { GroupsRealm(groups: $0) }
-//
-//                DispatchQueue.main.async {
-//                    try? RealmService.save(items: groupRealm)
-//                }
-//
-//            } catch {
-//                print(error)
-//            }
-//        }
-//        .resume()
-//    }
-    
-    
-    
     func loadFriends(
         token: String) -> Promise<[UserRealm]>
     {
-        return Promise { seal in
+        return Promise.init { resolver in
             urlConstructor.path = "/method/friends.get"
             urlConstructor.queryItems = [
                 URLQueryItem(name: "access_token", value: token),
@@ -146,24 +57,29 @@ final class NetworkService: NetworkGroupsServiceInterface {
                 URLQueryItem(name: "v", value: "5.92"),
             ]
             
-            guard let url = urlConstructor.url else { return }
+            guard let url = urlConstructor.url
+            else { return resolver.reject(PromiseErrors.urlError) }
             var request = URLRequest(url: url)
-            request.timeoutInterval = 50.0
-            request.setValue(
-                "",
-                forHTTPHeaderField: "Token")
+                      request.timeoutInterval = 50.0
+                      request.setValue(
+                          "",
+                          forHTTPHeaderField: "Token")
+            
             dataTaskRequest(request)
-                .map(on: .global()) { data in
-                 let user = try JSONDecoder().decode(UserResponse.self,from: data).response.items
-                 let groupRealm = user.map { UserRealm(user: $0) }
-                    try? RealmService.save(items: groupRealm)
-                }
-                .catch { _ in seal.reject(PromiseErrors.decoderError)}
-    }
+                           .map(on: .global()) { data in
+                            let user = try JSONDecoder().decode(UserResponse.self,from: data).response.items
+                            let groupRealm = user.map { UserRealm(user: $0) }
+                               resolver.fulfill(groupRealm)
+                           }
+                           .catch(on: .global()) { error in
+                               resolver.reject(PromiseErrors.decoderError)
+                           }
+               }
         }
+    
+          
+    
 
-    
-    
     // MARK: Load photos method
     func loadPhotos(token: String, ownerID: String)
 //                    completion: @escaping ([PhotosObject]) -> Void)

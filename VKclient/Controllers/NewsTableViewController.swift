@@ -61,6 +61,7 @@ class NewsTableViewController: UIViewController {
         loadNews()
         tableView.prefetchDataSource = self
         configRefreshControl()
+        self.tableView.isUserInteractionEnabled = true
         
         self.tableView.register(NewsHeaderSection.self, forCellReuseIdentifier: NewsHeaderSection.reuseIdentifier)
         self.tableView.register(NewsTableViewCellPost.self, forCellReuseIdentifier: NewsTableViewCellPost.reusedIdentifier)
@@ -113,8 +114,9 @@ extension NewsTableViewController: UITableViewDataSource {
         case .text:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "NewsPostCell") as? NewsTableViewCellPost else { return NewsTableViewCellPost() }
             let textHeight = news.text.heightWithConstrainedWidth(width: tableView.frame.width, font: textCellFont)
-            cell.configure(news, isTapped: textHeight > defaultCellHeight)
+            cell.configureCell(news, isTapped: textHeight > defaultCellHeight)
             cell.delegate = self
+            
             
             return cell
         case .photo:
