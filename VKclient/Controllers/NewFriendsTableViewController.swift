@@ -65,7 +65,6 @@ class NewFriendsTableViewController: UIViewController, UISearchBarDelegate {
         }
     }
 
-
     private func updatesFromRealm() {
         notificationFriends = friendsFromRealm?.observe { [weak self] changes in
             guard let self = self else { return }
@@ -87,9 +86,6 @@ class NewFriendsTableViewController: UIViewController, UISearchBarDelegate {
             let imageDestination = segue.destination as? PhotoViewController,
             let indexPath = tableView.indexPathForSelectedRow
         else { return }
-        
-    //        MARK: Load from Realm
-        
         let firstLetter = self.firstLetters[indexPath.section]
         if let users = self.dictOfUsers[firstLetter] {
             let user = users[indexPath.row]
@@ -153,20 +149,20 @@ extension NewFriendsTableViewController: UITableViewDelegate {
         defer { tableView.deselectRow(at: indexPath, animated: true)}
     }
     
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete,
-           let friendToDelete = friendsFromRealm?[indexPath.row] {
-            do {
-                let realm = try Realm(configuration: Realm.Configuration(deleteRealmIfMigrationNeeded: true))
-                try realm.write {
-                    realm.delete(friendToDelete)
-                }
-                tableView.deleteRows(at: [indexPath], with: .fade)
-            } catch {
-                print(error)
-            }
-        }
-    }
+//    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+//        if editingStyle == .delete,
+//           let friendToDelete = friendsFromRealm?[indexPath.row] {
+//            do {
+//                let realm = try Realm(configuration: Realm.Configuration(deleteRealmIfMigrationNeeded: true))
+//                try realm.write {
+//                    realm.delete(friendToDelete)
+//                }
+//                tableView.deleteRows(at: [indexPath], with: .fade)
+//            } catch {
+//                print(error)
+//            }
+//        }
+//    }
 }
 extension NewFriendsTableViewController: UIGestureRecognizerDelegate {
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRequireFailureOf otherGestureRecognizer: UIGestureRecognizer) -> Bool {
