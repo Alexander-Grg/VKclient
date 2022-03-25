@@ -47,10 +47,10 @@ class NewsTableViewController: UIViewController {
     @IBOutlet var tableView: UITableView!
     let token = Session.instance.token
     let networkService = NetworkService()
-    var newsPost: [PostNews]?
+    var newsPost: [News]?
     var IDs = [Int]()
-    var groupsForHeader: [GroupNews] = []
-    var usersForHeader: [UserNews] = []
+    var groupsForHeader: [User] = []
+    var usersForHeader: [Community] = []
     var nextFrom = ""
     var isLoading = false
     private let textCellFont = UIFont(name: "Avenir-Light", size: 16.0)!
@@ -143,13 +143,14 @@ extension NewsTableViewController: UITableViewDataSource {
         case .footer:
             return 40
         case .photo:
-            let tableWidth = tableView.bounds.width
-            let newsRatio = newsPost?[indexPath.section].aspectRatio ?? 0
-            let newsCGfloatRatio = CGFloat(newsRatio)
-            return newsCGfloatRatio * tableWidth
-        case .text:
-            let cell = tableView.cellForRow(at: indexPath) as? NewsTableViewCellPost
-            return (cell?.isPressed ?? false) ? UITableView.automaticDimension : defaultCellHeight
+//            let tableWidth = tableView.bounds.width
+//            let newsRatio = newsPost?[indexPath.section].aspectRatio ?? 0
+//            let newsCGfloatRatio = CGFloat(newsRatio)
+//            return newsCGfloatRatio * tableWidth
+//        case .text:
+//            let cell = tableView.cellForRow(at: indexPath) as? NewsTableViewCellPost
+//            return (cell?.isPressed ?? false) ? UITableView.automaticDimension : defaultCellHeight
+            return UITableView.automaticDimension
         default:
             return UITableView.automaticDimension
         }

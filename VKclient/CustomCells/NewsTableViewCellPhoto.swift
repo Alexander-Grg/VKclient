@@ -48,8 +48,8 @@ class NewsTableViewCellPhoto: UITableViewCell{
         ])
     }
     
-    func configure(_ image: PostNews) {
-        guard let imageURL = URL(string: image.urlString ?? "Error") else { return }
+    func configure(_ image: News) {
+        let imageURL = image.url
         newsPhoto.sd_setImage(with: imageURL)
     }
     

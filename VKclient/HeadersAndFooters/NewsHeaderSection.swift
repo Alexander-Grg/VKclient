@@ -101,7 +101,7 @@ class NewsHeaderSection: UITableViewCell {
         ])
     }
     
-    func configureCell(_ news: PostNews) {
+    func configureCell(_ news: News) {
         if let exactNews = news.urlProtocol {
             avatarView.sd_setImage(with: exactNews.urlImage)
             userName.text = exactNews.name
@@ -112,7 +112,8 @@ class NewsHeaderSection: UITableViewCell {
         
         let dateFormatter = DateFormatter()
         dateFormatter.timeStyle = .medium
-        postTimeLabel.text = dateFormatter.string(from: news.date)
+        let date = Date(timeIntervalSince1970: news.date)
+        postTimeLabel.text = dateFormatter.string(from: date)
     }
 }
 

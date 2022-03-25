@@ -8,16 +8,16 @@
 import Foundation
 import RealmSwift
 
-struct PhotosResponse: Decodable {
+struct PhotosResponse: Codable {
     let response: Response
 }
 
-struct Response: Decodable {
+struct Response: Codable {
     var count: Int = 0
     let items: [PhotosObject]
 }
 
-struct PhotosObject: Decodable {
+struct PhotosObject: Codable {
     var id: Int = 0
     var ownerID: Int = 0
     var sizes = Map<String, String>()

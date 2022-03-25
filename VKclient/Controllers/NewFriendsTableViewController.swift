@@ -16,7 +16,6 @@ class NewFriendsTableViewController: UIViewController, UISearchBarDelegate {
     @IBOutlet var tableView: UITableView!
     @IBOutlet private var searchBar: UISearchBar!
     private let networkService = NetworkService()
-    private let token = Session.instance.token
     private var searchedFilterData: [UserObject] = []
     private var searchedFiltedDataCharacters: [Character] = []
     private var sectionTitles: [Character] = []
@@ -57,12 +56,23 @@ class NewFriendsTableViewController: UIViewController, UISearchBarDelegate {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        let promise = networkService.loadFriends(token: token)
-        promise.done { friends in
-            try? RealmService.save(items: friends)
-        }.catch { error in
-            print(error)
+        networkService.loadFriends { [weak self] result in
+            guard let self = self else { return }
+            switch result {
+            case .success(let users):
+                try? RealmService.save(items: users)
+                self.tableView.reloadData()
+            case .failure:
+                print("Error, check the network service log")
+            }
         }
+        
+//        networkService.loadFriends(token: token) { [weak self] users in
+//            guard let self = self else { return }
+//
+//            try? RealmService.save(items: users)
+//            self.tableView.reloadData()
+//        }
     }
 
     private func updatesFromRealm() {
@@ -113,6 +123,7 @@ extension NewFriendsTableViewController: UITableViewDataSource {
         if let users = self.dictOfUsers[firstLetter] {
             cell.configure(users[indexPath.row])
         }
+        
         return cell
     }
     

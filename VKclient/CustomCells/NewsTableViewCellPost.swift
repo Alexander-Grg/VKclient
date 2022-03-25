@@ -237,7 +237,7 @@ class NewsTableViewCellPost: UITableViewCell {
 
     //    MARK: - Configuring cell
 
-    func configureCell(_ postText: PostNews, isTapped: Bool) {
+    func configureCell(_ postText: News, isTapped: Bool) {
         textForPost.text = postText.text
         if isTapped {
             isPressed = false
