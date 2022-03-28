@@ -48,7 +48,6 @@ class NewsTableViewController: UIViewController {
     let token = Session.instance.token
     let networkService = NetworkService()
     var newsPost: [PostNews]?
-//    var dictOfUsers: [String: [UserRealm]] = [:]
     var IDs = [Int]()
     var groupsForHeader: [GroupNews] = []
     var usersForHeader: [UserNews] = []
@@ -59,11 +58,15 @@ class NewsTableViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.register(UINib(nibName: "NewsFooterSection", bundle: nil), forCellReuseIdentifier: "NewsFooter")
- 
         loadNews()
         tableView.prefetchDataSource = self
         configRefreshControl()
+        
+        self.tableView.register(NewsHeaderSection.self, forCellReuseIdentifier: NewsHeaderSection.reuseIdentifier)
+        self.tableView.register(NewsTableViewCellPost.self, forCellReuseIdentifier: NewsTableViewCellPost.reusedIdentifier)
+        self.tableView.register(NewsTableViewCellPhoto.self, forCellReuseIdentifier: NewsTableViewCellPhoto.reuseIdentifier)
+        self.tableView.register(NewsFooterSection.self, forCellReuseIdentifier: NewsFooterSection.reuseIdentifier)
+   
     }
     
     private func loadNews() {
@@ -98,31 +101,32 @@ extension NewsTableViewController: UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
      
-        
         guard
             let news = newsPost?[indexPath.section] else { return NewsTableViewCellPost() }
-        
         
         switch news.rowsCounter[indexPath.row] {
         case .header:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "NewsHeaderSection") as? NewsHeaderSection else { return NewsHeaderSection() }
             cell.configureCell(news)
+            
             return cell
         case .text:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "NewsPostCell") as? NewsTableViewCellPost else { return NewsTableViewCellPost() }
+            
             let textHeight = news.text.heightWithConstrainedWidth(width: tableView.frame.width, font: textCellFont)
-            cell.configure(news, isTapped: textHeight > defaultCellHeight)
+            cell.configureCell(news, isTapped: textHeight > defaultCellHeight)
             cell.delegate = self
-           
             return cell
         case .photo:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "NewsPhotoCell") as? NewsTableViewCellPhoto else { return NewsTableViewCellPhoto() }
             cell.configure(news)
+            
             return cell
         case .footer:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: "NewsFooter") as? NewsFooterSection
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: NewsFooterSection.reuseIdentifier) as? NewsFooterSection
             else { return NewsFooterSection() }
-            cell.configure(news)
+            cell.configureCell(news)
+            
             return cell
         }
     }
@@ -130,6 +134,7 @@ extension NewsTableViewController: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
         newsPost?.count ?? 0
     }
+    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         switch newsPost?[indexPath.section].rowsCounter[indexPath.row] {
         case .header:
@@ -171,7 +176,6 @@ extension NewsTableViewController: UITableViewDataSourcePrefetching {
             networkService.loadNewsFeed(startFrom: nextFrom) { [weak self] (news, nextFrom) in
                 guard let self = self else { return }
 
-//                let indexSet = IndexSet(integersIn: (self.newsPost?.count ?? 0) ..< (self.newsPost?.count ?? 0) + news.count)
                 let indexSet = IndexSet(integersIn: (self.newsPost?.count ?? 0) ..< ((self.newsPost?.count ?? 0) + news.count))
 
                 self.newsPost?.append(contentsOf: news)
@@ -183,22 +187,6 @@ extension NewsTableViewController: UITableViewDataSourcePrefetching {
                 self.isLoading = false
             }
         }
-//        isLoading = true
-//
-//        networkService.loadNewsFeed(startFrom: nextFrom) { [weak self] (news, nextFrom) in
-//            guard let self = self else { return }
-//            guard let newsItems = self.newsPost else { return }
-//
-//
-//            let indexSet = IndexSet(integersIn: newsItems.count..<newsItems.count + news.count)
-////            let indexSet = IndexSet(integersIn: (self.newsPost?.count ?? 0) ..< (self.newsPost?.count ?? 0) + news.count)
-//            self.newsPost?.append(contentsOf: news)
-//            tableView.beginUpdates()
-//            self.tableView.insertSections(indexSet, with: .automatic)
-//            tableView.endUpdates()
-//            tableView.reloadData()
-//            self.isLoading = false
-//        }
     }
 }
 

@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import SwiftUI
 
 protocol NewsDelegate {
     func buttonTapped(cell: NewsTableViewCellPost)
@@ -15,17 +14,39 @@ protocol NewsDelegate {
 class NewsTableViewCellPost: UITableViewCell {
     
     //    MARK: - Properties
-    
-    let textForPost = UILabel()
-    let showMoreTextButton = UIButton()
     static let reusedIdentifier = "NewsPostCell"
     var isPressed: Bool = false
     var delegate: NewsDelegate?
     
+    private(set) lazy var textForPost: UILabel = {
+        let l = UILabel()
+        l.translatesAutoresizingMaskIntoConstraints = false
+        l.font = UIFont.systemFont(ofSize: 16.0)
+        l.textColor = .black
+        l.contentMode = .scaleToFill
+        l.numberOfLines = 0
+        l.textAlignment = .left
+        l.sizeToFit()
+        return l
+    }()
+    
+    private(set) lazy var showMoreTextButton: UIButton = {
+        let b = UIButton()
+        b.translatesAutoresizingMaskIntoConstraints = false
+        b.setTitleColor(UIColor.systemBlue, for: .normal)
+        b.addTarget(self, action: #selector(self.buttonTap) , for: .touchUpInside)
+        return b
+    }()
+    
     //    MARK: - Lifecycle
     
-    override func awakeFromNib() {
-        super.awakeFromNib()
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        self.configureUI()
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
         self.configureUI()
     }
     
@@ -36,61 +57,44 @@ class NewsTableViewCellPost: UITableViewCell {
     //    MARK: - Configuring UI
     
     private func configureUI() {
-        self.addTextLabel()
-        self.addShowMoreButton()
+        self.addSubviews()
         self.setupConstraints()
     }
     
-    private func addTextLabel() {
-        self.textForPost.translatesAutoresizingMaskIntoConstraints = false
-        textForPost.font = UIFont.systemFont(ofSize: 16.0)
-        textForPost.textColor = .black
-        textForPost.lineBreakMode = .byClipping
-        textForPost.contentMode = .scaleToFill
-        textForPost.numberOfLines = 0
-        textForPost.textAlignment = .center
-        textForPost.sizeToFit()
-        self.addSubview(self.textForPost)
+    private func addSubviews() {
+        self.contentView.addSubview(self.showMoreTextButton)
+        self.contentView.addSubview(self.textForPost)
     }
     
-    private func addShowMoreButton() {
-        self.showMoreTextButton.translatesAutoresizingMaskIntoConstraints = false
-        showMoreTextButton.setTitleColor(UIColor.systemBlue, for: .normal)
-        showMoreTextButton.addTarget(self, action: #selector(self.buttonTap), for: .touchUpInside)
-        self.addSubview(self.showMoreTextButton)
-    }
-    
-    @objc func buttonTap(_ sender: Any?) {
-        if sender is UIButton {
-            isPressed = !isPressed
-            showMoreTextButton.setTitle(buttonStateName(), for: .normal)
-        }
+    @objc func buttonTap() {
+        isPressed = !isPressed
+        showMoreTextButton.setTitle(buttonStateName(), for: .normal)
         delegate?.buttonTapped(cell: self)
     }
+    
     private func setupConstraints() {
         
         NSLayoutConstraint.activate([
-            
-            textForPost.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 10),
-            textForPost.leftAnchor.constraint(equalTo: safeAreaLayoutGuide.leftAnchor, constant: 10),
-            textForPost.rightAnchor.constraint(equalTo: safeAreaLayoutGuide.rightAnchor, constant: 10),
+            textForPost.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
+            textForPost.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 15),
+            textForPost.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: 15),
             textForPost.bottomAnchor.constraint(equalTo: showMoreTextButton.topAnchor),
             
             showMoreTextButton.topAnchor.constraint(equalTo: textForPost.bottomAnchor),
             showMoreTextButton.widthAnchor.constraint(equalToConstant: 150),
             showMoreTextButton.heightAnchor.constraint(equalToConstant: 30),
-            showMoreTextButton.rightAnchor.constraint(equalTo: safeAreaLayoutGuide.rightAnchor, constant: 10),
-            showMoreTextButton.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: 5)
+            showMoreTextButton.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: 10),
+            showMoreTextButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: 5),
         ])
     }
     
     //    MARK: - Configuring cell
     
-    func configure(_ postText: PostNews, isTapped: Bool) {
+    func configureCell(_ postText: PostNews, isTapped: Bool) {
         textForPost.text = postText.text
         if isTapped {
-            isPressed = false
-            showMoreTextButton.setTitle(buttonStateName(), for: .normal)
+            self.isPressed = false
+            showMoreTextButton.setTitle(self.buttonStateName(), for: .normal)
             showMoreTextButton.isHidden = false
         } else {
             showMoreTextButton.isHidden = true
@@ -101,5 +105,5 @@ class NewsTableViewCellPost: UITableViewCell {
         isPressed ? "Show Less": "Show More"
     }
     
-    }
+}
 

@@ -53,55 +53,5 @@ final class popAnimator: NSObject, UIViewControllerAnimatedTransitioning {
             transitionContext.completeTransition(finished && !transitionContext.transitionWasCancelled)
         }
     }
-    
-    
-    //    MARK: Animation with anchor point
-    //        transitionContext.containerView.addSubview(destination.view)
-    //        transitionContext.containerView.sendSubviewToBack(destination.view)
-    //
-    //                destination.view.layer.anchorPoint = CGPoint(x: 0, y: 0)
-    //        setAnchorPoint(anchorPoint: CGPoint(x: 0, y: 0), forView: destination.view)
-    //        destination.view.frame = transitionContext.containerView.frame
-    //        destination.view.transform = CGAffineTransform(rotationAngle: .pi/2)
-    //
-    //        UIView.animate(
-    //            withDuration: duration,
-    //            animations: {
-    //                source.view.transform = CGAffineTransform(rotationAngle: -.pi/2)
-    //                destination.view.transform = .identity
-    //            }) { (isComplete) in
-    //
-    //                if isComplete && !transitionContext.transitionWasCancelled {
-    //                    source.removeFromParent()
-    //                } else if transitionContext.transitionWasCancelled {
-    //                    destination.view.transform = .identity
-    //                }
-    //                transitionContext.completeTransition( isComplete && !transitionContext.transitionWasCancelled)
-    //                destination.view.isHidden = false
-    //            }
-    //
-    //    }
-    //
-    //    func setAnchorPoint(anchorPoint: CGPoint, forView view: UIView) {
-    //        var newPoint = CGPoint(x: view.bounds.size.width * anchorPoint.x,
-    //                               y: view.bounds.size.height * anchorPoint.y)
-    //
-    //
-    //        var oldPoint = CGPoint(x: view.bounds.size.width * view.layer.anchorPoint.x,
-    //                               y: view.bounds.size.height * view.layer.anchorPoint.y)
-    //
-    //        newPoint = newPoint.applying(view.transform)
-    //        oldPoint = oldPoint.applying(view.transform)
-    //
-    //        var position = view.layer.position
-    //        position.x -= oldPoint.x
-    //        position.x += newPoint.x
-    //
-    //        position.y -= oldPoint.y
-    //        position.y += newPoint.y
-    //
-    //        view.layer.position = position
-    //        view.layer.anchorPoint = anchorPoint
-    //    }
 }
 
