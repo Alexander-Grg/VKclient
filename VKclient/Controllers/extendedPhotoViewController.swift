@@ -12,8 +12,6 @@ import RealmSwift
 
 class extendedPhotoViewController: UIViewController {
 
-    let network = NetworkService()
-    let token = Session.instance.token
     var friendID = 0
     var indexOfSelectedPhoto = 0
     var arrayOfPhotosFromDB: [String] = [] {

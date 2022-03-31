@@ -13,7 +13,7 @@ class NewsFooterSection: UITableViewCell {
     
     static let reuseIdentifier = "NewsFooter"
    
-    let repostButton: UIButton = {
+    private(set) lazy var repostButton: UIButton = {
         let b = UIButton()
         b.translatesAutoresizingMaskIntoConstraints = false
         b.setImage(UIImage(systemName: "arrowshape.turn.up.right"), for: .normal)
@@ -22,7 +22,7 @@ class NewsFooterSection: UITableViewCell {
         return b
     }()
     
-    let commentsButton: UIButton = {
+    private(set) lazy var commentsButton: UIButton = {
         let b = UIButton()
         b.translatesAutoresizingMaskIntoConstraints = false
         b.setImage(UIImage(systemName: "message"), for: .normal)
@@ -31,7 +31,7 @@ class NewsFooterSection: UITableViewCell {
         return b
     }()
     
-    let likesButton: UIButton = {
+    private(set) lazy var likesButton: UIButton = {
         let b = UIButton()
         b.translatesAutoresizingMaskIntoConstraints = false
         b.setImage(UIImage(systemName: "heart.fill"), for: .normal)
@@ -41,7 +41,7 @@ class NewsFooterSection: UITableViewCell {
         return b
     }()
     
-    let viewsCounter: UIButton = {
+    private(set) lazy var viewsCounter: UIButton = {
         let b = UIButton()
         b.translatesAutoresizingMaskIntoConstraints = false
         b.setImage(UIImage(systemName: "eye"), for: .normal)

@@ -10,13 +10,11 @@ import UIKit
 class CommunitiesListTableViewController: UITableViewController, UISearchBarDelegate {
     
     @IBOutlet var search: UISearchBar!
-    var isSearching: Bool = false
     var groupsHolder2 = [SearchedObjects]() {
         didSet {
-            tableView.reloadData()
+            self.tableView.reloadData()
         }
     }
-    private let token = Session.instance.token
     private let network = NetworkService()
     
     override func viewDidLoad() {
@@ -39,11 +37,11 @@ class CommunitiesListTableViewController: UITableViewController, UISearchBarDele
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        let proxy = ProxyNetworkServiceGroupSearch(networkService: network)
-        proxy.SearchForGroups(token: token, search: searchText) { [weak self] groupsHolder2 in
+      
+        network.SearchForGroups(search: searchText) { [weak self] groups in
             guard let self = self else { return }
-            self.groupsHolder2 = groupsHolder2
+            self.groupsHolder2 = groups
         }
-        tableView.reloadData()
+        self.tableView.reloadData()
     }
 }

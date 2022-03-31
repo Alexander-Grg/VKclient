@@ -8,7 +8,6 @@
 import UIKit
 import SDWebImage
 import RealmSwift
-import PromiseKit
 
 class NewFriendsTableViewController: UIViewController, UISearchBarDelegate {
     
@@ -66,13 +65,6 @@ class NewFriendsTableViewController: UIViewController, UISearchBarDelegate {
                 print("Error, check the network service log")
             }
         }
-        
-//        networkService.loadFriends(token: token) { [weak self] users in
-//            guard let self = self else { return }
-//
-//            try? RealmService.save(items: users)
-//            self.tableView.reloadData()
-//        }
     }
 
     private func updatesFromRealm() {

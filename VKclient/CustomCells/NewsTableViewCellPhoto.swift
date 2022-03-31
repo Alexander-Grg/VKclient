@@ -12,7 +12,7 @@ class NewsTableViewCellPhoto: UITableViewCell{
     
     static let reuseIdentifier = "NewsPhotoCell"
     
-    let newsPhoto: UIImageView = {
+    private(set) lazy var newsPhoto: UIImageView = {
         let photo = UIImageView()
         photo.translatesAutoresizingMaskIntoConstraints = false
         photo.contentMode = .center

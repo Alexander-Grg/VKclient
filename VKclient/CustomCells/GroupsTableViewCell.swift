@@ -23,8 +23,9 @@ class GroupsTableViewCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
     }
     
-    func configure(from viewModel: GroupsViewModel) {
-        avatarView.sd_setImage(with: viewModel.photo)
+    func configure(from viewModel: GroupsRealm) {
+        let url = URL(string: viewModel.photo)
+        avatarView.sd_setImage(with: url)
         labelGroup.text = viewModel.name
     }
     

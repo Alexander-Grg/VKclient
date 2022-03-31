@@ -7,7 +7,6 @@
 
 import Foundation
 
-
 class AsyncOperationClass: Operation {
     
     enum State: String {

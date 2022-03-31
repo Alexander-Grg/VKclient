@@ -6,30 +6,43 @@
 //
 
 import Foundation
-import Alamofire
 
 final class NetworkGroupsAsyncOperation: AsyncOperationClass {
     
+    let networkService = NetworkService()
     let url: URL
-    let method: HTTPMethod
-    let parameters: Parameters
-    
     private(set) var data: Data?
     private var dataTask: URLSessionDataTask?
     
-    init(url: URL, method: HTTPMethod = .get, parameters: Parameters = [:]) {
+    init(url: URL) {
         self.url = url
-        self.method = method
-        self.parameters = parameters
     }
     
     override func main() {
-        AF.request(url, method: method, parameters: parameters)
-            .responseData { result in
-                guard !self.isCancelled else { return }
-                self.data = result.data
-                self.state = .finished
+        networkService.urlConstructor.path += "groups.get"
+        networkService.urlConstructor.queryItems?.append(
+            URLQueryItem(
+                name: "extended",
+                value: "1"))
+        networkService.urlConstructor.queryItems?.append(
+            URLQueryItem(
+                name: "fields",
+                value: "photo_100"))
+        
+        guard let url = networkService.urlConstructor.url
+        else { return }
+        
+        networkService.session.dataTask(with: url) { data, response, error in
+            if let response = response as? HTTPURLResponse {
+                print("STATUS CODE: \(response.statusCode)")
             }
+            guard
+                error == nil,
+                !self.isCancelled
+            else { return }
+            self.data = data
+            self.state = .finished
+        }
     }
 }
 
@@ -71,3 +84,4 @@ final class SavingGroupsToRealmAsyncOperation: Operation {
     }
     
 }
+

@@ -20,23 +20,34 @@ class PhotoViewController: UIViewController, UICollectionViewDelegateFlowLayout 
             self.photoCollection.reloadData()
         }
     }
-
     private let network = NetworkService()
-    private let token = Session.instance.token
     
     override func viewDidLoad() {
         super.viewDidLoad()
         let layout = UICollectionViewFlowLayout()
         layout.itemSize = CGSize(width: 120, height: 120)
         photoCollection.collectionViewLayout = layout
-        loadFromDB()
+        updatesFromRealm()
     }
     
-    private func loadFromDB() {
-        network.loadPhotos(token: token, ownerID: String(friendID))
-
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        network.loadPhotos(ownerID: String(friendID)) { [weak self] result in
+            guard let self = self else { return }
+            switch result {
+            case .success(let photos):
+                try? RealmService.save(items: photos)
+                self.photoCollection.reloadData()
+            case .failure:
+                print("Error, check the network service log")
+            }
+        }
+    }
+    
+    private func updatesFromRealm() {
+        
         photosFromDB = try! RealmService.load(typeOf: RealmPhotos.self).filter(NSPredicate(format: "ownerID == %d", friendID))
-
+        
         photosNotification = photosFromDB?.observe(on: .main, { realmChange in
             switch realmChange {
             case .initial(let objects):
@@ -45,33 +56,33 @@ class PhotoViewController: UIViewController, UICollectionViewDelegateFlowLayout 
                     self.photoCollection.reloadData()
                 }
                 print(objects)
-
+                
             case let .update(_, deletions, insertions, modifications ):
                 self.photoCollection.performBatchUpdates {
                     let delete = deletions.map {IndexPath(
                         item: $0,
                         section: 0) }
                     self.photoCollection.deleteItems(at: delete)
-
+                    
                     let insert = insertions.map { IndexPath(
                         item: $0,
                         section: 0) }
-
+                    
                     self.photoCollection.insertItems(at: insert)
-
+                    
                     let modify = modifications.map { IndexPath(
                         item: $0,
                         section: 0) }
                     self.photoCollection.reloadItems(at: modify)
                 }
-
+                
             case .error(let error):
                 print(error)
-
+                
             }
         })
     }
-
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         guard
             segue.identifier == "toExtendedPhotos",
