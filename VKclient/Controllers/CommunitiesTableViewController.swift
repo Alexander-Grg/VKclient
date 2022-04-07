@@ -27,7 +27,7 @@ class CommunitiesTableViewController: UITableViewController {
         super.viewDidLoad()
         tableView.register(UINib(nibName: "GroupsTableViewCell", bundle: nil), forCellReuseIdentifier: "myGroupsCells")
         self.fetchDataFromNetwork()
-        self.updatesFromRealm()
+//        self.updatesFromRealm()
       
     }
     
@@ -42,6 +42,7 @@ class CommunitiesTableViewController: UITableViewController {
             guard let self = self else { return }
             switch result {
             case .success:
+                self.updatesFromRealm()
                 print("Data has been received")
             case .failure(let requestError):
                 switch requestError {

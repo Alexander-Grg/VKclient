@@ -50,23 +50,7 @@ class NewFriendsTableViewController: UIViewController, UISearchBarDelegate {
         super.viewDidLoad()
         searchBar.delegate = self
         fetchDataFromNetwork()
-        updatesFromRealm()
-        usersFilteredFromRealm(with: friendsFromRealm)
     }
-//    
-//    override func viewWillAppear(_ animated: Bool) {
-//        super.viewWillAppear(animated)
-//        networkService.loadFriends { [weak self] result in
-//            guard let self = self else { return }
-//            switch result {
-//            case .success(let users):
-//                try? RealmService.save(items: users)
-//                self.tableView.reloadData()
-//            case .failure:
-//                print("Data has already been saved to Realm")
-//            }
-//        }
-//    }
     
     private func fetchDataFromNetwork() {
         networkService.loadFriends { [weak self] result in
@@ -74,6 +58,7 @@ class NewFriendsTableViewController: UIViewController, UISearchBarDelegate {
             switch result {
             case .success:
                 self.updatesFromRealm()
+                self.usersFilteredFromRealm(with: self.friendsFromRealm)
                 print("Data has been received")
             case .failure(let requestError):
                 switch requestError {
