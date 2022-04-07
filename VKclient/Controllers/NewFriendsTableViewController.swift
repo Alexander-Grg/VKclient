@@ -19,7 +19,7 @@ class NewFriendsTableViewController: UIViewController, UISearchBarDelegate {
     private var searchedFiltedDataCharacters: [Character] = []
     private var sectionTitles: [Character] = []
     private var isSearching: Bool = false
-    var friendsFromRealm: Results<UserRealm>? = try? RealmService.get(type: UserRealm.self)
+    var friendsFromRealm: Results<UserRealm>?
     var notificationFriends: NotificationToken?
     var friendsNetworkLetters = [[UserObject]]()
     var dictOfUsers: [Character: [UserRealm]] = [:]
@@ -49,25 +49,53 @@ class NewFriendsTableViewController: UIViewController, UISearchBarDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         searchBar.delegate = self
+        fetchDataFromNetwork()
         updatesFromRealm()
         usersFilteredFromRealm(with: friendsFromRealm)
     }
+//    
+//    override func viewWillAppear(_ animated: Bool) {
+//        super.viewWillAppear(animated)
+//        networkService.loadFriends { [weak self] result in
+//            guard let self = self else { return }
+//            switch result {
+//            case .success(let users):
+//                try? RealmService.save(items: users)
+//                self.tableView.reloadData()
+//            case .failure:
+//                print("Data has already been saved to Realm")
+//            }
+//        }
+//    }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+    private func fetchDataFromNetwork() {
         networkService.loadFriends { [weak self] result in
             guard let self = self else { return }
             switch result {
-            case .success(let users):
-                try? RealmService.save(items: users)
-                self.tableView.reloadData()
-            case .failure:
-                print("Error, check the network service log")
+            case .success:
+                self.updatesFromRealm()
+                print("Data has been received")
+            case .failure(let requestError):
+                switch requestError {
+                case .decoderError:
+                    print("Decoder error")
+                case .requestFailed:
+                    print("Request failed")
+                case .invalidUrl:
+                    print("URL error")
+                case .realmError:
+                    print("Realm error")
+                case .unknownError:
+                    print("Unknown error")
+                }
             }
         }
     }
 
     private func updatesFromRealm() {
+        
+       friendsFromRealm = try? RealmService.get(type: UserRealm.self)
+        
         notificationFriends = friendsFromRealm?.observe { [weak self] changes in
             guard let self = self else { return }
             switch changes {

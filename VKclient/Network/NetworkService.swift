@@ -39,7 +39,7 @@ final class NetworkService {
     }()
     
     func loadFriends(
-        completion: @escaping (Result<[UserRealm], RequestErrors>) -> Void)
+        completion: @escaping (Result<[UserObject], RequestErrors>) -> Void)
     {
         
         urlConstructor.path += "friends.get"
@@ -71,8 +71,9 @@ final class NetworkService {
                 
                 let groupRealm = user.map { UserRealm(user: $0)
                 }
+                try RealmService.save(items: groupRealm)
                 DispatchQueue.main.async {
-                    completion(.success(groupRealm))
+                    completion(.success(user))
                 }
             } catch {
                 print(completion(.failure(.decoderError)))
@@ -106,8 +107,9 @@ final class NetworkService {
                 name: "offset",
                 value: "0"))
         urlConstructor.queryItems?.append(
-            URLQueryItem(name: "photo_sizes",
-                         value: "0"))
+            URLQueryItem(
+                name: "photo_sizes",
+                value: "0"))
         
         guard let url = urlConstructor.url else {
             return completion(.failure(.invalidUrl)) }
@@ -136,11 +138,72 @@ final class NetworkService {
         .resume()
     }
     
+    func fetchingGroups(
+        completion: @escaping (Result<[GroupsObjects], RequestErrors>) -> Void)
+    {
+        urlConstructor.path += "groups.get"
+        urlConstructor.queryItems?.append(
+            URLQueryItem(
+                name: "extended",
+                value: "1"))
+        urlConstructor.queryItems?.append(
+            URLQueryItem(
+                name: "fields",
+                value: "photo_100"))
+        
+        guard let URL = urlConstructor.url else
+        { return completion(.failure(.invalidUrl)) }
+   
+        
+        session.dataTask(with: URL) { data, response, error in
+            if let response = response as? HTTPURLResponse {
+                print(response.statusCode)
+            }
+            
+            guard error == nil,
+                  let responseData = data
+            else {
+                return completion(.failure(.requestFailed)) }
+
+                do {
+                    let groups = try JSONDecoder().decode(GroupsResponse.self, from: responseData).response.items
+                    
+                    let realmGroups = groups.map { GroupsRealm(groups: $0)}
+
+                    DispatchQueue.main.async {
+                        try? RealmService.save(items: realmGroups)
+                        completion(.success(groups))
+                    }
+                } catch {
+                    print(completion(.failure(.realmError)))
+                }
+        } .resume()
+    }
     //    MARK: Search for groups method
     func SearchForGroups(search: String,
                          completion: @escaping ([SearchedObjects]) -> Void)
     {
         urlConstructor.path += "groups.search"
+//        urlConstructor.queryItems = [
+//            URLQueryItem(
+//                name: "access_token",
+//                value: Session.instance.token),
+//            URLQueryItem(
+//                name: "v"
+//                , value: "5.92"),
+//            URLQueryItem(
+//                name: "sort",
+//                value: "6"),
+//            URLQueryItem(
+//                name: "type",
+//                value: "group"),
+//            URLQueryItem(
+//                name: "q",
+//                value: search),
+//            URLQueryItem(
+//                name: "count",
+//                value: "20")
+//        ]
         urlConstructor.queryItems?.append(
             URLQueryItem(
                 name: "sort",
@@ -183,74 +246,78 @@ final class NetworkService {
     }
     
     
-    func loadNewsFeed(startFrom: String = "", startTime: Double? = nil, _ completion: @escaping ([News], String) -> Void) {
+    func loadNewsFeed(startFrom: String = "", startTime: Double? = nil, _ completion: @escaping (Result<[News], RequestErrors>, Result<String, RequestErrors>) -> Void) {
 
         urlConstructor.path += "newsfeed.get"
-//        var params =
-        urlConstructor.queryItems =  [
-            URLQueryItem(name: "access_token", value: Session.instance.token),
-            URLQueryItem(name: "start_from", value: startFrom),
-            URLQueryItem(name: "filters", value: "post, photo"),
-            URLQueryItem(name: "count", value: "10"),
-            URLQueryItem(name: "v", value: "5.92"),
-        ]
+        urlConstructor.queryItems?.append(URLQueryItem(name: "start_from", value: startFrom))
+        urlConstructor.queryItems?.append(URLQueryItem(name: "filters", value: "post, photo"))
+        urlConstructor.queryItems?.append(URLQueryItem(name: "count", value: "10"))
 
-//        if let startTime = startTime {
-//            params.append(URLQueryItem(name: "start_time", value: "\(startTime)"))
-//               }
-
-//        urlConstructor.queryItems = params
-
-        guard let url = urlConstructor.url else { return completion([], "")}
-        var request = URLRequest(url: url)
-        request.timeoutInterval = 50.0
-        request.setValue("", forHTTPHeaderField: "Token")
+        if let startTime = startTime {
+            urlConstructor.queryItems?.append(URLQueryItem(name: "start_time", value: "\(startTime)"))
+               }
         
+        guard let url = urlConstructor.url else {
+            return completion(.failure(.invalidUrl),
+                              .failure(.invalidUrl))}
 
-        session.dataTask(with: request) { responseData, urlResponse, error in
-            if let response = urlResponse as? HTTPURLResponse {
+        session.dataTask(with: url) { data, response, error in
+            if let response = response as? HTTPURLResponse {
                 print(response.statusCode)
             }
             guard
                 error == nil,
-                let responseData = responseData
-            else { return completion([], "") }
-//            var posts: [News] = []
-//            var profiles: [User] = []
-//            var groups: [Community] = []
-            do {
-                let nextFrom = try JSONDecoder().decode(Newsfeed.self, from: responseData).nextFrom
-                let postJSON = try JSONDecoder().decode(Newsfeed.self, from: responseData).items
-//                posts = postJSON
-                let userJSON = try JSONDecoder().decode(Newsfeed.self, from: responseData).profiles
-//                profiles = userJSON
-                let groupsJSON = try JSONDecoder().decode(Newsfeed.self, from: responseData).groups
-//                groups = groupsJSON
+                let responseData = data
+            else { return completion(.failure(.requestFailed),
+                                     .failure(.requestFailed)) }
+            var posts: [News] = []
+            var profiles: [User] = []
+            var groups: [Community] = []
+            var nextFrom: String = ""
+            
+//            do {
+                DispatchQueue.global().async(group: self.dispatchGroup, qos: .userInitiated) {
+                let next = try? JSONDecoder().decode(Newsfeed.self, from: responseData).nextFrom
+                    nextFrom = next ?? ""
+                }
+               
+            DispatchQueue.global().async(group: self.dispatchGroup, qos: .userInitiated) {
+                let postJSON = try? JSONDecoder().decode(Newsfeed.self, from: responseData).items
+                posts = postJSON ?? []
+            }
+            DispatchQueue.global().async(group: self.dispatchGroup, qos: .userInitiated) {
+                let userJSON = try? JSONDecoder().decode(Newsfeed.self, from: responseData).profiles
+             profiles = userJSON ?? []
+            }
+            DispatchQueue.global().async(group: self.dispatchGroup, qos: .userInitiated) {
+                let groupsJSON = try? JSONDecoder().decode(Newsfeed.self, from: responseData).groups
+             groups = groupsJSON ?? []
+            }
 
                 self.dispatchGroup.notify(queue: DispatchQueue.global()) {
-                    let newsWithSources = postJSON.compactMap { posts -> News? in
+                    let newsWithSources = posts.compactMap { posts -> News? in
                         if posts.sourceId > 0 {
                             let news = posts
-                            guard let newsID = userJSON.first(where: { $0.id == posts.sourceId})
+                            guard let newsID = profiles.first(where: { $0.id == posts.sourceId})
                             else { return nil }
                             news.urlProtocol = newsID
                             return news
                         } else {
                             let news = posts
-                            guard let newsID = groupsJSON.first(where: { -$0.id == posts.sourceId})
+                            guard let newsID = groups.first(where: { -$0.id == posts.sourceId})
                             else { return nil }
                             news.urlProtocol = newsID
                             return news
                         }
                     }
                     DispatchQueue.main.async {
-                        completion(newsWithSources, nextFrom)
+                        completion(.success(newsWithSources), .success(nextFrom))
                     }
                 }
-            } catch {
-                print(error)
-            }
-        }
+//            } catch {
+//                print(completion(.failure(.decoderError), .failure(.decoderError)))
+            
+        }.resume()
     }
 }
     //

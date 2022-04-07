@@ -12,7 +12,7 @@ class CommunitiesListTableViewController: UITableViewController, UISearchBarDele
     @IBOutlet var search: UISearchBar!
     var groupsHolder2 = [SearchedObjects]() {
         didSet {
-            self.tableView.reloadData()
+            tableView.reloadData()
         }
     }
     private let network = NetworkService()
@@ -33,7 +33,7 @@ class CommunitiesListTableViewController: UITableViewController, UISearchBarDele
         return cell
     }
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        do { tableView.deselectRow(at: indexPath, animated: true)}
+        defer { tableView.deselectRow(at: indexPath, animated: true)}
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
@@ -42,6 +42,6 @@ class CommunitiesListTableViewController: UITableViewController, UISearchBarDele
             guard let self = self else { return }
             self.groupsHolder2 = groups
         }
-        self.tableView.reloadData()
+        tableView.reloadData()
     }
 }

@@ -113,7 +113,7 @@ class NewsFooterSection: UITableViewCell {
         self.viewsCounter.setTitle("\(String(describing: data.views))", for: .normal)
         self.repostButton.setTitle("\(String(describing: data.reposts))", for: .normal)
         self.commentsButton.setTitle("\(String(describing: data.comments))", for: .normal)
-        self.likesButton.setTitle("\(String(describing: data.likes))", for: .normal)
+//        self.likesButton.setTitle("\(String(describing: data.likes))", for: .normal)
     }
     
 }

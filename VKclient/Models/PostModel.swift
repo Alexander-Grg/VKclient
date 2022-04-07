@@ -101,10 +101,12 @@ final class News {
     var text: String
     var attachments: [Attachments]?
     var comments: Comments?
-    var likes: Likes?
+//    var likes: Likes?
     var views: Views?
     var reposts: Reposts?
     var urlProtocol: NewsSource?
+    var url: URL? { urlString.flatMap { URL(string: $0) }}
+    var urlString: String?
     
     var rowsCounter: [NewsTypes] {
         var rowsCounter = [NewsTypes]()
@@ -117,7 +119,7 @@ final class News {
         }
         
         
-        if url != nil {
+        if urlString != nil {
             rowsCounter.append(.photo)
         }
         
@@ -126,13 +128,14 @@ final class News {
         return rowsCounter
     }
     
-    var url: URL? {
-        guard
-            let image = attachments?.first(where: { $0.type == "photo"} ),
-            let size = image.photo?.sizes["x"]
-        else { return nil }
-        return URL(string: size)
-    }
+//    var url: URL? {
+//        guard
+//            let image = attachments?.first(where: { $0.type == "photo"} ),
+//            let size = image.photo?.sizes["x"]
+//        else { return nil }
+//        return URL(string: size)
+//    }
+    
 }
 
 extension News: Codable {
@@ -142,7 +145,7 @@ extension News: Codable {
         case text
         case attachments
         case comments
-        case likes
+//        case likes
         case views
         case reposts
     }
@@ -183,16 +186,16 @@ extension Views: Codable {
     }
 }
 
-//MARK: Likes
-final class Likes {
-    var count: Int
-}
-
-extension Likes: Codable {
-    enum CodingKeys: String, CodingKey {
-        case count
-    }
-}
+////MARK: Likes
+//final class Likes {
+//    var count: Int
+//}
+//
+//extension Likes: Codable {
+//    enum CodingKeys: String, CodingKey {
+//        case count
+//    }
+//}
 
 // MARK: Reposts
 final class Reposts {

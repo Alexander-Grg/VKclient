@@ -39,7 +39,7 @@ class PhotoViewController: UIViewController, UICollectionViewDelegateFlowLayout 
                 try? RealmService.save(items: photos)
                 self.photoCollection.reloadData()
             case .failure:
-                print("Error, check the network service log")
+                print("Data has already been saved to Realm")
             }
         }
     }
