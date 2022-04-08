@@ -21,7 +21,6 @@ class PhotosCollectionViewCell: UICollectionViewCell {
 
     }
     
-    
     func configure(image: UIImage?) {
     }
     

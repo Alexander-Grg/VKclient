@@ -12,7 +12,7 @@ class CommunitiesListTableViewController: UITableViewController, UISearchBarDele
     @IBOutlet var search: UISearchBar!
     var groupsHolder2 = [SearchedObjects]() {
         didSet {
-            tableView.reloadData()
+            self.tableView.reloadData()
         }
     }
     private let network = NetworkService()
@@ -42,6 +42,6 @@ class CommunitiesListTableViewController: UITableViewController, UISearchBarDele
             guard let self = self else { return }
             self.groupsHolder2 = groups
         }
-        tableView.reloadData()
+        self.tableView.reloadData()
     }
 }

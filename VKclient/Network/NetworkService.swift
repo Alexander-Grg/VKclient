@@ -184,26 +184,7 @@ final class NetworkService {
                          completion: @escaping ([SearchedObjects]) -> Void)
     {
         urlConstructor.path += "groups.search"
-//        urlConstructor.queryItems = [
-//            URLQueryItem(
-//                name: "access_token",
-//                value: Session.instance.token),
-//            URLQueryItem(
-//                name: "v"
-//                , value: "5.92"),
-//            URLQueryItem(
-//                name: "sort",
-//                value: "6"),
-//            URLQueryItem(
-//                name: "type",
-//                value: "group"),
-//            URLQueryItem(
-//                name: "q",
-//                value: search),
-//            URLQueryItem(
-//                name: "count",
-//                value: "20")
-//        ]
+
         urlConstructor.queryItems?.append(
             URLQueryItem(
                 name: "sort",
@@ -223,8 +204,12 @@ final class NetworkService {
         
         guard let url = urlConstructor.url else {
             return completion([])}
+        
+        var request = URLRequest(url: url)
+        request.timeoutInterval = 50.0
+        request.setValue("", forHTTPHeaderField: "Token")
     
-        session.dataTask(with: url) { data, response, error in
+        session.dataTask(with: request) { data, response, error in
             if let response = response as? HTTPURLResponse {
                 print(response.statusCode)
             }

@@ -66,7 +66,7 @@ class NewsTableViewCellPost: UITableViewCell {
         self.contentView.addSubview(self.textForPost)
     }
     
-    @objc func buttonTap() {
+    @objc private func buttonTap() {
         isPressed = !isPressed
         showMoreTextButton.setTitle(buttonStateName(), for: .normal)
         delegate?.buttonTapped(cell: self)

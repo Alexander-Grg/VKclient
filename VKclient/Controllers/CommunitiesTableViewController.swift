@@ -25,7 +25,7 @@ class CommunitiesTableViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.register(UINib(nibName: "GroupsTableViewCell", bundle: nil), forCellReuseIdentifier: "myGroupsCells")
+        self.tableView.register(GroupsTableViewCell.self, forCellReuseIdentifier: GroupsTableViewCell.reusedIdentifier)
         self.fetchDataFromNetwork()
 //        self.updatesFromRealm()
       
@@ -74,7 +74,7 @@ class CommunitiesTableViewController: UITableViewController {
                     }
                     print(objects)
     
-                case let .update(groupsRealm, deletions, insertions, modifications ):
+                case let .update(_, deletions, insertions, modifications ):
                     self.tableView.beginUpdates()
                     self.tableView.insertRows(at: insertions.map({ IndexPath(row: $0, section: 0)}),
                                               with: .none)
@@ -104,12 +104,12 @@ class CommunitiesTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "myGroupsCells", for: indexPath) as! GroupsTableViewCell
         guard let groups = groupsfromRealm else { return cell }
-        cell.configure(groups: groups[indexPath.row])
+        cell.configureCell(groups: groups[indexPath.row])
         return cell
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        100.0
+        88.0
     }
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         do { tableView.deselectRow(at: indexPath, animated: true)}
