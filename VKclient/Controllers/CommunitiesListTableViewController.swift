@@ -10,11 +10,14 @@ import UIKit
 class CommunitiesListTableViewController: UITableViewController, UISearchBarDelegate {
     
     @IBOutlet var search: UISearchBar!
-    var groupsHolder2 = [SearchedObjects]() {
-        didSet {
-            self.tableView.reloadData()
-        }
-    }
+    
+    var groupsHolder2 = [SearchedObjects]()
+//    {
+//        didSet {
+//            self.tableView.reloadData()
+//        }
+//    }
+//
     private let network = NetworkService()
     
     override func viewDidLoad() {
@@ -38,10 +41,15 @@ class CommunitiesListTableViewController: UITableViewController, UISearchBarDele
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
       
-        network.SearchForGroups(search: searchText) { [weak self] groups in
-            guard let self = self else { return }
-            self.groupsHolder2 = groups
+        if searchText != nil {
+            network.SearchForGroups(search: searchText) { [weak self] groups in
+                guard let self = self else { return }
+                self.groupsHolder2 = groups
+            }
+            self.tableView.reloadData()
+        } else {
+            self.tableView.reloadData()
         }
-        self.tableView.reloadData()
+     
     }
 }

@@ -272,14 +272,9 @@
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" contentViewInsetsToSafeArea="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LdM-vW-R4L">
                                 <rect key="frame" x="0.0" y="88" width="414" height="808"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                <searchBar key="tableHeaderView" contentMode="redraw" id="mpd-Yy-E8W">
-                                    <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
-                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                                    <textInputTraits key="textInputTraits"/>
-                                </searchBar>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="NewFriendsCell" rowHeight="94" id="Rhj-I0-bmP" customClass="NewFriendsViewCell" customModule="VKclient" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="88.5" width="414" height="94"/>
+                                        <rect key="frame" x="0.0" y="44.5" width="414" height="94"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Rhj-I0-bmP" id="pqR-xp-in9">
                                             <rect key="frame" x="0.0" y="0.0" width="414" height="94"/>
@@ -321,10 +316,6 @@
                                     <outlet property="delegate" destination="DGY-MY-SZ0" id="pXG-hT-z5p"/>
                                 </connections>
                             </tableView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ZBq-Me-3AT" customClass="AlphabetControl" customModule="VKclient" customModuleProvider="target">
-                                <rect key="frame" x="395" y="138" width="24" height="625"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                            </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="V2h-RS-8j8"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -332,17 +323,11 @@
                             <constraint firstItem="LdM-vW-R4L" firstAttribute="leading" secondItem="V2h-RS-8j8" secondAttribute="leading" id="7z7-YP-P3h"/>
                             <constraint firstItem="LdM-vW-R4L" firstAttribute="top" secondItem="V2h-RS-8j8" secondAttribute="top" id="Cie-Oi-sg5"/>
                             <constraint firstItem="LdM-vW-R4L" firstAttribute="trailing" secondItem="V2h-RS-8j8" secondAttribute="trailing" id="OLz-50-gYJ"/>
-                            <constraint firstItem="ZBq-Me-3AT" firstAttribute="trailing" secondItem="V2h-RS-8j8" secondAttribute="trailing" constant="5" id="c9L-X8-KVX"/>
-                            <constraint firstItem="V2h-RS-8j8" firstAttribute="bottom" secondItem="ZBq-Me-3AT" secondAttribute="bottom" constant="50" id="e59-Eo-Uwa"/>
-                            <constraint firstItem="ZBq-Me-3AT" firstAttribute="leading" secondItem="V2h-RS-8j8" secondAttribute="leading" constant="395" id="foL-Ft-Tgr"/>
-                            <constraint firstItem="ZBq-Me-3AT" firstAttribute="top" secondItem="V2h-RS-8j8" secondAttribute="top" constant="50" id="iQv-zI-XeL"/>
                             <constraint firstAttribute="bottom" secondItem="LdM-vW-R4L" secondAttribute="bottom" id="koe-1g-Km0"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="L4k-sD-YkU"/>
                     <connections>
-                        <outlet property="alphabetControl" destination="ZBq-Me-3AT" id="rVW-7B-yms"/>
-                        <outlet property="searchBar" destination="mpd-Yy-E8W" id="Wrq-fy-DGt"/>
                         <outlet property="tableView" destination="LdM-vW-R4L" id="72f-99-nts"/>
                     </connections>
                 </viewController>
@@ -437,18 +422,6 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Мои группы" id="a8e-AG-ew8">
-                        <barButtonItem key="leftBarButtonItem" id="rvx-fI-seW">
-                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" id="isj-zw-WZU">
-                                <rect key="frame" x="20" y="5" width="92" height="34"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="18"/>
-                                <state key="normal" title="Exit"/>
-                                <connections>
-                                    <segue destination="aC5-DL-P5u" kind="unwind" unwindAction="unwindToMainMenuWithSender:" id="NHA-dM-dm7"/>
-                                </connections>
-                            </button>
-                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" style="done" systemItem="add" id="mRm-XM-Iq9">
                             <color key="tintColor" systemColor="tintColor"/>
                             <connections>
@@ -457,11 +430,11 @@
                         </barButtonItem>
                     </navigationItem>
                     <refreshControl key="refreshControl" opaque="NO" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="W0F-Ql-UdA">
+                        <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </refreshControl>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="PMD-wj-BBv" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-                <exit id="aC5-DL-P5u" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="4550.7246376811599" y="375"/>
         </scene>

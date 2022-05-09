@@ -9,24 +9,37 @@ import UIKit
 import SDWebImage
 import RealmSwift
 
-class CommunitiesTableViewController: UITableViewController {
-   
+class CommunitiesTableViewController: UITableViewController, UISearchBarDelegate {
+    
     @IBOutlet var addGroup: UIBarButtonItem!
     
     var groupsfromRealm: Results<GroupsRealm>?
     var groupsNotification: NotificationToken?
-   private let networkService = NetworkService()
-
+    var dictOfGroups: [Character: [GroupsRealm]] = [:]
+    var firstLetters = [Character]()
+    
+    private let networkService = NetworkService()
+    
     private var groupsHolder = [GroupsObjects]() {
         didSet {
             self.tableView.reloadData()
         }
     }
-
+    private(set) lazy var searchBar: UISearchBar = {
+        let s = UISearchBar()
+        s.searchBarStyle = .default
+        s.sizeToFit()
+        s.isTranslucent = false
+        
+        return s
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.tableView.register(GroupsTableViewCell.self, forCellReuseIdentifier: GroupsTableViewCell.reusedIdentifier)
         self.fetchDataFromNetwork()
+        searchBar.delegate = self
+        navigationItem.titleView = searchBar
 //        self.updatesFromRealm()
       
     }
@@ -36,7 +49,29 @@ class CommunitiesTableViewController: UITableViewController {
 //        self.updatesFromRealm()
 //    }
     
-//    MARK: Function for OPERATION
+//    MARK: - Function for sections
+    
+    private func groupsFilteredFromRealm(with groups: Results<GroupsRealm>?) {
+        self.dictOfGroups.removeAll()
+        self.firstLetters.removeAll()
+
+        if let filteredGroups = groups {
+            for group in filteredGroups {
+                guard let dictKey = group.name.first else { continue }
+                if var groups = self.dictOfGroups[dictKey] {
+                    groups.append(group)
+                    self.dictOfGroups[dictKey] = groups
+                } else {
+                    self.firstLetters.append(dictKey)
+                    self.dictOfGroups[dictKey] = [group]
+                }
+            }
+            self.firstLetters.sort()
+        }
+        tableView.reloadData()
+    }
+    
+//    MARK: - Function for OPERATION
     private func fetchDataFromNetwork() {
         networkService.fetchingGroups { [weak self] result in
             guard let self = self else { return }
@@ -44,6 +79,8 @@ class CommunitiesTableViewController: UITableViewController {
             case .success:
                 self.updatesFromRealm()
                 print("Data has been received")
+                self.groupsFilteredFromRealm(with: self.groupsfromRealm)
+                print("Data has been filtered for sections")
             case .failure(let requestError):
                 switch requestError {
                 case .decoderError:
@@ -61,7 +98,20 @@ class CommunitiesTableViewController: UITableViewController {
         }
     }
     
-//    MARK: Realm notification updates
+    //    MARK: - SearchBar setup
+    private func filterGroups(with text: String) {
+        guard !text.isEmpty else {
+            groupsFilteredFromRealm(with: self.groupsfromRealm)
+            return
+        }
+    
+        groupsFilteredFromRealm(with:self.groupsfromRealm?.filter("name CONTAINS[cd] %@", text, text))
+    }
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        filterGroups(with: searchText)
+    }
+    
+//    MARK: - Realm notification updates
         private func updatesFromRealm() {
     
             groupsfromRealm = try? RealmService.load(typeOf: GroupsRealm.self)
@@ -98,19 +148,37 @@ class CommunitiesTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        groupsfromRealm?.count ?? 0
+        let nameFirstLetter = self.firstLetters[section]
+        return self.dictOfGroups[nameFirstLetter]?.count ?? 0
+    }
+    
+    override func numberOfSections(in tableView: UITableView) -> Int {
+        self.firstLetters.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "myGroupsCells", for: indexPath) as! GroupsTableViewCell
-        guard let groups = groupsfromRealm else { return cell }
-        cell.configureCell(groups: groups[indexPath.row])
+        
+        let firstLetter = self.firstLetters[indexPath.section]
+        if let groups = self.dictOfGroups[firstLetter] {
+            cell.configureCell(groups: groups[indexPath.row])
+        }
         return cell
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         88.0
     }
+    
+    override func sectionIndexTitles(for tableView: UITableView) -> [String]? {
+        self.firstLetters.map{ String($0) }
+    }
+    
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        String(self.firstLetters[section])
+    }
+    
+    
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         do { tableView.deselectRow(at: indexPath, animated: true)}
         

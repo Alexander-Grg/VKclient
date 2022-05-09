@@ -29,7 +29,6 @@
 		626610C2270CF15E0089C651 /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 626610C1270CF15E0089C651 /* UserModel.swift */; };
 		626A00E6270F785A000E8F4C /* PhotosModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 626A00E5270F785A000E8F4C /* PhotosModel.swift */; };
 		626A00E9270F78A1000E8F4C /* GroupsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 626A00E8270F78A1000E8F4C /* GroupsModel.swift */; };
-		62840107270A25D300E19405 /* AlphabetControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62840106270A25D300E19405 /* AlphabetControl.swift */; };
 		6287BD8D26D67A4E0087D600 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6287BD8C26D67A4E0087D600 /* SettingsViewController.swift */; };
 		6287BD8F26D67AAF0087D600 /* PhotoCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6287BD8E26D67AAF0087D600 /* PhotoCollectionViewController.swift */; };
 		6287BD9126D67AE90087D600 /* CommunitiesListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6287BD9026D67AE90087D600 /* CommunitiesListTableViewController.swift */; };
@@ -76,7 +75,6 @@
 		6267A7D227B5223B000FCDC9 /* VKclient.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VKclient.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		626A00E5270F785A000E8F4C /* PhotosModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotosModel.swift; sourceTree = "<group>"; };
 		626A00E8270F78A1000E8F4C /* GroupsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupsModel.swift; sourceTree = "<group>"; };
-		62840106270A25D300E19405 /* AlphabetControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlphabetControl.swift; sourceTree = "<group>"; };
 		6287BD8C26D67A4E0087D600 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		6287BD8E26D67AAF0087D600 /* PhotoCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCollectionViewController.swift; sourceTree = "<group>"; };
 		6287BD9026D67AE90087D600 /* CommunitiesListTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunitiesListTableViewController.swift; sourceTree = "<group>"; };
@@ -177,7 +175,6 @@
 		62840105270A25B000E19405 /* Controls */ = {
 			isa = PBXGroup;
 			children = (
-				62840106270A25D300E19405 /* AlphabetControl.swift */,
 				62461FEF2755533F007318E5 /* LikeControl.swift */,
 			);
 			path = Controls;
@@ -403,7 +400,6 @@
 				6260D6AE26E7F8730003E12E /* PhotosCollectionViewCell.swift in Sources */,
 				6287BD8F26D67AAF0087D600 /* PhotoCollectionViewController.swift in Sources */,
 				62F69BBD27329D4E0090B3BC /* NewFriendsTableViewController.swift in Sources */,
-				62840107270A25D300E19405 /* AlphabetControl.swift in Sources */,
 				62317876271CB98A00A42097 /* RealmPhotos.swift in Sources */,
 				626610C2270CF15E0089C651 /* UserModel.swift in Sources */,
 				6287BD9126D67AE90087D600 /* CommunitiesListTableViewController.swift in Sources */,

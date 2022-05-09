@@ -13,17 +13,26 @@ class NewFriendsTableViewController: UIViewController, UISearchBarDelegate {
     
     @IBOutlet var alphabetControl: AlphabetControl!
     @IBOutlet var tableView: UITableView!
-    @IBOutlet private var searchBar: UISearchBar!
-    private let networkService = NetworkService()
-    private var searchedFilterData: [UserObject] = []
-    private var searchedFiltedDataCharacters: [Character] = []
-    private var sectionTitles: [Character] = []
-    private var isSearching: Bool = false
+//    @IBOutlet private var searchBar: UISearchBar!
     var friendsFromRealm: Results<UserRealm>?
     var notificationFriends: NotificationToken?
     var friendsNetworkLetters = [[UserObject]]()
     var dictOfUsers: [Character: [UserRealm]] = [:]
     var firstLetters = [Character]()
+    
+    private let networkService = NetworkService()
+    private var searchedFilterData: [UserObject] = []
+    private var searchedFiltedDataCharacters: [Character] = []
+    private var sectionTitles: [Character] = []
+    private(set) lazy var searchBar: UISearchBar = {
+        let s = UISearchBar()
+        s.searchBarStyle = .default
+        s.sizeToFit()
+        s.isTranslucent = false
+        
+        return s
+    }()
+
     
     //    MARK: - function for TableViewSection
     private func usersFilteredFromRealm(with friends: Results<UserRealm>?) {
@@ -49,6 +58,7 @@ class NewFriendsTableViewController: UIViewController, UISearchBarDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         searchBar.delegate = self
+        navigationItem.titleView = searchBar
         fetchDataFromNetwork()
     }
     

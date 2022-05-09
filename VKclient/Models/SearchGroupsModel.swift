@@ -7,7 +7,7 @@
 
 import Foundation
 //
-final class SearchResponse: Codable {
+struct SearchResponse: Codable {
     let response: SearchResponseNext
     
     enum CodingKeys: String, CodingKey {
@@ -15,7 +15,7 @@ final class SearchResponse: Codable {
     }
 }
 
-final class SearchResponseNext: Codable {
+struct SearchResponseNext: Codable {
     var count: Int = 0
     let items: [SearchedObjects]
     
@@ -24,9 +24,9 @@ final class SearchResponseNext: Codable {
     }
 }
 
-final class SearchedObjects: Codable {
-    dynamic var name: String = ""
-    dynamic var photo: String = ""
+struct SearchedObjects: Codable {
+     var name: String = ""
+     var photo: String = ""
     
     
     
