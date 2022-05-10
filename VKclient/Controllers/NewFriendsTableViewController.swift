@@ -11,9 +11,7 @@ import RealmSwift
 
 class NewFriendsTableViewController: UIViewController, UISearchBarDelegate {
     
-    @IBOutlet var alphabetControl: AlphabetControl!
     @IBOutlet var tableView: UITableView!
-//    @IBOutlet private var searchBar: UISearchBar!
     var friendsFromRealm: Results<UserRealm>?
     var notificationFriends: NotificationToken?
     var friendsNetworkLetters = [[UserObject]]()
@@ -28,11 +26,18 @@ class NewFriendsTableViewController: UIViewController, UISearchBarDelegate {
         let s = UISearchBar()
         s.searchBarStyle = .default
         s.sizeToFit()
-        s.isTranslucent = false
+        s.isTranslucent = true
+        s.barTintColor = .green
         
         return s
     }()
-
+    
+    private(set) lazy var exitButton: UIBarButtonItem = {
+        let b = UIBarButtonItem(title: "Exit", style: .plain, target: self, action: #selector(self.buttonPressed))
+        b.tintColor = .systemBlue
+        
+        return b
+    }()
     
     //    MARK: - function for TableViewSection
     private func usersFilteredFromRealm(with friends: Results<UserRealm>?) {
@@ -59,6 +64,8 @@ class NewFriendsTableViewController: UIViewController, UISearchBarDelegate {
         super.viewDidLoad()
         searchBar.delegate = self
         navigationItem.titleView = searchBar
+        navigationItem.titleView?.tintColor = .systemBlue
+        navigationItem.leftBarButtonItem = exitButton
         fetchDataFromNetwork()
     }
     
@@ -103,6 +110,10 @@ class NewFriendsTableViewController: UIViewController, UISearchBarDelegate {
             }
         }
     }
+    
+    @objc private func buttonPressed() {
+         self.dismiss(animated: true)
+     }
     
     //        MARK: - Segue to transfer photos to the PhotoCollectionView
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

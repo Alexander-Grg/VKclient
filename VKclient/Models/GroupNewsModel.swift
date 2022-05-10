@@ -8,15 +8,15 @@
 import Foundation
 import SwiftyJSON
 
-final class UserGroups: Codable {
+struct UserGroups: Codable {
     var items: [Community]
 }
 
-final class popularGroups: Codable {
+struct popularGroups: Codable {
     var items: [Community]
 }
 
-final class Community: NewsSource {
+struct Community: NewsSource {
 var urlString: String { photo }
 var pictureUrl: URL? { URL(string: photo) }
     

@@ -7,11 +7,11 @@
 
 import Foundation
 
-final class Users: Codable {
+struct Users: Codable {
     var items: [User]
 }
 
-final class User: Codable, NewsSource {
+struct User: Codable, NewsSource {
     var name: String { "\(firstName) \(lastName)" }
     var urlString: String { avatar }
 

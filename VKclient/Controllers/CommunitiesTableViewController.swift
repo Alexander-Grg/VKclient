@@ -11,8 +11,6 @@ import RealmSwift
 
 class CommunitiesTableViewController: UITableViewController, UISearchBarDelegate {
     
-    @IBOutlet var addGroup: UIBarButtonItem!
-    
     var groupsfromRealm: Results<GroupsRealm>?
     var groupsNotification: NotificationToken?
     var dictOfGroups: [Character: [GroupsRealm]] = [:]
@@ -29,9 +27,24 @@ class CommunitiesTableViewController: UITableViewController, UISearchBarDelegate
         let s = UISearchBar()
         s.searchBarStyle = .default
         s.sizeToFit()
-        s.isTranslucent = false
+        s.isTranslucent = true
+        s.barTintColor = .systemBlue
         
         return s
+    }()
+    
+    private(set) lazy var addGroupButton: UIBarButtonItem = {
+        let b = UIBarButtonItem(image: UIImage(systemName: "plus.rectangle.on.rectangle"), style: .plain, target: self, action: #selector(self.addButtonPressed))
+        b.tintColor = .systemBlue
+        
+        return b
+    }()
+    
+    private(set) lazy var exitButton: UIBarButtonItem = {
+        let b = UIBarButtonItem(title: "Exit", style: .plain, target: self, action: #selector(self.buttonPressed))
+        b.tintColor = .systemBlue
+        
+        return b
     }()
     
     override func viewDidLoad() {
@@ -40,16 +53,21 @@ class CommunitiesTableViewController: UITableViewController, UISearchBarDelegate
         self.fetchDataFromNetwork()
         searchBar.delegate = self
         navigationItem.titleView = searchBar
-//        self.updatesFromRealm()
-      
+        navigationItem.leftBarButtonItem = exitButton
+        navigationItem.rightBarButtonItem = addGroupButton
+    }
+
+//    MARK: - Private methods
+    
+   @objc private func buttonPressed() {
+        self.dismiss(animated: true)
     }
     
-//    override func viewWillAppear(_ animated: Bool) {
-//        super.viewWillAppear(animated)
-//        self.updatesFromRealm()
-//    }
-    
-//    MARK: - Function for sections
+    @objc private func addButtonPressed() {
+        let storyBoard = UIStoryboard(name: "Main", bundle: nil)
+        let nextVC = storyBoard.instantiateViewController(withIdentifier: "groupsList")
+        self.navigationController?.pushViewController(nextVC, animated: true)
+    }
     
     private func groupsFilteredFromRealm(with groups: Results<GroupsRealm>?) {
         self.dictOfGroups.removeAll()
@@ -71,7 +89,6 @@ class CommunitiesTableViewController: UITableViewController, UISearchBarDelegate
         tableView.reloadData()
     }
     
-//    MARK: - Function for OPERATION
     private func fetchDataFromNetwork() {
         networkService.fetchingGroups { [weak self] result in
             guard let self = self else { return }
@@ -98,7 +115,6 @@ class CommunitiesTableViewController: UITableViewController, UISearchBarDelegate
         }
     }
     
-    //    MARK: - SearchBar setup
     private func filterGroups(with text: String) {
         guard !text.isEmpty else {
             groupsFilteredFromRealm(with: self.groupsfromRealm)
@@ -110,8 +126,7 @@ class CommunitiesTableViewController: UITableViewController, UISearchBarDelegate
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         filterGroups(with: searchText)
     }
-    
-//    MARK: - Realm notification updates
+
         private func updatesFromRealm() {
     
             groupsfromRealm = try? RealmService.load(typeOf: GroupsRealm.self)
@@ -139,7 +154,6 @@ class CommunitiesTableViewController: UITableViewController, UISearchBarDelegate
     
                 }
             })
-    
         }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -181,6 +195,5 @@ class CommunitiesTableViewController: UITableViewController, UISearchBarDelegate
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         do { tableView.deselectRow(at: indexPath, animated: true)}
-        
     }
 }

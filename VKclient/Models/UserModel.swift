@@ -7,7 +7,7 @@
 
 import Foundation
 
-final class UserResponse: Codable {
+struct UserResponse: Codable {
     let response: NextResponse
     
     enum CodingKeys: String, CodingKey {
@@ -15,7 +15,7 @@ final class UserResponse: Codable {
     }
 }
 
-final class NextResponse: Codable {
+struct NextResponse: Codable {
     var count: Int = 0
     let items: [UserObject]
     
@@ -25,7 +25,7 @@ final class NextResponse: Codable {
     }
 }
 
-final class UserObject: Codable {
+struct UserObject: Codable {
     dynamic var firstName: String = ""
     dynamic var lastName: String = ""
     dynamic var id: Int = 0

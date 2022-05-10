@@ -75,7 +75,7 @@ class NewsTableViewController: UIViewController {
 //            self.newsPost = newsPost
 //            self.tableView.reloadData()
 //        }
-        
+
         networkService.loadNewsFeed { [weak self] finalResult, nextFrom in
             guard let self = self else { return }
             switch finalResult {
@@ -88,16 +88,9 @@ class NewsTableViewController: UIViewController {
         }
     }
     
-//    networkService.loadFriends { [weak self] result in
-//        guard let self = self else { return }
-//        switch result {
-//        case .success(let users):
-//            try? RealmService.save(items: users)
-//            self.tableView.reloadData()
-//        case .failure:
-//            print("Error, check the network service log")
-//        }
-//    }
+
+    
+
     
     private func configRefreshControl() {
         let refresh = UIRefreshControl()
@@ -217,16 +210,6 @@ extension NewsTableViewController: UITableViewDataSourcePrefetching {
                 self.tableView.insertSections(indexSet, with: .automatic)
                 tableView.endUpdates()
                 self.isLoading = false
-        
-//            networkService.loadNewsFeed(startFrom: nextFrom) { [weak self] (news, nextFrom) in
-//                guard let self = self else { return }
-//
-//                let indexSet = IndexSet(integersIn: (self.newsPost?.count ?? 0) ..< ((self.newsPost?.count ?? 0) + news.count))
-//
-//                self.newsPost?.append(contentsOf: news)
-//                print(news)
-//                self.nextFrom = nextFrom
-             
             }
         }
     }

@@ -12,7 +12,6 @@
 		62074C6227527993005D0418 /* GroupNewsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62074C6127527993005D0418 /* GroupNewsModel.swift */; };
 		62081C9E270200670068B97C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 62081C9D270200670068B97C /* Main.storyboard */; };
 		620CAE30270899980090CB77 /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 620CAE2F270899980090CB77 /* NetworkService.swift */; };
-		621A17F42716CE2B008DF60C /* SearchGroupsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 621A17F32716CE2B008DF60C /* SearchGroupsModel.swift */; };
 		621A26A027B50F28001693BC /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 621A269F27B50F28001693BC /* SwiftyJSON */; };
 		621A26A327B50F49001693BC /* PromiseKit in Frameworks */ = {isa = PBXBuildFile; productRef = 621A26A227B50F49001693BC /* PromiseKit */; };
 		621A26A627B50F98001693BC /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 621A26A527B50F98001693BC /* Alamofire */; };
@@ -62,7 +61,6 @@
 		62074C6127527993005D0418 /* GroupNewsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupNewsModel.swift; sourceTree = "<group>"; };
 		62081C9D270200670068B97C /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		620CAE2F270899980090CB77 /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
-		621A17F32716CE2B008DF60C /* SearchGroupsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchGroupsModel.swift; sourceTree = "<group>"; };
 		622C308A279494AF00DD63A9 /* GroupsTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = GroupsTableViewCell.xib; sourceTree = "<group>"; };
 		62317871271C96C700A42097 /* RealmService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmService.swift; sourceTree = "<group>"; };
 		62317873271CB97500A42097 /* RealmUsers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmUsers.swift; sourceTree = "<group>"; };
@@ -146,7 +144,6 @@
 				626A00E5270F785A000E8F4C /* PhotosModel.swift */,
 				626610C1270CF15E0089C651 /* UserModel.swift */,
 				626A00E8270F78A1000E8F4C /* GroupsModel.swift */,
-				621A17F32716CE2B008DF60C /* SearchGroupsModel.swift */,
 				62E8F54D274EC4250037A9A7 /* PostModel.swift */,
 				62074C5F2752766F005D0418 /* UserNewsModel.swift */,
 				62074C6127527993005D0418 /* GroupNewsModel.swift */,
@@ -392,7 +389,6 @@
 				62317872271C96C700A42097 /* RealmService.swift in Sources */,
 				62B572CE273C394A001B4689 /* NewsTableViewCellPhoto.swift in Sources */,
 				62E8F54E274EC4250037A9A7 /* PostModel.swift in Sources */,
-				621A17F42716CE2B008DF60C /* SearchGroupsModel.swift in Sources */,
 				62BBDB6A26CA6A3700144345 /* AppDelegate.swift in Sources */,
 				62317874271CB97500A42097 /* RealmUsers.swift in Sources */,
 				62461FF02755533F007318E5 /* LikeControl.swift in Sources */,
