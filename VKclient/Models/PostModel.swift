@@ -18,6 +18,10 @@ extension NewsSource {
     var urlImage: URL? { URL(string: urlString)}
 }
 
+struct NewsResponse: Codable {
+    let response: Newsfeed
+}
+
 struct Newsfeed: Codable {
     var items: [News]
     var profiles: [User]
@@ -40,7 +44,7 @@ struct News: Codable {
     var text: String
     var attachments: [Attachments]?
     var comments: Comments?
-//    var likes: Likes?
+    var likes: Likes?
     var views: Views?
     var reposts: Reposts?
     
@@ -73,7 +77,7 @@ struct News: Codable {
         case text
         case attachments
         case comments
-//        case likes
+        case likes
         case views
         case reposts
    
@@ -114,15 +118,15 @@ struct Views: Codable {
 
 
 //MARK: Likes
-//struct Likes {
-//    var count: Int
-//}
-//
-//extension Likes: Codable {
-//    enum CodingKeys: String, CodingKey {
-//        case count
-//    }
-//}
+struct Likes {
+    var count: Int
+}
+
+extension Likes: Codable {
+    enum CodingKeys: String, CodingKey {
+        case count
+    }
+}
 
 // MARK: Reposts
 struct Reposts: Codable {

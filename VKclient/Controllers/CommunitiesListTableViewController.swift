@@ -49,7 +49,8 @@ class CommunitiesListTableViewController: UITableViewController, UISearchBarDele
                 guard let self = self else { return }
                 self.groupsHolder = groups
             }
-        self.tableView.reloadData()
-     
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
+        }
     }
 }

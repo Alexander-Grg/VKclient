@@ -52,4 +52,9 @@ class NewsTableViewCellPhoto: UITableViewCell{
         let imageURL = image.url
         newsPhoto.sd_setImage(with: imageURL)
     }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        newsPhoto.image = nil
+    }
 }

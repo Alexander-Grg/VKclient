@@ -110,10 +110,17 @@ class NewsFooterSection: UITableViewCell {
     }
     
     func configureCell(_ data: News) {
-        self.viewsCounter.setTitle("\(String(describing: data.views))", for: .normal)
-        self.repostButton.setTitle("\(String(describing: data.reposts))", for: .normal)
-        self.commentsButton.setTitle("\(String(describing: data.comments))", for: .normal)
-//        self.likesButton.setTitle("\(String(describing: data.likes))", for: .normal)
+        
+        guard let likes = data.likes,
+              let view = data.views,
+              let reposts = data.reposts,
+              let comments = data.comments
+        else { return }
+        
+        self.viewsCounter.setTitle("\(view.count)", for: .normal)
+        self.repostButton.setTitle("\(reposts.count)", for: .normal)
+        self.commentsButton.setTitle("\(comments.count)", for: .normal)
+        self.likesButton.setTitle("\(likes.count)", for: .normal)
     }
     
 }
