@@ -192,7 +192,6 @@ class CommunitiesTableViewController: UITableViewController, UISearchBarDelegate
         String(self.firstLetters[section])
     }
     
-    
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         do { tableView.deselectRow(at: indexPath, animated: true)}
     }

@@ -40,7 +40,7 @@
 		62B572CE273C394A001B4689 /* NewsTableViewCellPhoto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62B572CD273C394A001B4689 /* NewsTableViewCellPhoto.swift */; };
 		62B572D2273C452D001B4689 /* NewsHeaderSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62B572D1273C452D001B4689 /* NewsHeaderSection.swift */; };
 		62B572D4273C4574001B4689 /* NewsFooterSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62B572D3273C4574001B4689 /* NewsFooterSection.swift */; };
-		62BA53FF2704AFB5000F790A /* SessionPattern.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62BA53FE2704AFB5000F790A /* SessionPattern.swift */; };
+		62BA53FF2704AFB5000F790A /* SessionSingleton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62BA53FE2704AFB5000F790A /* SessionSingleton.swift */; };
 		62BBDB6A26CA6A3700144345 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62BBDB6926CA6A3700144345 /* AppDelegate.swift */; };
 		62BBDB6C26CA6A3700144345 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62BBDB6B26CA6A3700144345 /* SceneDelegate.swift */; };
 		62BBDB6E26CA6A3700144345 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62BBDB6D26CA6A3700144345 /* LoginViewController.swift */; };
@@ -85,7 +85,7 @@
 		62B572CD273C394A001B4689 /* NewsTableViewCellPhoto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsTableViewCellPhoto.swift; sourceTree = "<group>"; };
 		62B572D1273C452D001B4689 /* NewsHeaderSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsHeaderSection.swift; sourceTree = "<group>"; };
 		62B572D3273C4574001B4689 /* NewsFooterSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsFooterSection.swift; sourceTree = "<group>"; };
-		62BA53FE2704AFB5000F790A /* SessionPattern.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionPattern.swift; sourceTree = "<group>"; };
+		62BA53FE2704AFB5000F790A /* SessionSingleton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionSingleton.swift; sourceTree = "<group>"; };
 		62BBDB6926CA6A3700144345 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		62BBDB6B26CA6A3700144345 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		62BBDB6D26CA6A3700144345 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
@@ -122,7 +122,6 @@
 		620CAE2E270899810090CB77 /* Network */ = {
 			isa = PBXGroup;
 			children = (
-				621C4E48276523BC00F2BB41 /* Operations */,
 				620CAE2F270899980090CB77 /* NetworkService.swift */,
 				62317871271C96C700A42097 /* RealmService.swift */,
 			);
@@ -150,13 +149,6 @@
 				62B9EEA926E3A041000BCA91 /* Base */,
 			);
 			path = Models;
-			sourceTree = "<group>";
-		};
-		621C4E48276523BC00F2BB41 /* Operations */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Operations;
 			sourceTree = "<group>";
 		};
 		6249009E271C57250060FAA6 /* Realm models */ = {
@@ -239,7 +231,7 @@
 		62BA53FD2704AF9C000F790A /* Patterns */ = {
 			isa = PBXGroup;
 			children = (
-				62BA53FE2704AFB5000F790A /* SessionPattern.swift */,
+				62BA53FE2704AFB5000F790A /* SessionSingleton.swift */,
 			);
 			path = Patterns;
 			sourceTree = "<group>";
@@ -374,7 +366,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				62BA53FF2704AFB5000F790A /* SessionPattern.swift in Sources */,
+				62BA53FF2704AFB5000F790A /* SessionSingleton.swift in Sources */,
 				62BBDB6E26CA6A3700144345 /* LoginViewController.swift in Sources */,
 				620CAE30270899980090CB77 /* NetworkService.swift in Sources */,
 				628E853B26FFABD400FB5FAE /* customNavigator.swift in Sources */,

@@ -93,10 +93,10 @@ class NewFriendsTableViewController: UIViewController, UISearchBarDelegate {
             }
         }
     }
-
+    
     private func updatesFromRealm() {
         
-       friendsFromRealm = try? RealmService.get(type: UserRealm.self)
+        friendsFromRealm = try? RealmService.get(type: UserRealm.self)
         
         notificationFriends = friendsFromRealm?.observe { [weak self] changes in
             guard let self = self else { return }
@@ -112,8 +112,8 @@ class NewFriendsTableViewController: UIViewController, UISearchBarDelegate {
     }
     
     @objc private func buttonPressed() {
-         self.dismiss(animated: true)
-     }
+        self.dismiss(animated: true)
+    }
     
     //        MARK: - Segue to transfer photos to the PhotoCollectionView
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -165,7 +165,7 @@ extension NewFriendsTableViewController: UITableViewDataSource {
         String(self.firstLetters[section])
         
     }
-
+    
     //    MARK: - SearchBar setup
     private func filterFriends(with text: String) {
         guard !text.isEmpty else {
@@ -186,20 +186,20 @@ extension NewFriendsTableViewController: UITableViewDelegate {
         defer { tableView.deselectRow(at: indexPath, animated: true)}
     }
     
-//    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-//        if editingStyle == .delete,
-//           let friendToDelete = friendsFromRealm?[indexPath.row] {
-//            do {
-//                let realm = try Realm(configuration: Realm.Configuration(deleteRealmIfMigrationNeeded: true))
-//                try realm.write {
-//                    realm.delete(friendToDelete)
-//                }
-//                tableView.deleteRows(at: [indexPath], with: .fade)
-//            } catch {
-//                print(error)
-//            }
-//        }
-//    }
+    //    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+    //        if editingStyle == .delete,
+    //           let friendToDelete = friendsFromRealm?[indexPath.row] {
+    //            do {
+    //                let realm = try Realm(configuration: Realm.Configuration(deleteRealmIfMigrationNeeded: true))
+    //                try realm.write {
+    //                    realm.delete(friendToDelete)
+    //                }
+    //                tableView.deleteRows(at: [indexPath], with: .fade)
+    //            } catch {
+    //                print(error)
+    //            }
+    //        }
+    //    }
 }
 extension NewFriendsTableViewController: UIGestureRecognizerDelegate {
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRequireFailureOf otherGestureRecognizer: UIGestureRecognizer) -> Bool {

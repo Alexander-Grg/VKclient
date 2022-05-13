@@ -27,15 +27,15 @@ class NewsTableViewCellPhoto: UITableViewCell{
     
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-          super.init(style: style, reuseIdentifier: reuseIdentifier)
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
         self.setView()
-  
-      }
-  
-      required init?(coder aDecoder: NSCoder) {
-          super.init(coder: aDecoder)
-          self.setView()
-      }
+        
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        self.setView()
+    }
     
     func setView() {
         contentView.addSubview(newsPhoto)

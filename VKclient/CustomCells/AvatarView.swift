@@ -66,7 +66,6 @@ class AvatarView: UIView {
             imageView.trailingAnchor.constraint(equalTo: shadowView.trailingAnchor),
             imageView.bottomAnchor.constraint(equalTo: shadowView.bottomAnchor),
         ])
-        
     }
     
     private func viewSettings() {

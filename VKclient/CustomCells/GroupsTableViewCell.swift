@@ -22,7 +22,7 @@ class GroupsTableViewCell: UITableViewCell {
         recognizer.numberOfTouchesRequired = 1
         a.addGestureRecognizer(recognizer)
         a.isUserInteractionEnabled = true
-//        a.contentMode = .scaleToFill
+        //        a.contentMode = .scaleToFill
         
         return a
     }()
@@ -35,12 +35,12 @@ class GroupsTableViewCell: UITableViewCell {
         l.textAlignment = .center
         l.lineBreakMode = .byWordWrapping
         l.numberOfLines = 2
-//        l.contentMode = .scaleToFill
+        //        l.contentMode = .scaleToFill
         
         return l
     }()
     
-//    MARK: - Lifecycle
+    //    MARK: - Lifecycle
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -55,8 +55,8 @@ class GroupsTableViewCell: UITableViewCell {
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
     }
-
-//    MARK: - Configuring UI
+    
+    //    MARK: - Configuring UI
     
     private func configureUI() {
         self.addSubviews()
@@ -81,7 +81,7 @@ class GroupsTableViewCell: UITableViewCell {
             self.labelGroup.leftAnchor.constraint(equalTo: avatarView.rightAnchor, constant: 10),
             self.labelGroup.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: 10)
             
-        
+            
         ])
     }
     
@@ -104,10 +104,7 @@ class GroupsTableViewCell: UITableViewCell {
     
     func configureCell(groups: GroupsRealm) {
         guard let url = URL(string: groups.photo) else { return }
-//        avatarView.sd_setImage(with: url)
-//        avatarView.imageView.sd_setImage(with: url)
         avatarView.imageView.sd_setImage(with: url)
         labelGroup.text = groups.name
     }
-    
 }

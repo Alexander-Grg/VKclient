@@ -12,7 +12,7 @@ class NewsFooterSection: UITableViewCell {
     //    MARK: - Properties
     
     static let reuseIdentifier = "NewsFooter"
-   
+    
     private(set) lazy var repostButton: UIButton = {
         let b = UIButton()
         b.translatesAutoresizingMaskIntoConstraints = false
@@ -122,5 +122,4 @@ class NewsFooterSection: UITableViewCell {
         self.commentsButton.setTitle("\(comments.count)", for: .normal)
         self.likesButton.setTitle("\(likes.count)", for: .normal)
     }
-    
 }

@@ -10,7 +10,7 @@ import SDWebImage
 
 class NewsHeaderSection: UITableViewCell {
     //    MARK: - Properties
-
+    
     private(set) lazy var avatarView: UIImageView = {
         let avatar = UIImageView()
         avatar.translatesAutoresizingMaskIntoConstraints = false
@@ -43,7 +43,7 @@ class NewsHeaderSection: UITableViewCell {
         
         return label
     }()
-
+    
     static let reuseIdentifier = "NewsHeaderSection"
     
     //    MARK: - Lifecycle
@@ -78,7 +78,6 @@ class NewsHeaderSection: UITableViewCell {
         self.contentView.addSubview(self.postTimeLabel)
         self.contentView.addSubview(self.userName)
     }
-    
     
     private func setupConstraints() {
         

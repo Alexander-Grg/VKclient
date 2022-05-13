@@ -45,10 +45,10 @@ class CommunitiesListTableViewController: UITableViewController, UISearchBarDele
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         
-            network.searchForGroups(search: searchText) { [weak self] groups in
-                guard let self = self else { return }
-                self.groupsHolder = groups
-            }
+        network.searchForGroups(search: searchText) { [weak self] groups in
+            guard let self = self else { return }
+            self.groupsHolder = groups
+        }
         DispatchQueue.main.async {
             self.tableView.reloadData()
         }

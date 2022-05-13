@@ -83,25 +83,6 @@ class LoginViewController: UIViewController {
                                     completion: nil)
         }
         
-//                func animationLoading1() {
-//                    UIView.animateKeyframes(withDuration: 3,
-//                                            delay: 0,
-//                                            options: [.repeat, .autoreverse],
-//                                            animations: {
-//                        UIView.addKeyframe(withRelativeStartTime: 0,
-//                                           relativeDuration: 0.33,
-//                                           animations: { self.circle1.alpha = 1 })
-//                        UIView.addKeyframe(withRelativeStartTime: 0.33,
-//                                           relativeDuration: 0.33,
-//                                           animations: { self.circle2.alpha = 1 })
-//                        UIView.addKeyframe(withRelativeStartTime: 0.66,
-//                                           relativeDuration: 0.33,
-//                                           animations: { self.circle3.alpha = 1 })
-//                    })
-//                }
-
-    
-    
     override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
         let checkResult = checkUserData()
         
@@ -125,8 +106,5 @@ class LoginViewController: UIViewController {
         let action = UIAlertAction(title: "OK", style: .cancel, handler: nil)
         alert.addAction(action)
         present(alert, animated: true, completion: nil)
-    }
-    
+    }    
 }
-
-

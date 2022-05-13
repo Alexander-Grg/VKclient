@@ -1,5 +1,5 @@
 //
-//  SessionPattern.swift
+//  SessionSingleton.swift
 //  MyFirstApp
 //
 //  Created by Alexander Grigoryev on 29.09.2021.

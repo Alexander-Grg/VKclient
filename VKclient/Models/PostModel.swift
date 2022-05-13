@@ -9,7 +9,7 @@ import Foundation
 import SwiftyJSON
 
 protocol NewsSource {
-
+    
     var name: String { get }
     var urlString : String { get }
 }
@@ -80,9 +80,9 @@ struct News: Codable {
         case likes
         case views
         case reposts
-   
+        
     }
-
+    
 }
 
 // MARK: Attachments
@@ -115,7 +115,6 @@ struct Views: Codable {
         case count
     }
 }
-
 
 //MARK: Likes
 struct Likes {

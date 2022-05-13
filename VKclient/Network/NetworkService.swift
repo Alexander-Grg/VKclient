@@ -6,8 +6,6 @@
 //
 
 import Foundation
-import Alamofire
-import SwiftyJSON
 
 final class NetworkService {
     
@@ -75,13 +73,8 @@ final class NetworkService {
                     print(completion(.failure(.decoderError)))
                 }
             }
-            
         }  .resume()
     }
-    
-    
-    
-    
     
     // MARK: Load photos method
     func loadPhotos(
@@ -153,7 +146,6 @@ final class NetworkService {
         guard let URL = urlConstructor.url else
         { return completion(.failure(.invalidUrl)) }
         
-        
         session.dataTask(with: URL) { data, response, error in
             if let response = response as? HTTPURLResponse {
                 print(response.statusCode)
@@ -175,7 +167,6 @@ final class NetworkService {
             }
         }.resume()
     }
-    
     
     //    MARK: Search for groups method
     func searchForGroups(search: String,
@@ -211,7 +202,6 @@ final class NetworkService {
             if let response = response as? HTTPURLResponse {
                 print(response.statusCode)
             }
-            
             if let data = data {
                 do {
                     let groupsData = try JSONDecoder().decode(GroupsResponse.self,
@@ -246,139 +236,64 @@ final class NetworkService {
             urlConstructor.queryItems?.append(URLQueryItem(name: "start_time", value: "\(startTime)"))
         }
         
-            if let url = urlConstructor.url {
+        if let url = urlConstructor.url {
+            
+            session.dataTask(with: url) { data, response, error in
+                if let response = response as? HTTPURLResponse {
+                    print(response.statusCode)
+                }
                 
-                session.dataTask(with: url) { data, response, error in
-                    if let response = response as? HTTPURLResponse {
-                        print(response.statusCode)
-                    }
-               
-                    
-                    var posts: [News] = []
-                    var profiles: [User] = []
-                    var groups: [Community] = []
-                    var nextFrom = ""
-                    
-                    if let data = data {
+                var posts: [News] = []
+                var profiles: [User] = []
+                var groups: [Community] = []
+                var nextFrom = ""
+                
+                if let data = data {
+                    do {
+                        let next: String = try JSONDecoder().decode(NewsResponse.self, from: data).response.nextFrom
+                        nextFrom = next
                         
-                        do {
-//                            DispatchQueue.global().async(group: self.dispatchGroup, qos: .userInitiated) {
-                            let next: String = try JSONDecoder().decode(NewsResponse.self, from: data).response.nextFrom
-                               nextFrom = next
-//                            }
-//                            DispatchQueue.global().async(group: self.dispatchGroup, qos: .userInitiated) {
-                                let postJSON = try JSONDecoder().decode(NewsResponse.self, from: data).response.items
-                                posts = postJSON
-//                            }
-                            
-//                            DispatchQueue.global().async(group: self.dispatchGroup, qos: .userInitiated) {
-                                let userJSON = try JSONDecoder().decode(NewsResponse.self, from: data).response.profiles
-                                profiles = userJSON
-//                            }
-                            
-//                            DispatchQueue.global().async(group: self.dispatchGroup, qos: .userInitiated) {
-                                let groupsJSON = try JSONDecoder().decode(NewsResponse.self, from: data).response.groups
-                                groups = groupsJSON
-//                            }
-                            
-                            
-//                            self.dispatchGroup.notify(queue: DispatchQueue.global()) {
-                                let newsWithSources = posts.compactMap { posts -> News? in
-                                    if posts.sourceId > 0 {
-                                        var news = posts
-                                        guard let newsID = profiles.first(where: { $0.id == posts.sourceId})
-                                        else { return nil }
-                                        news.urlProtocol = newsID
-                                        return news
-                                    } else {
-                                        var news = posts
-                                        guard let newsID = groups.first(where: { -$0.id == posts.sourceId})
-                                        else { return nil }
-                                        news.urlProtocol = newsID
-                                        return news
-                                    }
+                        DispatchQueue.global().async(group: self.dispatchGroup, qos: .userInitiated) {
+                            let postJSON = try? JSONDecoder().decode(NewsResponse.self, from: data).response.items
+                            posts = postJSON ?? []
+                        }
+                        
+                        DispatchQueue.global().async(group: self.dispatchGroup, qos: .userInitiated) {
+                            let userJSON = try? JSONDecoder().decode(NewsResponse.self, from: data).response.profiles
+                            profiles = userJSON ?? []
+                        }
+                        
+                        DispatchQueue.global().async(group: self.dispatchGroup, qos: .userInitiated) {
+                            let groupsJSON = try? JSONDecoder().decode(NewsResponse.self, from: data).response.groups
+                            groups = groupsJSON ?? []
+                        }
+                        
+                        self.dispatchGroup.notify(queue: DispatchQueue.global()) {
+                            let newsWithSources = posts.compactMap { posts -> News? in
+                                if posts.sourceId > 0 {
+                                    var news = posts
+                                    guard let newsID = profiles.first(where: { $0.id == posts.sourceId})
+                                    else { return nil }
+                                    news.urlProtocol = newsID
+                                    return news
+                                } else {
+                                    var news = posts
+                                    guard let newsID = groups.first(where: { -$0.id == posts.sourceId})
+                                    else { return nil }
+                                    news.urlProtocol = newsID
+                                    return news
                                 }
-                            
+                            }
                             DispatchQueue.main.async {
                                 completion(newsWithSources, nextFrom)
                             }
-                        } catch {
-                            completion([], "")
-                            print(error)
                         }
+                    } catch {
+                        completion([], "")
+                        print(error)
                     }
-                    
-                } .resume()
-            }
+                }
+            } .resume()
         }
+    }
 }
-//
-//        func loadNewsFeed(startFrom: String = "", startTime: Double? = nil, _ completion: @escaping ([PostNews], String) -> Void) {
-//            let path = "/method/newsfeed.get"
-//
-//            var params: Parameters = [
-//                "access_token": Session.instance.token,
-//                "v": "5.92",
-//                "filters": "post, photo",
-//                "count": "10",
-//                "start_from": startFrom
-//            ]
-//
-//            if let startTime = startTime {
-//                params["start_time"] = startTime
-//            }
-//
-//            AF.request(NetworkService.baseUrl + path,
-//                       method: .get,
-//                       parameters: params)
-//                .responseData { response in
-//                    switch response.result {
-//                    case .success(let data):
-//
-//                        var posts: [PostNews] = []
-//                        var profiles: [UserNews] = []
-//                        var groups: [GroupNews] = []
-//                        let nextFrom = JSON(data)["response"]["next_from"].stringValue
-//
-//                        DispatchQueue.global().async(group: self.dispatchGroup, qos: .userInitiated) {
-//                            let postJSONs = JSON(data)["response"]["items"].arrayValue
-//                            posts = postJSONs.compactMap(PostNews.init)
-//                        }
-//
-//                        DispatchQueue.global().async(group: self.dispatchGroup, qos: .userInitiated) {
-//                            let profileJSONs = JSON(data)["response"]["profiles"].arrayValue
-//                            profiles = profileJSONs.compactMap { UserNews($0) }
-//                        }
-//
-//                        DispatchQueue.global().async(group: self.dispatchGroup, qos: .userInitiated) {
-//                            let groupJSONs = JSON(data)["response"]["groups"].arrayValue
-//                            groups = groupJSONs.compactMap { GroupNews($0) }
-//                        }
-//
-//                        self.dispatchGroup.notify(queue: DispatchQueue.global()) {
-//                            let newsWithSources = posts.compactMap { posts -> PostNews? in
-//                                if posts.sourceID > 0 {
-//                                    let news = posts
-//                                    guard let newsID = profiles.first(where: { $0.id == posts.sourceID})
-//                                    else { return nil }
-//                                    news.urlProtocol = newsID
-//                                    return news
-//                                } else {
-//                                    let news = posts
-//                                    guard let newsID = groups.first(where: { -$0.id == posts.sourceID })
-//                                    else { return nil }
-//                                    news.urlProtocol = newsID
-//                                    return news
-//                                }
-//                            }
-//                            DispatchQueue.main.async {
-//                                completion(newsWithSources, nextFrom)
-//                            }
-//                        }
-//
-//                    case .failure(let error):
-//                        print(error)
-//                    }
-//                }
-//        }
-//    }

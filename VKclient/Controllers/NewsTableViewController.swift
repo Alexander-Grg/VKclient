@@ -47,7 +47,7 @@ class NewsTableViewController: UIViewController {
     @IBOutlet var tableView: UITableView!
     let token = Session.instance.token
     let networkService = NetworkService()
-    var newsPost: [News]? 
+    var newsPost: [News]?
     var IDs = [Int]()
     var groupsForHeader: [Community] = []
     var usersForHeader: [User] = []
@@ -66,19 +66,19 @@ class NewsTableViewController: UIViewController {
         self.tableView.register(NewsTableViewCellPost.self, forCellReuseIdentifier: NewsTableViewCellPost.reusedIdentifier)
         self.tableView.register(NewsTableViewCellPhoto.self, forCellReuseIdentifier: NewsTableViewCellPhoto.reuseIdentifier)
         self.tableView.register(NewsFooterSection.self, forCellReuseIdentifier: NewsFooterSection.reuseIdentifier)
-   
+        
     }
     
     private func loadNews() {
         networkService.loadNewsFeed { [weak self] newsPost, nextFrom  in
-             guard let self = self else { return }
+            guard let self = self else { return }
             self.newsPost = newsPost
-//            DispatchQueue.main.async {
-                self.tableView.reloadData()
-//            }
-         }
-     }
-
+            //            DispatchQueue.main.async {
+            self.tableView.reloadData()
+            //            }
+        }
+    }
+    
     private func configRefreshControl() {
         let refresh = UIRefreshControl()
         refresh.addTarget(self,
@@ -102,9 +102,9 @@ extension NewsTableViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         newsPost?[section].rowsCounter.count ?? 0
     }
-
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-     
+        
         guard
             let news = newsPost?[indexPath.section] else { return NewsTableViewCellPost() }
         
@@ -171,58 +171,31 @@ extension NewsTableViewController: UITableViewDelegate {
 extension NewsTableViewController: UITableViewDataSourcePrefetching {
     
     func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
-//
-//        guard let maxSections = indexPaths.map({ $0.section }).max() else { return }
-//        guard let newsItems = self.newsPost else { return }
-//
-//        if maxSections > newsItems.count - 3, !isLoading {
-//            isLoading = true
-//
-//            networkService.loadNewsFeed(startFrom: nextFrom) { [weak self] (news, nextFrom) in
-//                guard let self = self else { return }
-//
-//                let indexSet = IndexSet(integersIn: (self.newsPost?.count ?? 0) ..< ((self.newsPost?.count ?? 0) + news.count))
-//
-//                self.newsPost?.append(contentsOf: news)
-//                self.nextFrom = nextFrom
-//
-//
-//                DispatchQueue.main.async {
-//                self.tableView.beginUpdates()
-//                    self.tableView.insertSections(indexSet, with: .automatic)
-//                self.tableView.endUpdates()
-//                }
-//
-//                    self.isLoading = false
-//            }
-//        }
-//    }
-        
-        guard let maxSections = indexPaths.map({ $0.section }).max() else { return }
-                guard let newsItems = self.newsPost else { return }
-            
-            
-            if maxSections > newsItems.count - 3, !isLoading {
-                isLoading = true
-            
-                networkService.loadNewsFeed(startFrom: nextFrom) { [weak self] (news, nextFrom) in
-                    guard let self = self else { return }
-                    DispatchQueue.main.async {
-                    let indexSet = IndexSet(integersIn: (self.newsPost?.count ?? 0) ..< ((self.newsPost?.count ?? 0) + news.count))
 
+        guard let maxSections = indexPaths.map({ $0.section }).max() else { return }
+        guard let newsItems = self.newsPost else { return }
+        
+        
+        if maxSections > newsItems.count - 3, !isLoading {
+            isLoading = true
+            
+            networkService.loadNewsFeed(startFrom: nextFrom) { [weak self] (news, nextFrom) in
+                guard let self = self else { return }
+                DispatchQueue.main.async {
+                    let indexSet = IndexSet(integersIn: (self.newsPost?.count ?? 0) ..< ((self.newsPost?.count ?? 0) + news.count))
+                    
                     self.newsPost?.append(contentsOf: news)
                     print(news)
                     self.nextFrom = nextFrom
-                   
-                        tableView.beginUpdates()
-                        self.tableView.insertSections(indexSet, with: .automatic)
-                        tableView.endUpdates()
                     
-                 
+                    tableView.beginUpdates()
+                    self.tableView.insertSections(indexSet, with: .automatic)
+                    tableView.endUpdates()
+                    
                     self.isLoading = false
                 }
-                }
             }
+        }
     }
 }
 

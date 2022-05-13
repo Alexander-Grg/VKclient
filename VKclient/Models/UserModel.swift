@@ -41,7 +41,6 @@ struct UserObject: Codable {
     }
 }
 
-
 //MARK: JSON response
 //{
 //    "response": {
