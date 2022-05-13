@@ -11,7 +11,7 @@ import SDWebImage
 class NewsHeaderSection: UITableViewCell {
     //    MARK: - Properties
 
-    let avatarView: UIImageView = {
+    private(set) lazy var avatarView: UIImageView = {
         let avatar = UIImageView()
         avatar.translatesAutoresizingMaskIntoConstraints = false
         avatar.layer.cornerRadius = 10.0
@@ -20,7 +20,7 @@ class NewsHeaderSection: UITableViewCell {
         return avatar
     }()
     
-    let postTimeLabel: UILabel = {
+    private(set) lazy var postTimeLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.systemFont(ofSize: 14.0)
@@ -32,7 +32,7 @@ class NewsHeaderSection: UITableViewCell {
         return label
     }()
     
-    let userName: UILabel = {
+    private(set) lazy var userName: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.systemFont(ofSize: 14.0)
@@ -74,34 +74,34 @@ class NewsHeaderSection: UITableViewCell {
     }
     
     private func addSubviews(){
-        self.addSubview(self.avatarView)
-        self.addSubview(self.postTimeLabel)
-        self.addSubview(self.userName)
+        self.contentView.addSubview(self.avatarView)
+        self.contentView.addSubview(self.postTimeLabel)
+        self.contentView.addSubview(self.userName)
     }
     
     
     private func setupConstraints() {
         
-        let s = safeAreaLayoutGuide
+        let c = contentView
         
         NSLayoutConstraint.activate([
-            self.avatarView.leftAnchor.constraint(equalTo: s.leftAnchor, constant: 5),
-            self.avatarView.topAnchor.constraint(equalTo: s.topAnchor, constant: 5),
+            self.avatarView.leftAnchor.constraint(equalTo: c.leftAnchor, constant: 5),
+            self.avatarView.topAnchor.constraint(equalTo: c.topAnchor, constant: 5),
             self.avatarView.rightAnchor.constraint(equalTo: userName.leftAnchor),
             self.avatarView.widthAnchor.constraint(equalToConstant: 60),
             self.avatarView.heightAnchor.constraint(equalToConstant: 60),
             
             self.userName.leftAnchor.constraint(equalTo: avatarView.rightAnchor),
-            self.userName.topAnchor.constraint(equalTo: s.topAnchor, constant: 5),
-            self.userName.rightAnchor.constraint(equalTo: s.rightAnchor, constant: 0),
+            self.userName.topAnchor.constraint(equalTo: c.topAnchor, constant: 5),
+            self.userName.rightAnchor.constraint(equalTo: c.rightAnchor, constant: 0),
             
             self.postTimeLabel.leftAnchor.constraint(equalTo: avatarView.rightAnchor),
             self.postTimeLabel.topAnchor.constraint(equalTo: userName.bottomAnchor, constant: 5),
-            self.postTimeLabel.rightAnchor.constraint(equalTo: s.rightAnchor, constant: 0)
+            self.postTimeLabel.rightAnchor.constraint(equalTo: c.rightAnchor, constant: 0)
         ])
     }
     
-    func configureCell(_ news: PostNews) {
+    func configureCell(_ news: News) {
         if let exactNews = news.urlProtocol {
             avatarView.sd_setImage(with: exactNews.urlImage)
             userName.text = exactNews.name
@@ -112,7 +112,8 @@ class NewsHeaderSection: UITableViewCell {
         
         let dateFormatter = DateFormatter()
         dateFormatter.timeStyle = .medium
-        postTimeLabel.text = dateFormatter.string(from: news.date)
+        let date = Date(timeIntervalSince1970: news.date)
+        postTimeLabel.text = dateFormatter.string(from: date)
     }
 }
 

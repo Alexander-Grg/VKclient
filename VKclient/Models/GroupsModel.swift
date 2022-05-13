@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct GroupsResponse: Decodable {
+struct GroupsResponse: Codable {
     var response: GroupsNextResponse
     
     enum CodingKeys: String, CodingKey {
@@ -15,7 +15,7 @@ struct GroupsResponse: Decodable {
     }
 }
 
-struct GroupsNextResponse: Decodable {
+struct GroupsNextResponse: Codable {
     var count: Int = 0
     var items: [GroupsObjects]
     
@@ -24,7 +24,7 @@ struct GroupsNextResponse: Decodable {
     }
 }
 
-struct GroupsObjects: Decodable {
+struct GroupsObjects: Codable {
     var name: String = ""
     var id: Int = 0
     var photo: String = ""

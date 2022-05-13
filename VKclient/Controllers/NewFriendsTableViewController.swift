@@ -8,24 +8,36 @@
 import UIKit
 import SDWebImage
 import RealmSwift
-import PromiseKit
 
 class NewFriendsTableViewController: UIViewController, UISearchBarDelegate {
     
-    @IBOutlet var alphabetControl: AlphabetControl!
     @IBOutlet var tableView: UITableView!
-    @IBOutlet private var searchBar: UISearchBar!
-    private let networkService = NetworkService()
-    private let token = Session.instance.token
-    private var searchedFilterData: [UserObject] = []
-    private var searchedFiltedDataCharacters: [Character] = []
-    private var sectionTitles: [Character] = []
-    private var isSearching: Bool = false
-    var friendsFromRealm: Results<UserRealm>? = try? RealmService.get(type: UserRealm.self)
+    var friendsFromRealm: Results<UserRealm>?
     var notificationFriends: NotificationToken?
     var friendsNetworkLetters = [[UserObject]]()
     var dictOfUsers: [Character: [UserRealm]] = [:]
     var firstLetters = [Character]()
+    
+    private let networkService = NetworkService()
+    private var searchedFilterData: [UserObject] = []
+    private var searchedFiltedDataCharacters: [Character] = []
+    private var sectionTitles: [Character] = []
+    private(set) lazy var searchBar: UISearchBar = {
+        let s = UISearchBar()
+        s.searchBarStyle = .default
+        s.sizeToFit()
+        s.isTranslucent = true
+        s.barTintColor = .green
+        
+        return s
+    }()
+    
+    private(set) lazy var exitButton: UIBarButtonItem = {
+        let b = UIBarButtonItem(title: "Exit", style: .plain, target: self, action: #selector(self.buttonPressed))
+        b.tintColor = .systemBlue
+        
+        return b
+    }()
     
     //    MARK: - function for TableViewSection
     private func usersFilteredFromRealm(with friends: Results<UserRealm>?) {
@@ -51,21 +63,41 @@ class NewFriendsTableViewController: UIViewController, UISearchBarDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         searchBar.delegate = self
-        updatesFromRealm()
-        usersFilteredFromRealm(with: friendsFromRealm)
+        navigationItem.titleView = searchBar
+        navigationItem.titleView?.tintColor = .systemBlue
+        navigationItem.leftBarButtonItem = exitButton
+        fetchDataFromNetwork()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        let promise = networkService.loadFriends(token: token)
-        promise.done { friends in
-            try? RealmService.save(items: friends)
-        }.catch { error in
-            print(error)
+    private func fetchDataFromNetwork() {
+        networkService.loadFriends { [weak self] result in
+            guard let self = self else { return }
+            switch result {
+            case .success:
+                self.updatesFromRealm()
+                self.usersFilteredFromRealm(with: self.friendsFromRealm)
+                print("Data has been received")
+            case .failure(let requestError):
+                switch requestError {
+                case .decoderError:
+                    print("Decoder error")
+                case .requestFailed:
+                    print("Request failed")
+                case .invalidUrl:
+                    print("URL error")
+                case .realmError:
+                    print("Realm error")
+                case .unknownError:
+                    print("Unknown error")
+                }
+            }
         }
     }
 
     private func updatesFromRealm() {
+        
+       friendsFromRealm = try? RealmService.get(type: UserRealm.self)
+        
         notificationFriends = friendsFromRealm?.observe { [weak self] changes in
             guard let self = self else { return }
             switch changes {
@@ -78,6 +110,10 @@ class NewFriendsTableViewController: UIViewController, UISearchBarDelegate {
             }
         }
     }
+    
+    @objc private func buttonPressed() {
+         self.dismiss(animated: true)
+     }
     
     //        MARK: - Segue to transfer photos to the PhotoCollectionView
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -113,6 +149,7 @@ extension NewFriendsTableViewController: UITableViewDataSource {
         if let users = self.dictOfUsers[firstLetter] {
             cell.configure(users[indexPath.row])
         }
+        
         return cell
     }
     

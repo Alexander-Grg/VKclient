@@ -8,19 +8,22 @@
 import Foundation
 import RealmSwift
 
-struct PhotosResponse: Decodable {
+struct PhotosResponse: Codable {
     let response: Response
 }
 
-struct Response: Decodable {
+struct Response: Codable {
     var count: Int = 0
     let items: [PhotosObject]
 }
 
-struct PhotosObject: Decodable {
+struct PhotosObject: Codable {
     var id: Int = 0
     var ownerID: Int = 0
     var sizes = Map<String, String>()
+    var aspectRatio: Float { width/height }
+    var height: Float = 0
+    var width: Float = 0
     
     enum CodingKeys: String, CodingKey {
         case id
@@ -43,7 +46,11 @@ struct PhotosObject: Decodable {
             let photo = try photosValue.nestedContainer(keyedBy: PhotoKeys.self)
             let photoType = try photo.decode(String.self, forKey: .type)
             let photoURL = try photo.decode(String.self, forKey: .url)
+            let photoHeight = try photo.decode(Float.self, forKey: .height)
+            let photoWidth = try photo.decode(Float.self, forKey: .width)
             sizes[photoType] = photoURL
+            height = photoHeight
+            width = photoWidth
         }
     }
 }

@@ -9,41 +9,48 @@ import UIKit
 
 class CommunitiesListTableViewController: UITableViewController, UISearchBarDelegate {
     
-    @IBOutlet var search: UISearchBar!
-    var isSearching: Bool = false
-    var groupsHolder2 = [SearchedObjects]() {
+    var groupsHolder = [GroupsObjects]() {
         didSet {
             tableView.reloadData()
         }
     }
-    private let token = Session.instance.token
     private let network = NetworkService()
+    private(set) lazy var search: UISearchBar = {
+        let s = UISearchBar()
+        s.searchBarStyle = .default
+        s.barTintColor = .systemBlue
+        
+        return s
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         search.delegate = self
+        self.navigationItem.titleView = search
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return groupsHolder2.count
+        return groupsHolder.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "communityCell", for: indexPath)
-        cell.textLabel?.text = groupsHolder2[indexPath.row].name
-        cell.imageView?.sd_setImage(with: URL(string: groupsHolder2[indexPath.row].photo))
+        cell.textLabel?.text = groupsHolder[indexPath.row].name
+        cell.imageView?.sd_setImage(with: URL(string: groupsHolder[indexPath.row].photo))
         return cell
     }
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        do { tableView.deselectRow(at: indexPath, animated: true)}
+        defer { tableView.deselectRow(at: indexPath, animated: true)}
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        let proxy = ProxyNetworkServiceGroupSearch(networkService: network)
-        proxy.SearchForGroups(token: token, search: searchText) { [weak self] groupsHolder2 in
-            guard let self = self else { return }
-            self.groupsHolder2 = groupsHolder2
+        
+            network.searchForGroups(search: searchText) { [weak self] groups in
+                guard let self = self else { return }
+                self.groupsHolder = groups
+            }
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
         }
-        tableView.reloadData()
     }
 }

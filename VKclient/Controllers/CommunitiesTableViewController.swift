@@ -9,103 +9,152 @@ import UIKit
 import SDWebImage
 import RealmSwift
 
-class CommunitiesTableViewController: UITableViewController {
-   
-    @IBOutlet var addGroup: UIBarButtonItem!
-//    MARK: Property for OPERATION
-//    let myQueue: OperationQueue = {
-//        let q = OperationQueue()
-//        q.maxConcurrentOperationCount = 4
-//        q.name = "asych.groups.load.parsing.savingToRealm.operation"
-//        q.qualityOfService = .userInitiated
-//        return q
-//    }()
+class CommunitiesTableViewController: UITableViewController, UISearchBarDelegate {
     
-    var groupsfromRealm: Results<GroupsRealm>? {
-        didSet {
-            self.tableView.reloadData()
-        }
-    }
+    var groupsfromRealm: Results<GroupsRealm>?
     var groupsNotification: NotificationToken?
-    private let token = Session.instance.token
-    private let groupsService = NetworkGroupsAdapter()
-    private let viewModelFactory = GroupsViewModelFactory()
+    var dictOfGroups: [Character: [GroupsRealm]] = [:]
+    var firstLetters = [Character]()
+    
+    private let networkService = NetworkService()
+    
     private var groupsHolder = [GroupsObjects]() {
         didSet {
             self.tableView.reloadData()
         }
     }
-    private var viewModels: [GroupsViewModel] = []
-    private var groupsAll: [GroupsObjects] = []
+    private(set) lazy var searchBar: UISearchBar = {
+        let s = UISearchBar()
+        s.searchBarStyle = .default
+        s.sizeToFit()
+        s.isTranslucent = true
+        s.barTintColor = .systemBlue
+        
+        return s
+    }()
     
-
+    private(set) lazy var addGroupButton: UIBarButtonItem = {
+        let b = UIBarButtonItem(image: UIImage(systemName: "plus.rectangle.on.rectangle"), style: .plain, target: self, action: #selector(self.addButtonPressed))
+        b.tintColor = .systemBlue
+        
+        return b
+    }()
+    
+    private(set) lazy var exitButton: UIBarButtonItem = {
+        let b = UIBarButtonItem(title: "Exit", style: .plain, target: self, action: #selector(self.buttonPressed))
+        b.tintColor = .systemBlue
+        
+        return b
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.register(UINib(nibName: "GroupsTableViewCell", bundle: nil), forCellReuseIdentifier: "myGroupsCells")
-        groupsService.getFriendsData(token: token) { [weak self] groups in
-            guard let self = self else { return }
-            self.groupsAll = groups
-            self.viewModels = self.viewModelFactory.constructViewModels(from: groups)
-            self.tableView.reloadData()
-        }
-        
-        
-        self.tableView.reloadData()
-//        asyncOperationGroups()
-//        loadFromDB()
+        self.tableView.register(GroupsTableViewCell.self, forCellReuseIdentifier: GroupsTableViewCell.reusedIdentifier)
+        self.fetchDataFromNetwork()
+        searchBar.delegate = self
+        navigationItem.titleView = searchBar
+        navigationItem.leftBarButtonItem = exitButton
+        navigationItem.rightBarButtonItem = addGroupButton
+    }
+
+//    MARK: - Private methods
+    
+   @objc private func buttonPressed() {
+        self.dismiss(animated: true)
     }
     
-//    MARK: Function for OPERATION
-//    private func asyncOperationGroups() {
-//        let networkOperation = NetworkGroupsAsyncOperation(url: URL(string: "https://api.vk.com/method/groups.get")!,
-//                                                           method: .get,
-//                                                           parameters: [
-//                                                            "access_token": token,
-//                                                            "extended": "1",
-//                                                            "fields": "photo_100",
-//                                                            "v": "5.92"
-//                                                        ])
-//        myQueue.addOperation(networkOperation)
-//
-//        let parsingOperation = ParsingData()
-//        parsingOperation.addDependency(networkOperation)
-//        myQueue.addOperation(parsingOperation)
-//
-//        let saveToRealm = SavingGroupsToRealmAsyncOperation()
-//        saveToRealm.addDependency(parsingOperation)
-//        myQueue.addOperation(saveToRealm)
-//    }
+    @objc private func addButtonPressed() {
+        let storyBoard = UIStoryboard(name: "Main", bundle: nil)
+        let nextVC = storyBoard.instantiateViewController(withIdentifier: "groupsList")
+        self.navigationController?.pushViewController(nextVC, animated: true)
+    }
     
-//    MARK: Realm notification updates
-//    private func loadFromDB() {
-//
-//        groupsfromRealm = try? RealmService.load(typeOf: GroupsRealm.self)
-//
-//        groupsNotification = groupsfromRealm?.observe(on: .main, { realmChange in
-//            switch realmChange {
-//            case .initial(let objects):
-//                if objects.count > 0 {
-//                    self.tableView.reloadData()
-//                }
-//                print(objects)
-//
-//            case let .update(groupsRealm, deletions, insertions, modifications ):
-//                self.tableView.beginUpdates()
-//                self.tableView.insertRows(at: insertions.map({ IndexPath(row: $0, section: 0)}),
-//                                          with: .none)
-//                self.tableView.reloadRows(at: modifications.map({ IndexPath(row: $0, section: 0)}),
-//                                          with: .none)
-//                self.tableView.deleteRows(at: deletions.map({ IndexPath(row: $0, section: 0)}),
-//                                          with: .none)
-//                self.tableView.endUpdates()
-//
-//            case .error(let error):
-//                print(error)
-//
-//            }
-//        })
-//
-//    }
+    private func groupsFilteredFromRealm(with groups: Results<GroupsRealm>?) {
+        self.dictOfGroups.removeAll()
+        self.firstLetters.removeAll()
+
+        if let filteredGroups = groups {
+            for group in filteredGroups {
+                guard let dictKey = group.name.first else { continue }
+                if var groups = self.dictOfGroups[dictKey] {
+                    groups.append(group)
+                    self.dictOfGroups[dictKey] = groups
+                } else {
+                    self.firstLetters.append(dictKey)
+                    self.dictOfGroups[dictKey] = [group]
+                }
+            }
+            self.firstLetters.sort()
+        }
+        tableView.reloadData()
+    }
+    
+    private func fetchDataFromNetwork() {
+        networkService.fetchingGroups { [weak self] result in
+            guard let self = self else { return }
+            switch result {
+            case .success:
+                self.updatesFromRealm()
+                print("Data has been received")
+                self.groupsFilteredFromRealm(with: self.groupsfromRealm)
+                print("Data has been filtered for sections")
+            case .failure(let requestError):
+                switch requestError {
+                case .decoderError:
+                    print("Decoder error")
+                case .requestFailed:
+                    print("Request failed")
+                case .invalidUrl:
+                    print("URL error")
+                case .realmError:
+                    print("Realm error")
+                case .unknownError:
+                    print("Unknown error")
+                }
+            }
+        }
+    }
+    
+    private func filterGroups(with text: String) {
+        guard !text.isEmpty else {
+            groupsFilteredFromRealm(with: self.groupsfromRealm)
+            return
+        }
+    
+        groupsFilteredFromRealm(with:self.groupsfromRealm?.filter("name CONTAINS[cd] %@", text, text))
+    }
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        filterGroups(with: searchText)
+    }
+
+        private func updatesFromRealm() {
+    
+            groupsfromRealm = try? RealmService.load(typeOf: GroupsRealm.self)
+    
+            groupsNotification = groupsfromRealm?.observe(on: .main, { realmChange in
+                switch realmChange {
+                case .initial(let objects):
+                    if objects.count > 0 {
+                        self.tableView.reloadData()
+                    }
+                    print(objects)
+    
+                case let .update(_, deletions, insertions, modifications ):
+                    self.tableView.beginUpdates()
+                    self.tableView.insertRows(at: insertions.map({ IndexPath(row: $0, section: 0)}),
+                                              with: .none)
+                    self.tableView.reloadRows(at: modifications.map({ IndexPath(row: $0, section: 0)}),
+                                              with: .none)
+                    self.tableView.deleteRows(at: deletions.map({ IndexPath(row: $0, section: 0)}),
+                                              with: .none)
+                    self.tableView.endUpdates()
+    
+                case .error(let error):
+                    print(error)
+    
+                }
+            })
+        }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
@@ -113,45 +162,38 @@ class CommunitiesTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        viewModels.count
-//        groupsfromRealm?.count ?? 0
-        //        return myCommunities.count
+        let nameFirstLetter = self.firstLetters[section]
+        return self.dictOfGroups[nameFirstLetter]?.count ?? 0
+    }
+    
+    override func numberOfSections(in tableView: UITableView) -> Int {
+        self.firstLetters.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "myGroupsCells", for: indexPath) as! GroupsTableViewCell
         
-        cell.configure(from: viewModels[indexPath.row])
+        let firstLetter = self.firstLetters[indexPath.section]
+        if let groups = self.dictOfGroups[firstLetter] {
+            cell.configureCell(groups: groups[indexPath.row])
+        }
         return cell
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        100.0
-    }
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        do { tableView.deselectRow(at: indexPath, animated: true)}
-        
+        88.0
     }
     
-    //    MARK: Method to add froup from all groups screen
-    //    @IBAction func addGroup(_ segue: UIStoryboardSegue) {
-    //        guard
-    //            segue.identifier == "addGroup",
-    //            let sourceController = segue.source as? CommunitiesListTableViewController,
-    //            let indexPath = sourceController.tableView.indexPathForSelectedRow
-    //        else {
-    //            return
-    //        }
-    //        let group = sourceController.communitiesAll[indexPath.row]
-    //        if !myCommunities.contains(where: { $0.name == group.name }) {
-    //            myCommunities.append(group)
-    //            tableView.reloadData()
-    //        }
-    //    }
-    //    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-    //        if editingStyle == .delete {
-    //            myCommunities.remove(at: indexPath.row)
-    //            tableView.deleteRows(at: [indexPath], with: .fade)
-    //        }
-    //    }
+    override func sectionIndexTitles(for tableView: UITableView) -> [String]? {
+        self.firstLetters.map{ String($0) }
+    }
+    
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        String(self.firstLetters[section])
+    }
+    
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        do { tableView.deselectRow(at: indexPath, animated: true)}
+    }
 }

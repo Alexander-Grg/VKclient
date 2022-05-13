@@ -47,10 +47,10 @@ class NewsTableViewController: UIViewController {
     @IBOutlet var tableView: UITableView!
     let token = Session.instance.token
     let networkService = NetworkService()
-    var newsPost: [PostNews]?
+    var newsPost: [News]? 
     var IDs = [Int]()
-    var groupsForHeader: [GroupNews] = []
-    var usersForHeader: [UserNews] = []
+    var groupsForHeader: [Community] = []
+    var usersForHeader: [User] = []
     var nextFrom = ""
     var isLoading = false
     private let textCellFont = UIFont(name: "Avenir-Light", size: 16.0)!
@@ -58,7 +58,7 @@ class NewsTableViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        loadNews()
+        self.loadNews()
         tableView.prefetchDataSource = self
         configRefreshControl()
         
@@ -71,12 +71,14 @@ class NewsTableViewController: UIViewController {
     
     private func loadNews() {
         networkService.loadNewsFeed { [weak self] newsPost, nextFrom  in
-            guard let self = self else { return }
+             guard let self = self else { return }
             self.newsPost = newsPost
-            self.tableView.reloadData()
-        }
-    }
-    
+//            DispatchQueue.main.async {
+                self.tableView.reloadData()
+//            }
+         }
+     }
+
     private func configRefreshControl() {
         let refresh = UIRefreshControl()
         refresh.addTarget(self,
@@ -89,7 +91,9 @@ class NewsTableViewController: UIViewController {
         tableView.refreshControl?.beginRefreshing()
         _ = Date().timeIntervalSince1970 + 1
         networkService.loadNewsFeed { [weak self] news, nextFrom in
-            self?.tableView.refreshControl?.endRefreshing()
+            DispatchQueue.main.async {
+                self?.tableView.refreshControl?.endRefreshing()
+            }
         }
     }
 }
@@ -116,6 +120,7 @@ extension NewsTableViewController: UITableViewDataSource {
             let textHeight = news.text.heightWithConstrainedWidth(width: tableView.frame.width, font: textCellFont)
             cell.configureCell(news, isTapped: textHeight > defaultCellHeight)
             cell.delegate = self
+            
             return cell
         case .photo:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "NewsPhotoCell") as? NewsTableViewCellPhoto else { return NewsTableViewCellPhoto() }
@@ -143,7 +148,8 @@ extension NewsTableViewController: UITableViewDataSource {
             return 40
         case .photo:
             let tableWidth = tableView.bounds.width
-            let newsRatio = newsPost?[indexPath.section].aspectRatio ?? 0
+            let newsAttachments = newsPost?[indexPath.section].attachments
+            let newsRatio = newsAttachments?[indexPath.section].photo?.aspectRatio ?? 0
             let newsCGfloatRatio = CGFloat(newsRatio)
             return newsCGfloatRatio * tableWidth
         case .text:
@@ -165,28 +171,58 @@ extension NewsTableViewController: UITableViewDelegate {
 extension NewsTableViewController: UITableViewDataSourcePrefetching {
     
     func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
+//
+//        guard let maxSections = indexPaths.map({ $0.section }).max() else { return }
+//        guard let newsItems = self.newsPost else { return }
+//
+//        if maxSections > newsItems.count - 3, !isLoading {
+//            isLoading = true
+//
+//            networkService.loadNewsFeed(startFrom: nextFrom) { [weak self] (news, nextFrom) in
+//                guard let self = self else { return }
+//
+//                let indexSet = IndexSet(integersIn: (self.newsPost?.count ?? 0) ..< ((self.newsPost?.count ?? 0) + news.count))
+//
+//                self.newsPost?.append(contentsOf: news)
+//                self.nextFrom = nextFrom
+//
+//
+//                DispatchQueue.main.async {
+//                self.tableView.beginUpdates()
+//                    self.tableView.insertSections(indexSet, with: .automatic)
+//                self.tableView.endUpdates()
+//                }
+//
+//                    self.isLoading = false
+//            }
+//        }
+//    }
+        
+        guard let maxSections = indexPaths.map({ $0.section }).max() else { return }
+                guard let newsItems = self.newsPost else { return }
             
-            guard let maxSections = indexPaths.map({ $0.section }).max() else { return }
-            guard let newsItems = self.newsPost else { return }
-        
-        
-        if maxSections > newsItems.count - 3, !isLoading {
-            isLoading = true
-        
-            networkService.loadNewsFeed(startFrom: nextFrom) { [weak self] (news, nextFrom) in
-                guard let self = self else { return }
+            
+            if maxSections > newsItems.count - 3, !isLoading {
+                isLoading = true
+            
+                networkService.loadNewsFeed(startFrom: nextFrom) { [weak self] (news, nextFrom) in
+                    guard let self = self else { return }
+                    DispatchQueue.main.async {
+                    let indexSet = IndexSet(integersIn: (self.newsPost?.count ?? 0) ..< ((self.newsPost?.count ?? 0) + news.count))
 
-                let indexSet = IndexSet(integersIn: (self.newsPost?.count ?? 0) ..< ((self.newsPost?.count ?? 0) + news.count))
-
-                self.newsPost?.append(contentsOf: news)
-                print(news)
-                self.nextFrom = nextFrom
-                tableView.beginUpdates()
-                self.tableView.insertSections(indexSet, with: .automatic)
-                tableView.endUpdates()
-                self.isLoading = false
+                    self.newsPost?.append(contentsOf: news)
+                    print(news)
+                    self.nextFrom = nextFrom
+                   
+                        tableView.beginUpdates()
+                        self.tableView.insertSections(indexSet, with: .automatic)
+                        tableView.endUpdates()
+                    
+                 
+                    self.isLoading = false
+                }
+                }
             }
-        }
     }
 }
 
@@ -198,5 +234,3 @@ extension NewsTableViewController: NewsDelegate {
     
     
 }
-
-
