@@ -26,7 +26,7 @@
                                 <rect key="frame" x="0.0" y="44" width="414" height="818"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="VKclient" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pOZ-ca-D6N">
-                                        <rect key="frame" x="129.5" y="60" width="155" height="44"/>
+                                        <rect key="frame" x="100" y="60" width="214" height="44"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="36"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
@@ -68,12 +68,12 @@
                                         <color key="tintColor" systemColor="systemTealColor"/>
                                     </imageView>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="circle.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="j3Z-yY-n98">
-                                        <rect key="frame" x="233" y="237.5" width="19.5" height="19"/>
+                                        <rect key="frame" x="233" y="237.5" width="20" height="19"/>
                                         <color key="tintColor" systemColor="systemTealColor"/>
                                     </imageView>
                                 </subviews>
                                 <constraints>
-                                    <constraint firstAttribute="trailing" secondItem="pOZ-ca-D6N" secondAttribute="trailing" constant="129" id="1cd-hz-E4T"/>
+                                    <constraint firstAttribute="trailing" secondItem="pOZ-ca-D6N" secondAttribute="trailing" constant="100" id="1cd-hz-E4T"/>
                                     <constraint firstItem="Ihr-Pd-aAA" firstAttribute="top" secondItem="ZcY-du-Rje" secondAttribute="bottom" constant="50" id="86J-Fe-gba"/>
                                     <constraint firstItem="nmx-fE-Vtx" firstAttribute="leading" secondItem="9Zi-yG-dgJ" secondAttribute="leading" constant="135" id="Ahg-OD-397"/>
                                     <constraint firstItem="j3Z-yY-n98" firstAttribute="leading" secondItem="bce-Ge-ACN" secondAttribute="trailing" constant="16" id="BHd-te-YdA"/>
@@ -94,7 +94,7 @@
                                     <constraint firstItem="X5Z-Q6-hWT" firstAttribute="leading" secondItem="9Zi-yG-dgJ" secondAttribute="leading" constant="157" id="dX2-Bx-ZI0"/>
                                     <constraint firstItem="bce-Ge-ACN" firstAttribute="baseline" secondItem="j3Z-yY-n98" secondAttribute="baseline" id="h79-wK-9or"/>
                                     <constraint firstItem="HcM-Q4-uAX" firstAttribute="trailing" secondItem="j3Z-yY-n98" secondAttribute="trailing" constant="161" id="jQZ-9r-sTy"/>
-                                    <constraint firstItem="pOZ-ca-D6N" firstAttribute="leading" secondItem="j0J-cj-sZf" secondAttribute="leading" constant="129.5" id="tbR-0S-ALA"/>
+                                    <constraint firstItem="pOZ-ca-D6N" firstAttribute="leading" secondItem="j0J-cj-sZf" secondAttribute="leading" constant="100" id="tbR-0S-ALA"/>
                                 </constraints>
                                 <viewLayoutGuide key="contentLayoutGuide" id="HcM-Q4-uAX"/>
                                 <viewLayoutGuide key="frameLayoutGuide" id="9Zi-yG-dgJ"/>

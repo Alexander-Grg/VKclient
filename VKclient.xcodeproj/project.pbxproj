@@ -28,6 +28,8 @@
 		626610C2270CF15E0089C651 /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 626610C1270CF15E0089C651 /* UserModel.swift */; };
 		626A00E6270F785A000E8F4C /* PhotosModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 626A00E5270F785A000E8F4C /* PhotosModel.swift */; };
 		626A00E9270F78A1000E8F4C /* GroupsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 626A00E8270F78A1000E8F4C /* GroupsModel.swift */; };
+		626E8123282FBCAE00CEC689 /* CirleAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 626E8122282FBCAE00CEC689 /* CirleAnimation.swift */; };
+		626E8126282FC36100CEC689 /* NetworkConstructors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 626E8125282FC36100CEC689 /* NetworkConstructors.swift */; };
 		6287BD8D26D67A4E0087D600 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6287BD8C26D67A4E0087D600 /* SettingsViewController.swift */; };
 		6287BD8F26D67AAF0087D600 /* PhotoCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6287BD8E26D67AAF0087D600 /* PhotoCollectionViewController.swift */; };
 		6287BD9126D67AE90087D600 /* CommunitiesListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6287BD9026D67AE90087D600 /* CommunitiesListTableViewController.swift */; };
@@ -73,6 +75,8 @@
 		6267A7D227B5223B000FCDC9 /* VKclient.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VKclient.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		626A00E5270F785A000E8F4C /* PhotosModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotosModel.swift; sourceTree = "<group>"; };
 		626A00E8270F78A1000E8F4C /* GroupsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupsModel.swift; sourceTree = "<group>"; };
+		626E8122282FBCAE00CEC689 /* CirleAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CirleAnimation.swift; sourceTree = "<group>"; };
+		626E8125282FC36100CEC689 /* NetworkConstructors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkConstructors.swift; sourceTree = "<group>"; };
 		6287BD8C26D67A4E0087D600 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		6287BD8E26D67AAF0087D600 /* PhotoCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCollectionViewController.swift; sourceTree = "<group>"; };
 		6287BD9026D67AE90087D600 /* CommunitiesListTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunitiesListTableViewController.swift; sourceTree = "<group>"; };
@@ -122,6 +126,7 @@
 		620CAE2E270899810090CB77 /* Network */ = {
 			isa = PBXGroup;
 			children = (
+				626E8125282FC36100CEC689 /* NetworkConstructors.swift */,
 				620CAE2F270899980090CB77 /* NetworkService.swift */,
 				62317871271C96C700A42097 /* RealmService.swift */,
 			);
@@ -140,6 +145,7 @@
 		621771D726DBB71D00E54A7C /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				626E8124282FBD9C00CEC689 /* Animation */,
 				626A00E5270F785A000E8F4C /* PhotosModel.swift */,
 				626610C1270CF15E0089C651 /* UserModel.swift */,
 				626A00E8270F78A1000E8F4C /* GroupsModel.swift */,
@@ -159,6 +165,14 @@
 				6249009F271C57360060FAA6 /* RealmGroups.swift */,
 			);
 			path = "Realm models";
+			sourceTree = "<group>";
+		};
+		626E8124282FBD9C00CEC689 /* Animation */ = {
+			isa = PBXGroup;
+			children = (
+				626E8122282FBCAE00CEC689 /* CirleAnimation.swift */,
+			);
+			path = Animation;
 			sourceTree = "<group>";
 		};
 		62840105270A25B000E19405 /* Controls */ = {
@@ -392,8 +406,10 @@
 				626610C2270CF15E0089C651 /* UserModel.swift in Sources */,
 				6287BD9126D67AE90087D600 /* CommunitiesListTableViewController.swift in Sources */,
 				623AEA6E26F33EFD00F87BD5 /* NewsTableViewController.swift in Sources */,
+				626E8123282FBCAE00CEC689 /* CirleAnimation.swift in Sources */,
 				6201BB512708C33400036E76 /* VKLoginController.swift in Sources */,
 				62074C602752766F005D0418 /* UserNewsModel.swift in Sources */,
+				626E8126282FC36100CEC689 /* NetworkConstructors.swift in Sources */,
 				62BBDB6C26CA6A3700144345 /* SceneDelegate.swift in Sources */,
 				62A2D25427B2E04D0089FA9A /* GroupsTableViewCell.swift in Sources */,
 				626A00E6270F785A000E8F4C /* PhotosModel.swift in Sources */,

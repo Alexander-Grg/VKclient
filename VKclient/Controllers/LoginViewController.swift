@@ -58,31 +58,10 @@ class LoginViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        animationLoading1()
+        let animation = CirleAnimation(circle1: self.circle1, circle2: self.circle2, circle3: self.circle3)
+        animation.animationLoading()
     }
-        func animationLoading1() {
-            
-            self.circle1.alpha = 0
-            self.circle2.alpha = 0
-            self.circle3.alpha = 0
-            
-            UIView.animateKeyframes(withDuration: 7,
-                                    delay: 0,
-                                    options: [.repeat, .autoreverse],
-                                    animations: {
-                UIView.addKeyframe(withRelativeStartTime: 0,
-                                   relativeDuration: 0.5,
-                                   animations: { self.circle1.alpha = 1})
-                UIView.addKeyframe(withRelativeStartTime: 0.33,
-                                   relativeDuration: 0.5,
-                                   animations: { self.circle2.alpha = 1})
-                UIView.addKeyframe(withRelativeStartTime: 0.66,
-                                   relativeDuration: 0.5,
-                                   animations: { self.circle3.alpha = 1})
-            },
-                                    completion: nil)
-        }
-        
+
     override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
         let checkResult = checkUserData()
         

@@ -9,11 +9,7 @@ import UIKit
 
 class CommunitiesListTableViewController: UITableViewController, UISearchBarDelegate {
     
-    var groupsHolder = [GroupsObjects]() {
-        didSet {
-            tableView.reloadData()
-        }
-    }
+    var groupsHolder = [GroupsObjects]() 
     private let network = NetworkService()
     private(set) lazy var search: UISearchBar = {
         let s = UISearchBar()
@@ -48,9 +44,13 @@ class CommunitiesListTableViewController: UITableViewController, UISearchBarDele
         network.searchForGroups(search: searchText) { [weak self] groups in
             guard let self = self else { return }
             self.groupsHolder = groups
-        }
-        DispatchQueue.main.async {
-            self.tableView.reloadData()
+            
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
         }
     }
 }
+
+
+
