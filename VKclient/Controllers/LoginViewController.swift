@@ -18,6 +18,11 @@ class LoginViewController: UIViewController {
     @IBOutlet var scrollView: UIScrollView!
     @IBAction func unwindToMainMenu(sender: UIStoryboardSegue) {}
     
+//    private(set) lazy var circle1: UIImageView = {
+//        let image = UIImageView()
+//
+//    }()
+    
     @objc func keyboardWasShown(notification: Notification) {
         let info = notification.userInfo! as NSDictionary
         let kbSize = (info.value(forKey: UIResponder.keyboardFrameEndUserInfoKey) as! NSValue).cgRectValue.size
@@ -49,7 +54,6 @@ class LoginViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-//        animationLoading1()
         
         let hideKeyboardGesture = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
         
@@ -81,7 +85,7 @@ class LoginViewController: UIViewController {
                 }
     }
     func showLoginError() {
-        let alert = UIAlertController(title: "Ошибка", message: "Введены некорректные данные", preferredStyle: .alert)
+        let alert = UIAlertController(title: "Error", message: "You are entered incorrect data", preferredStyle: .alert)
         let action = UIAlertAction(title: "OK", style: .cancel, handler: nil)
         alert.addAction(action)
         present(alert, animated: true, completion: nil)

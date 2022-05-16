@@ -22,8 +22,7 @@ class GroupsTableViewCell: UITableViewCell {
         recognizer.numberOfTouchesRequired = 1
         a.addGestureRecognizer(recognizer)
         a.isUserInteractionEnabled = true
-        //        a.contentMode = .scaleToFill
-        
+
         return a
     }()
     
@@ -35,7 +34,6 @@ class GroupsTableViewCell: UITableViewCell {
         l.textAlignment = .center
         l.lineBreakMode = .byWordWrapping
         l.numberOfLines = 2
-        //        l.contentMode = .scaleToFill
         
         return l
     }()

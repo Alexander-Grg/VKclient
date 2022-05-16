@@ -9,7 +9,7 @@ import UIKit
 
 class AvatarView: UIView {
     
-    var imageView: UIImageView = {
+   private(set) lazy var imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFill
@@ -18,7 +18,7 @@ class AvatarView: UIView {
         return imageView
     }()
     
-    private var shadowView: UIView = {
+    private(set) lazy var shadowView: UIView = {
         let shadowView = UIView()
         shadowView.translatesAutoresizingMaskIntoConstraints = false
         shadowView.backgroundColor = .clear

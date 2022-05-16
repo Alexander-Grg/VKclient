@@ -17,7 +17,12 @@ struct Response: Codable {
     let items: [PhotosObject]
 }
 
-struct PhotosObject: Codable {
+struct PhotosObject: Codable, NewsSource {
+    
+    var name: String = ""
+    
+    var urlString: String { sizes["x"]! }
+
     var id: Int = 0
     var ownerID: Int = 0
     var sizes = Map<String, String>()

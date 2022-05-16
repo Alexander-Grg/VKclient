@@ -11,20 +11,80 @@ import SDWebImage
 
 class NewFriendsViewCell: UITableViewCell {
     
-    static let reusedIdentifier = "NewFriendsCell"
-    @IBOutlet var nameView: UILabel!
-    @IBOutlet var avatarView: AvatarView!
+    //    MARK: - Properties
     
-    override func awakeFromNib() {
-        super.awakeFromNib()
+    static let reusedIdentifier = "NewFriendsCell"
+
+    private(set) lazy var nameView: UILabel = {
+        let l = UILabel()
+        l.translatesAutoresizingMaskIntoConstraints = false
+        l.font = UIFont.systemFont(ofSize: 17.0)
+        l.textColor = .black
+        l.textAlignment = .center
+        l.lineBreakMode = .byWordWrapping
+        l.numberOfLines = 2
+        
+        return l
+    }()
+    
+    private(set) lazy var avatarView: AvatarView = {
+        let a = AvatarView()
+        a.translatesAutoresizingMaskIntoConstraints = false
         let recognizer = UITapGestureRecognizer(target: self, action: #selector(onTap))
         recognizer.numberOfTapsRequired = 1
         recognizer.numberOfTouchesRequired = 1
-        avatarView.addGestureRecognizer(recognizer)
-        avatarView.isUserInteractionEnabled = true
+        a.addGestureRecognizer(recognizer)
+        a.isUserInteractionEnabled = true
+        
+        return a
+    }()
+
+    //    MARK: - Lifecycle
+    
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        self.configureUI()
     }
     
-    @objc func onTap() {
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        self.configureUI()
+    }
+    
+    override func setSelected(_ selected: Bool, animated: Bool) {
+        super.setSelected(selected, animated: animated)
+    }
+    
+    //    MARK: - Configuring UI
+    
+    private func configureUI() {
+        self.addSubviews()
+        self.setupConstraints()
+    }
+    
+    private func addSubviews() {
+        self.contentView.addSubview(self.avatarView)
+        self.contentView.addSubview(self.nameView)
+    }
+    
+    private func setupConstraints() {
+        
+        NSLayoutConstraint.activate([
+            self.avatarView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 0),
+            self.avatarView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: 0),
+            self.avatarView.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 10),
+            self.avatarView.rightAnchor.constraint(equalTo: nameView.leftAnchor),
+            self.avatarView.heightAnchor.constraint(equalTo: avatarView.widthAnchor, multiplier: 1.0),
+            
+            self.nameView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            self.nameView.leftAnchor.constraint(equalTo: avatarView.rightAnchor, constant: 10),
+            self.nameView.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: 10)
+        ])
+    }
+    
+//    MARK: - Private methods
+    
+    @objc private func onTap() {
         avatarAnimation()
     }
     
@@ -39,7 +99,6 @@ class NewFriendsViewCell: UITableViewCell {
             self.avatarView.transform = CGAffineTransform(scaleX: 1, y: 1)}
                        ,completion: nil)
     }
-    //    MARK: - UserRealm for loading from R, UserObject for Network.
     
     func configure(_ friend: UserRealm) {
         nameView.text = "\(friend.firstName) \(friend.lastName)"

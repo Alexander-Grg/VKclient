@@ -63,6 +63,7 @@ class NewFriendsTableViewController: UIViewController, UISearchBarDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         searchBar.delegate = self
+        self.tableView.register(NewFriendsViewCell.self, forCellReuseIdentifier: NewFriendsViewCell.reusedIdentifier)
         navigationItem.titleView = searchBar
         navigationItem.titleView?.tintColor = .systemBlue
         navigationItem.leftBarButtonItem = exitButton
