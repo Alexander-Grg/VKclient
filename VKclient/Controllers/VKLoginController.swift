@@ -14,10 +14,14 @@ class VKLoginController: UIViewController, WKUIDelegate {
         let webConfiguration = WKWebViewConfiguration()
          let webView = WKWebView(frame: .zero, configuration: webConfiguration)
          webView.uiDelegate = self
+        webView.navigationDelegate = self
          webView.translatesAutoresizingMaskIntoConstraints = false
         
         return webView
     }()
+    
+    private var window: UIWindow?
+    private var appStartManager: AppStartManager?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -82,9 +86,9 @@ extension VKLoginController: WKNavigationDelegate {
               }
         
         Session.instance.token = token
+
         let next = LoginViewController()
         self.navigationController?.pushViewController(next, animated: true)
-//        performSegue(withIdentifier: "toSecondLoginScreen", sender: nil)
         decisionHandler(.cancel)
     }
 }

@@ -64,8 +64,8 @@ class CommunitiesTableViewController: UITableViewController, UISearchBarDelegate
     }
     
     @objc private func addButtonPressed() {
-        let storyBoard = UIStoryboard(name: "Main", bundle: nil)
-        let nextVC = storyBoard.instantiateViewController(withIdentifier: "groupsList")
+        
+        let nextVC = CommunitiesListTableViewController()
         self.navigationController?.pushViewController(nextVC, animated: true)
     }
     

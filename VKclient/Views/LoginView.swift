@@ -117,7 +117,7 @@ final class LoginView: UIView {
         return s
     }()
     
-    let VC = LoginViewController()
+    var loginDelegate: LoginDelegate?
     
 //    MARK: - Init
     
@@ -204,21 +204,22 @@ final class LoginView: UIView {
 //        }
 //        return checkResult
 //    }
-    func checkUserData() -> Bool {
-        guard let login = loginEntryField.text,
-              let password = passwordEntryField.text else { return false }
-        
-                if login == "a" && password == "1" {
-        return true
-                } else {
-                    return false
-                }
-    }
+//    func checkUserData() -> Bool {
+//        guard let login = loginEntryField.text,
+//              let password = passwordEntryField.text else { return false }
+//        
+//                if login == "a" && password == "1" {
+//        return true
+//                } else {
+//                    return false
+//                }
+//    }
     
     @objc func buttonTap() {
-//        let storyBoard = UIStoryboard(name: "Main", bundle: nil)
-//        let nextVC = storyBoard.instantiateViewController(withIdentifier: "TabBar")
-//        self.navigationController?.pushViewController(nextVC, animated: true)
+        
+        self.loginDelegate?.didTap(true)
+        
     }
 }
+
 

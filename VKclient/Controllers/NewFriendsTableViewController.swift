@@ -11,7 +11,13 @@ import RealmSwift
 
 class NewFriendsTableViewController: UIViewController, UISearchBarDelegate {
     
-    @IBOutlet var tableView: UITableView!
+    
+    private(set) lazy var tableView: UITableView = {
+        let t = UITableView()
+        t.translatesAutoresizingMaskIntoConstraints = false
+    
+        return t
+    }()
     var friendsFromRealm: Results<UserRealm>?
     var notificationFriends: NotificationToken?
     var friendsNetworkLetters = [[UserObject]]()
@@ -22,6 +28,7 @@ class NewFriendsTableViewController: UIViewController, UISearchBarDelegate {
     private var searchedFilterData: [UserObject] = []
     private var searchedFiltedDataCharacters: [Character] = []
     private var sectionTitles: [Character] = []
+    
     private(set) lazy var searchBar: UISearchBar = {
         let s = UISearchBar()
         s.searchBarStyle = .default
@@ -62,7 +69,10 @@ class NewFriendsTableViewController: UIViewController, UISearchBarDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.setupTableView()
         searchBar.delegate = self
+        self.tableView.delegate = self
+        self.tableView.dataSource = self
         self.tableView.register(NewFriendsViewCell.self, forCellReuseIdentifier: NewFriendsViewCell.reusedIdentifier)
         navigationItem.titleView = searchBar
         navigationItem.titleView?.tintColor = .systemBlue
@@ -110,6 +120,16 @@ class NewFriendsTableViewController: UIViewController, UISearchBarDelegate {
                 print(error)
             }
         }
+    }
+    
+    private func setupTableView() {
+        self.view.addSubview(tableView)
+        
+        tableView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        tableView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
+        tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        tableView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
+        
     }
     
     @objc private func buttonPressed() {

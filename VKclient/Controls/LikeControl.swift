@@ -10,11 +10,13 @@ import UIKit
 
 class LikeControl: UIControl {
     
-    @IBOutlet weak var likeButton: UIButton! {
-        didSet {
-            self.likeButton.addTarget(self, action: #selector(likeButtonHadler(_:)), for: .touchUpInside)
-        }
-    }
+    private(set) lazy var likeButton: UIButton = {
+        let b = UIButton()
+        
+        b.addTarget(self, action: #selector(likeButtonHadler(_:)), for: .touchUpInside)
+        
+        return b
+    }()
     
     var isLiked: Bool = false
     

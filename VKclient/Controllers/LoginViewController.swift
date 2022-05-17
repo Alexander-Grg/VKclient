@@ -7,6 +7,12 @@
 
 import UIKit
 
+protocol LoginDelegate {
+    
+    func didTap(_ tap: Bool)
+    
+}
+
 class LoginViewController: UIViewController {
     
     private(set) lazy var scrollView: UIScrollView = {
@@ -18,6 +24,9 @@ class LoginViewController: UIViewController {
         return s
     }()
     
+    
+    private var window: UIWindow?
+    private var appStartManager: AppStartManager?
     private var loginView = LoginView()
     
     var safeArea: UILayoutGuide!
@@ -55,6 +64,8 @@ class LoginViewController: UIViewController {
         super.viewDidLoad()
         safeArea = view.layoutMarginsGuide
         self.configureUI()
+        loginView.loginDelegate = self
+        
     }
     
     override func loadView() {
@@ -120,3 +131,16 @@ class LoginViewController: UIViewController {
 //
 //    }
 }
+
+extension LoginViewController: LoginDelegate {
+    
+    func didTap(_ tap: Bool) {
+        let nexVC = TabBarController()
+
+        if tap == true {
+            self.navigationController?.pushViewController(nexVC, animated: true)
+        }
+    }
+}
+    
+

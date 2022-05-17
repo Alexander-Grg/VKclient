@@ -17,8 +17,15 @@ final class AppStartManager {
     
     func start() {
         let rootVC = VKLoginController()
-//        rootVC.navigationItem.title = "Персональные данные"
+        let navVC = self.configuredNavigationController
+        navVC.viewControllers = [rootVC]
         
+        window?.rootViewController = navVC
+        window?.makeKeyAndVisible()
+    }
+    
+    func secondStart() {
+        let rootVC = TabBarController()
         let navVC = self.configuredNavigationController
         navVC.viewControllers = [rootVC]
         
@@ -28,8 +35,8 @@ final class AppStartManager {
     
     private lazy var configuredNavigationController: UINavigationController = {
         let navVC = UINavigationController()
-        navVC.navigationBar.barTintColor = UIColor.gray
-        navVC.navigationBar.isTranslucent = false
+//        navVC.navigationBar.isTranslucent = true
+        navVC.isNavigationBarHidden = true
         navVC.navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
         navVC.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
         return navVC

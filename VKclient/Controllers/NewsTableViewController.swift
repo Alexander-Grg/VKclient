@@ -44,7 +44,7 @@ enum NewsTypes {
 
 class NewsTableViewController: UIViewController {
     
-    @IBOutlet var tableView: UITableView!
+
     let token = Session.instance.token
     let networkService = NetworkService()
     var newsPost: [News]?
@@ -54,6 +54,14 @@ class NewsTableViewController: UIViewController {
     var usersForHeader: [User] = []
     var nextFrom = ""
     var isLoading = false
+    
+    private(set) lazy var tableView: UITableView = {
+        let t = UITableView()
+        t.translatesAutoresizingMaskIntoConstraints = false
+        
+        return t
+    }()
+    
     private let textCellFont = UIFont(name: "Avenir-Light", size: 16.0)!
     private let defaultCellHeight: CGFloat = 200
     private var nextNews: String = ""
@@ -61,7 +69,11 @@ class NewsTableViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.loadNews()
+        self.setupTableView()
         tableView.prefetchDataSource = self
+        tableView.dataSource = self
+        tableView.delegate = self
+        
         configRefreshControl()
         
         self.tableView.register(NewsHeaderSection.self, forCellReuseIdentifier: NewsHeaderSection.reuseIdentifier)
@@ -81,6 +93,16 @@ class NewsTableViewController: UIViewController {
             
         }
     }
+    
+    private func setupTableView() {
+        self.view.addSubview(tableView)
+        
+        tableView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        tableView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
+        tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        tableView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
+    }
+    
     
     private func configRefreshControl() {
         let refresh = UIRefreshControl()
