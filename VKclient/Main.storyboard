@@ -15,117 +15,7 @@
         <scene sceneID="tne-QT-ifu">
             <objects>
                 <viewController id="BYZ-38-t0r" customClass="LoginViewController" customModule="VKclient" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="resul-mentes-DbwYNr8RPbg-unsplash" adjustsImageSizeForAccessibilityContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nmZ-r4-YTN">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            </imageView>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="j0J-cj-sZf">
-                                <rect key="frame" x="0.0" y="44" width="414" height="818"/>
-                                <subviews>
-                                    <textField opaque="NO" contentMode="scaleToFill" verticalCompressionResistancePriority="752" contentHorizontalAlignment="center" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Password" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ZcY-du-Rje" userLabel="PasswordEntryField">
-                                        <rect key="frame" x="135" y="316" width="150" height="34"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="150" id="gF3-Zz-cI8"/>
-                                            <constraint firstAttribute="height" constant="34" id="hAu-hw-Xhq"/>
-                                        </constraints>
-                                        <color key="textColor" white="0.46000000000000002" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
-                                    </textField>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="VKclient" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pOZ-ca-D6N">
-                                        <rect key="frame" x="130" y="180" width="160" height="44"/>
-                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="36"/>
-                                        <nil key="textColor"/>
-                                        <nil key="highlightedColor"/>
-                                        <color key="shadowColor" systemColor="quaternaryLabelColor"/>
-                                    </label>
-                                    <textField opaque="NO" contentMode="scaleToFill" verticalCompressionResistancePriority="751" highlighted="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Login" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="nmx-fE-Vtx" userLabel="LoginEntryField">
-                                        <rect key="frame" x="135" y="274" width="150" height="34"/>
-                                        <rect key="contentStretch" x="1" y="0.0" width="1" height="1"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="34" id="6On-ZE-YUw"/>
-                                            <constraint firstAttribute="width" constant="150" id="Dhg-vd-Qus"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <textInputTraits key="textInputTraits"/>
-                                    </textField>
-                                    <stackView opaque="NO" contentMode="scaleToFill" spacing="42" translatesAutoresizingMaskIntoConstraints="NO" id="BWF-Fg-HrL">
-                                        <rect key="frame" x="135" y="370" width="150" height="20"/>
-                                        <subviews>
-                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="252" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" image="circle.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="X5Z-Q6-hWT">
-                                                <rect key="frame" x="0.0" y="0.5" width="20" height="19"/>
-                                                <color key="tintColor" systemColor="systemTealColor"/>
-                                            </imageView>
-                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="252" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" image="circle.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="bce-Ge-ACN">
-                                                <rect key="frame" x="62" y="0.5" width="20" height="19"/>
-                                                <color key="tintColor" systemColor="systemTealColor"/>
-                                            </imageView>
-                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="circle.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="j3Z-yY-n98">
-                                                <rect key="frame" x="124" y="0.5" width="26" height="19"/>
-                                                <color key="tintColor" systemColor="systemTealColor"/>
-                                            </imageView>
-                                        </subviews>
-                                    </stackView>
-                                    <button opaque="NO" contentMode="scaleToFill" verticalCompressionResistancePriority="751" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ihr-Pd-aAA">
-                                        <rect key="frame" x="160" y="398" width="100" height="47.5"/>
-                                        <fontDescription key="fontDescription" name=".AppleSystemUIFont" family=".AppleSystemUIFont" pointSize="28"/>
-                                        <state key="normal" title="Enter">
-                                            <color key="titleColor" systemColor="labelColor"/>
-                                        </state>
-                                        <buttonConfiguration key="configuration" style="gray" title="Enter">
-                                            <fontDescription key="titleFontDescription" name=".AppleSystemUIFont" family=".AppleSystemUIFont" pointSize="28"/>
-                                            <color key="baseForegroundColor" systemColor="labelColor"/>
-                                        </buttonConfiguration>
-                                        <connections>
-                                            <action selector="EnterActionButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="7c2-uX-My0"/>
-                                            <segue destination="ERg-R5-WR1" kind="presentation" identifier="loginSegue" modalPresentationStyle="fullScreen" id="pCW-Yc-1om"/>
-                                        </connections>
-                                    </button>
-                                </subviews>
-                                <constraints>
-                                    <constraint firstItem="BWF-Fg-HrL" firstAttribute="leading" secondItem="9Zi-yG-dgJ" secondAttribute="leading" constant="135" id="1Nu-ZW-R4d"/>
-                                    <constraint firstItem="9Zi-yG-dgJ" firstAttribute="trailing" secondItem="ZcY-du-Rje" secondAttribute="trailing" constant="135" id="6pj-0h-ze2"/>
-                                    <constraint firstItem="ZcY-du-Rje" firstAttribute="top" secondItem="nmx-fE-Vtx" secondAttribute="bottom" constant="8" id="77E-tR-Dht"/>
-                                    <constraint firstItem="Ihr-Pd-aAA" firstAttribute="leading" secondItem="9Zi-yG-dgJ" secondAttribute="leading" constant="160" id="7Sy-gy-fcS"/>
-                                    <constraint firstItem="Ihr-Pd-aAA" firstAttribute="top" secondItem="BWF-Fg-HrL" secondAttribute="bottom" constant="8" id="8mt-1c-qdX"/>
-                                    <constraint firstItem="9Zi-yG-dgJ" firstAttribute="trailing" secondItem="pOZ-ca-D6N" secondAttribute="trailing" constant="130" id="JdN-f1-RDU"/>
-                                    <constraint firstItem="9Zi-yG-dgJ" firstAttribute="trailing" secondItem="BWF-Fg-HrL" secondAttribute="trailing" constant="135" id="KDn-ts-zuA"/>
-                                    <constraint firstItem="pOZ-ca-D6N" firstAttribute="top" secondItem="9Zi-yG-dgJ" secondAttribute="top" constant="180" id="KO1-un-Idv"/>
-                                    <constraint firstItem="9Zi-yG-dgJ" firstAttribute="trailing" secondItem="nmx-fE-Vtx" secondAttribute="trailing" constant="135" id="Q7K-GN-1F9"/>
-                                    <constraint firstItem="pOZ-ca-D6N" firstAttribute="leading" secondItem="9Zi-yG-dgJ" secondAttribute="leading" constant="130" id="bCj-Pa-aED"/>
-                                    <constraint firstItem="nmx-fE-Vtx" firstAttribute="leading" secondItem="9Zi-yG-dgJ" secondAttribute="leading" constant="135" id="dj3-jb-Q5r"/>
-                                    <constraint firstItem="9Zi-yG-dgJ" firstAttribute="bottom" secondItem="Ihr-Pd-aAA" secondAttribute="bottom" constant="372.5" id="eB1-HN-Xo1"/>
-                                    <constraint firstItem="nmx-fE-Vtx" firstAttribute="top" secondItem="pOZ-ca-D6N" secondAttribute="bottom" constant="50" id="j6D-Ie-lvR"/>
-                                    <constraint firstItem="9Zi-yG-dgJ" firstAttribute="trailing" secondItem="Ihr-Pd-aAA" secondAttribute="trailing" constant="160" id="pHD-iy-pfg"/>
-                                    <constraint firstItem="BWF-Fg-HrL" firstAttribute="top" secondItem="ZcY-du-Rje" secondAttribute="bottom" constant="20" id="tVP-uh-Mdh"/>
-                                    <constraint firstItem="ZcY-du-Rje" firstAttribute="leading" secondItem="9Zi-yG-dgJ" secondAttribute="leading" constant="135" id="uX7-e6-Zzf"/>
-                                </constraints>
-                                <viewLayoutGuide key="contentLayoutGuide" id="HcM-Q4-uAX"/>
-                                <viewLayoutGuide key="frameLayoutGuide" id="9Zi-yG-dgJ"/>
-                            </scrollView>
-                        </subviews>
-                        <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                        <constraints>
-                            <constraint firstItem="j0J-cj-sZf" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="0Lt-ee-kyn"/>
-                            <constraint firstItem="j0J-cj-sZf" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="Sua-s4-QEp"/>
-                            <constraint firstItem="j0J-cj-sZf" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="eBT-5S-Eb1"/>
-                            <constraint firstItem="j0J-cj-sZf" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="fU9-n5-mEp"/>
-                        </constraints>
-                    </view>
                     <navigationItem key="navigationItem" title="Login" id="UzT-fG-Jgw"/>
-                    <connections>
-                        <outlet property="circle1" destination="X5Z-Q6-hWT" id="1ry-LO-Uw8"/>
-                        <outlet property="circle2" destination="bce-Ge-ACN" id="z2E-5a-vfJ"/>
-                        <outlet property="circle3" destination="j3Z-yY-n98" id="Q6G-Y9-bEy"/>
-                        <outlet property="loginEntryField" destination="nmx-fE-Vtx" id="lSp-2C-X2n"/>
-                        <outlet property="passwordEntryField" destination="ZcY-du-Rje" id="YF5-v7-Qkr"/>
-                        <outlet property="scrollView" destination="j0J-cj-sZf" id="YI2-ZD-3dk"/>
-                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
@@ -246,7 +136,7 @@
         <!--Tab Bar Controller-->
         <scene sceneID="fhk-ir-D7U">
             <objects>
-                <tabBarController wantsFullScreenLayout="YES" id="ERg-R5-WR1" sceneMemberID="viewController">
+                <tabBarController storyboardIdentifier="TabBar" wantsFullScreenLayout="YES" id="ERg-R5-WR1" sceneMemberID="viewController">
                     <navigationItem key="navigationItem" id="ybn-SX-X9z"/>
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="qS2-W0-izS">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="49"/>
@@ -491,7 +381,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="circle.fill" catalog="system" width="128" height="121"/>
         <image name="circle.grid.3x3" catalog="system" width="128" height="110"/>
         <image name="circle.grid.3x3.fill" catalog="system" width="128" height="112"/>
         <image name="heart" catalog="system" width="128" height="109"/>
@@ -499,13 +388,6 @@
         <image name="person.3" catalog="system" width="128" height="62"/>
         <image name="person.3.fill" catalog="system" width="128" height="61"/>
         <image name="person.fill" catalog="system" width="128" height="120"/>
-        <image name="resul-mentes-DbwYNr8RPbg-unsplash" width="4433" height="7880"/>
-        <systemColor name="labelColor">
-            <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
-        <systemColor name="quaternaryLabelColor">
-            <color red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.17999999999999999" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
         <systemColor name="secondaryLabelColor">
             <color red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
@@ -514,9 +396,6 @@
         </systemColor>
         <systemColor name="systemRedColor">
             <color red="1" green="0.23137254901960785" blue="0.18823529411764706" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
-        <systemColor name="systemTealColor">
-            <color red="0.18823529411764706" green="0.69019607843137254" blue="0.7803921568627451" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

@@ -55,6 +55,7 @@
 		62E8F54E274EC4250037A9A7 /* PostModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62E8F54D274EC4250037A9A7 /* PostModel.swift */; };
 		62F69BBD27329D4E0090B3BC /* NewFriendsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62F69BBC27329D4E0090B3BC /* NewFriendsTableViewController.swift */; };
 		62F69BBF27329E130090B3BC /* NewFriendsViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62F69BBE27329E130090B3BC /* NewFriendsViewCell.swift */; };
+		62FB4FE62832A56600CD6F6D /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62FB4FE52832A56600CD6F6D /* LoginView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -104,6 +105,7 @@
 		62ECB19327A3FFEB00DCF2E5 /* LoggingProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoggingProxy.swift; sourceTree = "<group>"; };
 		62F69BBC27329D4E0090B3BC /* NewFriendsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewFriendsTableViewController.swift; sourceTree = "<group>"; };
 		62F69BBE27329E130090B3BC /* NewFriendsViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewFriendsViewCell.swift; sourceTree = "<group>"; };
+		62FB4FE52832A56600CD6F6D /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -173,6 +175,13 @@
 				626E8122282FBCAE00CEC689 /* CirleAnimation.swift */,
 			);
 			path = Animation;
+			sourceTree = "<group>";
+		};
+		628114972833BB9800E042D6 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Core;
 			sourceTree = "<group>";
 		};
 		62840105270A25B000E19405 /* Controls */ = {
@@ -262,6 +271,8 @@
 		62BBDB6826CA6A3700144345 /* VKclient */ = {
 			isa = PBXGroup;
 			children = (
+				628114972833BB9800E042D6 /* Core */,
+				62FB4FE42832A54D00CD6F6D /* Views */,
 				62840105270A25B000E19405 /* Controls */,
 				620CAE2E270899810090CB77 /* Network */,
 				62BA53FD2704AF9C000F790A /* Patterns */,
@@ -293,6 +304,14 @@
 				6201BB502708C33400036E76 /* VKLoginController.swift */,
 			);
 			path = Controllers;
+			sourceTree = "<group>";
+		};
+		62FB4FE42832A54D00CD6F6D /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				62FB4FE52832A56600CD6F6D /* LoginView.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -418,6 +437,7 @@
 				626A00E9270F78A1000E8F4C /* GroupsModel.swift in Sources */,
 				62F69BBF27329E130090B3BC /* NewFriendsViewCell.swift in Sources */,
 				6287BD8D26D67A4E0087D600 /* SettingsViewController.swift in Sources */,
+				62FB4FE62832A56600CD6F6D /* LoginView.swift in Sources */,
 				62B572D4273C4574001B4689 /* NewsFooterSection.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
