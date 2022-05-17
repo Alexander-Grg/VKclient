@@ -198,7 +198,7 @@ final class LoginView: UIView {
     
 //    override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
 //        let checkResult = checkUserData()
-//        
+//
 //        if !checkResult {
 //            VC.showLoginError()
 //        }

@@ -8,17 +8,20 @@
 import UIKit
 import WebKit
 
-class VKLoginController: UIViewController {
+class VKLoginController: UIViewController, WKUIDelegate {
     
-    @IBOutlet var webView: WKWebView! {
-        didSet {
-            webView.navigationDelegate = self
-        }
-    }
+    private(set) lazy var webView: WKWebView = {
+        let webConfiguration = WKWebViewConfiguration()
+         let webView = WKWebView(frame: .zero, configuration: webConfiguration)
+         webView.uiDelegate = self
+         webView.translatesAutoresizingMaskIntoConstraints = false
+        
+        return webView
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        self.setupUI()
         var components = URLComponents()
         components.scheme = "https"
         components.host = "oauth.vk.com"
@@ -35,6 +38,22 @@ class VKLoginController: UIViewController {
         let request = URLRequest(url: components.url!)
         webView.load(request)
     }
+
+    func setupUI() {
+            self.view.backgroundColor = .white
+            self.view.addSubview(webView)
+            
+            NSLayoutConstraint.activate([
+                webView.topAnchor
+                    .constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor),
+                webView.leftAnchor
+                    .constraint(equalTo: self.view.safeAreaLayoutGuide.leftAnchor),
+                webView.bottomAnchor
+                    .constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor),
+                webView.rightAnchor
+                    .constraint(equalTo: self.view.safeAreaLayoutGuide.rightAnchor)
+            ])
+        }
 }
 
 extension VKLoginController: WKNavigationDelegate {
@@ -63,7 +82,9 @@ extension VKLoginController: WKNavigationDelegate {
               }
         
         Session.instance.token = token
-        performSegue(withIdentifier: "toSecondLoginScreen", sender: nil)
+        let next = LoginViewController()
+        self.navigationController?.pushViewController(next, animated: true)
+//        performSegue(withIdentifier: "toSecondLoginScreen", sender: nil)
         decisionHandler(.cancel)
     }
 }
