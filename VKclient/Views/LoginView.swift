@@ -132,7 +132,6 @@ final class LoginView: UIView {
         self.configureUI()
     }
     
- 
 //    MARK: - setting UI
     
     private func configureUI() {
@@ -158,6 +157,7 @@ final class LoginView: UIView {
         
         NSLayoutConstraint.activate([
         
+          
             self.wallpaper.topAnchor.constraint(equalTo: self.topAnchor),
             self.wallpaper.leadingAnchor.constraint(equalTo: self.leadingAnchor),
             self.wallpaper.trailingAnchor.constraint(equalTo: self.trailingAnchor),
@@ -196,29 +196,9 @@ final class LoginView: UIView {
         
     }
     
-//    override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
-//        let checkResult = checkUserData()
-//
-//        if !checkResult {
-//            VC.showLoginError()
-//        }
-//        return checkResult
-//    }
-//    func checkUserData() -> Bool {
-//        guard let login = loginEntryField.text,
-//              let password = passwordEntryField.text else { return false }
-//        
-//                if login == "a" && password == "1" {
-//        return true
-//                } else {
-//                    return false
-//                }
-//    }
-    
     @objc func buttonTap() {
         
         self.loginDelegate?.didTap(true)
-        
     }
 }
 

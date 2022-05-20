@@ -138,7 +138,8 @@ extension LoginViewController: LoginDelegate {
         let nexVC = TabBarController()
 
         if tap == true {
-            self.navigationController?.pushViewController(nexVC, animated: true)
+            self.view.window?.rootViewController = nexVC
+            self.view.window?.makeKeyAndVisible()
         }
     }
 }

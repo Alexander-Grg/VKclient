@@ -18,7 +18,6 @@ final class NetworkService {
     }
     
     let dispatchGroup = DispatchGroup()
-    // MARK: Network configuration/session
     
     func loadFriends(
         completion: @escaping (Result<[UserObject], RequestErrors>) -> Void)
@@ -109,7 +108,6 @@ final class NetworkService {
         }
     }
     
-    
     func fetchingGroups(
         completion: @escaping (Result<[GroupsObjects], RequestErrors>) -> Void)
     {
@@ -149,7 +147,6 @@ final class NetworkService {
             }.resume()
         }
     }
-    
     
     //    MARK: Search for groups method
     

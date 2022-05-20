@@ -12,8 +12,6 @@ import SDWebImage
 class NewFriendsViewCell: UITableViewCell {
     
     //    MARK: - Properties
-    
-    static let reusedIdentifier = "NewFriendsCell"
 
     private(set) lazy var nameView: UILabel = {
         let l = UILabel()
@@ -106,3 +104,10 @@ class NewFriendsViewCell: UITableViewCell {
         avatarView.imageView.sd_setImage(with: photoURL)
     }
 }
+
+extension NewFriendsViewCell: ReusableView {
+    static var identifier: String {
+        return String(describing: self)
+    }
+}
+

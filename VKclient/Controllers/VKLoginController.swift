@@ -89,6 +89,7 @@ extension VKLoginController: WKNavigationDelegate {
 
         let next = LoginViewController()
         self.navigationController?.pushViewController(next, animated: true)
+        
         decisionHandler(.cancel)
     }
 }

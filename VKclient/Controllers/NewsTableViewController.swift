@@ -31,13 +31,13 @@ enum NewsTypes {
     var cellIdentifiersForRows: String {
         switch self {
         case .photo:
-            return "NewsPhotoCell"
+            return NewsTableViewCellPhoto.identifier
         case .text:
-            return  "NewsPostCell"
+            return  NewsTableViewCellPost.identifier
         case .footer:
-            return "NewsFooter"
+            return NewsFooterSection.identifier
         case .header:
-            return "NewsHeaderSection"
+            return NewsHeaderSection.identifier
         }
     }
 }
@@ -76,10 +76,10 @@ class NewsTableViewController: UIViewController {
         
         configRefreshControl()
         
-        self.tableView.register(NewsHeaderSection.self, forCellReuseIdentifier: NewsHeaderSection.reuseIdentifier)
-        self.tableView.register(NewsTableViewCellPost.self, forCellReuseIdentifier: NewsTableViewCellPost.reusedIdentifier)
-        self.tableView.register(NewsTableViewCellPhoto.self, forCellReuseIdentifier: NewsTableViewCellPhoto.reuseIdentifier)
-        self.tableView.register(NewsFooterSection.self, forCellReuseIdentifier: NewsFooterSection.reuseIdentifier)
+        self.tableView.register(NewsHeaderSection.self, forCellReuseIdentifier: NewsHeaderSection.identifier)
+        self.tableView.register(NewsTableViewCellPost.self, forCellReuseIdentifier: NewsTableViewCellPost.identifier)
+        self.tableView.register(NewsTableViewCellPhoto.self, forCellReuseIdentifier: NewsTableViewCellPhoto.identifier)
+        self.tableView.register(NewsFooterSection.self, forCellReuseIdentifier: NewsFooterSection.identifier)
         
     }
     
@@ -136,12 +136,12 @@ extension NewsTableViewController: UITableViewDataSource {
         
         switch news.rowsCounter[indexPath.row] {
         case .header:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: "NewsHeaderSection") as? NewsHeaderSection else { return NewsHeaderSection() }
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: NewsHeaderSection.identifier) as? NewsHeaderSection else { return NewsHeaderSection() }
             cell.configureCell(news)
             
             return cell
         case .text:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: "NewsPostCell") as? NewsTableViewCellPost else { return NewsTableViewCellPost() }
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: NewsTableViewCellPost.identifier) as? NewsTableViewCellPost else { return NewsTableViewCellPost() }
             
             let textHeight = news.text.heightWithConstrainedWidth(width: tableView.frame.width, font: textCellFont)
             cell.configureCell(news, isTapped: textHeight > defaultCellHeight)
@@ -149,13 +149,13 @@ extension NewsTableViewController: UITableViewDataSource {
             
             return cell
         case .photo:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: "NewsPhotoCell") as? NewsTableViewCellPhoto else { return NewsTableViewCellPhoto() }
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: NewsTableViewCellPhoto.identifier) as? NewsTableViewCellPhoto else { return NewsTableViewCellPhoto() }
             
             cell.configure(news)
             
             return cell
         case .footer:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: NewsFooterSection.reuseIdentifier) as? NewsFooterSection
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: NewsFooterSection.identifier) as? NewsFooterSection
             else { return NewsFooterSection() }
             cell.configureCell(news)
             

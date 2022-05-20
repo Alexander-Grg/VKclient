@@ -30,7 +30,6 @@
 		6281149B2833BDDF00E042D6 /* AppStartManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6281149A2833BDDF00E042D6 /* AppStartManager.swift */; };
 		6281149D2833E74200E042D6 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6281149C2833E74200E042D6 /* TabBarController.swift */; };
 		6281149F2833F93D00E042D6 /* CommunityListCustomCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6281149E2833F93D00E042D6 /* CommunityListCustomCell.swift */; };
-		6287BD8D26D67A4E0087D600 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6287BD8C26D67A4E0087D600 /* SettingsViewController.swift */; };
 		6287BD8F26D67AAF0087D600 /* PhotoCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6287BD8E26D67AAF0087D600 /* PhotoCollectionViewController.swift */; };
 		6287BD9126D67AE90087D600 /* CommunitiesListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6287BD9026D67AE90087D600 /* CommunitiesListTableViewController.swift */; };
 		628E852C26FF69C100FB5FAE /* extendedPhotoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 628E852B26FF69C100FB5FAE /* extendedPhotoViewController.swift */; };
@@ -78,7 +77,6 @@
 		6281149A2833BDDF00E042D6 /* AppStartManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStartManager.swift; sourceTree = "<group>"; };
 		6281149C2833E74200E042D6 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		6281149E2833F93D00E042D6 /* CommunityListCustomCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityListCustomCell.swift; sourceTree = "<group>"; };
-		6287BD8C26D67A4E0087D600 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		6287BD8E26D67AAF0087D600 /* PhotoCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCollectionViewController.swift; sourceTree = "<group>"; };
 		6287BD9026D67AE90087D600 /* CommunitiesListTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunitiesListTableViewController.swift; sourceTree = "<group>"; };
 		628E852B26FF69C100FB5FAE /* extendedPhotoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = extendedPhotoViewController.swift; sourceTree = "<group>"; };
@@ -275,7 +273,6 @@
 				6287BD8E26D67AAF0087D600 /* PhotoCollectionViewController.swift */,
 				628E852B26FF69C100FB5FAE /* extendedPhotoViewController.swift */,
 				623AEA6D26F33EFD00F87BD5 /* NewsTableViewController.swift */,
-				6287BD8C26D67A4E0087D600 /* SettingsViewController.swift */,
 				62BBDB6D26CA6A3700144345 /* LoginViewController.swift */,
 				6201BB502708C33400036E76 /* VKLoginController.swift */,
 				6281149C2833E74200E042D6 /* TabBarController.swift */,
@@ -408,7 +405,6 @@
 				62E56F3326D6742800F825A7 /* CommunitiesTableViewController.swift in Sources */,
 				626A00E9270F78A1000E8F4C /* GroupsModel.swift in Sources */,
 				62F69BBF27329E130090B3BC /* NewFriendsViewCell.swift in Sources */,
-				6287BD8D26D67A4E0087D600 /* SettingsViewController.swift in Sources */,
 				62FB4FE62832A56600CD6F6D /* LoginView.swift in Sources */,
 				62B572D4273C4574001B4689 /* NewsFooterSection.swift in Sources */,
 			);

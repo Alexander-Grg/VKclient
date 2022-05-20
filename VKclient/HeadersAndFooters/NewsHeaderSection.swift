@@ -9,6 +9,7 @@ import UIKit
 import SDWebImage
 
 class NewsHeaderSection: UITableViewCell {
+    
     //    MARK: - Properties
     
     private(set) lazy var avatarView: UIImageView = {
@@ -43,9 +44,7 @@ class NewsHeaderSection: UITableViewCell {
         
         return label
     }()
-    
-    static let reuseIdentifier = "NewsHeaderSection"
-    
+
     //    MARK: - Lifecycle
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -115,4 +114,11 @@ class NewsHeaderSection: UITableViewCell {
         postTimeLabel.text = dateFormatter.string(from: date)
     }
 }
+
+extension NewsHeaderSection: ReusableView {
+    static var identifier: String {
+        return String(describing: self)
+    }
+}
+
 

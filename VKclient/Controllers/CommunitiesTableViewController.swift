@@ -49,18 +49,20 @@ class CommunitiesTableViewController: UITableViewController, UISearchBarDelegate
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.tableView.register(GroupsTableViewCell.self, forCellReuseIdentifier: GroupsTableViewCell.reusedIdentifier)
+        self.tableView.register(GroupsTableViewCell.self, forCellReuseIdentifier: GroupsTableViewCell.identifier)
         self.fetchDataFromNetwork()
         searchBar.delegate = self
         navigationItem.titleView = searchBar
         navigationItem.leftBarButtonItem = exitButton
         navigationItem.rightBarButtonItem = addGroupButton
     }
-
-//    MARK: - Private methods
     
-   @objc private func buttonPressed() {
-        self.dismiss(animated: true)
+    //    MARK: - Private methods
+    
+    @objc private func buttonPressed() {
+        let loginVC = LoginViewController()
+        self.view.window?.rootViewController = loginVC
+        self.view.window?.makeKeyAndVisible()
     }
     
     @objc private func addButtonPressed() {
@@ -72,7 +74,7 @@ class CommunitiesTableViewController: UITableViewController, UISearchBarDelegate
     private func groupsFilteredFromRealm(with groups: Results<GroupsRealm>?) {
         self.dictOfGroups.removeAll()
         self.firstLetters.removeAll()
-
+        
         if let filteredGroups = groups {
             for group in filteredGroups {
                 guard let dictKey = group.name.first else { continue }
@@ -120,41 +122,41 @@ class CommunitiesTableViewController: UITableViewController, UISearchBarDelegate
             groupsFilteredFromRealm(with: self.groupsfromRealm)
             return
         }
-    
+        
         groupsFilteredFromRealm(with:self.groupsfromRealm?.filter("name CONTAINS[cd] %@", text, text))
     }
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         filterGroups(with: searchText)
     }
-
-        private func updatesFromRealm() {
     
-            groupsfromRealm = try? RealmService.load(typeOf: GroupsRealm.self)
-    
-            groupsNotification = groupsfromRealm?.observe(on: .main, { realmChange in
-                switch realmChange {
-                case .initial(let objects):
-                    if objects.count > 0 {
-                        self.tableView.reloadData()
-                    }
-                    print(objects)
-    
-                case let .update(_, deletions, insertions, modifications ):
-                    self.tableView.beginUpdates()
-                    self.tableView.insertRows(at: insertions.map({ IndexPath(row: $0, section: 0)}),
-                                              with: .none)
-                    self.tableView.reloadRows(at: modifications.map({ IndexPath(row: $0, section: 0)}),
-                                              with: .none)
-                    self.tableView.deleteRows(at: deletions.map({ IndexPath(row: $0, section: 0)}),
-                                              with: .none)
-                    self.tableView.endUpdates()
-    
-                case .error(let error):
-                    print(error)
-    
+    private func updatesFromRealm() {
+        
+        groupsfromRealm = try? RealmService.load(typeOf: GroupsRealm.self)
+        
+        groupsNotification = groupsfromRealm?.observe(on: .main, { realmChange in
+            switch realmChange {
+            case .initial(let objects):
+                if objects.count > 0 {
+                    self.tableView.reloadData()
                 }
-            })
-        }
+                print(objects)
+                
+            case let .update(_, deletions, insertions, modifications ):
+                self.tableView.beginUpdates()
+                self.tableView.insertRows(at: insertions.map({ IndexPath(row: $0, section: 0)}),
+                                          with: .none)
+                self.tableView.reloadRows(at: modifications.map({ IndexPath(row: $0, section: 0)}),
+                                          with: .none)
+                self.tableView.deleteRows(at: deletions.map({ IndexPath(row: $0, section: 0)}),
+                                          with: .none)
+                self.tableView.endUpdates()
+                
+            case .error(let error):
+                print(error)
+                
+            }
+        })
+    }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
@@ -171,7 +173,7 @@ class CommunitiesTableViewController: UITableViewController, UISearchBarDelegate
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "myGroupsCells", for: indexPath) as! GroupsTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: GroupsTableViewCell.identifier, for: indexPath) as! GroupsTableViewCell
         
         let firstLetter = self.firstLetters[indexPath.section]
         if let groups = self.dictOfGroups[firstLetter] {

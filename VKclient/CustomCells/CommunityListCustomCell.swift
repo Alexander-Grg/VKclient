@@ -9,21 +9,19 @@ import UIKit
 
 class CommunityListCustomCell: UITableViewCell {
     
-//    MARK: - Properties
-    
-    static let reusedIdentifier = "communityCell"
+    //    MARK: - Properties
     
     private(set) lazy var avatar: AvatarView = {
-            let a = AvatarView()
-            a.translatesAutoresizingMaskIntoConstraints = false
+        let a = AvatarView()
+        a.translatesAutoresizingMaskIntoConstraints = false
         let recognizer = UITapGestureRecognizer(target: self, action: #selector(self.buttonTap))
-            recognizer.numberOfTapsRequired = 1
-            recognizer.numberOfTouchesRequired = 1
-            a.addGestureRecognizer(recognizer)
-            a.isUserInteractionEnabled = true
-
-            return a
-        }()
+        recognizer.numberOfTapsRequired = 1
+        recognizer.numberOfTouchesRequired = 1
+        a.addGestureRecognizer(recognizer)
+        a.isUserInteractionEnabled = true
+        
+        return a
+    }()
     
     private(set) lazy var label: UILabel = {
         let l = UILabel()
@@ -37,7 +35,7 @@ class CommunityListCustomCell: UITableViewCell {
         return l
     }()
     
-//    MARK: - Init
+    //    MARK: - Init
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -49,7 +47,7 @@ class CommunityListCustomCell: UITableViewCell {
         self.configureUI()
     }
     
-//    MARK: - UI
+    //    MARK: - UI
     
     private func configureUI() {
         self.addSubviews()
@@ -75,11 +73,11 @@ class CommunityListCustomCell: UITableViewCell {
             self.label.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             self.label.leftAnchor.constraint(equalTo: self.avatar.rightAnchor, constant: 10),
             self.label.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: 10)
-
+            
         ])
     }
     
-   @objc private func buttonTap() {
+    @objc private func buttonTap() {
         self.avatarAnimation()
     }
     
@@ -103,3 +101,10 @@ class CommunityListCustomCell: UITableViewCell {
         self.label.text = data.name
     }
 }
+
+extension CommunityListCustomCell: ReusableView {
+    static var identifier: String {
+        return String(describing: self)
+    }
+}
+

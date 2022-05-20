@@ -9,6 +9,8 @@ import UIKit
 
 class AvatarView: UIView {
     
+//    MARK: - Properties
+    
    private(set) lazy var imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
@@ -27,6 +29,8 @@ class AvatarView: UIView {
         return shadowView
     }()
     
+//    MARK: - Init
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupViews()
@@ -38,6 +42,8 @@ class AvatarView: UIView {
         setupViews()
         setupConstraint()
     }
+    
+//    MARK: - UI
     
     func setImage(_ image: UIImage?) {
         imageView.image = image

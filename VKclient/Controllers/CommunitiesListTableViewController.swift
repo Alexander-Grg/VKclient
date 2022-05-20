@@ -9,7 +9,7 @@ import UIKit
 
 class CommunitiesListTableViewController: UITableViewController, UISearchBarDelegate {
     
-    var groupsHolder = [GroupsObjects]() 
+    var groupsHolder = [GroupsObjects]()
     private let network = NetworkService()
     private(set) lazy var search: UISearchBar = {
         let s = UISearchBar()
@@ -23,7 +23,7 @@ class CommunitiesListTableViewController: UITableViewController, UISearchBarDele
         super.viewDidLoad()
         search.delegate = self
         self.navigationItem.titleView = search
-        self.tableView.register(CommunityListCustomCell.self, forCellReuseIdentifier: CommunityListCustomCell.reusedIdentifier)
+        self.tableView.register(CommunityListCustomCell.self, forCellReuseIdentifier: CommunityListCustomCell.identifier)
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -31,7 +31,7 @@ class CommunitiesListTableViewController: UITableViewController, UISearchBarDele
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "communityCell", for: indexPath) as! CommunityListCustomCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: CommunityListCustomCell.identifier, for: indexPath) as! CommunityListCustomCell
         cell.configureCell(groupsHolder[indexPath.row])
         
         return cell
@@ -56,7 +56,7 @@ class CommunitiesListTableViewController: UITableViewController, UISearchBarDele
                 }
             }
         }
-     
+        
     }
 }
 

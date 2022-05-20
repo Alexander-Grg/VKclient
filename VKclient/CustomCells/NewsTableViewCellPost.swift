@@ -14,7 +14,7 @@ protocol NewsDelegate {
 class NewsTableViewCellPost: UITableViewCell {
     
     //    MARK: - Properties
-    static let reusedIdentifier = "NewsPostCell"
+
     var isPressed: Bool = false
     var delegate: NewsDelegate?
     
@@ -77,7 +77,7 @@ class NewsTableViewCellPost: UITableViewCell {
         NSLayoutConstraint.activate([
             textForPost.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
             textForPost.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 15),
-            textForPost.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: 15),
+            textForPost.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -10),
             textForPost.bottomAnchor.constraint(equalTo: showMoreTextButton.topAnchor),
             
             showMoreTextButton.topAnchor.constraint(equalTo: textForPost.bottomAnchor),
@@ -105,4 +105,10 @@ class NewsTableViewCellPost: UITableViewCell {
         isPressed ? "Show Less": "Show More"
     }
     
+}
+
+extension NewsTableViewCellPost: ReusableView {
+    static var identifier: String {
+        return String(describing: self)
+    }
 }

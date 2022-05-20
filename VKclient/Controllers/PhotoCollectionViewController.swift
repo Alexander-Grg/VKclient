@@ -7,27 +7,50 @@
 
 import UIKit
 import RealmSwift
-import SwiftUI
 
-class PhotoViewController: UIViewController, UICollectionViewDelegateFlowLayout  {
-    @IBOutlet var photoCollection: UICollectionView!
-    var friendID: Int = 0
+class PhotoViewController : UIViewController {
+    
+    private let collectionView: UICollectionView = {
+        let viewLayout = UICollectionViewFlowLayout()
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: viewLayout)
+        collectionView.backgroundColor = .white
+        
+        return collectionView
+    }()
+    
+    private enum LayoutConstant {
+        static let spacing: CGFloat = 16.0
+        static let itemHeight: CGFloat = 300.0
+    }
+    
+    var friendID: Int = Session.instance.friendID
     var photosFromDB: Results<RealmPhotos>?
     var photosNotification: NotificationToken?
+    var photosForExtendedController: [String] = []
     var user: User?
     var arrayOfRealm = [String]() {
         didSet {
-            self.photoCollection.reloadData()
+            self.collectionView.reloadData()
         }
     }
     private let network = NetworkService()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        let layout = UICollectionViewFlowLayout()
-        layout.itemSize = CGSize(width: 120, height: 120)
-        photoCollection.collectionViewLayout = layout
+        view.backgroundColor = .white
+        view.addSubview(collectionView)
+        setupViews()
+        setupLayouts()
         updatesFromRealm()
+        
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            collectionView.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor),
+            collectionView.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor)
+        ])
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -37,12 +60,13 @@ class PhotoViewController: UIViewController, UICollectionViewDelegateFlowLayout 
             switch result {
             case .success(let photos):
                 try? RealmService.save(items: photos)
-                self.photoCollection.reloadData()
+                self.collectionView.reloadData()
             case .failure:
                 print("Data has already been saved to Realm")
             }
         }
     }
+    
     
     private func updatesFromRealm() {
         
@@ -53,27 +77,27 @@ class PhotoViewController: UIViewController, UICollectionViewDelegateFlowLayout 
             case .initial(let objects):
                 if objects.count > 0 {
                     //                self.groupsfromRealm = objects
-                    self.photoCollection.reloadData()
+                    self.collectionView.reloadData()
                 }
                 print(objects)
                 
             case let .update(_, deletions, insertions, modifications ):
-                self.photoCollection.performBatchUpdates {
+                self.collectionView.performBatchUpdates {
                     let delete = deletions.map {IndexPath(
                         item: $0,
                         section: 0) }
-                    self.photoCollection.deleteItems(at: delete)
+                    self.collectionView.deleteItems(at: delete)
                     
                     let insert = insertions.map { IndexPath(
                         item: $0,
                         section: 0) }
                     
-                    self.photoCollection.insertItems(at: insert)
+                    self.collectionView.insertItems(at: insert)
                     
                     let modify = modifications.map { IndexPath(
                         item: $0,
                         section: 0) }
-                    self.photoCollection.reloadItems(at: modify)
+                    self.collectionView.reloadItems(at: modify)
                 }
                 
             case .error(let error):
@@ -83,52 +107,92 @@ class PhotoViewController: UIViewController, UICollectionViewDelegateFlowLayout 
         })
     }
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        guard
-            segue.identifier == "toExtendedPhotos",
-            let dataDestination = segue.destination as? extendedPhotoViewController,
-            let indexPath = photoCollection.indexPathsForSelectedItems?.first
-        else { return }
-        var userArray: [String] = []
-        guard let userPhotos = photosFromDB else { return }
-        for element in userPhotos {
-            userArray.append(element.sizes["x"]!)
-        }
-        dataDestination.arrayOfPhotosFromDB = userArray
-        dataDestination.friendID = friendID
-        dataDestination.indexOfSelectedPhoto = Int(indexPath.item)
+    private func setupViews() {
+        view.backgroundColor = .white
+        view.addSubview(collectionView)
+        
+        
+        collectionView.dataSource = self
+        collectionView.delegate = self
+        collectionView.register(PhotosCollectionViewCell.self, forCellWithReuseIdentifier: PhotosCollectionViewCell.identifier)
     }
     
-    // MARK: UICollectionViewDataSource
-    
+    private func setupLayouts() {
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        
+        // Layout constraints for `collectionView`
+        NSLayoutConstraint.activate([
+            collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            collectionView.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor),
+            collectionView.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor)
+        ])
+    }
+}
+
+extension PhotoViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         photosFromDB?.count ?? 0
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PhotosCell", for: indexPath) as! PhotosCollectionViewCell
-        //        MARK: PHOTOS FROM DB
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PhotosCollectionViewCell.identifier, for: indexPath) as! PhotosCollectionViewCell
+        
         guard let photosFromDB = photosFromDB else { return cell }
-        cell.photoCollectionCell.sd_setImage(with: URL(string: photosFromDB[indexPath.row].sizes["x"]!))
+        cell.profileImageView.sd_setImage(with: URL(string: photosFromDB[indexPath.row].sizes["x"]!))
+        
         return cell
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        
-        let width = collectionView.frame.width / 3 - 1
-        return CGSize(width: width, height: width)
-    }
+}
+
+extension PhotoViewController: UICollectionViewDelegate {
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return 1.0
-    }
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return 1.0
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
+        guard let userPhotos = photosFromDB
+                
+        else { return }
+        
+        for element in userPhotos {
+            photosForExtendedController.append(element.sizes["x"]!)
+        }
+        let VC = extendedPhotoViewController(arrayOfPhotosFromDB: self.photosForExtendedController, indexOfSelectedPhoto: Int(indexPath.item))
+        self.navigationController?.pushViewController(VC.self, animated: true)
+        
     }
 }
 
-extension PhotoViewController: UICollectionViewDataSource, UICollectionViewDelegate {
+extension PhotoViewController: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        
+        let width = itemWidth(for: view.frame.width, spacing: LayoutConstant.spacing)
+        
+        return CGSize(width: width, height: LayoutConstant.itemHeight)
+    }
+    
+    func itemWidth(for width: CGFloat, spacing: CGFloat) -> CGFloat {
+        let itemsInRow: CGFloat = 2
+        
+        let totalSpacing: CGFloat = 2 * spacing + (itemsInRow - 1) * spacing
+        let finalWidth = (width - totalSpacing) / itemsInRow
+        
+        return floor(finalWidth)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        return UIEdgeInsets(top: LayoutConstant.spacing, left: LayoutConstant.spacing, bottom: LayoutConstant.spacing, right: LayoutConstant.spacing)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return LayoutConstant.spacing
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return LayoutConstant.spacing
+    }
 }
+
 
 
 

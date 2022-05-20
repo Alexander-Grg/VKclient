@@ -10,7 +10,7 @@ import SDWebImage
 
 class NewsTableViewCellPhoto: UITableViewCell{
     
-    static let reuseIdentifier = "NewsPhotoCell"
+//    MARK: - Properties
     
     private(set) lazy var newsPhoto: UIImageView = {
         let photo = UIImageView()
@@ -25,6 +25,7 @@ class NewsTableViewCellPhoto: UITableViewCell{
         return photo
     }()
     
+//    MARK: - Init
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -36,6 +37,8 @@ class NewsTableViewCellPhoto: UITableViewCell{
         super.init(coder: aDecoder)
         self.setView()
     }
+    
+//    MARK: - UI
     
     private func setView() {
         contentView.addSubview(newsPhoto)
@@ -60,3 +63,10 @@ class NewsTableViewCellPhoto: UITableViewCell{
         newsPhoto.image = nil
     }
 }
+
+extension NewsTableViewCellPhoto: ReusableView {
+    static var identifier: String {
+        return String(describing: self)
+    }
+}
+

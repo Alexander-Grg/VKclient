@@ -10,6 +10,8 @@ import UIKit
 
 class LikeControl: UIControl {
     
+//    MARK: - Properties
+    
     private(set) lazy var likeButton: UIButton = {
         let b = UIButton()
         
@@ -35,6 +37,8 @@ class LikeControl: UIControl {
         }
     }
     
+//    MARK: - Init
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
     }
@@ -52,3 +56,5 @@ class LikeControl: UIControl {
         isLiked ? self.likesCount += 1 : self.likesCount > 0 ? self.likesCount -= 1 : nil
     }
 }
+
+

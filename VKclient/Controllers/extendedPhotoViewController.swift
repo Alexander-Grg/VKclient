@@ -11,22 +11,29 @@ import RealmSwift
 
 class extendedPhotoViewController: UIViewController {
     
-    var friendID = 0
-    var indexOfSelectedPhoto = 0
-    var arrayOfPhotosFromDB: [String] = [] {
-        didSet {
-            self.view.reloadInputViews()
-        }
-    }
+    var friendID = Session.instance.friendID
+    var indexOfSelectedPhoto: Int
+    var arrayOfPhotosFromDB: [String]
     var leftImage: UIImageView!
     var mainImage: UIImageView!
     var rightImage: UIImageView!
     var swipeToRight: UIViewPropertyAnimator!
     var swipeToLeft: UIViewPropertyAnimator!
     
+
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
+    }
+    
+    init(arrayOfPhotosFromDB: [String], indexOfSelectedPhoto: Int ) {
+        self.arrayOfPhotosFromDB = arrayOfPhotosFromDB
+        self.indexOfSelectedPhoto = indexOfSelectedPhoto
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     
@@ -49,6 +56,7 @@ class extendedPhotoViewController: UIViewController {
         var leftPhotoIndex = indexOfSelectedPhoto - 1
         let mainPhotoIndex = indexOfSelectedPhoto
         var rightPhotoIndex = indexOfSelectedPhoto + 1
+  
         
         if leftPhotoIndex < 0, !arrayOfPhotosFromDB.isEmpty {
             leftPhotoIndex = arrayOfPhotosFromDB.count - 1
@@ -126,6 +134,9 @@ class extendedPhotoViewController: UIViewController {
     }
     
     @objc func panSettings(_ recognizer: UIPanGestureRecognizer) {
+        
+       
+        
         switch recognizer.state {
         case .began:
             swipeToRight = UIViewPropertyAnimator(
@@ -146,7 +157,7 @@ class extendedPhotoViewController: UIViewController {
                         }, completion: { [unowned self] _ in
                             self.indexOfSelectedPhoto -= 1
                             if self.indexOfSelectedPhoto < 0 {
-                                self.indexOfSelectedPhoto = self.arrayOfPhotosFromDB.count - 1
+                                self.indexOfSelectedPhoto = (arrayOfPhotosFromDB.count) - 1
                             }
                             self.AnimationStarts()
                         })
@@ -168,7 +179,7 @@ class extendedPhotoViewController: UIViewController {
                             self.leftImage.transform = transform
                         }, completion: { [unowned self] _ in
                             self.indexOfSelectedPhoto += 1
-                            if self.indexOfSelectedPhoto > self.arrayOfPhotosFromDB.count - 1 {
+                            if self.indexOfSelectedPhoto > arrayOfPhotosFromDB.count - 1 {
                                 self.indexOfSelectedPhoto = 0
                             }
                             self.AnimationStarts()
