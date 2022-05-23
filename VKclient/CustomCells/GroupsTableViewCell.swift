@@ -19,7 +19,7 @@ class GroupsTableViewCell: UITableViewCell {
         recognizer.numberOfTapsRequired = 1
         recognizer.numberOfTouchesRequired = 1
         a.addGestureRecognizer(recognizer)
-        a.isUserInteractionEnabled = false
+        a.isUserInteractionEnabled = true
 
         return a
     }()
