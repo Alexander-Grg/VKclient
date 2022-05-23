@@ -13,7 +13,6 @@ class CommunityListCustomCell: UITableViewCell {
     
     private(set) lazy var avatar: AvatarView = {
         let a = AvatarView()
-        a.translatesAutoresizingMaskIntoConstraints = false
         let recognizer = UITapGestureRecognizer(target: self, action: #selector(self.buttonTap))
         recognizer.numberOfTapsRequired = 1
         recognizer.numberOfTouchesRequired = 1
@@ -25,7 +24,6 @@ class CommunityListCustomCell: UITableViewCell {
     
     private(set) lazy var label: UILabel = {
         let l = UILabel()
-        l.translatesAutoresizingMaskIntoConstraints = false
         l.font = UIFont.systemFont(ofSize: 16.0)
         l.textColor = .black
         l.textAlignment = .center
@@ -60,6 +58,9 @@ class CommunityListCustomCell: UITableViewCell {
     }
     
     private func setupConstraint() {
+        
+        avatar.translatesAutoresizingMaskIntoConstraints = false
+        label.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
             self.avatar.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 0),

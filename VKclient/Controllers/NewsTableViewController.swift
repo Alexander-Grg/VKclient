@@ -57,7 +57,6 @@ class NewsTableViewController: UIViewController {
     
     private(set) lazy var tableView: UITableView = {
         let t = UITableView()
-        t.translatesAutoresizingMaskIntoConstraints = false
         
         return t
     }()
@@ -96,6 +95,7 @@ class NewsTableViewController: UIViewController {
     
     private func setupTableView() {
         self.view.addSubview(tableView)
+        tableView.translatesAutoresizingMaskIntoConstraints = false
         
         tableView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
         tableView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true

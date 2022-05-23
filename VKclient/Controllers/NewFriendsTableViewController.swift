@@ -13,7 +13,6 @@ class NewFriendsTableViewController: UIViewController, UISearchBarDelegate {
     
     private(set) lazy var tableView: UITableView = {
         let t = UITableView()
-        t.translatesAutoresizingMaskIntoConstraints = false
         
         return t
     }()
@@ -125,6 +124,7 @@ class NewFriendsTableViewController: UIViewController, UISearchBarDelegate {
     
     private func setupTableView() {
         self.view.addSubview(tableView)
+        tableView.translatesAutoresizingMaskIntoConstraints = false
         
         tableView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
         tableView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
@@ -208,22 +208,6 @@ extension NewFriendsTableViewController: UITableViewDelegate {
         defer { tableView.deselectRow(at: indexPath, animated: true)}
     }
 }
-
-
-//    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-//        if editingStyle == .delete,
-//           let friendToDelete = friendsFromRealm?[indexPath.row] {
-//            do {
-//                let realm = try Realm(configuration: Realm.Configuration(deleteRealmIfMigrationNeeded: true))
-//                try realm.write {
-//                    realm.delete(friendToDelete)
-//                }
-//                tableView.deleteRows(at: [indexPath], with: .fade)
-//            } catch {
-//                print(error)
-//            }
-//        }
-//    }
 
 extension NewFriendsTableViewController: UIGestureRecognizerDelegate {
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRequireFailureOf otherGestureRecognizer: UIGestureRecognizer) -> Bool {

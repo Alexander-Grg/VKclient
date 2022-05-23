@@ -15,7 +15,6 @@ class VKLoginController: UIViewController, WKUIDelegate {
          let webView = WKWebView(frame: .zero, configuration: webConfiguration)
          webView.uiDelegate = self
         webView.navigationDelegate = self
-         webView.translatesAutoresizingMaskIntoConstraints = false
         
         return webView
     }()
@@ -46,6 +45,7 @@ class VKLoginController: UIViewController, WKUIDelegate {
     func setupUI() {
             self.view.backgroundColor = .white
             self.view.addSubview(webView)
+        webView.translatesAutoresizingMaskIntoConstraints = false
             
             NSLayoutConstraint.activate([
                 webView.topAnchor

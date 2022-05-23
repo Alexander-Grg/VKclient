@@ -20,7 +20,6 @@ class NewsTableViewCellPost: UITableViewCell {
     
     private(set) lazy var textForPost: UILabel = {
         let l = UILabel()
-        l.translatesAutoresizingMaskIntoConstraints = false
         l.font = UIFont.systemFont(ofSize: 16.0)
         l.textColor = .black
         l.contentMode = .scaleToFill
@@ -32,7 +31,6 @@ class NewsTableViewCellPost: UITableViewCell {
     
     private(set) lazy var showMoreTextButton: UIButton = {
         let b = UIButton()
-        b.translatesAutoresizingMaskIntoConstraints = false
         b.setTitleColor(UIColor.systemBlue, for: .normal)
         b.addTarget(self, action: #selector(self.buttonTap) , for: .touchUpInside)
         return b
@@ -73,6 +71,9 @@ class NewsTableViewCellPost: UITableViewCell {
     }
     
     private func setupConstraints() {
+        
+        textForPost.translatesAutoresizingMaskIntoConstraints = false
+        showMoreTextButton.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
             textForPost.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),

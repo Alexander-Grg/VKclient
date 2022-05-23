@@ -13,7 +13,6 @@ class AvatarView: UIView {
     
    private(set) lazy var imageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         
@@ -22,7 +21,6 @@ class AvatarView: UIView {
     
     private(set) lazy var shadowView: UIView = {
         let shadowView = UIView()
-        shadowView.translatesAutoresizingMaskIntoConstraints = false
         shadowView.backgroundColor = .clear
         shadowView.clipsToBounds = false
         
@@ -60,6 +58,9 @@ class AvatarView: UIView {
     }
     
     private func setupConstraint() {
+        
+        shadowView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
             shadowView.topAnchor.constraint(equalTo: topAnchor),

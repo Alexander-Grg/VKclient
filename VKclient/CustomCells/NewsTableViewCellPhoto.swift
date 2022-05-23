@@ -14,7 +14,6 @@ class NewsTableViewCellPhoto: UITableViewCell{
     
     private(set) lazy var newsPhoto: UIImageView = {
         let photo = UIImageView()
-        photo.translatesAutoresizingMaskIntoConstraints = false
         photo.contentMode = .center
         photo.contentMode = .scaleToFill
         photo.semanticContentAttribute = .unspecified
@@ -41,7 +40,10 @@ class NewsTableViewCellPhoto: UITableViewCell{
 //    MARK: - UI
     
     private func setView() {
+        
         contentView.addSubview(newsPhoto)
+        
+        newsPhoto.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
             newsPhoto.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 5),

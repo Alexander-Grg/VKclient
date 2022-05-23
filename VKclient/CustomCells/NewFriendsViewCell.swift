@@ -15,7 +15,6 @@ class NewFriendsViewCell: UITableViewCell {
 
     private(set) lazy var nameView: UILabel = {
         let l = UILabel()
-        l.translatesAutoresizingMaskIntoConstraints = false
         l.font = UIFont.systemFont(ofSize: 17.0)
         l.textColor = .black
         l.textAlignment = .center
@@ -27,7 +26,6 @@ class NewFriendsViewCell: UITableViewCell {
     
     private(set) lazy var avatarView: AvatarView = {
         let a = AvatarView()
-        a.translatesAutoresizingMaskIntoConstraints = false
         let recognizer = UITapGestureRecognizer(target: self, action: #selector(onTap))
         recognizer.numberOfTapsRequired = 1
         recognizer.numberOfTouchesRequired = 1
@@ -66,6 +64,9 @@ class NewFriendsViewCell: UITableViewCell {
     }
     
     private func setupConstraints() {
+        
+        avatarView.translatesAutoresizingMaskIntoConstraints = false
+        nameView.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
             self.avatarView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 0),

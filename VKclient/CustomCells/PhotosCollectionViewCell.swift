@@ -18,20 +18,26 @@ final class PhotosCollectionViewCell: UICollectionViewCell {
     private enum Constants {
         
         static let contentViewCornerRadius: CGFloat = 4.0
-        
         static let imageHeight: CGFloat = 180.0
-        
         static let verticalSpacing: CGFloat = 8.0
         static let horizontalPadding: CGFloat = 16.0
         static let profileDescriptionVerticalPadding: CGFloat = 8.0
     }
     
-    let profileImageView: UIImageView = {
+    private(set) lazy var profileImageView: UIImageView = {
         let imageView = UIImageView(frame: .zero)
         imageView.contentMode = .scaleAspectFill
         
         return imageView
     }()
+    
+    private(set) lazy var likeControl: LikeControl = {
+        let l = LikeControl()
+        
+        return l
+    }()
+    
+    
     
 //    MARK: - Init
     
