@@ -1,5 +1,5 @@
 //
-//  CommunitiesListTableViewController.swift
+//  GroupsSearchTableViewController.swift
 //  ProjectTestLocalUI
 //
 //  Created by Alexander Grigoryev on 25.08.2021.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-class CommunitiesListTableViewController: UITableViewController, UISearchBarDelegate {
+class GroupsSearchTableViewController: UITableViewController, UISearchBarDelegate {
     
     var groupsHolder = [GroupsObjects]()
     private let network = NetworkService()

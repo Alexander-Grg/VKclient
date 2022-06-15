@@ -1,5 +1,5 @@
 //
-//  CommunityListCustomCell.swift
+//  GroupsSearchCell.swift
 //  VKclient
 //
 //  Created by Alexander Grigoryev on 17.05.2022.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-class CommunityListCustomCell: UITableViewCell {
+class GroupsSearchCell: UITableViewCell {
     
     //    MARK: - Properties
     
@@ -103,7 +103,7 @@ class CommunityListCustomCell: UITableViewCell {
     }
 }
 
-extension CommunityListCustomCell: ReusableView {
+extension GroupsSearchCell: ReusableView {
     static var identifier: String {
         return String(describing: self)
     }
