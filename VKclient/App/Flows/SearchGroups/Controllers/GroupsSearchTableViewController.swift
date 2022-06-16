@@ -10,7 +10,6 @@ import UIKit
 class GroupsSearchTableViewController: UITableViewController, UISearchBarDelegate {
     
     var groupsHolder = [GroupsObjects]()
-    private let network = NetworkService()
     private(set) lazy var search: UISearchBar = {
         let s = UISearchBar()
         s.searchBarStyle = .default
@@ -23,7 +22,7 @@ class GroupsSearchTableViewController: UITableViewController, UISearchBarDelegat
         super.viewDidLoad()
         search.delegate = self
         self.navigationItem.titleView = search
-        self.tableView.register(CommunityListCustomCell.self, forCellReuseIdentifier: CommunityListCustomCell.identifier)
+        self.tableView.register(GroupsSearchCell.self, forCellReuseIdentifier: GroupsSearchCell.identifier)
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -31,7 +30,7 @@ class GroupsSearchTableViewController: UITableViewController, UISearchBarDelegat
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: CommunityListCustomCell.identifier, for: indexPath) as! CommunityListCustomCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: GroupsSearchCell.identifier, for: indexPath) as! GroupsSearchCell
         cell.configureCell(groupsHolder[indexPath.row])
         
         return cell
@@ -42,12 +41,21 @@ class GroupsSearchTableViewController: UITableViewController, UISearchBarDelegat
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         
+        let requestSearch = GetGroupSearch(
+            constructorPath: "groups.search",
+            queryItems: [
+                URLQueryItem(name: "sort", value: "6"),
+                URLQueryItem(name: "type", value: "group"),
+                URLQueryItem(name: "q", value: searchText),
+                URLQueryItem(name: "count", value: "20")
+            ])
         
         if searchText.isEmpty {
             self.groupsHolder.removeAll()
             self.tableView.reloadData()
         } else {
-            network.searchForGroups(search: searchText) { [weak self] groups in
+            
+            requestSearch.request { [weak self] groups in
                 guard let self = self else { return }
                 self.groupsHolder = groups
                 

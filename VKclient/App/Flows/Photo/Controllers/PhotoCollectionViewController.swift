@@ -33,8 +33,7 @@ class PhotoViewController : UIViewController {
             self.collectionView.reloadData()
         }
     }
-    private let network = NetworkService()
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -55,7 +54,27 @@ class PhotoViewController : UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        network.loadPhotos(ownerID: String(friendID)) { [weak self] result in
+        
+        let photoRequest = GetPhotos(constructorPath: "photos.get",
+                                     queryItems: [
+                                        URLQueryItem(
+                                            name: "rev",
+                                            value: "1"),
+                                        URLQueryItem(
+                                            name: "album_id",
+                                            value: "profile"),
+                                        URLQueryItem(
+                                            name: "offset",
+                                            value: "0"),
+                                        URLQueryItem(
+                                            name: "photo_sizes",
+                                            value: "0"),
+                                        URLQueryItem(
+                                            name: "owner_id",
+                                            value: String(friendID))
+                                     ])
+        
+        photoRequest.request() { [weak self] result in
             guard let self = self else { return }
             switch result {
             case .success(let photos):

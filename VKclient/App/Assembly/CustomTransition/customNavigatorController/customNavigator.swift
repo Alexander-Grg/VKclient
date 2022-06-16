@@ -28,7 +28,7 @@ final class CustomNavigatorController: UINavigationController, UINavigationContr
             interactiveTransition.isStarted = true
             popViewController(animated: true)
         case .changed:
-            guard let width = recognizer.view?.bounds.width else {
+            guard (recognizer.view?.bounds.width) != nil else {
                 interactiveTransition.isStarted = false
                 interactiveTransition.cancel()
                 return

@@ -6,16 +6,36 @@
 //
 
 import Foundation
+import UIKit
 
-class VKConstructor {
+enum RequestErrors: String, Error {
+    case invalidUrl
+    case decoderError
+    case requestFailed
+    case unknownError
+    case realmError
+}
+
+protocol AbstractUrlConstructor {
     
-    let session = URLSession.shared
-    let constructorScheme = "https"
-    let constructorHost = "api.vk.com"
-    let constructorPath: String
+    var session: URLSession { get }
+    var constructorScheme: String { get set }
+    var constructorHost: String { get set }
+    var constructorPath: String { get set }
+    var queryItems: [URLQueryItem] { get set }
+    var constructor: URLComponents { get set }
+    
+    func dataTaskRequest(_ url: URL, completion: @escaping (Result<Data, RequestErrors>) -> Void)
+}
+
+class VKConstructor: AbstractUrlConstructor {
+    
+    var session: URLSession = URLSession.shared
+    var constructorScheme: String = "https"
+    var constructorHost: String = "api.vk.com"
+    var constructorPath: String
     var queryItems: [URLQueryItem]
-    
-    var constructor : URLComponents = {
+    var constructor: URLComponents = {
         var constructor = URLComponents()
         constructor.queryItems = [
             URLQueryItem(name: "v", value: "5.92"),
@@ -25,12 +45,26 @@ class VKConstructor {
     }()
     
     init(constructorPath: String, queryItems: [URLQueryItem]) {
-    
+        
         self.constructorPath = "/method/\(constructorPath)"
         self.queryItems = queryItems
         self.constructor.path = self.constructorPath
         self.constructor.host = constructorHost
         self.constructor.scheme = constructorScheme
         self.constructor.queryItems? += queryItems
+    }
+    
+    func dataTaskRequest(_ url: URL, completion: @escaping (Result<Data, RequestErrors>) -> Void)  {
+        
+        session.dataTask(with: url) { data, response, error in
+            if let response = response as? HTTPURLResponse {
+                print(response.statusCode)
+            }
+            if let data = data {
+                completion(.success(data))
+            } else {
+                completion(.failure(.requestFailed))
+            }
+        }.resume()
     }
 }

@@ -15,9 +15,7 @@ class CommunitiesTableViewController: UITableViewController, UISearchBarDelegate
     var groupsNotification: NotificationToken?
     var dictOfGroups: [Character: [GroupsRealm]] = [:]
     var firstLetters = [Character]()
-    
-    private let networkService = NetworkService()
-    
+   
     private var groupsHolder = [GroupsObjects]() {
         didSet {
             self.tableView.reloadData()
@@ -67,7 +65,7 @@ class CommunitiesTableViewController: UITableViewController, UISearchBarDelegate
     
     @objc private func addButtonPressed() {
         
-        let nextVC = CommunitiesListTableViewController()
+        let nextVC = GroupsSearchTableViewController()
         self.navigationController?.pushViewController(nextVC, animated: true)
     }
     
@@ -92,7 +90,18 @@ class CommunitiesTableViewController: UITableViewController, UISearchBarDelegate
     }
     
     private func fetchDataFromNetwork() {
-        networkService.fetchingGroups { [weak self] result in
+
+        let groupsRequest = GetGroups(constructorPath: "groups.get",
+                                      queryItems: [
+                                        URLQueryItem(
+                                            name: "extended",
+                                            value: "1"),
+                                        URLQueryItem(
+                                            name: "fields",
+                                            value: "photo_100")
+                                      ])
+
+        groupsRequest.request { [weak self] result in
             guard let self = self else { return }
             switch result {
             case .success:

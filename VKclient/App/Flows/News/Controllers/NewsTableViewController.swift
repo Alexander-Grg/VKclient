@@ -6,8 +6,6 @@
 //
 
 import UIKit
-import SDWebImage
-import SwiftUI
 
 enum NewsTypes {
     case photo
@@ -44,11 +42,17 @@ enum NewsTypes {
 
 class NewsTableViewController: UIViewController {
     
-
-    let token = Session.instance.token
-    let networkService = NetworkService()
+    let newsRequest = GetNews(
+        constructorPath: "newsfeed.get",
+        queryItems: [
+            URLQueryItem(
+                name: "filters",
+                value: "post, photo"),
+            URLQueryItem(
+                name: "count",
+                value: "20")
+        ])
     var newsPost: [News]?
-    
     var IDs = [Int]()
     var groupsForHeader: [Community] = []
     var usersForHeader: [User] = []
@@ -83,13 +87,13 @@ class NewsTableViewController: UIViewController {
     }
     
     private func loadNews() {
-        networkService.loadNewsFeed { [weak self] newsPost, nextFrom  in
+        
+        newsRequest.request { [weak self] newsPost, nextFrom  in
             guard let self = self else { return }
             self.newsPost = newsPost
             self.nextNews = nextFrom
             
             self.tableView.reloadData()
-            
         }
     }
     
@@ -115,13 +119,14 @@ class NewsTableViewController: UIViewController {
     @objc private func didRefresh() {
         tableView.refreshControl?.beginRefreshing()
         _ = Date().timeIntervalSince1970 + 1
-        networkService.loadNewsFeed { [weak self] news, nextFrom in
-            DispatchQueue.main.async {
-                self?.tableView.refreshControl?.endRefreshing()
-            }
+        
+        self.loadNews()
+        DispatchQueue.main.async {
+            self.tableView.refreshControl?.endRefreshing()
         }
     }
 }
+
 
 extension NewsTableViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -205,7 +210,8 @@ extension NewsTableViewController: UITableViewDataSourcePrefetching {
         if maxSections > newsItems.count - 3, !isLoading {
             isLoading = true
             
-            networkService.loadNewsFeed(startFrom: nextNews) { [weak self] (news, nextFrom) in
+            
+            newsRequest.request(startFrom: nextNews) {[weak self] (news, nextFrom) in
                 guard let self = self else { return }
                 
                 DispatchQueue.main.async {
@@ -213,7 +219,7 @@ extension NewsTableViewController: UITableViewDataSourcePrefetching {
                     
                     self.newsPost?.append(contentsOf: news)
                     print(news)
-                
+                    
                     self.nextNews = nextFrom
                     
                     tableView.beginUpdates()

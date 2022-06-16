@@ -22,8 +22,6 @@ class NewFriendsTableViewController: UIViewController, UISearchBarDelegate {
     var friendsNetworkLetters = [[UserObject]]()
     var dictOfUsers: [Character: [UserRealm]] = [:]
     var firstLetters = [Character]()
-    
-    private let networkService = NetworkService()
     private var searchedFilterData: [UserObject] = []
     private var searchedFiltedDataCharacters: [Character] = []
     private var sectionTitles: [Character] = []
@@ -81,7 +79,17 @@ class NewFriendsTableViewController: UIViewController, UISearchBarDelegate {
     }
     
     private func fetchDataFromNetwork() {
-        networkService.loadFriends { [weak self] result in
+    let friendRequest = GetFriends(constructorPath: "friends.get",
+                                           queryItems: [
+                                            URLQueryItem(
+                                            name: "order",
+                                            value: "random"),
+                                            URLQueryItem(
+                                            name: "fields",
+                                            value: "nickname, photo_100")
+                                           ])
+        
+        friendRequest.request { [weak self] result in
             guard let self = self else { return }
             switch result {
             case .success:
@@ -106,7 +114,6 @@ class NewFriendsTableViewController: UIViewController, UISearchBarDelegate {
     }
     
     private func updatesFromRealm() {
-        
         friendsFromRealm = try? RealmService.get(type: UserRealm.self)
         
         notificationFriends = friendsFromRealm?.observe { [weak self] changes in
@@ -199,9 +206,6 @@ extension NewFriendsTableViewController: UITableViewDelegate {
             let userID = users[indexPath.row].id
             Session.instance.friendID = userID
             let VC = PhotoViewController()
-            
-            
-            //            self.navigationController?.pushViewController(VC)
             self.navigationController?.pushViewController(VC.self, animated: true)
             
         }

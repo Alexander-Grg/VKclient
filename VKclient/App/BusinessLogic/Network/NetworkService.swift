@@ -7,43 +7,16 @@
 
 import Foundation
 
-final class NetworkService {
-    
-    enum RequestErrors: String, Error {
-        case invalidUrl
-        case decoderError
-        case requestFailed
-        case unknownError
-        case realmError
-    }
-    
-    let dispatchGroup = DispatchGroup()
-    
-    func loadFriends(
-        completion: @escaping (Result<[UserObject], RequestErrors>) -> Void)
-    {
-        let constructorCreator = VKConstructor(
-            constructorPath: "friends.get",
-            queryItems: [
-                URLQueryItem(
-                    name: "order",
-                    value: "random"),
-                URLQueryItem(
-                    name: "fields",
-                    value: "nickname, photo_100"),
-            ])
+final class GetFriends: VKConstructor {
+    func request(completion: @escaping (Result<[UserObject], RequestErrors>) -> Void) {
         
-        if let url = constructorCreator.constructor.url {
-            constructorCreator.session.dataTask(with: url) { data, response, error in
-                if let response = response as? HTTPURLResponse {
-                    print("STATUS CODE: \(response.statusCode)")
-                }
-                
-                if let data = data {
+        if let url = constructor.url {
+            dataTaskRequest(url) { result in
+                switch result {
+                case .success(let data):
                     do {
                         let user = try JSONDecoder().decode(UserResponse.self,
                                                             from: data).response.items
-                        
                         let groupRealm = user.map { UserRealm(user: $0)
                         }
                         try RealmService.save(items: groupRealm)
@@ -53,176 +26,125 @@ final class NetworkService {
                     } catch {
                         print(completion(.failure(.decoderError)))
                     }
-                }
-            } .resume()
-        }
-    }
-    
-    // MARK: Load photos method
-    func loadPhotos(
-        ownerID: String,
-        completion: @escaping (Result<[RealmPhotos], RequestErrors>) -> Void)
-    {
-        let constructorCreator = VKConstructor(
-            constructorPath: "photos.get",
-            queryItems: [
-                URLQueryItem(
-                    name: "rev",
-                    value: "1"),
-                URLQueryItem(
-                    name: "owner_id",
-                    value: ownerID),
-                URLQueryItem(
-                    name: "album_id",
-                    value: "profile"),
-                URLQueryItem(
-                    name: "offset",
-                    value: "0"),
-                URLQueryItem(
-                    name: "photo_sizes",
-                    value: "0")
-            ])
-        
-        if let url = constructorCreator.constructor.url {
-            constructorCreator.session.dataTask(with: url) { data, response, error in
-                if let response = response as? HTTPURLResponse {
-                    print(response.statusCode)
+                case .failure(let error):
+                    completion(.failure(error))
                 }
                 
-                if let data = data {
+            }
+        }
+    }
+}
+
+final class GetPhotos: VKConstructor {
+    func request(
+        completion: @escaping (Result<[RealmPhotos], RequestErrors>) -> Void)
+    {
+        
+        if let url = constructor.url {
+            dataTaskRequest(url) { result in
+                switch result {
+                case .success(let data):
                     do {
                         let photos = try JSONDecoder().decode(PhotosResponse.self,
                                                               from: data).response.items
-                        
-                        let groupRealm = photos.map { RealmPhotos(photos: $0)
+                        let photosRealm = photos.map { RealmPhotos(photos: $0)
                         }
                         DispatchQueue.main.async {
-                            completion(.success(groupRealm))
+                            completion(.success(photosRealm))
                         }
                     } catch {
                         print(completion(.failure(.decoderError)))
                     }
+                case .failure(let error):
+                    completion(.failure(error))
                 }
-                
-            }.resume()
+            }
         }
     }
-    
-    func fetchingGroups(
+}
+
+final class GetGroups: VKConstructor {
+    func request(
         completion: @escaping (Result<[GroupsObjects], RequestErrors>) -> Void)
     {
-        
-        let constructorCreator = VKConstructor(
-            constructorPath: "groups.get",
-            queryItems: [
-                URLQueryItem(
-                    name: "extended",
-                    value: "1"),
-                URLQueryItem(
-                    name: "fields",
-                    value: "photo_100")
-            ])
-        
-        
-        if let url = constructorCreator.constructor.url {
-            constructorCreator.session.dataTask(with: url) { data, response, error in
-                if let response = response as? HTTPURLResponse {
-                    print(response.statusCode)
-                }
-                
-                if let data = data {
+        if let url = constructor.url {
+            dataTaskRequest(url) { result in
+                switch result {
+                case .success(let data):
                     do {
-                        let groups = try JSONDecoder().decode(GroupsResponse.self, from: data).response.items
-                        
-                        let realmGroups = groups.map { GroupsRealm(groups: $0)}
+                        let groups = try JSONDecoder().decode(GroupsResponse.self,
+                                                              from: data).response.items
+                        let groupsRealm = groups.map { GroupsRealm(groups: $0)
+                        }
                         
                         DispatchQueue.main.async {
-                            try? RealmService.save(items: realmGroups)
+                            try? RealmService.save(items: groupsRealm)
                             completion(.success(groups))
                         }
                     } catch {
-                        print(completion(.failure(.realmError)))
+                        print(completion(.failure(.decoderError)))
                     }
+                case .failure(let error):
+                    completion(.failure(error))
                 }
-            }.resume()
+            }
         }
     }
-    
-    //    MARK: Search for groups method
-    
-    func searchForGroups(
-        search: String,
+}
+
+final class GetGroupSearch: VKConstructor {
+    func request(
         completion: @escaping ([GroupsObjects]) -> Void)
     {
-        
-        let constructorCreator = VKConstructor(constructorPath: "groups.search",
-                                               queryItems: [
-                                                URLQueryItem(name: "sort", value: "6"),
-                                                URLQueryItem(name: "type", value: "group"),
-                                                URLQueryItem(name: "q", value: search),
-                                                URLQueryItem(name: "count", value: "20")
-                                               ])
-        
-        guard let url = constructorCreator.constructor.url else { return completion([])}
-        var request = URLRequest(url: url)
-        request.timeoutInterval = 50.0
-        request.setValue("", forHTTPHeaderField: "Token")
-        
-        constructorCreator.session.dataTask(with: request) { responseData, urlResponse, error in
-            if let response = urlResponse as? HTTPURLResponse {
-                print(response.statusCode)
-            }
-            guard
-                error == nil,
-                let responseData = responseData
-            else { return completion([]) }
-            do {
-                let user = try JSONDecoder().decode(GroupsResponse.self,
-                                                    from: responseData).response.items
-                DispatchQueue.main.async {
-                    completion(user)
-                    print(user)
+        if let url = constructor.url {
+            dataTaskRequest(url) { result in
+                switch result {
+                case .success(let data):
+                    do {
+                        let groups = try JSONDecoder().decode(GroupsResponse.self,
+                                                              from: data).response.items
+                        DispatchQueue.main.async {
+                            completion(groups)
+                        }
+                    } catch {
+                        print("Decoder error")
+                    }
+                case .failure(_):
+                    completion([])
                 }
-            } catch {
-                print(error)
             }
         }
-        .resume()
     }
+}
+
+final class GetNews: VKConstructor {
     
-    func loadNewsFeed(startFrom: String = "", startTime: Double? = nil, _ completion: @escaping ([News], String) -> Void) {
-        
-        let constructorCreator = VKConstructor(
-            constructorPath: "newsfeed.get",
-            queryItems: [
-                URLQueryItem(
-                    name: "start_from",
-                    value: startFrom),
-                URLQueryItem(
-                    name: "filters",
-                    value: "post, photo"),
-                URLQueryItem(
-                    name: "count",
-                    value: "20")
-            ])
+    let dispatchGroup = DispatchGroup()
+    
+    func request(
+        startFrom: String = "",
+        startTime: Double? = nil,
+        _ completion: @escaping ([News], String) -> Void)
+    {
+        constructor.queryItems?.append(
+            URLQueryItem(
+                name: "start_from",
+                value: startFrom))
         
         if let startTime = startTime {
-            constructorCreator.queryItems.append(URLQueryItem(name: "start_time", value: "\(startTime)"))
+            constructor.queryItems?.append(URLQueryItem(name: "start_time", value: "\(startTime)"))
         }
         
-        if let url = constructorCreator.constructor.url {
-            
-            constructorCreator.session.dataTask(with: url) { data, response, error in
-                if let response = response as? HTTPURLResponse {
-                    print(response.statusCode)
-                }
-                
-                var posts: [News] = []
-                var profiles: [User] = []
-                var groups: [Community] = []
-                var nextFrom = ""
-                
-                if let data = data {
+        if let url = constructor.url {
+            dataTaskRequest(url) { result in
+                switch result {
+                case .success(let data):
+                    
+                    var posts: [News] = []
+                    var profiles: [User] = []
+                    var groups: [Community] = []
+                    var nextFrom = ""
+                    
                     do {
                         let next: String = try JSONDecoder().decode(NewsResponse.self, from: data).response.nextFrom
                         nextFrom = next
@@ -266,8 +188,10 @@ final class NetworkService {
                         completion([], "")
                         print(error)
                     }
+                case .failure(_):
+                    completion([], "")
                 }
-            } .resume()
+            }
         }
     }
 }

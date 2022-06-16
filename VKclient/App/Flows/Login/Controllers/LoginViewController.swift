@@ -62,7 +62,7 @@ class LoginViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         safeArea = view.layoutMarginsGuide
-        self.configureUI()
+//        self.configureUI()
         loginView.loginDelegate = self
     }
     
