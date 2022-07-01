@@ -8,7 +8,6 @@
 import UIKit
 
 final class AppStartManager {
-    
     var window: UIWindow?
     
     init(window: UIWindow?) {
@@ -25,7 +24,6 @@ final class AppStartManager {
     }
     
     private lazy var configuredNavigationController: UINavigationController = {
-
         let navVC = CustomNavigatorController()
         navVC.isNavigationBarHidden = true
         navVC.navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]

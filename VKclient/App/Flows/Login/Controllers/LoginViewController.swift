@@ -62,12 +62,10 @@ class LoginViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         safeArea = view.layoutMarginsGuide
-//        self.configureUI()
         loginView.loginDelegate = self
     }
     
     override func loadView() {
-        
         self.view = loginView
         self.view.backgroundColor = UIColor(patternImage: UIImage(named: "resul-mentes-DbwYNr8RPbg-unsplash")!)
         

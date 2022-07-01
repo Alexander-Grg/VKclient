@@ -10,7 +10,6 @@ import SDWebImage
 import RealmSwift
 
 class extendedPhotoViewController: UIViewController {
-    
     var friendID = Session.instance.friendID
     var indexOfSelectedPhoto: Int
     var arrayOfPhotosFromDB: [String]
@@ -20,7 +19,6 @@ class extendedPhotoViewController: UIViewController {
     var swipeToRight: UIViewPropertyAnimator!
     var swipeToLeft: UIViewPropertyAnimator!
     
-
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -35,7 +33,6 @@ class extendedPhotoViewController: UIViewController {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -52,11 +49,10 @@ class extendedPhotoViewController: UIViewController {
     
     func imagesSettings(){
         
-        
         var leftPhotoIndex = indexOfSelectedPhoto - 1
         let mainPhotoIndex = indexOfSelectedPhoto
         var rightPhotoIndex = indexOfSelectedPhoto + 1
-  
+        
         
         if leftPhotoIndex < 0, !arrayOfPhotosFromDB.isEmpty {
             leftPhotoIndex = arrayOfPhotosFromDB.count - 1
@@ -99,7 +95,6 @@ class extendedPhotoViewController: UIViewController {
             rightImage.widthAnchor.constraint(equalTo: mainImage.widthAnchor),
         ])
         
-        
         leftImage.sd_setImage(with: URL(string: arrayOfPhotosFromDB[leftPhotoIndex]))
         mainImage.sd_setImage(with: URL(string: arrayOfPhotosFromDB[mainPhotoIndex]))
         rightImage.sd_setImage(with: URL(string: arrayOfPhotosFromDB[rightPhotoIndex]))
@@ -134,8 +129,6 @@ class extendedPhotoViewController: UIViewController {
     }
     
     @objc func panSettings(_ recognizer: UIPanGestureRecognizer) {
-        
-       
         
         switch recognizer.state {
         case .began:

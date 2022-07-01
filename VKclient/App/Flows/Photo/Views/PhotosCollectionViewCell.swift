@@ -16,7 +16,6 @@ final class PhotosCollectionViewCell: UICollectionViewCell {
 //    MARK: - Properties
     
     private enum Constants {
-        
         static let contentViewCornerRadius: CGFloat = 4.0
         static let imageHeight: CGFloat = 180.0
         static let verticalSpacing: CGFloat = 8.0
@@ -36,8 +35,6 @@ final class PhotosCollectionViewCell: UICollectionViewCell {
         
         return l
     }()
-    
-    
     
 //    MARK: - Init
     
@@ -59,7 +56,6 @@ final class PhotosCollectionViewCell: UICollectionViewCell {
     }
     
     private func setupLayouts() {
-        
         profileImageView.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([

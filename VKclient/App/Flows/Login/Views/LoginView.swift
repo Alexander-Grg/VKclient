@@ -10,7 +10,7 @@ import AuthenticationServices
 
 final class LoginView: UIView {
     
-//    MARK: - Properties
+    //    MARK: - Properties
     
     private(set) lazy var wallpaper: UIImageView = {
         let i = UIImageView()
@@ -119,7 +119,7 @@ final class LoginView: UIView {
     
     var loginDelegate: LoginDelegate?
     
-//    MARK: - Init
+    //    MARK: - Init
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -132,7 +132,7 @@ final class LoginView: UIView {
         self.configureUI()
     }
     
-//    MARK: - setting UI
+    //    MARK: - setting UI
     
     private func configureUI() {
         self.addSubviews()
@@ -141,14 +141,10 @@ final class LoginView: UIView {
     
     private func addSubviews() {
         self.addSubview(self.wallpaper)
-//        self.addSubview(self.circle1)
-//        self.addSubview(self.circle2)
-//        self.addSubview(self.circle3)
         self.addSubview(self.loginEntryField)
         self.addSubview(self.passwordEntryField)
         self.addSubview(self.EnterActionButton)
         self.addSubview(self.appName)
-//        self.addSubview(self.stackView)
     }
     
     private func setupConstraints() {
@@ -156,8 +152,8 @@ final class LoginView: UIView {
         let s = safeAreaLayoutGuide
         
         NSLayoutConstraint.activate([
-        
-          
+            
+            
             self.wallpaper.topAnchor.constraint(equalTo: self.topAnchor),
             self.wallpaper.leadingAnchor.constraint(equalTo: self.leadingAnchor),
             self.wallpaper.trailingAnchor.constraint(equalTo: self.trailingAnchor),
@@ -166,8 +162,8 @@ final class LoginView: UIView {
             self.appName.centerXAnchor.constraint(equalTo: s.centerXAnchor),
             self.appName.topAnchor.constraint(equalTo: s.topAnchor, constant: 150),
             self.appName.bottomAnchor.constraint(equalTo: loginEntryField.topAnchor, constant: -50),
-
-
+            
+            
             self.loginEntryField.topAnchor.constraint(equalTo: self.appName.bottomAnchor),
             self.loginEntryField.centerXAnchor.constraint(equalTo: s.centerXAnchor),
             self.loginEntryField.widthAnchor.constraint(equalToConstant: 150),
@@ -180,20 +176,11 @@ final class LoginView: UIView {
             self.passwordEntryField.heightAnchor.constraint(equalToConstant: 34),
             self.passwordEntryField.bottomAnchor.constraint(equalTo: self.EnterActionButton.topAnchor, constant: -20),
 
-//            self.stackView.topAnchor.constraint(equalTo: self.passwordEntryField.bottomAnchor),
-//            self.stackView.centerXAnchor.constraint(equalTo: s.centerXAnchor),
-//            self.stackView.heightAnchor.constraint(equalToConstant: 34),
-//            self.stackView.widthAnchor.constraint(equalToConstant: 150)
-//            self.stackView.leadingAnchor.constraint(equalTo: s.leadingAnchor, constant: 135),
-//            self.stackView.trailingAnchor.constraint(equalTo: s.trailingAnchor, constant: 135),
-//            self.stackView.bottomAnchor.constraint(equalTo: self.EnterActionButton.topAnchor, constant: 8),
-//
             self.EnterActionButton.centerXAnchor.constraint(equalTo: s.centerXAnchor),
             self.EnterActionButton.topAnchor.constraint(equalTo: self.passwordEntryField.bottomAnchor),
             self.EnterActionButton.widthAnchor.constraint(equalToConstant: 70),
             self.EnterActionButton.heightAnchor.constraint(equalToConstant: 50)
         ])
-        
     }
     
     @objc func buttonTap() {

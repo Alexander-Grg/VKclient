@@ -79,15 +79,15 @@ class NewFriendsTableViewController: UIViewController, UISearchBarDelegate {
     }
     
     private func fetchDataFromNetwork() {
-    let friendRequest = GetFriends(constructorPath: "friends.get",
-                                           queryItems: [
-                                            URLQueryItem(
+        let friendRequest = GetFriends(constructorPath: "friends.get",
+                                       queryItems: [
+                                        URLQueryItem(
                                             name: "order",
                                             value: "random"),
-                                            URLQueryItem(
+                                        URLQueryItem(
                                             name: "fields",
                                             value: "nickname, photo_100")
-                                           ])
+                                       ])
         
         friendRequest.request { [weak self] result in
             guard let self = self else { return }
@@ -148,6 +148,7 @@ class NewFriendsTableViewController: UIViewController, UISearchBarDelegate {
 }
 
 extension NewFriendsTableViewController: UITableViewDataSource {
+    
     //    MARK: Sections configure
     func numberOfSections(in tableView: UITableView) -> Int {
         self.firstLetters.count
@@ -178,12 +179,14 @@ extension NewFriendsTableViewController: UITableViewDataSource {
         self.firstLetters.map{ String($0) }
     }
     //    MARK: Header of section
+    
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         String(self.firstLetters[section])
         
     }
     
     //    MARK: - SearchBar setup
+    
     private func filterFriends(with text: String) {
         guard !text.isEmpty else {
             usersFilteredFromRealm(with: self.friendsFromRealm)

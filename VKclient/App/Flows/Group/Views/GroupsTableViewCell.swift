@@ -19,7 +19,7 @@ class GroupsTableViewCell: UITableViewCell {
         recognizer.numberOfTouchesRequired = 1
         a.addGestureRecognizer(recognizer)
         a.isUserInteractionEnabled = true
-
+        
         return a
     }()
     
@@ -63,7 +63,6 @@ class GroupsTableViewCell: UITableViewCell {
     }
     
     private func setupConstraints() {
-        
         avatarView.translatesAutoresizingMaskIntoConstraints = false
         labelGroup.translatesAutoresizingMaskIntoConstraints = false
         
@@ -77,8 +76,6 @@ class GroupsTableViewCell: UITableViewCell {
             self.labelGroup.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             self.labelGroup.leftAnchor.constraint(equalTo: avatarView.rightAnchor, constant: 10),
             self.labelGroup.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: 10)
-            
-            
         ])
     }
     

@@ -12,8 +12,8 @@ class VKLoginController: UIViewController, WKUIDelegate {
     
     private(set) lazy var webView: WKWebView = {
         let webConfiguration = WKWebViewConfiguration()
-         let webView = WKWebView(frame: .zero, configuration: webConfiguration)
-         webView.uiDelegate = self
+        let webView = WKWebView(frame: .zero, configuration: webConfiguration)
+        webView.uiDelegate = self
         webView.navigationDelegate = self
         
         return webView
@@ -41,23 +41,23 @@ class VKLoginController: UIViewController, WKUIDelegate {
         let request = URLRequest(url: components.url!)
         webView.load(request)
     }
-
+    
     func setupUI() {
-            self.view.backgroundColor = .white
-            self.view.addSubview(webView)
+        self.view.backgroundColor = .white
+        self.view.addSubview(webView)
         webView.translatesAutoresizingMaskIntoConstraints = false
-            
-            NSLayoutConstraint.activate([
-                webView.topAnchor
-                    .constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor),
-                webView.leftAnchor
-                    .constraint(equalTo: self.view.safeAreaLayoutGuide.leftAnchor),
-                webView.bottomAnchor
-                    .constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor),
-                webView.rightAnchor
-                    .constraint(equalTo: self.view.safeAreaLayoutGuide.rightAnchor)
-            ])
-        }
+        
+        NSLayoutConstraint.activate([
+            webView.topAnchor
+                .constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor),
+            webView.leftAnchor
+                .constraint(equalTo: self.view.safeAreaLayoutGuide.leftAnchor),
+            webView.bottomAnchor
+                .constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor),
+            webView.rightAnchor
+                .constraint(equalTo: self.view.safeAreaLayoutGuide.rightAnchor)
+        ])
+    }
 }
 
 extension VKLoginController: WKNavigationDelegate {
@@ -81,12 +81,12 @@ extension VKLoginController: WKNavigationDelegate {
         guard let token = params["access_token"],
               let userIdString = params["user_id"],
               let _ = Int(userIdString) else {
-                  decisionHandler(.allow)
-                  return
-              }
+            decisionHandler(.allow)
+            return
+        }
         
         Session.instance.token = token
-
+        
         let next = LoginViewController()
         self.navigationController?.pushViewController(next, animated: true)
         

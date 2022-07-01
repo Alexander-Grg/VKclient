@@ -10,12 +10,11 @@ import SDWebImage
 import RealmSwift
 
 class CommunitiesTableViewController: UITableViewController, UISearchBarDelegate {
-    
     var groupsfromRealm: Results<GroupsRealm>?
     var groupsNotification: NotificationToken?
     var dictOfGroups: [Character: [GroupsRealm]] = [:]
     var firstLetters = [Character]()
-   
+    
     private var groupsHolder = [GroupsObjects]() {
         didSet {
             self.tableView.reloadData()
@@ -90,7 +89,7 @@ class CommunitiesTableViewController: UITableViewController, UISearchBarDelegate
     }
     
     private func fetchDataFromNetwork() {
-
+        
         let groupsRequest = GetGroups(constructorPath: "groups.get",
                                       queryItems: [
                                         URLQueryItem(
@@ -100,7 +99,7 @@ class CommunitiesTableViewController: UITableViewController, UISearchBarDelegate
                                             name: "fields",
                                             value: "photo_100")
                                       ])
-
+        
         groupsRequest.request { [weak self] result in
             guard let self = self else { return }
             switch result {
