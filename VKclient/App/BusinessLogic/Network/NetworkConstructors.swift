@@ -25,7 +25,7 @@ protocol AbstractUrlConstructor {
     var queryItems: [URLQueryItem] { get set }
     var constructor: URLComponents { get set }
     
-    func dataTaskRequest(_ url: URL, completion: @escaping (Result<Data, RequestErrors>) -> Void)
+    func dataTaskRequest(completion: @escaping (Result<Data, RequestErrors>) -> Void)
 }
 
 class VKConstructor: AbstractUrlConstructor {
@@ -54,13 +54,15 @@ class VKConstructor: AbstractUrlConstructor {
         self.constructor.queryItems? += queryItems
     }
     
-    func dataTaskRequest(_ url: URL, completion: @escaping (Result<Data, RequestErrors>) -> Void)  {
+    func dataTaskRequest(completion: @escaping (Result<Data, RequestErrors>) -> Void)  {
+        guard let url = constructor.url  else { return completion(.failure(.invalidUrl))}
         
         session.dataTask(with: url) { data, response, error in
             if let response = response as? HTTPURLResponse {
                 print(response.statusCode)
             }
             if let data = data {
+                
                 completion(.success(data))
             } else {
                 completion(.failure(.requestFailed))
