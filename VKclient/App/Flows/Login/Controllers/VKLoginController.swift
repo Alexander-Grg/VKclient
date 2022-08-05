@@ -25,6 +25,10 @@ class VKLoginController: UIViewController, WKUIDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setupUI()
+        loadWebView()
+    }
+    
+    func loadWebView() {
         var components = URLComponents()
         components.scheme = "https"
         components.host = "oauth.vk.com"
