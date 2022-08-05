@@ -88,8 +88,8 @@ class NewFriendsTableViewController: UIViewController, UISearchBarDelegate {
                                             name: "fields",
                                             value: "nickname, photo_100")
                                        ])
-        
-        friendRequest.request { [weak self] result in
+   
+        friendRequest.requestFriends { [weak self] result in
             guard let self = self else { return }
             switch result {
             case .success:
