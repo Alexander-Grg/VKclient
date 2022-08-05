@@ -8,9 +8,7 @@
 import UIKit
 
 protocol LoginDelegate {
-    
     func didTap(_ tap: Bool)
-    
 }
 
 class LoginViewController: UIViewController {
