@@ -17,19 +17,19 @@ enum RequestErrors: String, Error {
 }
 
 protocol AbstractUrlConstructor {
-    
+
     var session: URLSession { get }
     var constructorScheme: String { get set }
     var constructorHost: String { get set }
     var constructorPath: String { get set }
     var queryItems: [URLQueryItem] { get set }
     var constructor: URLComponents { get set }
-    
+
     func dataTaskRequest(completion: @escaping (Result<Data, RequestErrors>) -> Void)
 }
 
 class VKConstructor: AbstractUrlConstructor {
-    
+
     var session: URLSession = URLSession.shared
     var constructorScheme: String = "https"
     var constructorHost: String = "api.vk.com"
@@ -40,12 +40,12 @@ class VKConstructor: AbstractUrlConstructor {
         constructor.queryItems = [
             URLQueryItem(name: "v", value: "5.92"),
             URLQueryItem(name: "access_token", value: Session.instance.token)]
-        
+
         return constructor
     }()
-    
+
     init(constructorPath: String, queryItems: [URLQueryItem]) {
-        
+
         self.constructorPath = "/method/\(constructorPath)"
         self.queryItems = queryItems
         self.constructor.path = self.constructorPath
@@ -53,16 +53,16 @@ class VKConstructor: AbstractUrlConstructor {
         self.constructor.scheme = constructorScheme
         self.constructor.queryItems? += queryItems
     }
-    
-    func dataTaskRequest(completion: @escaping (Result<Data, RequestErrors>) -> Void)  {
+
+    func dataTaskRequest(completion: @escaping (Result<Data, RequestErrors>) -> Void) {
         guard let url = constructor.url  else { return completion(.failure(.invalidUrl))}
-        
-        session.dataTask(with: url) { data, response, error in
+
+        session.dataTask(with: url) { data, response, _ in
             if let response = response as? HTTPURLResponse {
                 print(response.statusCode)
             }
             if let data = data {
-                
+
                 completion(.success(data))
             } else {
                 completion(.failure(.requestFailed))

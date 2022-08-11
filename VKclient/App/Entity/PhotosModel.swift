@@ -18,9 +18,7 @@ struct Response: Codable {
 }
 
 struct PhotosObject: Codable, NewsSource {
-    
     var name: String = ""
-    
     var urlString: String { sizes["x"]! }
 
     var id: Int = 0
@@ -29,24 +27,19 @@ struct PhotosObject: Codable, NewsSource {
     var aspectRatio: Float { width/height }
     var height: Float = 0
     var width: Float = 0
-    
     enum CodingKeys: String, CodingKey {
         case id
         case ownerID = "owner_id"
         case sizes
     }
-    
     enum PhotoKeys: String, CodingKey {
         case height, url, type, width
     }
-    
     init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         self.id = try values.decode(Int.self, forKey: .id)
         self.ownerID = try values.decode(Int.self, forKey: .ownerID)
-        
         var photosValue = try values.nestedUnkeyedContainer(forKey: .sizes)
-        
         while !photosValue.isAtEnd {
             let photo = try photosValue.nestedContainer(keyedBy: PhotoKeys.self)
             let photoType = try photo.decode(String.self, forKey: .type)

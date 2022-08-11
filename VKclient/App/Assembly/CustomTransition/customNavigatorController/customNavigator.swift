@@ -13,7 +13,6 @@ final class CustomInteractiveTransition: UIPercentDrivenInteractiveTransition {
 }
 final class CustomNavigatorController: UINavigationController, UINavigationControllerDelegate {
     let interactiveTransition = CustomInteractiveTransition()
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         delegate = self
@@ -21,8 +20,7 @@ final class CustomNavigatorController: UINavigationController, UINavigationContr
         recognizer.edges = [.left]
         view.addGestureRecognizer(recognizer)
     }
-    
-    @objc func hand(_ recognizer: UIScreenEdgePanGestureRecognizer){
+    @objc func hand(_ recognizer: UIScreenEdgePanGestureRecognizer) {
         switch recognizer.state {
         case .began:
             interactiveTransition.isStarted = true
@@ -36,14 +34,11 @@ final class CustomNavigatorController: UINavigationController, UINavigationContr
             let translation = recognizer.translation(in: view)
             let relativeTranslation = translation.x / (recognizer.view?.bounds.width ?? 1)
             let progress = max(0, min(1, relativeTranslation))
-            
             interactiveTransition.isFinished = progress > 0.33
-            
             interactiveTransition.update(progress)
         case .ended:
             interactiveTransition.isStarted = false
             interactiveTransition.isFinished ? interactiveTransition.finish() : interactiveTransition.cancel()
-            
         case .cancelled:
             interactiveTransition.isStarted = false
             interactiveTransition.cancel()
@@ -51,19 +46,22 @@ final class CustomNavigatorController: UINavigationController, UINavigationContr
             return
         }
     }
-    
-    func navigationController(_ navigationController: UINavigationController, animationControllerFor operation: UINavigationController.Operation, from fromVC: UIViewController, to toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        
+    func navigationController(_ navigationController: UINavigationController,
+                              animationControllerFor operation: UINavigationController.Operation,
+                              from fromVC: UIViewController,
+                              to toVC: UIViewController)
+    -> UIViewControllerAnimatedTransitioning? {
         switch operation {
         case .pop:
-            return popAnimator()
+            return PopAnimator()
         case .push:
-            return pushAnimator()
+            return PushAnimator()
         default:
             return nil
         }
     }
-    
-    func navigationController(_ navigationController: UINavigationController, interactionControllerFor animationController: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? { return interactiveTransition.isStarted ? interactiveTransition : nil }
+    func navigationController(_ navigationController: UINavigationController,
+                              interactionControllerFor animationController: UIViewControllerAnimatedTransitioning)
+    -> UIViewControllerInteractiveTransitioning? {
+        return interactiveTransition.isStarted ? interactiveTransition : nil }
 }
-

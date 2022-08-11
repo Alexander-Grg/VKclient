@@ -8,7 +8,7 @@
 import RealmSwift
 
 class UserRealm: Object {
-    
+
     @Persisted var firstName: String = ""
     @Persisted var lastName: String = ""
     @Persisted(primaryKey: true) var id: Int = 0
@@ -16,7 +16,7 @@ class UserRealm: Object {
 }
 
 extension UserRealm {
-    convenience init(user: UserObject){
+    convenience init(user: UserObject) {
         self.init()
         self.firstName = user.firstName
         self.lastName = user.lastName
@@ -24,4 +24,3 @@ extension UserRealm {
         self.avatar = user.avatar
     }
 }
-

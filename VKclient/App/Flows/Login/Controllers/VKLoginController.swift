@@ -9,25 +9,25 @@ import UIKit
 import WebKit
 
 class VKLoginController: UIViewController, WKUIDelegate {
-    
+
     private(set) lazy var webView: WKWebView = {
         let webConfiguration = WKWebViewConfiguration()
         let webView = WKWebView(frame: .zero, configuration: webConfiguration)
         webView.uiDelegate = self
         webView.navigationDelegate = self
-        
+
         return webView
     }()
-    
+
     private var window: UIWindow?
     private var appStartManager: AppStartManager?
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setupUI()
         loadWebView()
     }
-    
+
     func loadWebView() {
         var components = URLComponents()
         components.scheme = "https"
@@ -41,16 +41,16 @@ class VKLoginController: UIViewController, WKUIDelegate {
             URLQueryItem(name: "response_type", value: "token"),
             URLQueryItem(name: "v", value: "5.92")
         ]
-        
+
         let request = URLRequest(url: components.url!)
         webView.load(request)
     }
-    
+
     func setupUI() {
         self.view.backgroundColor = .white
         self.view.addSubview(webView)
         webView.translatesAutoresizingMaskIntoConstraints = false
-        
+
         NSLayoutConstraint.activate([
             webView.topAnchor
                 .constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor),
@@ -65,11 +65,14 @@ class VKLoginController: UIViewController, WKUIDelegate {
 }
 
 extension VKLoginController: WKNavigationDelegate {
-    func webView(_ webView: WKWebView, decidePolicyFor navigationResponse: WKNavigationResponse, decisionHandler: @escaping (WKNavigationResponsePolicy) -> Void) {
+    func webView(_ webView: WKWebView,
+                 decidePolicyFor navigationResponse: WKNavigationResponse,
+                 decisionHandler: @escaping (WKNavigationResponsePolicy)
+                 -> Void) {
         guard let url = navigationResponse.response.url,
               url.path == "/blank.html",
               let fragment = url.fragment else { decisionHandler(.allow); return }
-        
+
         let params = fragment
             .components(separatedBy: "&")
             .map { $0.components(separatedBy: "=") }
@@ -80,20 +83,20 @@ extension VKLoginController: WKNavigationDelegate {
                 dict[key] = value
                 return dict
             }
-        
+
         print(params)
         guard let token = params["access_token"],
               let userIdString = params["user_id"],
-              let _ = Int(userIdString) else {
+              Int(userIdString) != nil else {
             decisionHandler(.allow)
             return
         }
-        
+
         Session.instance.token = token
-        
+
         let next = LoginViewController()
         self.navigationController?.pushViewController(next, animated: true)
-        
+
         decisionHandler(.cancel)
     }
 }

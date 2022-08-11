@@ -20,7 +20,6 @@ struct User: Codable, NewsSource {
     var lastName: String
     var avatar: String
 
-
     var avatarURL: URL? {
         URL(string: avatar)
     }

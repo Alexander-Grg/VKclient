@@ -8,73 +8,73 @@
 import UIKit
 
 class AvatarView: UIView {
-    
-//    MARK: - Properties
-    
+
+// MARK: - Properties
+
    private(set) lazy var imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
-        
+
         return imageView
     }()
-    
+
     private(set) lazy var shadowView: UIView = {
         let shadowView = UIView()
         shadowView.backgroundColor = .clear
         shadowView.clipsToBounds = false
-        
+
         return shadowView
     }()
-    
-//    MARK: - Init
-    
+
+// MARK: - Init
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupViews()
         setupConstraint()
     }
-    
+
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         setupViews()
         setupConstraint()
     }
-    
-//    MARK: - UI
-    
+
+// MARK: - UI
+
     func setImage(_ image: UIImage?) {
         imageView.image = image
     }
-    
+
     private func setupViews() {
         addSubview(shadowView)
         shadowView.addSubview(imageView)
     }
-    
+
     override func layoutSubviews() {
         super.layoutSubviews()
         viewSettings()
     }
-    
+
     private func setupConstraint() {
-        
+
         shadowView.translatesAutoresizingMaskIntoConstraints = false
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        
+
         NSLayoutConstraint.activate([
             shadowView.topAnchor.constraint(equalTo: topAnchor),
             shadowView.leftAnchor.constraint(equalTo: leftAnchor),
             shadowView.rightAnchor.constraint(equalTo: rightAnchor),
             shadowView.bottomAnchor.constraint(equalTo: bottomAnchor),
-            
+
             imageView.topAnchor.constraint(equalTo: shadowView.topAnchor),
             imageView.leadingAnchor.constraint(equalTo: shadowView.leadingAnchor),
             imageView.trailingAnchor.constraint(equalTo: shadowView.trailingAnchor),
-            imageView.bottomAnchor.constraint(equalTo: shadowView.bottomAnchor),
+            imageView.bottomAnchor.constraint(equalTo: shadowView.bottomAnchor)
         ])
     }
-    
+
     private func viewSettings() {
         backgroundColor = .clear
         imageView.layer.cornerRadius = bounds.height / 2
@@ -85,7 +85,3 @@ class AvatarView: UIView {
         shadowView.layer.shadowRadius = 8
     }
 }
-
-
-
-
