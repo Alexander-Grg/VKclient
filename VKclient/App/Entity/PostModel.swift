@@ -10,7 +10,7 @@ import Foundation
 protocol NewsSource {
 
     var name: String { get }
-    var urlString : String { get }
+    var urlString: String { get }
 }
 
 extension NewsSource {
@@ -26,7 +26,6 @@ struct Newsfeed: Codable {
     var profiles: [User]
     var groups: [Community]
     var nextFrom: String
-    
     enum CodingKeys: String, CodingKey {
         case items
         case profiles
@@ -46,30 +45,28 @@ struct News: Codable {
     var likes: Likes?
     var views: Views?
     var reposts: Reposts?
-    
+
     var urlProtocol: NewsSource?
 
     var attachmentPhotoUrl: URL? {
         guard
-            let image = attachments?.first(where: { $0.type == "photo"} ),
+            let image = attachments?.first(where: { $0.type == "photo"}),
             let photo = image.photo?.sizes["x"]
         else { return nil }
         return URL(string: photo)
     }
 
     var aspectRatio: Float {
-       guard  let image = attachments?.first(where: { $0.type == "photo"} ),
+       guard  let image = attachments?.first(where: { $0.type == "photo"}),
               let aspect = image.photo?.aspectRatio
         else { return 0.0 }
         return aspect
     }
 
-    
     var rowsCounter: [NewsTypes] {
         var rowsCounter = [NewsTypes]()
 
         rowsCounter.append(.header)
-
 
         if !text.isEmpty {
             rowsCounter.append(.text)
@@ -83,7 +80,7 @@ struct News: Codable {
 
         return rowsCounter
     }
-    
+
     enum CodingKeys: String, CodingKey {
         case sourceId = "source_id"
         case date
@@ -93,43 +90,39 @@ struct News: Codable {
         case likes
         case views
         case reposts
-        
     }
-    
+
 }
 
 // MARK: Attachments
 struct Attachments: Codable {
     var type: String
     var photo: PhotosObject?
-    
+
     enum CodingKeys: String, CodingKey {
         case type
         case photo
     }
 }
 
-
 // MARK: Comments
 struct Comments: Codable {
     var count: Int
-    
+
     enum CodingKeys: String, CodingKey {
         case count
     }
 }
-
 
 // MARK: Views
 struct Views: Codable {
     var count: Int
-    
     enum CodingKeys: String, CodingKey {
         case count
     }
 }
 
-//MARK: Likes
+// MARK: - Likes
 struct Likes {
     var count: Int
 }
@@ -143,7 +136,7 @@ extension Likes: Codable {
 // MARK: Reposts
 struct Reposts: Codable {
     var count: Int
-    
+
     enum CodingKeys: String, CodingKey {
         case count
     }

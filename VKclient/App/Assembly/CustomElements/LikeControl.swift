@@ -9,19 +9,19 @@ import Foundation
 import UIKit
 
 class LikeControl: UIControl {
-    
-//    MARK: - Properties
-    
+
+// MARK: - Properties
+
     private(set) lazy var likeButton: UIButton = {
-        let b = UIButton()
-        
-        b.addTarget(self, action: #selector(likeButtonHadler(_:)), for: .touchUpInside)
-        
-        return b
+        let button = UIButton()
+
+        button.addTarget(self, action: #selector(likeButtonHadler(_:)), for: .touchUpInside)
+
+        return button
     }()
-    
+
     var isLiked: Bool = false
-    
+
     var likesCount: Int = 0 {
         didSet {
             likeButton.setTitle("\(self.likesCount)", for: .normal)
@@ -36,25 +36,23 @@ class LikeControl: UIControl {
             self.likeButton.setTitleColor(textColor, for: .normal)
         }
     }
-    
-//    MARK: - Init
-    
+
+// MARK: - Init
+
     override init(frame: CGRect) {
         super.init(frame: frame)
     }
-    
+
     required init?(coder: NSCoder) {
         super.init(coder: coder)
     }
-    
+
     override func layoutSubviews() {
         super.layoutSubviews()
     }
-    
+
     @objc func likeButtonHadler(_ sender: UIButton) {
         isLiked.toggle()
         isLiked ? self.likesCount += 1 : self.likesCount > 0 ? self.likesCount -= 1 : nil
     }
 }
-
-

@@ -14,36 +14,36 @@ class CommunitiesTableViewController: UITableViewController, UISearchBarDelegate
     var groupsNotification: NotificationToken?
     var dictOfGroups: [Character: [GroupsRealm]] = [:]
     var firstLetters = [Character]()
-    
+
     private var groupsHolder = [GroupsObjects]() {
         didSet {
             self.tableView.reloadData()
         }
     }
     private(set) lazy var searchBar: UISearchBar = {
-        let s = UISearchBar()
-        s.searchBarStyle = .default
-        s.sizeToFit()
-        s.isTranslucent = true
-        s.barTintColor = .systemBlue
-        
-        return s
+        let search = UISearchBar()
+        search.searchBarStyle = .default
+        search.sizeToFit()
+        search.isTranslucent = true
+        search.barTintColor = .systemBlue
+
+        return search
     }()
-    
+
     private(set) lazy var addGroupButton: UIBarButtonItem = {
-        let b = UIBarButtonItem(image: UIImage(systemName: "plus.rectangle.on.rectangle"), style: .plain, target: self, action: #selector(self.addButtonPressed))
-        b.tintColor = .systemBlue
-        
-        return b
+        let barItem = UIBarButtonItem(image: UIImage(systemName: "plus.rectangle.on.rectangle"), style: .plain, target: self, action: #selector(self.addButtonPressed))
+        barItem.tintColor = .systemBlue
+
+        return barItem
     }()
-    
+
     private(set) lazy var exitButton: UIBarButtonItem = {
-        let b = UIBarButtonItem(title: "Exit", style: .plain, target: self, action: #selector(self.buttonPressed))
-        b.tintColor = .systemBlue
-        
-        return b
+        let barItem = UIBarButtonItem(title: "Exit", style: .plain, target: self, action: #selector(self.buttonPressed))
+        barItem.tintColor = .systemBlue
+
+        return barItem
     }()
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         self.tableView.register(GroupsTableViewCell.self, forCellReuseIdentifier: GroupsTableViewCell.identifier)
@@ -53,25 +53,25 @@ class CommunitiesTableViewController: UITableViewController, UISearchBarDelegate
         navigationItem.leftBarButtonItem = exitButton
         navigationItem.rightBarButtonItem = addGroupButton
     }
-    
-    //    MARK: - Private methods
-    
+
+    // MARK: - Private methods
+
     @objc private func buttonPressed() {
         let loginVC = LoginViewController()
         self.view.window?.rootViewController = loginVC
         self.view.window?.makeKeyAndVisible()
     }
-    
+
     @objc private func addButtonPressed() {
-        
+
         let nextVC = GroupsSearchTableViewController()
         self.navigationController?.pushViewController(nextVC, animated: true)
     }
-    
+
     private func groupsFilteredFromRealm(with groups: Results<GroupsRealm>?) {
         self.dictOfGroups.removeAll()
         self.firstLetters.removeAll()
-        
+
         if let filteredGroups = groups {
             for group in filteredGroups {
                 guard let dictKey = group.name.first else { continue }
@@ -87,9 +87,9 @@ class CommunitiesTableViewController: UITableViewController, UISearchBarDelegate
         }
         tableView.reloadData()
     }
-    
+
     private func fetchDataFromNetwork() {
-        
+
         let groupsRequest = GetGroups(constructorPath: "groups.get",
                                       queryItems: [
                                         URLQueryItem(
@@ -99,7 +99,7 @@ class CommunitiesTableViewController: UITableViewController, UISearchBarDelegate
                                             name: "fields",
                                             value: "photo_100")
                                       ])
-        
+
         groupsRequest.request { [weak self] result in
             guard let self = self else { return }
             switch result {
@@ -124,23 +124,23 @@ class CommunitiesTableViewController: UITableViewController, UISearchBarDelegate
             }
         }
     }
-    
+
     private func filterGroups(with text: String) {
         guard !text.isEmpty else {
             groupsFilteredFromRealm(with: self.groupsfromRealm)
             return
         }
-        
-        groupsFilteredFromRealm(with:self.groupsfromRealm?.filter("name CONTAINS[cd] %@", text, text))
+
+        groupsFilteredFromRealm(with: self.groupsfromRealm?.filter("name CONTAINS[cd] %@", text, text))
     }
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         filterGroups(with: searchText)
     }
-    
+
     private func updatesFromRealm() {
-        
+
         groupsfromRealm = try? RealmService.load(typeOf: GroupsRealm.self)
-        
+
         groupsNotification = groupsfromRealm?.observe(on: .main, { realmChange in
             switch realmChange {
             case .initial(let objects):
@@ -148,7 +148,7 @@ class CommunitiesTableViewController: UITableViewController, UISearchBarDelegate
                     self.tableView.reloadData()
                 }
                 print(objects)
-                
+
             case let .update(_, deletions, insertions, modifications ):
                 self.tableView.beginUpdates()
                 self.tableView.insertRows(at: insertions.map({ IndexPath(row: $0, section: 0)}),
@@ -158,50 +158,53 @@ class CommunitiesTableViewController: UITableViewController, UISearchBarDelegate
                 self.tableView.deleteRows(at: deletions.map({ IndexPath(row: $0, section: 0)}),
                                           with: .none)
                 self.tableView.endUpdates()
-                
+
             case .error(let error):
                 print(error)
-                
+
             }
         })
     }
-    
+
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         groupsNotification?.invalidate()
     }
-    
+
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         let nameFirstLetter = self.firstLetters[section]
         return self.dictOfGroups[nameFirstLetter]?.count ?? 0
     }
-    
+
     override func numberOfSections(in tableView: UITableView) -> Int {
         self.firstLetters.count
     }
-    
+
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: GroupsTableViewCell.identifier, for: indexPath) as! GroupsTableViewCell
-        
+        guard let cell = tableView.dequeueReusableCell(
+            withIdentifier: GroupsTableViewCell.identifier,
+            for: indexPath) as? GroupsTableViewCell
+        else { return UITableViewCell()}
+
         let firstLetter = self.firstLetters[indexPath.section]
         if let groups = self.dictOfGroups[firstLetter] {
             cell.configureCell(groups: groups[indexPath.row])
         }
         return cell
     }
-    
+
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         88.0
     }
-    
+
     override func sectionIndexTitles(for tableView: UITableView) -> [String]? {
-        self.firstLetters.map{ String($0) }
+        self.firstLetters.map { String($0) }
     }
-    
+
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         String(self.firstLetters[section])
     }
-    
+
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         do { tableView.deselectRow(at: indexPath, animated: true)}
     }

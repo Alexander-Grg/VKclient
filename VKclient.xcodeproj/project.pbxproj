@@ -31,7 +31,7 @@
 		6281149F2833F93D00E042D6 /* GroupsSearchCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6281149E2833F93D00E042D6 /* GroupsSearchCell.swift */; };
 		6287BD8F26D67AAF0087D600 /* PhotoCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6287BD8E26D67AAF0087D600 /* PhotoCollectionViewController.swift */; };
 		6287BD9126D67AE90087D600 /* GroupsSearchTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6287BD9026D67AE90087D600 /* GroupsSearchTableViewController.swift */; };
-		628E852C26FF69C100FB5FAE /* extendedPhotoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 628E852B26FF69C100FB5FAE /* extendedPhotoViewController.swift */; };
+		628E852C26FF69C100FB5FAE /* ExtendedPhotoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 628E852B26FF69C100FB5FAE /* ExtendedPhotoViewController.swift */; };
 		628E853026FF87AF00FB5FAE /* pushAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 628E852F26FF87AF00FB5FAE /* pushAnimator.swift */; };
 		628E853426FF887200FB5FAE /* basicAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 628E853326FF887200FB5FAE /* basicAnimator.swift */; };
 		628E853826FFA94F00FB5FAE /* popAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 628E853726FFA94F00FB5FAE /* popAnimator.swift */; };
@@ -77,7 +77,7 @@
 		6281149E2833F93D00E042D6 /* GroupsSearchCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupsSearchCell.swift; sourceTree = "<group>"; };
 		6287BD8E26D67AAF0087D600 /* PhotoCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCollectionViewController.swift; sourceTree = "<group>"; };
 		6287BD9026D67AE90087D600 /* GroupsSearchTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupsSearchTableViewController.swift; sourceTree = "<group>"; };
-		628E852B26FF69C100FB5FAE /* extendedPhotoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = extendedPhotoViewController.swift; sourceTree = "<group>"; };
+		628E852B26FF69C100FB5FAE /* ExtendedPhotoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtendedPhotoViewController.swift; sourceTree = "<group>"; };
 		628E852F26FF87AF00FB5FAE /* pushAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = pushAnimator.swift; sourceTree = "<group>"; };
 		628E853326FF887200FB5FAE /* basicAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = basicAnimator.swift; sourceTree = "<group>"; };
 		628E853726FFA94F00FB5FAE /* popAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = popAnimator.swift; sourceTree = "<group>"; };
@@ -384,7 +384,7 @@
 		627C31462859DD3100C9D2A8 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				628E852B26FF69C100FB5FAE /* extendedPhotoViewController.swift */,
+				628E852B26FF69C100FB5FAE /* ExtendedPhotoViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -484,6 +484,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 62BBDB7A26CA6A3800144345 /* Build configuration list for PBXNativeTarget "VKclient" */;
 			buildPhases = (
+				62416B4B28A4F933000E67D2 /* ShellScript */,
 				62BBDB6226CA6A3700144345 /* Sources */,
 				62BBDB6326CA6A3700144345 /* Frameworks */,
 				62BBDB6426CA6A3700144345 /* Resources */,
@@ -550,6 +551,26 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		62416B4B28A4F933000E67D2 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "export PATH=\"$PATH:/opt/homebrew/bin\"\nif which swiftlint > /dev/null; then\n  swiftlint\nelse\n  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		62BBDB6226CA6A3700144345 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -562,7 +583,7 @@
 				628114992833BD9C00E042D6 /* AppDelegate.swift in Sources */,
 				62E39E99277E03C5000215E0 /* NewsTableViewCellPost.swift in Sources */,
 				624900A0271C57360060FAA6 /* RealmGroups.swift in Sources */,
-				628E852C26FF69C100FB5FAE /* extendedPhotoViewController.swift in Sources */,
+				628E852C26FF69C100FB5FAE /* ExtendedPhotoViewController.swift in Sources */,
 				62074C6227527993005D0418 /* GroupNewsModel.swift in Sources */,
 				62B572D2273C452D001B4689 /* NewsHeaderSection.swift in Sources */,
 				628E853426FF887200FB5FAE /* basicAnimator.swift in Sources */,

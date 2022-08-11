@@ -11,18 +11,16 @@ struct UserGroups: Codable {
     var items: [Community]
 }
 
-struct popularGroups: Codable {
+struct PopularGroups: Codable {
     var items: [Community]
 }
 
 struct Community: NewsSource {
 var urlString: String { photo }
 var pictureUrl: URL? { URL(string: photo) }
-    
 var id: Int
 var name: String
 var photo: String
-    
     var photoURL: URL? {
         URL(string: photo)
     }

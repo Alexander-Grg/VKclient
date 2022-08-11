@@ -12,9 +12,9 @@ protocol ReusableView: AnyObject {
 }
 
 final class PhotosCollectionViewCell: UICollectionViewCell {
-    
-//    MARK: - Properties
-    
+
+// MARK: - Properties
+
     private enum Constants {
         static let contentViewCornerRadius: CGFloat = 4.0
         static let imageHeight: CGFloat = 180.0
@@ -22,42 +22,42 @@ final class PhotosCollectionViewCell: UICollectionViewCell {
         static let horizontalPadding: CGFloat = 16.0
         static let profileDescriptionVerticalPadding: CGFloat = 8.0
     }
-    
+
     private(set) lazy var profileImageView: UIImageView = {
         let imageView = UIImageView(frame: .zero)
         imageView.contentMode = .scaleAspectFill
-        
+
         return imageView
     }()
-    
+
     private(set) lazy var likeControl: LikeControl = {
-        let l = LikeControl()
-        
-        return l
+        let control = LikeControl()
+
+        return control
     }()
-    
-//    MARK: - Init
-    
+
+// MARK: - Init
+
     override init(frame: CGRect) {
         super.init(frame: .zero)
         setupViews()
         setupLayouts()
     }
-    
-//    MARK: - UI
-    
+
+// MARK: - UI
+
     private func setupViews() {
         contentView.clipsToBounds = true
         contentView.layer.cornerRadius = Constants.contentViewCornerRadius
         contentView.backgroundColor = .white
-        
+
         contentView.addSubview(profileImageView)
-        
+
     }
-    
+
     private func setupLayouts() {
         profileImageView.translatesAutoresizingMaskIntoConstraints = false
-        
+
         NSLayoutConstraint.activate([
             profileImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             profileImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
@@ -65,7 +65,7 @@ final class PhotosCollectionViewCell: UICollectionViewCell {
             profileImageView.heightAnchor.constraint(equalToConstant: Constants.imageHeight)
         ])
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
