@@ -118,6 +118,7 @@
 		620CAE2E270899810090CB77 /* Network */ = {
 			isa = PBXGroup;
 			children = (
+				626AEA2428A65260009433E0 /* NewNetwork */,
 				627C314A2859DE4900C9D2A8 /* Realm */,
 				62BA53FE2704AFB5000F790A /* SessionSingleton.swift */,
 				626E8125282FC36100CEC689 /* NetworkConstructors.swift */,
@@ -134,6 +135,13 @@
 				6249009F271C57360060FAA6 /* RealmGroups.swift */,
 			);
 			path = "Realm models";
+			sourceTree = "<group>";
+		};
+		626AEA2428A65260009433E0 /* NewNetwork */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = NewNetwork;
 			sourceTree = "<group>";
 		};
 		627C312B2859D96000C9D2A8 /* Resources */ = {
