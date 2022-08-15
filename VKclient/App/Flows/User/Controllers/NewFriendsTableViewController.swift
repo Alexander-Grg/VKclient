@@ -8,6 +8,7 @@
 import UIKit
 import SDWebImage
 import RealmSwift
+import Combine
 
 class NewFriendsTableViewController: UIViewController, UISearchBarDelegate {
     private(set) lazy var tableView: UITableView = {
@@ -16,12 +17,10 @@ class NewFriendsTableViewController: UIViewController, UISearchBarDelegate {
     }()
     var friendsFromRealm: Results<UserRealm>?
     var notificationFriends: NotificationToken?
-    var friendsNetworkLetters = [[UserObject]]()
     var dictOfUsers: [Character: [UserRealm]] = [:]
     var firstLetters = [Character]()
-    private var searchedFilterData: [UserObject] = []
-    private var searchedFiltedDataCharacters: [Character] = []
-    private var sectionTitles: [Character] = []
+    private var cancellable = Set<AnyCancellable>()
+    private let networkClient = APIProvider<FriendsEndpoint>()
 
     private(set) lazy var searchBar: UISearchBar = {
         let searchBar = UISearchBar()
@@ -60,6 +59,10 @@ class NewFriendsTableViewController: UIViewController, UISearchBarDelegate {
         }
         tableView.reloadData()
     }
+    
+//    override func viewWillAppear(_ animated: Bool) {
+//        fetchDataFromNetwork()
+//    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -75,40 +78,28 @@ class NewFriendsTableViewController: UIViewController, UISearchBarDelegate {
         fetchDataFromNetwork()
     }
 
-    private func fetchDataFromNetwork() {
-        let friendRequest = GetFriends(constructorPath: "friends.get",
-                                       queryItems: [
-                                        URLQueryItem(
-                                            name: "order",
-                                            value: "random"),
-                                        URLQueryItem(
-                                            name: "fields",
-                                            value: "nickname, photo_100")
-                                       ])
-
-        friendRequest.requestFriends { [weak self] result in
-            guard let self = self else { return }
-            switch result {
-            case .success:
-                self.updatesFromRealm()
-                self.usersFilteredFromRealm(with: self.friendsFromRealm)
-                print("Data has been received")
-            case .failure(let requestError):
-                switch requestError {
-                case .decoderError:
-                    print("Decoder error")
-                case .requestFailed:
-                    print("Request failed")
-                case .invalidUrl:
-                    print("URL error")
-                case .realmError:
-                    print("Realm error")
-                case .unknownError:
-                    print("Unknown error")
-                }
+     func fetchDataFromNetwork() {
+        networkClient.getData(from: .getFriends)
+            .decode(type: UserResponse.self, decoder: Container.jsonDecoder)
+            .receive(on: RunLoop.main)
+            .sink(receiveCompletion: { [weak self] error in
+                self?.friendsFromRealm = nil
+                print(error)
+            }, receiveValue: { [weak self] value in
+                self?.savingDataToRealm(value.response.items)
+                self?.updatesFromRealm()
+                self?.usersFilteredFromRealm(with: self?.friendsFromRealm)
             }
-        }
+            )
+            .store(in: &cancellable)
     }
+    
+   private func savingDataToRealm(_ data: [UserObject]) {
+         do {
+             let dataRealm = data.map {UserRealm(user: $0)}
+             try? RealmService.save(items: dataRealm)
+         }
+     }
 
     private func updatesFromRealm() {
         friendsFromRealm = try? RealmService.get(type: UserRealm.self)
