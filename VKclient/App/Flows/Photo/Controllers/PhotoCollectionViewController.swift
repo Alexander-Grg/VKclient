@@ -54,26 +54,9 @@ class PhotoViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        let photoRequest = GetPhotos(constructorPath: "photos.get",
-                                     queryItems: [
-                                        URLQueryItem(
-                                            name: "rev",
-                                            value: "1"),
-                                        URLQueryItem(
-                                            name: "album_id",
-                                            value: "profile"),
-                                        URLQueryItem(
-                                            name: "offset",
-                                            value: "0"),
-                                        URLQueryItem(
-                                            name: "photo_sizes",
-                                            value: "0"),
-                                        URLQueryItem(
-                                            name: "owner_id",
-                                            value: String(friendID))
-                                     ])
+        let photoRequest = GetPhotos()
 
-        photoRequest.request { [weak self] result in
+        photoRequest.request(friendID) { [weak self] result in
             guard let self = self else { return }
             switch result {
             case .success(let photos):

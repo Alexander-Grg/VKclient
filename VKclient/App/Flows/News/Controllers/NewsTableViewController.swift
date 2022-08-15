@@ -42,16 +42,7 @@ enum NewsTypes {
 
 class NewsTableViewController: UIViewController {
 
-    let newsRequest = GetNews(
-        constructorPath: "newsfeed.get",
-        queryItems: [
-            URLQueryItem(
-                name: "filters",
-                value: "post, photo"),
-            URLQueryItem(
-                name: "count",
-                value: "20")
-        ])
+    let newsRequest = GetNews()
     var newsPost: [News]?
     var IDs = [Int]()
     var groupsForHeader: [Community] = []

@@ -76,17 +76,10 @@ class NewFriendsTableViewController: UIViewController, UISearchBarDelegate {
     }
 
     private func fetchDataFromNetwork() {
-        let friendRequest = GetFriends(constructorPath: "friends.get",
-                                       queryItems: [
-                                        URLQueryItem(
-                                            name: "order",
-                                            value: "random"),
-                                        URLQueryItem(
-                                            name: "fields",
-                                            value: "nickname, photo_100")
-                                       ])
-
-        friendRequest.requestFriends { [weak self] result in
+     
+        let networkService = GetFriends()
+        
+        networkService.request { [weak self] result in
             guard let self = self else { return }
             switch result {
             case .success:

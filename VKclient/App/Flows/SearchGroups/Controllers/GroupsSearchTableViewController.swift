@@ -44,21 +44,14 @@ class GroupsSearchTableViewController: UITableViewController, UISearchBarDelegat
 
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
 
-        let requestSearch = GetGroupSearch(
-            constructorPath: "groups.search",
-            queryItems: [
-                URLQueryItem(name: "sort", value: "6"),
-                URLQueryItem(name: "type", value: "group"),
-                URLQueryItem(name: "q", value: searchText),
-                URLQueryItem(name: "count", value: "20")
-            ])
+        let requestSearch = GetGroupSearch()
 
         if searchText.isEmpty {
             self.groupsHolder.removeAll()
             self.tableView.reloadData()
         } else {
 
-            requestSearch.request { [weak self] groups in
+            requestSearch.request(searchText) { [weak self] groups in
                 guard let self = self else { return }
                 self.groupsHolder = groups
 
