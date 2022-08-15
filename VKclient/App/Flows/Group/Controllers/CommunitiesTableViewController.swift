@@ -90,15 +90,7 @@ class CommunitiesTableViewController: UITableViewController, UISearchBarDelegate
 
     private func fetchDataFromNetwork() {
 
-        let groupsRequest = GetGroups(constructorPath: "groups.get",
-                                      queryItems: [
-                                        URLQueryItem(
-                                            name: "extended",
-                                            value: "1"),
-                                        URLQueryItem(
-                                            name: "fields",
-                                            value: "photo_100")
-                                      ])
+        let groupsRequest = GetGroups()
 
         groupsRequest.request { [weak self] result in
             guard let self = self else { return }

@@ -10,7 +10,7 @@
 		6201BB512708C33400036E76 /* VKLoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6201BB502708C33400036E76 /* VKLoginController.swift */; };
 		62074C602752766F005D0418 /* UserNewsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62074C5F2752766F005D0418 /* UserNewsModel.swift */; };
 		62074C6227527993005D0418 /* GroupNewsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62074C6127527993005D0418 /* GroupNewsModel.swift */; };
-		620CAE30270899980090CB77 /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 620CAE2F270899980090CB77 /* NetworkService.swift */; };
+		620CAE30270899980090CB77 /* APIrequests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 620CAE2F270899980090CB77 /* APIrequests.swift */; };
 		621A26A927B50FE3001693BC /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = 621A26A827B50FE3001693BC /* SDWebImage */; };
 		621A26AC27B510EC001693BC /* Realm in Frameworks */ = {isa = PBXBuildFile; productRef = 621A26AB27B510EC001693BC /* Realm */; };
 		621A26AE27B510EC001693BC /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 621A26AD27B510EC001693BC /* RealmSwift */; };
@@ -24,7 +24,7 @@
 		626610C2270CF15E0089C651 /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 626610C1270CF15E0089C651 /* UserModel.swift */; };
 		626A00E6270F785A000E8F4C /* PhotosModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 626A00E5270F785A000E8F4C /* PhotosModel.swift */; };
 		626A00E9270F78A1000E8F4C /* GroupsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 626A00E8270F78A1000E8F4C /* GroupsModel.swift */; };
-		626E8126282FC36100CEC689 /* NetworkConstructors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 626E8125282FC36100CEC689 /* NetworkConstructors.swift */; };
+		626E8126282FC36100CEC689 /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 626E8125282FC36100CEC689 /* NetworkService.swift */; };
 		628114992833BD9C00E042D6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 628114982833BD9C00E042D6 /* AppDelegate.swift */; };
 		6281149B2833BDDF00E042D6 /* AppStartManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6281149A2833BDDF00E042D6 /* AppStartManager.swift */; };
 		6281149D2833E74200E042D6 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6281149C2833E74200E042D6 /* TabBarController.swift */; };
@@ -58,7 +58,7 @@
 		6201BB502708C33400036E76 /* VKLoginController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VKLoginController.swift; sourceTree = "<group>"; };
 		62074C5F2752766F005D0418 /* UserNewsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserNewsModel.swift; sourceTree = "<group>"; };
 		62074C6127527993005D0418 /* GroupNewsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupNewsModel.swift; sourceTree = "<group>"; };
-		620CAE2F270899980090CB77 /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
+		620CAE2F270899980090CB77 /* APIrequests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIrequests.swift; sourceTree = "<group>"; };
 		62317871271C96C700A42097 /* RealmService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmService.swift; sourceTree = "<group>"; };
 		62317873271CB97500A42097 /* RealmUsers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmUsers.swift; sourceTree = "<group>"; };
 		62317875271CB98A00A42097 /* RealmPhotos.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmPhotos.swift; sourceTree = "<group>"; };
@@ -70,7 +70,7 @@
 		6267A7D227B5223B000FCDC9 /* VKclient.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VKclient.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		626A00E5270F785A000E8F4C /* PhotosModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotosModel.swift; sourceTree = "<group>"; };
 		626A00E8270F78A1000E8F4C /* GroupsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupsModel.swift; sourceTree = "<group>"; };
-		626E8125282FC36100CEC689 /* NetworkConstructors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkConstructors.swift; sourceTree = "<group>"; };
+		626E8125282FC36100CEC689 /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
 		628114982833BD9C00E042D6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		6281149A2833BDDF00E042D6 /* AppStartManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStartManager.swift; sourceTree = "<group>"; };
 		6281149C2833E74200E042D6 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
@@ -118,11 +118,10 @@
 		620CAE2E270899810090CB77 /* Network */ = {
 			isa = PBXGroup;
 			children = (
-				626AEA2428A65260009433E0 /* NewNetwork */,
 				627C314A2859DE4900C9D2A8 /* Realm */,
 				62BA53FE2704AFB5000F790A /* SessionSingleton.swift */,
-				626E8125282FC36100CEC689 /* NetworkConstructors.swift */,
-				620CAE2F270899980090CB77 /* NetworkService.swift */,
+				626E8125282FC36100CEC689 /* NetworkService.swift */,
+				620CAE2F270899980090CB77 /* APIrequests.swift */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -135,13 +134,6 @@
 				6249009F271C57360060FAA6 /* RealmGroups.swift */,
 			);
 			path = "Realm models";
-			sourceTree = "<group>";
-		};
-		626AEA2428A65260009433E0 /* NewNetwork */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = NewNetwork;
 			sourceTree = "<group>";
 		};
 		627C312B2859D96000C9D2A8 /* Resources */ = {
@@ -492,7 +484,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 62BBDB7A26CA6A3800144345 /* Build configuration list for PBXNativeTarget "VKclient" */;
 			buildPhases = (
-				62416B4B28A4F933000E67D2 /* ShellScript */,
 				62BBDB6226CA6A3700144345 /* Sources */,
 				62BBDB6326CA6A3700144345 /* Frameworks */,
 				62BBDB6426CA6A3700144345 /* Resources */,
@@ -559,26 +550,6 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
-/* Begin PBXShellScriptBuildPhase section */
-		62416B4B28A4F933000E67D2 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "export PATH=\"$PATH:/opt/homebrew/bin\"\nif which swiftlint > /dev/null; then\n  swiftlint\nelse\n  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
-		};
-/* End PBXShellScriptBuildPhase section */
-
 /* Begin PBXSourcesBuildPhase section */
 		62BBDB6226CA6A3700144345 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -586,7 +557,7 @@
 			files = (
 				62BA53FF2704AFB5000F790A /* SessionSingleton.swift in Sources */,
 				62BBDB6E26CA6A3700144345 /* LoginViewController.swift in Sources */,
-				620CAE30270899980090CB77 /* NetworkService.swift in Sources */,
+				620CAE30270899980090CB77 /* APIrequests.swift in Sources */,
 				628E853B26FFABD400FB5FAE /* customNavigator.swift in Sources */,
 				628114992833BD9C00E042D6 /* AppDelegate.swift in Sources */,
 				62E39E99277E03C5000215E0 /* NewsTableViewCellPost.swift in Sources */,
@@ -615,7 +586,7 @@
 				6281149F2833F93D00E042D6 /* GroupsSearchCell.swift in Sources */,
 				6201BB512708C33400036E76 /* VKLoginController.swift in Sources */,
 				62074C602752766F005D0418 /* UserNewsModel.swift in Sources */,
-				626E8126282FC36100CEC689 /* NetworkConstructors.swift in Sources */,
+				626E8126282FC36100CEC689 /* NetworkService.swift in Sources */,
 				62A2D25427B2E04D0089FA9A /* GroupsTableViewCell.swift in Sources */,
 				626A00E6270F785A000E8F4C /* PhotosModel.swift in Sources */,
 				628E853826FFA94F00FB5FAE /* popAnimator.swift in Sources */,
