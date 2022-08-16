@@ -32,29 +32,29 @@ final class GetFriends: VKConstructor {
 
 }
 
-final class GetPhotos: VKConstructor {
-    func request(
-        completion: @escaping (Result<[RealmPhotos], RequestErrors>) -> Void) {
-        dataTaskRequest { result in
-            switch result {
-            case .success(let data):
-                do {
-                    let photos = try JSONDecoder().decode(PhotosResponse.self,
-                                                          from: data).response.items
-                    let photosRealm = photos.map { RealmPhotos(photos: $0)
-                    }
-                    DispatchQueue.main.async {
-                        completion(.success(photosRealm))
-                    }
-                } catch {
-                    print(completion(.failure(.decoderError)))
-                }
-            case .failure(let error):
-                completion(.failure(error))
-            }
-        }
-    }
-}
+//final class GetPhotos: VKConstructor {
+//    func request(
+//        completion: @escaping (Result<[RealmPhotos], RequestErrors>) -> Void) {
+//        dataTaskRequest { result in
+//            switch result {
+//            case .success(let data):
+//                do {
+//                    let photos = try JSONDecoder().decode(PhotosResponse.self,
+//                                                          from: data).response.items
+//                    let photosRealm = photos.map { RealmPhotos(photos: $0)
+//                    }
+//                    DispatchQueue.main.async {
+//                        completion(.success(photosRealm))
+//                    }
+//                } catch {
+//                    print(completion(.failure(.decoderError)))
+//                }
+//            case .failure(let error):
+//                completion(.failure(error))
+//            }
+//        }
+//    }
+//}
 
 final class GetGroups: VKConstructor {
     func request(
