@@ -15,12 +15,12 @@ class NewFriendsTableViewController: UIViewController, UISearchBarDelegate {
         let table = UITableView()
         return table
     }()
+    private var cancellable = Set<AnyCancellable>()
+    private let userService = UserService()
     var friendsFromRealm: Results<UserRealm>?
     var notificationFriends: NotificationToken?
     var dictOfUsers: [Character: [UserRealm]] = [:]
     var firstLetters = [Character]()
-    private var cancellable = Set<AnyCancellable>()
-    private let userService = UserService()
     var networkValue: [UserObject] = []
 
     private(set) lazy var searchBar: UISearchBar = {
@@ -93,8 +93,6 @@ class NewFriendsTableViewController: UIViewController, UISearchBarDelegate {
              }
              )
              .store(in: &cancellable)
-
-             
     }
     
    private func savingDataToRealm(_ data: [UserObject]) {

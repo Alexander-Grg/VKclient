@@ -9,10 +9,7 @@ import Foundation
 
 enum FriendsEndpoint: EndpointProtocol {
     case getFriends
-    
-    var baseURL: String {
-        return "https://api.vk.com"
-    }
+
     var absoluteURL: String {
         return baseURL + "/method/friends.get"
     }
