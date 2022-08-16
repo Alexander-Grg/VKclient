@@ -7,26 +7,22 @@
 
 import Foundation
 
-struct UserResponse: Codable {
+struct UserResponse: Decodable {
     let response: NextResponse
-    enum CodingKeys: String, CodingKey {
-        case response
-    }
 }
 
-struct NextResponse: Codable {
-    var count: Int = 0
+struct NextResponse: Decodable {
+    let count: Int
     let items: [UserObject]
-    enum CodingKeys: String, CodingKey {
-        case count, items
     }
-}
 
-struct UserObject: Codable {
-    dynamic var firstName: String = ""
-    dynamic var lastName: String = ""
-    dynamic var id: Int = 0
-    dynamic var avatar: String = ""
+
+struct UserObject: Decodable {
+    var firstName: String
+    var lastName: String
+    var id: Int
+    var avatar: String
+    
     enum CodingKeys: String, CodingKey {
         case firstName = "first_name"
         case id = "id"

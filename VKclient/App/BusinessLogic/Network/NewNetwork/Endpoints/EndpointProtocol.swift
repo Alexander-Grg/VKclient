@@ -10,5 +10,7 @@ import Foundation
 protocol EndpointProtocol {
     var baseURL: String { get }
     var absoluteURL: String { get }
-    var parameters: [String: String] { get }
+    var parameters: [String : String] { get }
 }
+
+

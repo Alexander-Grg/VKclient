@@ -28,7 +28,10 @@ class APIProvider<Endpoint: EndpointProtocol> {
         urlComponents.queryItems = endpoint.parameters.compactMap({ param -> URLQueryItem in
             return URLQueryItem(name: param.key, value: param.value)
         })
-
+        
+        urlComponents.queryItems?.append(URLQueryItem(name: "access_token", value: Session.instance.token))
+        urlComponents.queryItems?.append(URLQueryItem(name: "v", value: "5.131"))
+        
         guard let url = urlComponents.url else {
             return nil
         }
