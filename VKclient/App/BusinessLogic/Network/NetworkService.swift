@@ -20,10 +20,11 @@ enum RequestErrors: String, Error {
 
 class NetworkService {
     var session: URLSession = URLSession.shared
-    var constructorScheme: String = "https"
-    var constructorHost: String = "api.vk.com"
+    
     var constructor: URLComponents = {
         var constructor = URLComponents()
+        constructor.scheme = "https"
+        constructor.host = "api.vk.com"
         constructor.path = "/method/"
         constructor.queryItems = [
             URLQueryItem(name: "v", value: "5.92"),

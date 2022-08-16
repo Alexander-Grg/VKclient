@@ -9,7 +9,7 @@ import Foundation
 
 final class GetFriends: NetworkService {
     func request(completion: @escaping (Result<[UserObject], RequestErrors>) -> Void) {
-        constructor.path += "/method/friends.get"
+        constructor.path += "friends.get"
 //        constructor.queryItems?.append(contentsOf: [
 //            URLQueryItem(
 //                name: "order",
@@ -157,14 +157,15 @@ final class GetNews: NetworkService {
     func request(startFrom: String = "", startTime: Double? = nil, _ completion: @escaping ([News], String)
                  -> Void) {
         constructor.path += "newsfeed.get"
-        constructor.queryItems?.append(contentsOf: [
+        
+        constructor.queryItems?.append(
             URLQueryItem(
-                name: "filters",
-                value: "post, photo"),
+            name: "filters",
+            value: "post, photo"))
+        constructor.queryItems?.append(
             URLQueryItem(
-                name: "count",
-                value: "20")
-        ])
+            name: "count",
+            value: "20"))
         constructor.queryItems?.append(
             URLQueryItem(
                 name: "start_from",
