@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		6200E5B228ABA0540040A00B /* UserServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6200E5B128ABA0540040A00B /* UserServiceProtocol.swift */; };
+		6200E5B728ABAEEA0040A00B /* GroupsEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6200E5B628ABAEEA0040A00B /* GroupsEndpoint.swift */; };
+		6200E5B928ABB25B0040A00B /* GroupsServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6200E5B828ABB25B0040A00B /* GroupsServiceProtocol.swift */; };
 		6201BB512708C33400036E76 /* VKLoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6201BB502708C33400036E76 /* VKLoginController.swift */; };
 		62074C602752766F005D0418 /* UserNewsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62074C5F2752766F005D0418 /* UserNewsModel.swift */; };
 		62074C6227527993005D0418 /* GroupNewsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62074C6127527993005D0418 /* GroupNewsModel.swift */; };
@@ -61,6 +63,8 @@
 
 /* Begin PBXFileReference section */
 		6200E5B128ABA0540040A00B /* UserServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserServiceProtocol.swift; sourceTree = "<group>"; };
+		6200E5B628ABAEEA0040A00B /* GroupsEndpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupsEndpoint.swift; sourceTree = "<group>"; };
+		6200E5B828ABB25B0040A00B /* GroupsServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupsServiceProtocol.swift; sourceTree = "<group>"; };
 		6201BB502708C33400036E76 /* VKLoginController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VKLoginController.swift; sourceTree = "<group>"; };
 		62074C5F2752766F005D0418 /* UserNewsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserNewsModel.swift; sourceTree = "<group>"; };
 		62074C6127527993005D0418 /* GroupNewsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupNewsModel.swift; sourceTree = "<group>"; };
@@ -125,6 +129,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		6200E5B528ABAD090040A00B /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				6200E5B128ABA0540040A00B /* UserServiceProtocol.swift */,
+				6200E5B828ABB25B0040A00B /* GroupsServiceProtocol.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
 		620CAE2E270899810090CB77 /* Network */ = {
 			isa = PBXGroup;
 			children = (
@@ -472,6 +485,7 @@
 		62962C3528AA74CA00A59927 /* NewNetwork */ = {
 			isa = PBXGroup;
 			children = (
+				6200E5B528ABAD090040A00B /* Services */,
 				62962C3C28AA751C00A59927 /* Endpoints */,
 				62962C3628AA74DF00A59927 /* APIError.swift */,
 				62962C3828AA74F800A59927 /* APIProvider.swift */,
@@ -482,9 +496,9 @@
 		62962C3C28AA751C00A59927 /* Endpoints */ = {
 			isa = PBXGroup;
 			children = (
-				62962C3D28AA754600A59927 /* FriendsEndpoint.swift */,
 				62962C3A28AA751300A59927 /* EndpointProtocol.swift */,
-				6200E5B128ABA0540040A00B /* UserServiceProtocol.swift */,
+				62962C3D28AA754600A59927 /* FriendsEndpoint.swift */,
+				6200E5B628ABAEEA0040A00B /* GroupsEndpoint.swift */,
 			);
 			path = Endpoints;
 			sourceTree = "<group>";
@@ -588,6 +602,7 @@
 			files = (
 				62BA53FF2704AFB5000F790A /* SessionSingleton.swift in Sources */,
 				62BBDB6E26CA6A3700144345 /* LoginViewController.swift in Sources */,
+				6200E5B728ABAEEA0040A00B /* GroupsEndpoint.swift in Sources */,
 				620CAE30270899980090CB77 /* NetworkService.swift in Sources */,
 				628E853B26FFABD400FB5FAE /* customNavigator.swift in Sources */,
 				628114992833BD9C00E042D6 /* AppDelegate.swift in Sources */,
@@ -616,6 +631,7 @@
 				626610C2270CF15E0089C651 /* UserModel.swift in Sources */,
 				6281149D2833E74200E042D6 /* TabBarController.swift in Sources */,
 				62962C3E28AA754600A59927 /* FriendsEndpoint.swift in Sources */,
+				6200E5B928ABB25B0040A00B /* GroupsServiceProtocol.swift in Sources */,
 				62962C3728AA74DF00A59927 /* APIError.swift in Sources */,
 				6287BD9126D67AE90087D600 /* GroupsSearchTableViewController.swift in Sources */,
 				623AEA6E26F33EFD00F87BD5 /* NewsTableViewController.swift in Sources */,

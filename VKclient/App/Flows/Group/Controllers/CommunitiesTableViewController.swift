@@ -8,8 +8,11 @@
 import UIKit
 import SDWebImage
 import RealmSwift
+import Combine
 
 class CommunitiesTableViewController: UITableViewController, UISearchBarDelegate {
+    private var cancellable = Set<AnyCancellable>()
+    private let groupService = GroupsService()
     var groupsfromRealm: Results<GroupsRealm>?
     var groupsNotification: NotificationToken?
     var dictOfGroups: [Character: [GroupsRealm]] = [:]
@@ -89,41 +92,27 @@ class CommunitiesTableViewController: UITableViewController, UISearchBarDelegate
     }
 
     private func fetchDataFromNetwork() {
-
-        let groupsRequest = GetGroups(constructorPath: "groups.get",
-                                      queryItems: [
-                                        URLQueryItem(
-                                            name: "extended",
-                                            value: "1"),
-                                        URLQueryItem(
-                                            name: "fields",
-                                            value: "photo_100")
-                                      ])
-
-        groupsRequest.request { [weak self] result in
-            guard let self = self else { return }
-            switch result {
-            case .success:
-                self.updatesFromRealm()
-                print("Data has been received")
-                self.groupsFilteredFromRealm(with: self.groupsfromRealm)
-                print("Data has been filtered for sections")
-            case .failure(let requestError):
-                switch requestError {
-                case .decoderError:
-                    print("Decoder error")
-                case .requestFailed:
-                    print("Request failed")
-                case .invalidUrl:
-                    print("URL error")
-                case .realmError:
-                    print("Realm error")
-                case .unknownError:
-                    print("Unknown error")
-                }
+        groupService.requestGroups()
+            .decode(type: GroupsResponse.self, decoder: JSONDecoder())
+            .receive(on: DispatchQueue.main)
+            .sink(receiveCompletion: { [weak self] error in
+                self?.groupsfromRealm = nil
+                print(error)
+            }, receiveValue: { [weak self] value in
+                self?.savingDataToRealm(value.response.items)
+                self?.updatesFromRealm()
+                self?.groupsFilteredFromRealm(with: self?.groupsfromRealm)
             }
-        }
+            )
+            .store(in: &cancellable)
     }
+    
+    private func savingDataToRealm(_ data: [GroupsObjects]) {
+          do {
+              let dataRealm = data.map {GroupsRealm(groups: $0)}
+              try? RealmService.save(items: dataRealm)
+          }
+      }
 
     private func filterGroups(with text: String) {
         guard !text.isEmpty else {

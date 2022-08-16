@@ -13,4 +13,8 @@ protocol EndpointProtocol {
     var parameters: [String : String] { get }
 }
 
-
+extension EndpointProtocol {
+    var baseURL: String {
+        return "https://api.vk.com"
+    }
+}
