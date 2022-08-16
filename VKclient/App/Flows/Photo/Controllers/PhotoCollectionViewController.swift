@@ -7,6 +7,7 @@
 
 import UIKit
 import RealmSwift
+import Combine
 
 class PhotoViewController: UIViewController {
 
@@ -23,16 +24,14 @@ class PhotoViewController: UIViewController {
         static let itemHeight: CGFloat = 300.0
     }
 
+    private var cancellable = Set<AnyCancellable>()
+    private let photosService = PhotosService()
+    
     var friendID: Int = Session.instance.friendID
     var realmPhotos: Results<RealmPhotos>?
     var photosNotification: NotificationToken?
     var photosForExtendedController: [String] = []
     var user: User?
-    var arrayOfRealm = [String]() {
-        didSet {
-            self.collectionView.reloadData()
-        }
-    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,7 +40,8 @@ class PhotoViewController: UIViewController {
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         setupViews()
         setupLayouts()
-        updatesFromRealm()
+//        updatesFromRealm()
+        requestPhotosFromNetwork()
 
         NSLayoutConstraint.activate([
             collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
@@ -53,37 +53,47 @@ class PhotoViewController: UIViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-
-        let photoRequest = GetPhotos(constructorPath: "photos.get",
-                                     queryItems: [
-                                        URLQueryItem(
-                                            name: "rev",
-                                            value: "1"),
-                                        URLQueryItem(
-                                            name: "album_id",
-                                            value: "profile"),
-                                        URLQueryItem(
-                                            name: "offset",
-                                            value: "0"),
-                                        URLQueryItem(
-                                            name: "photo_sizes",
-                                            value: "0"),
-                                        URLQueryItem(
-                                            name: "owner_id",
-                                            value: String(friendID))
-                                     ])
-
-        photoRequest.request { [weak self] result in
-            guard let self = self else { return }
-            switch result {
-            case .success(let photos):
-                try? RealmService.save(items: photos)
-                self.collectionView.reloadData()
-            case .failure:
-                print("Data has already been saved to Realm")
-            }
-        }
+        requestPhotosFromNetwork()
     }
+    
+    private func requestPhotosFromNetwork() {
+        photosService.requestPhotos(id: String(friendID))
+            .decode(type: PhotosResponse.self, decoder: JSONDecoder())
+            .receive(on: DispatchQueue.main)
+            .sink(receiveCompletion: { [weak self] error in
+                self?.realmPhotos = nil
+                print(error)
+            }, receiveValue: { [weak self] value in
+                self?.savingDataToRealm(value.response.items)
+                self?.updatesFromRealm()
+            }
+            )
+            .store(in: &cancellable)
+    }
+    
+    private func savingDataToRealm(_ data: [PhotosObject]) {
+          do {
+              let dataRealm = data.map {RealmPhotos(photos: $0)}
+              try? RealmService.save(items: dataRealm)
+          }
+      }
+    
+//    private func updatesFromRealm() {
+//        realmPhotos = try? RealmService.get(type: RealmPhotos.self)
+////            .filter(NSPredicate(format: "ownerID == %d", friendID))
+//
+//           photosNotification = realmPhotos?.observe { [weak self] changes in
+//               guard let self = self else { return }
+//               switch changes {
+//               case .initial:
+//                   break
+//               case .update:
+//                   self.collectionView.reloadData()
+//               case let .error(error):
+//                   print(error)
+//               }
+//           }
+//       }
     private func updatesFromRealm() {
         do {
         realmPhotos = try RealmService.load(
