@@ -16,6 +16,8 @@ enum RequestErrors: String, Error {
     case realmError
 }
 
+
+
 class NetworkService {
     var session: URLSession = URLSession.shared
     var constructorScheme: String = "https"
@@ -31,7 +33,8 @@ class NetworkService {
     }()
 
     func dataTaskRequest(completion: @escaping (Result<Data, RequestErrors>) -> Void) {
-        guard let url = constructor.url  else { return completion(.failure(.invalidUrl))}
+        guard let url = constructor.url  else
+        { return completion(.failure(.invalidUrl))}
 
         session.dataTask(with: url) { data, response, _ in
             if let response = response as? HTTPURLResponse {
