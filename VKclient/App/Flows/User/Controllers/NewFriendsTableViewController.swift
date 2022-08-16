@@ -20,7 +20,8 @@ class NewFriendsTableViewController: UIViewController, UISearchBarDelegate {
     var dictOfUsers: [Character: [UserRealm]] = [:]
     var firstLetters = [Character]()
     private var cancellable = Set<AnyCancellable>()
-    private let networkClient = APIProvider<FriendsEndpoint>()
+    private let userService = UserService()
+    var networkValue: [UserObject] = []
 
     private(set) lazy var searchBar: UISearchBar = {
         let searchBar = UISearchBar()
@@ -79,19 +80,21 @@ class NewFriendsTableViewController: UIViewController, UISearchBarDelegate {
     }
 
      func fetchDataFromNetwork() {
-        networkClient.getData(from: .getFriends)
-            .decode(type: UserResponse.self, decoder: Container.jsonDecoder)
-            .receive(on: RunLoop.main)
-            .sink(receiveCompletion: { [weak self] error in
-                self?.friendsFromRealm = nil
-                print(error)
-            }, receiveValue: { [weak self] value in
-                self?.savingDataToRealm(value.response.items)
-                self?.updatesFromRealm()
-                self?.usersFilteredFromRealm(with: self?.friendsFromRealm)
-            }
-            )
-            .store(in: &cancellable)
+         userService.requestUsers()
+             .decode(type: UserResponse.self, decoder: JSONDecoder())
+             .receive(on: DispatchQueue.main)
+             .sink(receiveCompletion: { [weak self] error in
+                 self?.friendsFromRealm = nil
+                 print(error)
+             }, receiveValue: { [weak self] value in
+                 self?.savingDataToRealm(value.response.items)
+                 self?.updatesFromRealm()
+                 self?.usersFilteredFromRealm(with: self?.friendsFromRealm)
+             }
+             )
+             .store(in: &cancellable)
+
+             
     }
     
    private func savingDataToRealm(_ data: [UserObject]) {

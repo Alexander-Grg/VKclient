@@ -9,6 +9,7 @@ import Foundation
 
 enum FriendsEndpoint: EndpointProtocol {
     case getFriends
+    
     var baseURL: String {
         return "https://api.vk.com"
     }
@@ -17,8 +18,7 @@ enum FriendsEndpoint: EndpointProtocol {
     }
     var parameters: [String : String] {
         return ["order" : "random",
-                "fields" : "nickname, photo_100",
-                "v" : "5.92"
+                "fields" : "nickname,photo_100"
         ]
     }
 }
