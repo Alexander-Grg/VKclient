@@ -19,18 +19,6 @@ class APIProvider<Endpoint: EndpointProtocol> {
             .eraseToAnyPublisher()
     }
     
-    func getPhotosData(from endpoint: Endpoint, id: String) -> AnyPublisher<Data, Error> {
-        guard let request = performRequest(for: endpoint) else {
-            return Fail(error: APIProviderErrors.invalidURL)
-                .eraseToAnyPublisher()
-        }
-
-        return loadData(with: request)
-            .eraseToAnyPublisher()
-    }
-    
-
-    
     // MARK: - Request building
     private func performRequest(for endpoint: Endpoint) -> URLRequest? {
         guard var urlComponents = URLComponents(string: endpoint.absoluteURL) else {
