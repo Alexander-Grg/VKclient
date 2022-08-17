@@ -25,14 +25,6 @@ enum PhotosEndpoint: EndpointProtocol {
     var absoluteURL: String {
         return baseURL + "/method/photos.get"
     }
-//    var parameters: [String : String] {
-//        return [
-//            "rev" : "1",
-//            "owner_id" : String(Session.instance.friendID),
-//            "album_id" : "profile",
-//            "offset" : "0",
-//            "photo_sizes" : "0"
-//        ]
-//    }
+
 }
 
