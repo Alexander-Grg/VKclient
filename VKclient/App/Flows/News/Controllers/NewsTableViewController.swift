@@ -44,10 +44,14 @@ class NewsTableViewController: UIViewController {
 
     let newsRequest = GetNews()
     var newsPost: [News]?
+//    {
+//        didSet {
+//            self.tableView.reloadData()
+//        }
+//    }
     var IDs = [Int]()
     var groupsForHeader: [Community] = []
     var usersForHeader: [User] = []
-    var nextFrom = ""
     var isLoading = false
 
     private(set) lazy var tableView: UITableView = {
@@ -58,11 +62,15 @@ class NewsTableViewController: UIViewController {
 
     private let textCellFont = UIFont(name: "Avenir-Light", size: 16.0)!
     private let defaultCellHeight: CGFloat = 200
-    private var nextNews: String = ""
+    private var nextFrom: String = ""
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.loadNews()
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.loadNews()
         self.setupTableView()
         tableView.prefetchDataSource = self
         tableView.dataSource = self
@@ -78,11 +86,11 @@ class NewsTableViewController: UIViewController {
     }
 
     private func loadNews() {
-        newsRequest.request { [weak self] newsPost, nextFrom  in
+        newsRequest.request(startFrom: nextFrom) { [weak self] newsPost, next  in
             guard let self = self else { return }
-            self.newsPost = newsPost
-            self.nextNews = nextFrom
             DispatchQueue.main.async {
+                self.newsPost = newsPost
+                self.nextFrom = next
                 self.tableView.reloadData()
             }
         }
@@ -162,7 +170,8 @@ extension NewsTableViewController: UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        switch newsPost?[indexPath.section].rowsCounter[indexPath.row] {
+        guard let news = newsPost else { return UITableView.automaticDimension}
+        switch news[indexPath.section].rowsCounter[indexPath.row] {
         case .header:
             return 75
         case .footer:
@@ -175,8 +184,6 @@ extension NewsTableViewController: UITableViewDataSource {
         case .text:
             let cell = tableView.cellForRow(at: indexPath) as? NewsTableViewCellPost
             return (cell?.isPressed ?? false) ? UITableView.automaticDimension : defaultCellHeight
-        default:
-            return UITableView.automaticDimension
         }
     }
 }
@@ -198,16 +205,16 @@ extension NewsTableViewController: UITableViewDataSourcePrefetching {
         if maxSections > newsItems.count - 3, !isLoading {
             isLoading = true
 
-            newsRequest.request(startFrom: nextNews) {[weak self] (news, nextFrom) in
+            newsRequest.request(startFrom: nextFrom) {[weak self] (news, nextFrom) in
                 guard let self = self else { return }
-
+                self.nextFrom = nextFrom
                 DispatchQueue.main.async {
                     let indexSet = IndexSet(integersIn: (self.newsPost?.count ?? 0) ..< ((self.newsPost?.count ?? 0) + news.count))
 
                     self.newsPost?.append(contentsOf: news)
                     print(news)
-
-                    self.nextNews = nextFrom
+                    
+                    
 
                     tableView.beginUpdates()
                     self.tableView.insertSections(indexSet, with: .automatic)

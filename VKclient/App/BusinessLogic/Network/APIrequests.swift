@@ -10,17 +10,17 @@ import Foundation
 final class GetFriends: NetworkService {
     func request(completion: @escaping (Result<[UserObject], RequestErrors>) -> Void) {
         constructor.path += "friends.get"
-//        constructor.queryItems?.append(contentsOf: [
-//            URLQueryItem(
-//                name: "order",
-//                value: "random"),
-//            URLQueryItem(
-//                name: "fields",
-//                value: "nickname, photo_100")
-//        ])
+        constructor.queryItems?.append(contentsOf: [
+            URLQueryItem(
+                name: "order",
+                value: "random"),
+            URLQueryItem(
+                name: "fields",
+                value: "nickname, photo_100")
+        ])
         
-        constructor.queryItems?.append(URLQueryItem(name: "order", value: "random"))
-        constructor.queryItems?.append(URLQueryItem(name: "fields", value: "nickname,photo_100"))
+//        constructor.queryItems?.append(URLQueryItem(name: "order", value: "random"))
+//        constructor.queryItems?.append(URLQueryItem(name: "fields", value: "nickname,photo_100"))
         dataTaskRequest { result in
             switch result {
             case .success(let data):
@@ -158,19 +158,22 @@ final class GetNews: NetworkService {
                  -> Void) {
         constructor.path += "newsfeed.get"
         
-        constructor.queryItems?.append(
+        constructor.queryItems?.append(contentsOf: [
             URLQueryItem(
-            name: "filters",
-            value: "post, photo"))
-        constructor.queryItems?.append(
+                name: "filters",
+                value: "post, photo"),
             URLQueryItem(
-            name: "count",
-            value: "20"))
-        constructor.queryItems?.append(
-            URLQueryItem(
+                name: "filters",
+                value: "post, photo")
+        ])
+        
+    
+            constructor.queryItems?.append( URLQueryItem(
                 name: "start_from",
                 value: startFrom))
         
+       
+
         if let startTime = startTime {
             constructor.queryItems?.append(URLQueryItem(name: "start_time", value: "\(startTime)"))
         }
