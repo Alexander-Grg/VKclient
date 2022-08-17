@@ -19,8 +19,6 @@ final class GetFriends: NetworkService {
                 value: "nickname, photo_100")
         ])
         
-//        constructor.queryItems?.append(URLQueryItem(name: "order", value: "random"))
-//        constructor.queryItems?.append(URLQueryItem(name: "fields", value: "nickname,photo_100"))
         dataTaskRequest { result in
             switch result {
             case .success(let data):
@@ -151,7 +149,6 @@ final class GetGroupSearch: NetworkService {
 }
 
 final class GetNews: NetworkService {
-    
     let dispatchGroup = DispatchGroup()
     
     func request(startFrom: String = "", startTime: Double? = nil, _ completion: @escaping ([News], String)
@@ -164,16 +161,12 @@ final class GetNews: NetworkService {
                 value: "post, photo"),
             URLQueryItem(
                 name: "filters",
-                value: "post, photo")
+                value: "post, photo"),
+            URLQueryItem(
+                name: "start_from",
+                value: startFrom)
         ])
         
-    
-            constructor.queryItems?.append( URLQueryItem(
-                name: "start_from",
-                value: startFrom))
-        
-       
-
         if let startTime = startTime {
             constructor.queryItems?.append(URLQueryItem(name: "start_time", value: "\(startTime)"))
         }
