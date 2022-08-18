@@ -12,7 +12,7 @@ enum NewsTypes {
     case text
     case header
     case footer
-
+    
     func rowsToDisplay() -> UITableViewCell.Type {
         switch self {
         case .photo:
@@ -25,7 +25,7 @@ enum NewsTypes {
             return NewsHeaderSection.self
         }
     }
-
+    
     var cellIdentifiersForRows: String {
         switch self {
         case .photo:
@@ -40,72 +40,66 @@ enum NewsTypes {
     }
 }
 
-class NewsTableViewController: UIViewController {
-
-    let newsRequest = GetNews()
-    var newsPost: [News]?
-//    {
-//        didSet {
-//            self.tableView.reloadData()
-//        }
-//    }
-    var IDs = [Int]()
-    var groupsForHeader: [Community] = []
-    var usersForHeader: [User] = []
-    var isLoading = false
-
+final class NewsTableViewController: UIViewController {
+    private let newsService = NewsService()
+    private let textCellFont = UIFont(name: "Avenir-Light", size: 16.0)!
+    private let defaultCellHeight: CGFloat = 200
+    private var newsPost: [News] = []
+    private var nextNews = ""
+    private var isLoading = false
+    
     private(set) lazy var tableView: UITableView = {
         let table = UITableView()
-
+        
         return table
     }()
 
-    private let textCellFont = UIFont(name: "Avenir-Light", size: 16.0)!
-    private let defaultCellHeight: CGFloat = 200
-    private var nextFrom: String = ""
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        self.loadNews()
-    }
-
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.loadNews()
         self.setupTableView()
         tableView.prefetchDataSource = self
         tableView.dataSource = self
         tableView.delegate = self
-
+        
         configRefreshControl()
-
+        
         self.tableView.register(NewsHeaderSection.self, forCellReuseIdentifier: NewsHeaderSection.identifier)
         self.tableView.register(NewsTableViewCellPost.self, forCellReuseIdentifier: NewsTableViewCellPost.identifier)
         self.tableView.register(NewsTableViewCellPhoto.self, forCellReuseIdentifier: NewsTableViewCellPhoto.identifier)
         self.tableView.register(NewsFooterSection.self, forCellReuseIdentifier: NewsFooterSection.identifier)
-
+        
     }
-
+    
     private func loadNews() {
-        newsRequest.request(startFrom: nextFrom) { [weak self] newsPost, next  in
+        newsService.getNews { [weak self] news, nextFrom in
             guard let self = self else { return }
             DispatchQueue.main.async {
-                self.newsPost = newsPost
-                self.nextFrom = next
+                self.newsPost = news
+                self.nextNews = nextFrom
                 self.tableView.reloadData()
             }
         }
     }
-
+    
+    private func loadNextNews(startFrom: String, completion: @escaping ([News], String) -> Void) {
+        newsService.getNews(startFrom: startFrom) { newNews, nextFrom in
+            DispatchQueue.main.async {
+                completion(newNews, nextFrom)
+            }
+        }
+    }
+    
     private func setupTableView() {
         self.view.addSubview(tableView)
         tableView.translatesAutoresizingMaskIntoConstraints = false
-
+        
         tableView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
         tableView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
         tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         tableView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
     }
-
+    
     private func configRefreshControl() {
         let refresh = UIRefreshControl()
         refresh.addTarget(self,
@@ -113,11 +107,11 @@ class NewsTableViewController: UIViewController {
                           for: .valueChanged)
         tableView.refreshControl = refresh
     }
-
+    
     @objc private func didRefresh() {
         tableView.refreshControl?.beginRefreshing()
         _ = Date().timeIntervalSince1970 + 1
-
+        
         self.loadNews()
         DispatchQueue.main.async {
             self.tableView.refreshControl?.endRefreshing()
@@ -127,59 +121,58 @@ class NewsTableViewController: UIViewController {
 
 extension NewsTableViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        newsPost?[section].rowsCounter.count ?? 0
+        newsPost[section].rowsCounter.count
     }
-
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-
-        guard
-            let news = newsPost?[indexPath.section]
-        else { return NewsTableViewCellPost() }
-
+        
+        
+        let news = newsPost[indexPath.section]
+        
+        
         switch news.rowsCounter[indexPath.row] {
         case .header:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: NewsHeaderSection.identifier) as? NewsHeaderSection else { return NewsHeaderSection() }
             cell.configureCell(news)
-
+            
             return cell
         case .text:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: NewsTableViewCellPost.identifier) as? NewsTableViewCellPost else { return NewsTableViewCellPost() }
-
+            
             let textHeight = news.text.heightWithConstrainedWidth(width: tableView.frame.width, font: textCellFont)
             cell.configureCell(news, isTapped: textHeight > defaultCellHeight)
             cell.delegate = self
-
+            
             return cell
         case .photo:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: NewsTableViewCellPhoto.identifier) as? NewsTableViewCellPhoto else { return NewsTableViewCellPhoto() }
-
+            
             cell.configure(news)
-
+            
             return cell
         case .footer:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: NewsFooterSection.identifier) as? NewsFooterSection
             else { return NewsFooterSection() }
             cell.configureCell(news)
-
+            
             return cell
         }
     }
-
+    
     func numberOfSections(in tableView: UITableView) -> Int {
-        newsPost?.count ?? 0
+        newsPost.count
     }
-
+    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        guard let news = newsPost else { return UITableView.automaticDimension}
-        switch news[indexPath.section].rowsCounter[indexPath.row] {
+        switch newsPost[indexPath.section].rowsCounter[indexPath.row] {
         case .header:
             return 75
         case .footer:
             return 40
         case .photo:
             let tableWidth = tableView.bounds.width
-            guard let newsRatio = newsPost?[indexPath.section].aspectRatio else { return UITableView.automaticDimension }
-            let newsCGfloatRatio = CGFloat(newsRatio)
+            let ratio = newsPost[indexPath.section].aspectRatio
+            let newsCGfloatRatio = CGFloat(ratio)
             return newsCGfloatRatio * tableWidth
         case .text:
             let cell = tableView.cellForRow(at: indexPath) as? NewsTableViewCellPost
@@ -189,37 +182,35 @@ extension NewsTableViewController: UITableViewDataSource {
 }
 
 extension NewsTableViewController: UITableViewDelegate {
-
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         defer { tableView.deselectRow(at: indexPath, animated: true)}
     }
 }
 
 extension NewsTableViewController: UITableViewDataSourcePrefetching {
-
+    
     func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
-
+        
         guard let maxSections = indexPaths.map({ $0.section }).max() else { return }
-        guard let newsItems = self.newsPost else { return }
-
-        if maxSections > newsItems.count - 3, !isLoading {
+        
+        if maxSections > newsPost.count - 3, !isLoading {
             isLoading = true
-
-            newsRequest.request(startFrom: nextFrom) {[weak self] (news, nextFrom) in
-                guard let self = self else { return }
-                self.nextFrom = nextFrom
+            
+            self.loadNextNews(startFrom: nextNews) { news, nextFrom in
+                
                 DispatchQueue.main.async {
-                    let indexSet = IndexSet(integersIn: (self.newsPost?.count ?? 0) ..< ((self.newsPost?.count ?? 0) + news.count))
-
-                    self.newsPost?.append(contentsOf: news)
-                    print(news)
+                    let indexSet = IndexSet(integersIn: (self.newsPost.count) ..< ((self.newsPost.count) + news.count))
                     
+                    self.newsPost.append(contentsOf: news)
                     
-
+                    self.nextNews = nextFrom
+                    
                     tableView.beginUpdates()
                     self.tableView.insertSections(indexSet, with: .automatic)
                     tableView.endUpdates()
                     self.isLoading = false
+                    self.tableView.reloadData()
                 }
             }
         }
@@ -231,5 +222,4 @@ extension NewsTableViewController: NewsDelegate {
         tableView.beginUpdates()
         tableView.endUpdates()
     }
-
 }

@@ -8,20 +8,20 @@
 import UIKit
 import SDWebImage
 import RealmSwift
+import Combine
 
 class NewFriendsTableViewController: UIViewController, UISearchBarDelegate {
     private(set) lazy var tableView: UITableView = {
         let table = UITableView()
         return table
     }()
+    private var cancellable = Set<AnyCancellable>()
+    private let userService = UserService()
     var friendsFromRealm: Results<UserRealm>?
     var notificationFriends: NotificationToken?
-    var friendsNetworkLetters = [[UserObject]]()
     var dictOfUsers: [Character: [UserRealm]] = [:]
     var firstLetters = [Character]()
-    private var searchedFilterData: [UserObject] = []
-    private var searchedFiltedDataCharacters: [Character] = []
-    private var sectionTitles: [Character] = []
+    var networkValue: [UserObject] = []
 
     private(set) lazy var searchBar: UISearchBar = {
         let searchBar = UISearchBar()
@@ -60,6 +60,10 @@ class NewFriendsTableViewController: UIViewController, UISearchBarDelegate {
         }
         tableView.reloadData()
     }
+    
+//    override func viewWillAppear(_ animated: Bool) {
+//        fetchDataFromNetwork()
+//    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -75,33 +79,28 @@ class NewFriendsTableViewController: UIViewController, UISearchBarDelegate {
         fetchDataFromNetwork()
     }
 
-    private func fetchDataFromNetwork() {
-     
-        let networkService = GetFriends()
-        
-        networkService.request { [weak self] result in
-            guard let self = self else { return }
-            switch result {
-            case .success:
-                self.updatesFromRealm()
-                self.usersFilteredFromRealm(with: self.friendsFromRealm)
-                print("Data has been received")
-            case .failure(let requestError):
-                switch requestError {
-                case .decoderError:
-                    print("Decoder error")
-                case .requestFailed:
-                    print("Request failed")
-                case .invalidUrl:
-                    print("URL error")
-                case .realmError:
-                    print("Realm error")
-                case .unknownError:
-                    print("Unknown error")
-                }
-            }
-        }
+     func fetchDataFromNetwork() {
+         userService.requestUsers()
+             .decode(type: UserResponse.self, decoder: JSONDecoder())
+             .receive(on: DispatchQueue.main)
+             .sink(receiveCompletion: { [weak self] error in
+                 self?.friendsFromRealm = nil
+                 print(error)
+             }, receiveValue: { [weak self] value in
+                 self?.savingDataToRealm(value.response.items)
+                 self?.updatesFromRealm()
+                 self?.usersFilteredFromRealm(with: self?.friendsFromRealm)
+             }
+             )
+             .store(in: &cancellable)
     }
+    
+   private func savingDataToRealm(_ data: [UserObject]) {
+         do {
+             let dataRealm = data.map {UserRealm(user: $0)}
+             try? RealmService.save(items: dataRealm)
+         }
+     }
 
     private func updatesFromRealm() {
         friendsFromRealm = try? RealmService.get(type: UserRealm.self)
@@ -160,7 +159,6 @@ extension NewFriendsTableViewController: UITableViewDataSource {
         if let users = self.dictOfUsers[firstLetter] {
             cell.configure(users[indexPath.row])
         }
-
         return cell
     }
 
@@ -185,7 +183,6 @@ extension NewFriendsTableViewController: UITableViewDataSource {
             usersFilteredFromRealm(with: self.friendsFromRealm)
             return
         }
-
         usersFilteredFromRealm(with: self.friendsFromRealm?.filter("firstName CONTAINS[cd] %@ OR lastName CONTAINS[cd] %@", text, text))
     }
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
@@ -203,7 +200,6 @@ extension NewFriendsTableViewController: UITableViewDelegate {
             Session.instance.friendID = userID
             let viewController = PhotoViewController()
             self.navigationController?.pushViewController(viewController.self, animated: true)
-
         }
         defer { tableView.deselectRow(at: indexPath, animated: true)}
     }
