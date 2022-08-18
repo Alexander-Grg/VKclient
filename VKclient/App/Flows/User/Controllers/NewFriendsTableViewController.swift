@@ -159,7 +159,6 @@ extension NewFriendsTableViewController: UITableViewDataSource {
         if let users = self.dictOfUsers[firstLetter] {
             cell.configure(users[indexPath.row])
         }
-
         return cell
     }
 
@@ -184,7 +183,6 @@ extension NewFriendsTableViewController: UITableViewDataSource {
             usersFilteredFromRealm(with: self.friendsFromRealm)
             return
         }
-
         usersFilteredFromRealm(with: self.friendsFromRealm?.filter("firstName CONTAINS[cd] %@ OR lastName CONTAINS[cd] %@", text, text))
     }
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
@@ -202,7 +200,6 @@ extension NewFriendsTableViewController: UITableViewDelegate {
             Session.instance.friendID = userID
             let viewController = PhotoViewController()
             self.navigationController?.pushViewController(viewController.self, animated: true)
-
         }
         defer { tableView.deselectRow(at: indexPath, animated: true)}
     }
