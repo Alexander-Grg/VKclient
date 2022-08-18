@@ -7,6 +7,7 @@
 
 import UIKit
 import RealmSwift
+import Combine
 
 class PhotoViewController: UIViewController {
 
@@ -22,7 +23,9 @@ class PhotoViewController: UIViewController {
         static let spacing: CGFloat = 16.0
         static let itemHeight: CGFloat = 300.0
     }
-
+    
+    private var cancellable = Set<AnyCancellable>()
+    private let photosService = PhotosService()
     var friendID: Int = Session.instance.friendID
     var realmPhotos: Results<RealmPhotos>?
     var photosNotification: NotificationToken?
@@ -41,7 +44,7 @@ class PhotoViewController: UIViewController {
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         setupViews()
         setupLayouts()
-        updatesFromRealm()
+        requestPhotos()
 
         NSLayoutConstraint.activate([
             collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
@@ -50,59 +53,54 @@ class PhotoViewController: UIViewController {
             collectionView.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor)
         ])
     }
-
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-
-        let photoRequest = GetPhotos()
-
-        photoRequest.request(friendID) { [weak self] result in
+    
+    private func requestPhotos() {
+        photosService.requestPhotos(id: String(friendID))
+            .decode(type: PhotosResponse.self, decoder: JSONDecoder())
+            .receive(on: DispatchQueue.main)
+            .sink(receiveCompletion: { [weak self] error in
+                self?.realmPhotos = nil
+                print(error)
+            }, receiveValue: { [weak self] value in
+                DispatchQueue.main.async {
+                    self?.savingToRealm(value.response.items)
+                    self?.updatesFromRealm()
+                    self?.collectionView.reloadData()
+                }
+            }
+            )
+            .store(in: &cancellable)
+    }
+    
+    private func savingToRealm(_ value: [PhotosObject]) {
+        do {
+            let realm = value.map { RealmPhotos(photos: $0)}
+            try RealmService.save(items: realm)
+        } catch {
+            print("Saving to Realm failed")
+        }
+    }
+    
+    private func updatesFromRealm() {
+        do {
+            realmPhotos = try RealmService.get(type: RealmPhotos.self).filter(NSPredicate(format: "ownerID == %d", friendID))
+        } catch {
+            print("Loading from Realm error")
+        }
+           
+        photosNotification = realmPhotos?.observe { [weak self] changes in
             guard let self = self else { return }
-            switch result {
-            case .success(let photos):
-                try? RealmService.save(items: photos)
+            switch changes {
+            case .initial:
+                break
+            case .update:
                 self.collectionView.reloadData()
-            case .failure:
-                print("Data has already been saved to Realm")
+            case let .error(error):
+                print(error)
             }
         }
     }
-    private func updatesFromRealm() {
-        do {
-        realmPhotos = try RealmService.load(
-            typeOf: RealmPhotos.self)
-        .filter(NSPredicate(format: "ownerID == %d", friendID))
-    } catch {
-print("Realm Error")
-    }
-        photosNotification = realmPhotos?.observe(on: .main, { realmChange in
-            switch realmChange {
-            case .initial(let objects):
-                if objects.count > 0 {
-                    //                self.groupsfromRealm = objects
-                    self.collectionView.reloadData()
-                }
-                print(objects)
-            case let .update(_, deletions, insertions, modifications ):
-                self.collectionView.performBatchUpdates {
-                    let delete = deletions.map {IndexPath(
-                        item: $0,
-                        section: 0) }
-                    self.collectionView.deleteItems(at: delete)
-                    let insert = insertions.map { IndexPath(
-                        item: $0,
-                        section: 0) }
-                    self.collectionView.insertItems(at: insert)
-                    let modify = modifications.map { IndexPath(
-                        item: $0,
-                        section: 0) }
-                    self.collectionView.reloadItems(at: modify)
-                }
-            case .error(let error):
-                print(error)
-            }
-        })
-    }
+ 
     private func setupViews() {
         view.backgroundColor = .white
         view.addSubview(collectionView)
@@ -131,11 +129,10 @@ extension PhotoViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView,
                         cellForItemAt indexPath: IndexPath)
     -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(
+         let cell = collectionView.dequeueReusableCell(
             withReuseIdentifier: PhotosCollectionViewCell.identifier,
-            for: indexPath) as? PhotosCollectionViewCell,
-              let photosFromDB = realmPhotos else { return UICollectionViewCell()}
-        cell.profileImageView.sd_setImage(with: URL(string: photosFromDB[indexPath.row].sizes["x"]!))
+            for: indexPath) as! PhotosCollectionViewCell
+        cell.profileImageView.sd_setImage(with: URL(string: realmPhotos?[indexPath.row].sizes["x"]! ?? ""))
         return cell
     }
 }
