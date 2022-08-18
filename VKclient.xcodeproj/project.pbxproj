@@ -152,7 +152,7 @@
 		620CAE2E270899810090CB77 /* Network */ = {
 			isa = PBXGroup;
 			children = (
-				62962C3528AA74CA00A59927 /* NewNetwork */,
+				62962C3528AA74CA00A59927 /* Network */,
 				627C314A2859DE4900C9D2A8 /* Realm */,
 				62BA53FE2704AFB5000F790A /* SessionSingleton.swift */,
 			);
@@ -491,7 +491,7 @@
 			path = customNavigatorController;
 			sourceTree = "<group>";
 		};
-		62962C3528AA74CA00A59927 /* NewNetwork */ = {
+		62962C3528AA74CA00A59927 /* Network */ = {
 			isa = PBXGroup;
 			children = (
 				6200E5B528ABAD090040A00B /* Services */,
@@ -499,7 +499,7 @@
 				62962C3628AA74DF00A59927 /* APIError.swift */,
 				62962C3828AA74F800A59927 /* APIProvider.swift */,
 			);
-			path = NewNetwork;
+			path = Network;
 			sourceTree = "<group>";
 		};
 		62962C3C28AA751C00A59927 /* Endpoints */ = {
