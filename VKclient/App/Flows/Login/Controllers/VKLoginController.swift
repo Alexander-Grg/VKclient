@@ -9,9 +9,6 @@ import UIKit
 import WebKit
 
 class VKLoginController: UIViewController, WKUIDelegate {
-    
-    let viewModel = VKLoginViewModel()
-
     private(set) lazy var webView: WKWebView = {
         let webConfiguration = WKWebViewConfiguration()
         let webView = WKWebView(frame: .zero, configuration: webConfiguration)

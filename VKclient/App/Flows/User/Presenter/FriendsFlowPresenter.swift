@@ -11,24 +11,31 @@ import RealmSwift
 import UIKit
 
 protocol FriendsFlowViewInput: AnyObject {
-    
+    func updateTableView()
+    func buttonDidPress()
 }
 
 protocol FriendsFlowViewOutput: AnyObject {
-    
+    var dictOfUsers: [Character: [UserRealm]] { get }
+    var firstLetters: [Character] { get }
+    func fetchData()
+    func logout()
+    func didSearch(search: String)
+    func goNextScreen(index: IndexPath)
 }
 
 final class FriendsFlowPresenter {
     private var cancellable = Set<AnyCancellable>()
     private let userService = UserService()
-    var friendsFromRealm: Results<UserRealm>?
-    var notificationFriends: NotificationToken?
-    var dictOfUsers: [Character: [UserRealm]] = [:]
-    var firstLetters = [Character]()
-    var networkValue: [UserObject] = []
+    private var friendsFromRealm: Results<UserRealm>?
+    private var notificationFriends: NotificationToken?
+    internal var dictOfUsers: [Character: [UserRealm]] = [:]
+    internal var firstLetters = [Character]()
+    
+    weak var viewInput: (UIViewController & FriendsFlowViewInput)?
     
     // MARK: - Function for tableView sections
-        private func usersFilteredFromRealm(with friends: Results<UserRealm>?) {
+    internal func usersFilteredFromRealm(with friends: Results<UserRealm>?) {
             self.dictOfUsers.removeAll()
             self.firstLetters.removeAll()
 
@@ -45,10 +52,9 @@ final class FriendsFlowPresenter {
                 }
                 self.firstLetters.sort()
             }
-            tableView.reloadData()
         }
     
-    func fetchDataFromNetwork() {
+    private func fetchDataFromNetwork() {
         userService.requestUsers()
             .decode(type: UserResponse.self, decoder: JSONDecoder())
             .receive(on: DispatchQueue.main)
@@ -56,21 +62,22 @@ final class FriendsFlowPresenter {
                 print(error)
             }, receiveValue: { [weak self] value in
                 self?.savingDataToRealm(value.response.items)
-                self?.updatesFromRealm()
                 self?.usersFilteredFromRealm(with: self?.friendsFromRealm)
+                
+                
             }
             )
             .store(in: &cancellable)
    }
    
-  private func savingDataToRealm(_ data: [UserObject]) {
+    internal func savingDataToRealm(_ data: [UserObject]) {
         do {
             let dataRealm = data.map {UserRealm(user: $0)}
             try? RealmService.save(items: dataRealm)
         }
     }
 
-   private func updatesFromRealm() {
+    internal func updatesFromRealm() {
        friendsFromRealm = try? RealmService.get(type: UserRealm.self)
 
        notificationFriends = friendsFromRealm?.observe { [weak self] changes in
@@ -79,25 +86,51 @@ final class FriendsFlowPresenter {
            case .initial:
                break
            case .update:
-               self.tableView.reloadData()
+               self.viewInput?.updateTableView()
            case let .error(error):
                print(error)
            }
        }
    }
     
-    func openFriendsPhotos(indexPath: IndexPath, navigationController: UINavigationController) {
+    internal func filterFriends(with text: String) {
+        guard !text.isEmpty else {
+            usersFilteredFromRealm(with: self.friendsFromRealm)
+            return
+        }
+        usersFilteredFromRealm(with: self.friendsFromRealm?.filter("firstName CONTAINS[cd] %@ OR lastName CONTAINS[cd] %@", text, text))
+        self.viewInput?.updateTableView()
+    }
+    
+     private func openFriendsPhotos(indexPath: IndexPath) {
         let firstLetter = self.firstLetters[indexPath.section]
         if let users = self.dictOfUsers[firstLetter] {
             let userID = users[indexPath.row].id
             Session.instance.friendID = userID
             let viewController = PhotoViewController()
-            navigationController.pushViewController(viewController.self, animated: true)
+            self.viewInput?.navigationController?.pushViewController(viewController.self, animated: true)
         }
     }
-
+    
+    func logout() {
+        let loginVC = LoginViewController()
+        viewInput?.view.window?.rootViewController = loginVC
+        viewInput?.view.window?.makeKeyAndVisible()
+    }
 }
 
 extension FriendsFlowPresenter: FriendsFlowViewOutput {
     
+    func fetchData() {
+        self.fetchDataFromNetwork()
+        self.updatesFromRealm()
+    }
+    
+    func didSearch(search: String) {
+        self.filterFriends(with: search)
+    }
+    
+    func goNextScreen(index: IndexPath) {
+        self.openFriendsPhotos(indexPath: index)
+    }
 }
