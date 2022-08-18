@@ -9,6 +9,8 @@ import UIKit
 import WebKit
 
 class VKLoginController: UIViewController, WKUIDelegate {
+    
+    let viewModel = VKLoginViewModel()
 
     private(set) lazy var webView: WKWebView = {
         let webConfiguration = WKWebViewConfiguration()
@@ -19,15 +21,12 @@ class VKLoginController: UIViewController, WKUIDelegate {
         return webView
     }()
 
-    private var window: UIWindow?
-    private var appStartManager: AppStartManager?
-
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setupUI()
         loadWebView()
-    }
-
+        }
+    
     func loadWebView() {
         var components = URLComponents()
         components.scheme = "https"
@@ -45,7 +44,7 @@ class VKLoginController: UIViewController, WKUIDelegate {
         let request = URLRequest(url: components.url!)
         webView.load(request)
     }
-
+    
     func setupUI() {
         self.view.backgroundColor = .white
         self.view.addSubview(webView)
@@ -63,7 +62,6 @@ class VKLoginController: UIViewController, WKUIDelegate {
         ])
     }
 }
-
 extension VKLoginController: WKNavigationDelegate {
     func webView(_ webView: WKWebView,
                  decidePolicyFor navigationResponse: WKNavigationResponse,
