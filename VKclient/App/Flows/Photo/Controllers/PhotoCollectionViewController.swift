@@ -58,8 +58,7 @@ class PhotoViewController: UIViewController {
         photosService.requestPhotos(id: String(friendID))
             .decode(type: PhotosResponse.self, decoder: JSONDecoder())
             .receive(on: DispatchQueue.main)
-            .sink(receiveCompletion: { [weak self] error in
-                self?.realmPhotos = nil
+            .sink(receiveCompletion: { error in
                 print(error)
             }, receiveValue: { [weak self] value in
                 DispatchQueue.main.async {

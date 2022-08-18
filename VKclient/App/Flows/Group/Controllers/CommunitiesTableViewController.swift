@@ -95,8 +95,7 @@ class CommunitiesTableViewController: UITableViewController, UISearchBarDelegate
         groupService.requestGroups()
             .decode(type: GroupsResponse.self, decoder: JSONDecoder())
             .receive(on: DispatchQueue.main)
-            .sink(receiveCompletion: { [weak self] error in
-                self?.groupsfromRealm = nil
+            .sink(receiveCompletion: { error in
                 print(error)
             }, receiveValue: { [weak self] value in
                 self?.savingDataToRealm(value.response.items)
