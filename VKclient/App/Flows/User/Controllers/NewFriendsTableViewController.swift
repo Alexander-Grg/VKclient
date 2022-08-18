@@ -83,8 +83,7 @@ class NewFriendsTableViewController: UIViewController, UISearchBarDelegate {
          userService.requestUsers()
              .decode(type: UserResponse.self, decoder: JSONDecoder())
              .receive(on: DispatchQueue.main)
-             .sink(receiveCompletion: { [weak self] error in
-                 self?.friendsFromRealm = nil
+             .sink(receiveCompletion: { error in
                  print(error)
              }, receiveValue: { [weak self] value in
                  self?.savingDataToRealm(value.response.items)
@@ -184,9 +183,11 @@ extension NewFriendsTableViewController: UITableViewDataSource {
             return
         }
         usersFilteredFromRealm(with: self.friendsFromRealm?.filter("firstName CONTAINS[cd] %@ OR lastName CONTAINS[cd] %@", text, text))
+        self.tableView.reloadData()
     }
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         filterFriends(with: searchText)
+        
     }
 }
 
