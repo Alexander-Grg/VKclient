@@ -9,12 +9,12 @@ import Foundation
 import RealmSwift
 
 struct PhotosResponse: Codable {
-    let response: Response
+    var response: Response
 }
 
 struct Response: Codable {
     var count: Int = 0
-    let items: [PhotosObject]
+    var items: [PhotosObject]
 }
 
 struct PhotosObject: Codable, NewsSource {
