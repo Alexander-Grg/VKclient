@@ -6,14 +6,13 @@
 //
 
 import Foundation
-
-struct UserResponse: Decodable {
-    let response: NextResponse
+ UserResponse: Decodable {
+    var response: NextResponse
 }
 
 struct NextResponse: Decodable {
-    let count: Int
-    let items: [UserObject]
+    var count: Int
+    var items: [UserObject]
     }
 
 

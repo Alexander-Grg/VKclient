@@ -18,7 +18,7 @@ extension NewsSource {
 }
 
 struct NewsResponse: Codable {
-    let response: Newsfeed
+    var response: Newsfeed
 }
 
 struct Newsfeed: Codable {
