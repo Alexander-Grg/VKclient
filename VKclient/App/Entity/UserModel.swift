@@ -6,7 +6,7 @@
 //
 
 import Foundation
- UserResponse: Decodable {
+ struct UserResponse: Decodable {
     var response: NextResponse
 }
 
