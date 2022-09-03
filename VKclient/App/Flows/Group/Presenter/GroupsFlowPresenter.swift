@@ -116,7 +116,7 @@ final class GroupsFlowPresenter {
     }
     
     private func toTheGroupSearch() {
-        let nextVC = GroupsSearchTableViewController()
+        let nextVC = SearchGroupsFlowBuilder.build()
         self.viewInput?.navigationController?.pushViewController(nextVC, animated: true)
     }
     

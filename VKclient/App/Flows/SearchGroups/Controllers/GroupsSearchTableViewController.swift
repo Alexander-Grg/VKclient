@@ -9,14 +9,8 @@ import UIKit
 import Combine
 
 class GroupsSearchTableViewController: UITableViewController, UISearchBarDelegate {
-    private var cancellable = Set<AnyCancellable>()
-    private let groupsSearchService = GroupSearchService()
+    private let presenter: SearchGroupsFlowViewOutput
     
-    var groupsHolder = [GroupsObjects]() {
-        didSet {
-            self.tableView.reloadData()
-        }
-    }
     private(set) lazy var search: UISearchBar = {
         let search = UISearchBar()
         search.searchBarStyle = .default
@@ -24,6 +18,15 @@ class GroupsSearchTableViewController: UITableViewController, UISearchBarDelegat
         
         return search
     }()
+    
+    init(presenter: SearchGroupsFlowViewOutput) {
+        self.presenter = presenter
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,7 +36,7 @@ class GroupsSearchTableViewController: UITableViewController, UISearchBarDelegat
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return groupsHolder.count
+        return self.presenter.groupsHolder.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -41,7 +44,7 @@ class GroupsSearchTableViewController: UITableViewController, UISearchBarDelegat
             withIdentifier: GroupsSearchCell.identifier,
             for: indexPath) as! GroupsSearchCell
         
-        cell.configureCell(groupsHolder[indexPath.row])
+        cell.configureCell(self.presenter.groupsHolder[indexPath.row])
         
         return cell
     }
@@ -50,19 +53,12 @@ class GroupsSearchTableViewController: UITableViewController, UISearchBarDelegat
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        if searchText.isEmpty {
-            self.groupsHolder.removeAll()
-        } else {
-            groupsSearchService.requestGroupsSearch(search: searchText)
-                .decode(type: GroupsResponse.self, decoder: JSONDecoder())
-                .receive(on: DispatchQueue.main)
-                .sink(receiveCompletion: { [weak self] error in
-                    print(error)
-                }, receiveValue: { [weak self] value in
-                    self?.groupsHolder = value.response.items
-                }
-                )
-                .store(in: &cancellable)
-        }
+        self.presenter.didSearch(searchText)
+    }
+}
+
+extension GroupsSearchTableViewController: SearchGroupsFlowViewInput {
+    func updateTableView() {
+        self.tableView.reloadData()
     }
 }
