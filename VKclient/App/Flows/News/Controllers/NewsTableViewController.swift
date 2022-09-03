@@ -7,56 +7,28 @@
 
 import UIKit
 
-enum NewsTypes {
-    case photo
-    case text
-    case header
-    case footer
-    
-    func rowsToDisplay() -> UITableViewCell.Type {
-        switch self {
-        case .photo:
-            return NewsTableViewCellPhoto.self
-        case .text:
-            return NewsTableViewCellPost.self
-        case .footer:
-            return NewsFooterSection.self
-        case .header:
-            return NewsHeaderSection.self
-        }
-    }
-    
-    var cellIdentifiersForRows: String {
-        switch self {
-        case .photo:
-            return NewsTableViewCellPhoto.identifier
-        case .text:
-            return  NewsTableViewCellPost.identifier
-        case .footer:
-            return NewsFooterSection.identifier
-        case .header:
-            return NewsHeaderSection.identifier
-        }
-    }
-}
-
 final class NewsTableViewController: UIViewController {
-    private let newsService = NewsService()
-    private let textCellFont = UIFont(name: "Avenir-Light", size: 16.0)!
-    private let defaultCellHeight: CGFloat = 200
-    private var newsPost: [News] = []
-    private var nextNews = ""
-    private var isLoading = false
-    
     private(set) lazy var tableView: UITableView = {
         let table = UITableView()
         
         return table
     }()
-
+    private let textCellFont = UIFont(name: "Avenir-Light", size: 16.0)!
+    private let defaultCellHeight: CGFloat = 200
+    private var presenter: NewsFlowViewOutput
+    
+    init(presenter: NewsFlowViewOutput) {
+        self.presenter = presenter
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.loadNews()
+        self.presenter.loadNews()
         self.setupTableView()
         tableView.prefetchDataSource = self
         tableView.dataSource = self
@@ -71,35 +43,6 @@ final class NewsTableViewController: UIViewController {
         
     }
     
-    private func loadNews() {
-        newsService.getNews { [weak self] news, nextFrom in
-            guard let self = self else { return }
-            DispatchQueue.main.async {
-                self.newsPost = news
-                self.nextNews = nextFrom
-                self.tableView.reloadData()
-            }
-        }
-    }
-    
-    private func loadNextNews(startFrom: String, completion: @escaping ([News], String) -> Void) {
-        newsService.getNews(startFrom: startFrom) { newNews, nextFrom in
-            DispatchQueue.main.async {
-                completion(newNews, nextFrom)
-            }
-        }
-    }
-    
-    private func setupTableView() {
-        self.view.addSubview(tableView)
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-        
-        tableView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-        tableView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
-        tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
-        tableView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
-    }
-    
     private func configRefreshControl() {
         let refresh = UIRefreshControl()
         refresh.addTarget(self,
@@ -112,22 +55,32 @@ final class NewsTableViewController: UIViewController {
         tableView.refreshControl?.beginRefreshing()
         _ = Date().timeIntervalSince1970 + 1
         
-        self.loadNews()
+        self.presenter.loadNews()
         DispatchQueue.main.async {
             self.tableView.refreshControl?.endRefreshing()
         }
+    }
+    
+    private func setupTableView() {
+        self.view.addSubview(tableView)
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        
+        tableView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        tableView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
+        tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        tableView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
     }
 }
 
 extension NewsTableViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        newsPost[section].rowsCounter.count
+        self.presenter.newsPost[section].rowsCounter.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         
-        let news = newsPost[indexPath.section]
+        let news = self.presenter.newsPost[indexPath.section]
         
         
         switch news.rowsCounter[indexPath.row] {
@@ -160,18 +113,18 @@ extension NewsTableViewController: UITableViewDataSource {
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        newsPost.count
+        self.presenter.newsPost.count
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        switch newsPost[indexPath.section].rowsCounter[indexPath.row] {
+        switch self.presenter.newsPost[indexPath.section].rowsCounter[indexPath.row] {
         case .header:
             return 75
         case .footer:
             return 40
         case .photo:
             let tableWidth = tableView.bounds.width
-            let ratio = newsPost[indexPath.section].aspectRatio
+            let ratio = self.presenter.newsPost[indexPath.section].aspectRatio
             let newsCGfloatRatio = CGFloat(ratio)
             return newsCGfloatRatio * tableWidth
         case .text:
@@ -194,22 +147,23 @@ extension NewsTableViewController: UITableViewDataSourcePrefetching {
         
         guard let maxSections = indexPaths.map({ $0.section }).max() else { return }
         
-        if maxSections > newsPost.count - 3, !isLoading {
-            isLoading = true
+        if maxSections > self.presenter.newsPost.count - 3, self.presenter.isLoading == false {
+            self.presenter.isLoading = true
             
-            self.loadNextNews(startFrom: nextNews) { news, nextFrom in
+            self.presenter.loadNextData(startFrom: self.presenter.nextNews) { news, nextFrom in
+                
                 
                 DispatchQueue.main.async {
-                    let indexSet = IndexSet(integersIn: (self.newsPost.count) ..< ((self.newsPost.count) + news.count))
+                    let indexSet = IndexSet(integersIn: (self.presenter.newsPost.count) ..< ((self.presenter.newsPost.count) + news.count))
                     
-                    self.newsPost.append(contentsOf: news)
+                    self.presenter.newsPost.append(contentsOf: news)
                     
-                    self.nextNews = nextFrom
+                    self.presenter.nextNews = nextFrom
                     
                     tableView.beginUpdates()
                     self.tableView.insertSections(indexSet, with: .automatic)
                     tableView.endUpdates()
-                    self.isLoading = false
+                    self.presenter.isLoading = false
                     self.tableView.reloadData()
                 }
             }
@@ -221,5 +175,11 @@ extension NewsTableViewController: NewsDelegate {
     func buttonTapped(cell: NewsTableViewCellPost) {
         tableView.beginUpdates()
         tableView.endUpdates()
+    }
+}
+
+extension NewsTableViewController: NewsFlowViewInput {
+    func updateTableView() {
+        self.tableView.reloadData()
     }
 }

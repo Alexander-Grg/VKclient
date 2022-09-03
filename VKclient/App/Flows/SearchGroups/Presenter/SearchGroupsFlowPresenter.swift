@@ -9,11 +9,11 @@ import Foundation
 import UIKit
 import Combine
 
-protocol SearchGroupsFlowViewInput {
+protocol SearchGroupsFlowViewInput: AnyObject {
     func updateTableView()
 }
 
-protocol SearchGroupsFlowViewOutput {
+protocol SearchGroupsFlowViewOutput: AnyObject {
     var groupsHolder: [GroupsObjects] { get }
     func didSearch(_ searchText: String)
 }

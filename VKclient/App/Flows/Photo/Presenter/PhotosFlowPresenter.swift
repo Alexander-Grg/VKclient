@@ -10,11 +10,11 @@ import RealmSwift
 import UIKit
 import Combine
 
-protocol PhotosFlowViewInput {
+protocol PhotosFlowViewInput: AnyObject {
     func updateTableView()
 }
 
-protocol PhotosFlowViewOutput {
+protocol PhotosFlowViewOutput: AnyObject {
     var realmPhotos: Results<RealmPhotos>? { get }
     func fetchData()
     func dataUpdates()
