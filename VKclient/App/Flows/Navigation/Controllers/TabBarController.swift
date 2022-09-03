@@ -26,11 +26,11 @@ class TabBarController: UIViewController {
         tabTwo.title = "Groups"
         tabTwo.tabBarItem = UITabBarItem(title: "Groups", image: UIImage(systemName: "rectangle.3.group.bubble.left"), selectedImage: UIImage(systemName: "rectangle.3.group.bubble.left.fill"))
 
-        let tabThree = NewsTableViewController()
+        let tabThree = NewsFlowBuilder.build()
         tabThree.title = "News"
         tabThree.tabBarItem = UITabBarItem(title: "News", image: UIImage(systemName: "newspaper"), selectedImage: UIImage(systemName: "newspaper.fill"))
 
-        let controllerArray = [tabOne, tabTwo, tabThree]
+        let controllerArray: [UIViewController] = [tabOne, tabTwo, tabThree]
         tabBar.viewControllers = controllerArray.map { UINavigationController.init(rootViewController: $0)}
 
         self.view.addSubview(tabBar.view)
