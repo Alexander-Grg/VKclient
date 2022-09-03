@@ -18,19 +18,19 @@ class TabBarController: UIViewController {
     }
 
     func createTabBar() {
-        let tabOne = NewFriendsTableViewController()
+        let tabOne = FriendsFlowModuleBuilder.build()
         tabOne.title = "Friends"
         tabOne.tabBarItem = UITabBarItem(title: "Friends", image: UIImage(systemName: "person.3"), selectedImage: UIImage(systemName: "person.3.fill"))
 
-        let tabTwo = CommunitiesTableViewController()
+        let tabTwo = GroupsFlowModuleBuilder.build()
         tabTwo.title = "Groups"
         tabTwo.tabBarItem = UITabBarItem(title: "Groups", image: UIImage(systemName: "rectangle.3.group.bubble.left"), selectedImage: UIImage(systemName: "rectangle.3.group.bubble.left.fill"))
 
-        let tabThree = NewsTableViewController()
+        let tabThree = NewsFlowBuilder.build()
         tabThree.title = "News"
         tabThree.tabBarItem = UITabBarItem(title: "News", image: UIImage(systemName: "newspaper"), selectedImage: UIImage(systemName: "newspaper.fill"))
 
-        let controllerArray = [tabOne, tabTwo, tabThree]
+        let controllerArray: [UIViewController] = [tabOne, tabTwo, tabThree]
         tabBar.viewControllers = controllerArray.map { UINavigationController.init(rootViewController: $0)}
 
         self.view.addSubview(tabBar.view)
