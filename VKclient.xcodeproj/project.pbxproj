@@ -337,8 +337,8 @@
 		627C31372859DB4800C9D2A8 /* News */ = {
 			isa = PBXGroup;
 			children = (
-				62C4856B28C3BA010006921D /* NewsFlowBuilder.swift */,
-				62C4856D28C3BA190006921D /* NewsFlowPresenter.swift */,
+				62C4856F28C3C7910006921D /* Builder */,
+				62C4857028C3C79A0006921D /* Presenter */,
 				627C31392859DB5300C9D2A8 /* Controllers */,
 				627C31382859DB4D00C9D2A8 /* Views */,
 			);
@@ -624,6 +624,22 @@
 			isa = PBXGroup;
 			children = (
 				62C4856528C388740006921D /* PhotosFlowPresenter.swift */,
+			);
+			path = Presenter;
+			sourceTree = "<group>";
+		};
+		62C4856F28C3C7910006921D /* Builder */ = {
+			isa = PBXGroup;
+			children = (
+				62C4856B28C3BA010006921D /* NewsFlowBuilder.swift */,
+			);
+			path = Builder;
+			sourceTree = "<group>";
+		};
+		62C4857028C3C79A0006921D /* Presenter */ = {
+			isa = PBXGroup;
+			children = (
+				62C4856D28C3BA190006921D /* NewsFlowPresenter.swift */,
 			);
 			path = Presenter;
 			sourceTree = "<group>";
