@@ -7,12 +7,10 @@
 
 import UIKit
 import SDWebImage
-import RealmSwift
-import Combine
 
 class NewFriendsTableViewController: UIViewController, UISearchBarDelegate {
     
-    private let presenter: FriendsFlowViewOutput
+   private let presenter: FriendsFlowViewOutput
     
    private(set) lazy var tableView: UITableView = {
         let table = UITableView()
@@ -36,9 +34,7 @@ class NewFriendsTableViewController: UIViewController, UISearchBarDelegate {
 
         return barItem
     }()
-                                      
-                                      
-    
+
 //    MARK: - LifeCycle
 
     init(presenter: FriendsFlowViewOutput) {
@@ -62,7 +58,13 @@ class NewFriendsTableViewController: UIViewController, UISearchBarDelegate {
         navigationItem.titleView?.tintColor = .systemBlue
         navigationItem.leftBarButtonItem = exitButton
         self.presenter.fetchData()
+        
     }
+    
+//    override func viewWillAppear(_ animated: Bool) {
+//        super.viewWillAppear(animated)
+//        self.presenter.updatesFromRealm()
+//    }
 
     private func setupTableView() {
         self.view.addSubview(tableView)
@@ -137,8 +139,6 @@ extension NewFriendsTableViewController: UIGestureRecognizerDelegate {
 }
     
 extension NewFriendsTableViewController: FriendsFlowViewInput {
-
-       
         func updateTableView() {
             self.tableView.reloadData()
         }
@@ -146,6 +146,5 @@ extension NewFriendsTableViewController: FriendsFlowViewInput {
       @objc func buttonDidPress() {
           self.presenter.logout()
         }
-        
     }
     

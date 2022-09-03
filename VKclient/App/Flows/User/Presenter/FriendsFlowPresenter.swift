@@ -10,11 +10,13 @@ import Combine
 import RealmSwift
 import UIKit
 
+//Refers to View
 protocol FriendsFlowViewInput: AnyObject {
     func updateTableView()
     func buttonDidPress()
 }
 
+//Refers to Presentor methods
 protocol FriendsFlowViewOutput: AnyObject {
     var dictOfUsers: [Character: [UserRealm]] { get }
     var firstLetters: [Character] { get }
@@ -35,7 +37,7 @@ final class FriendsFlowPresenter {
     weak var viewInput: (UIViewController & FriendsFlowViewInput)?
     
     // MARK: - Function for tableView sections
-    internal func usersFilteredFromRealm(with friends: Results<UserRealm>?) {
+     func usersFilteredFromRealm(with friends: Results<UserRealm>?) {
             self.dictOfUsers.removeAll()
             self.firstLetters.removeAll()
 
@@ -52,35 +54,34 @@ final class FriendsFlowPresenter {
                 }
                 self.firstLetters.sort()
             }
+         self.viewInput?.updateTableView()
         }
     
-    private func fetchDataFromNetwork() {
+     func fetchDataFromNetwork() {
         userService.requestUsers()
             .decode(type: UserResponse.self, decoder: JSONDecoder())
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { error in
                 print(error)
             }, receiveValue: { [weak self] value in
-                self?.savingDataToRealm(value.response.items)
-                self?.usersFilteredFromRealm(with: self?.friendsFromRealm)
-                
-                
+                guard let self = self else { return }
+                self.savingDataToRealm(value.response.items)
+                self.updatesFromRealm()
+                self.usersFilteredFromRealm(with: self.friendsFromRealm)
             }
             )
             .store(in: &cancellable)
    }
    
-    internal func savingDataToRealm(_ data: [UserObject]) {
-        do {
+     func savingDataToRealm(_ data: [UserObject]) {
             let dataRealm = data.map {UserRealm(user: $0)}
             try? RealmService.save(items: dataRealm)
-        }
     }
 
-    internal func updatesFromRealm() {
-       friendsFromRealm = try? RealmService.get(type: UserRealm.self)
+     func updatesFromRealm() {
+         self.friendsFromRealm = try? RealmService.get(type: UserRealm.self)
 
-       notificationFriends = friendsFromRealm?.observe { [weak self] changes in
+         self.notificationFriends = friendsFromRealm?.observe { [weak self] changes in
            guard let self = self else { return }
            switch changes {
            case .initial:
@@ -93,7 +94,7 @@ final class FriendsFlowPresenter {
        }
    }
     
-    internal func filterFriends(with text: String) {
+     func filterFriends(with text: String) {
         guard !text.isEmpty else {
             usersFilteredFromRealm(with: self.friendsFromRealm)
             return
@@ -102,7 +103,7 @@ final class FriendsFlowPresenter {
         self.viewInput?.updateTableView()
     }
     
-     private func openFriendsPhotos(indexPath: IndexPath) {
+      func openFriendsPhotos(indexPath: IndexPath) {
         let firstLetter = self.firstLetters[indexPath.section]
         if let users = self.dictOfUsers[firstLetter] {
             let userID = users[indexPath.row].id
@@ -123,7 +124,7 @@ extension FriendsFlowPresenter: FriendsFlowViewOutput {
     
     func fetchData() {
         self.fetchDataFromNetwork()
-        self.updatesFromRealm()
+//        self.updatesFromRealm()
     }
     
     func didSearch(search: String) {
