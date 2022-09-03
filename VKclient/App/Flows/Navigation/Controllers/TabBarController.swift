@@ -22,7 +22,7 @@ class TabBarController: UIViewController {
         tabOne.title = "Friends"
         tabOne.tabBarItem = UITabBarItem(title: "Friends", image: UIImage(systemName: "person.3"), selectedImage: UIImage(systemName: "person.3.fill"))
 
-        let tabTwo = CommunitiesTableViewController()
+        let tabTwo = GroupsFlowModuleBuilder.build()
         tabTwo.title = "Groups"
         tabTwo.tabBarItem = UITabBarItem(title: "Groups", image: UIImage(systemName: "rectangle.3.group.bubble.left"), selectedImage: UIImage(systemName: "rectangle.3.group.bubble.left.fill"))
 
