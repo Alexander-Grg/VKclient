@@ -18,7 +18,7 @@ class TabBarController: UIViewController {
     }
 
     func createTabBar() {
-        let tabOne = NewFriendsTableViewController()
+        let tabOne = FriendsFlowModuleBuilder.build()
         tabOne.title = "Friends"
         tabOne.tabBarItem = UITabBarItem(title: "Friends", image: UIImage(systemName: "person.3"), selectedImage: UIImage(systemName: "person.3.fill"))
 
