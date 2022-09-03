@@ -61,10 +61,10 @@ class NewFriendsTableViewController: UIViewController, UISearchBarDelegate {
         
     }
     
-//    override func viewWillAppear(_ animated: Bool) {
-//        super.viewWillAppear(animated)
-//        self.presenter.updatesFromRealm()
-//    }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.presenter.dataUpdates()
+    }
 
     private func setupTableView() {
         self.view.addSubview(tableView)
