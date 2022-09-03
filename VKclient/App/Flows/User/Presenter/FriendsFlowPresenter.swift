@@ -118,7 +118,7 @@ final class FriendsFlowPresenter {
         if let users = self.dictOfUsers[firstLetter] {
             let userID = users[indexPath.row].id
             Session.instance.friendID = userID
-            let viewController = PhotoViewController()
+            let viewController = PhotosFlowBuilder.build()
             self.viewInput?.navigationController?.pushViewController(viewController.self, animated: true)
         }
     }
