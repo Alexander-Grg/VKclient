@@ -62,6 +62,8 @@
 		62C4855C28C378630006921D /* GroupsFlowBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62C4855B28C378630006921D /* GroupsFlowBuilder.swift */; };
 		62C4856028C383130006921D /* SearchGroupsFlowPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62C4855F28C383130006921D /* SearchGroupsFlowPresenter.swift */; };
 		62C4856228C3832B0006921D /* SearchGroupsFlowBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62C4856128C3832B0006921D /* SearchGroupsFlowBuilder.swift */; };
+		62C4856628C388740006921D /* PhotosFlowPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62C4856528C388740006921D /* PhotosFlowPresenter.swift */; };
+		62C4856828C388810006921D /* PhotosFlowBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62C4856728C388810006921D /* PhotosFlowBuilder.swift */; };
 		62D3EB1E26E6A64B00B8F1A2 /* AvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62D3EB1D26E6A64B00B8F1A2 /* AvatarView.swift */; };
 		62E39E99277E03C5000215E0 /* NewsTableViewCellPost.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62E39E97277E03C5000215E0 /* NewsTableViewCellPost.swift */; };
 		62E56F3326D6742800F825A7 /* CommunitiesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62E56F3226D6742800F825A7 /* CommunitiesTableViewController.swift */; };
@@ -126,6 +128,8 @@
 		62C4855B28C378630006921D /* GroupsFlowBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupsFlowBuilder.swift; sourceTree = "<group>"; };
 		62C4855F28C383130006921D /* SearchGroupsFlowPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchGroupsFlowPresenter.swift; sourceTree = "<group>"; };
 		62C4856128C3832B0006921D /* SearchGroupsFlowBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchGroupsFlowBuilder.swift; sourceTree = "<group>"; };
+		62C4856528C388740006921D /* PhotosFlowPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotosFlowPresenter.swift; sourceTree = "<group>"; };
+		62C4856728C388810006921D /* PhotosFlowBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotosFlowBuilder.swift; sourceTree = "<group>"; };
 		62D3EB1D26E6A64B00B8F1A2 /* AvatarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvatarView.swift; sourceTree = "<group>"; };
 		62E39E97277E03C5000215E0 /* NewsTableViewCellPost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsTableViewCellPost.swift; sourceTree = "<group>"; };
 		62E56F3226D6742800F825A7 /* CommunitiesTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunitiesTableViewController.swift; sourceTree = "<group>"; };
@@ -408,6 +412,8 @@
 		627C31402859DC9F00C9D2A8 /* Photo */ = {
 			isa = PBXGroup;
 			children = (
+				62C4856928C3B9680006921D /* Builder */,
+				62C4856A28C3B96D0006921D /* Presenter */,
 				627C31422859DCAB00C9D2A8 /* Controllers */,
 				627C31412859DCA700C9D2A8 /* Views */,
 			);
@@ -608,6 +614,22 @@
 			path = Presenter;
 			sourceTree = "<group>";
 		};
+		62C4856928C3B9680006921D /* Builder */ = {
+			isa = PBXGroup;
+			children = (
+				62C4856728C388810006921D /* PhotosFlowBuilder.swift */,
+			);
+			path = Builder;
+			sourceTree = "<group>";
+		};
+		62C4856A28C3B96D0006921D /* Presenter */ = {
+			isa = PBXGroup;
+			children = (
+				62C4856528C388740006921D /* PhotosFlowPresenter.swift */,
+			);
+			path = Presenter;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -720,9 +742,11 @@
 				62317876271CB98A00A42097 /* RealmPhotos.swift in Sources */,
 				626610C2270CF15E0089C651 /* UserModel.swift in Sources */,
 				6281149D2833E74200E042D6 /* TabBarController.swift in Sources */,
+				62C4856828C388810006921D /* PhotosFlowBuilder.swift in Sources */,
 				62962C3E28AA754600A59927 /* FriendsEndpoint.swift in Sources */,
 				6200E5B928ABB25B0040A00B /* GroupsServiceProtocol.swift in Sources */,
 				62962C3728AA74DF00A59927 /* APIError.swift in Sources */,
+				62C4856628C388740006921D /* PhotosFlowPresenter.swift in Sources */,
 				6287BD9126D67AE90087D600 /* GroupsSearchTableViewController.swift in Sources */,
 				623AEA6E26F33EFD00F87BD5 /* NewsTableViewController.swift in Sources */,
 				62C4855A28C378530006921D /* GroupsFlowPresenter.swift in Sources */,
