@@ -137,7 +137,9 @@ extension FriendsFlowPresenter: FriendsFlowViewOutput {
     }
     
     func dataUpdates() {
-        self.updatesFromRealm()
+        DispatchQueue.main.async {
+            self.updatesFromRealm()
+        }
     }
     
     func didSearch(search: String) {

@@ -187,13 +187,6 @@
 			path = Presenter;
 			sourceTree = "<group>";
 		};
-		621AA0B928AE3A6D00CBBADC /* Builder */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Builder;
-			sourceTree = "<group>";
-		};
 		6249009E271C57250060FAA6 /* Realm models */ = {
 			isa = PBXGroup;
 			children = (
@@ -477,7 +470,6 @@
 		627C31482859DD6900C9D2A8 /* Assembly */ = {
 			isa = PBXGroup;
 			children = (
-				621AA0B928AE3A6D00CBBADC /* Builder */,
 				627C31492859DD9100C9D2A8 /* CustomElements */,
 				628E852D26FF874D00FB5FAE /* CustomTransition */,
 			);
