@@ -133,7 +133,9 @@ extension GroupsFlowPresenter: GroupsFlowViewOutput {
     }
     
     func dataUpdates() {
+        DispatchQueue.main.async {
         self.updatesFromRealm()
+        }
     }
     
     func didSearch(search: String) {

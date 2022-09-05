@@ -97,7 +97,9 @@ extension PhotosFlowPresenter: PhotosFlowViewOutput {
         self.fetchDataFromNetwork()
     }
     func dataUpdates() {
+        DispatchQueue.main.async {
         self.updatesFromRealm()
+        }
     }
     func goNextScreen(index: IndexPath) {
         self.openExtendedPhotoView(index)
