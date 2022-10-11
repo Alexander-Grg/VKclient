@@ -39,7 +39,9 @@ class VKLoginController: UIViewController, WKUIDelegate {
         ]
 
         let request = URLRequest(url: components.url!)
-        webView.load(request)
+        DispatchQueue.main.async {
+            self.webView.load(request)
+        }
     }
     
     func setupUI() {
