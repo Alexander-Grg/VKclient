@@ -8,10 +8,7 @@
 import Foundation
 import UIKit
 
-class TabBarController: UIViewController {
-
-    let tabBar = UITabBarController()
-
+class TabBarController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
         createTabBar()
@@ -31,8 +28,6 @@ class TabBarController: UIViewController {
         tabThree.tabBarItem = UITabBarItem(title: "News", image: UIImage(systemName: "newspaper"), selectedImage: UIImage(systemName: "newspaper.fill"))
 
         let controllerArray: [UIViewController] = [tabOne, tabTwo, tabThree]
-        tabBar.viewControllers = controllerArray.map { UINavigationController.init(rootViewController: $0)}
-
-        self.view.addSubview(tabBar.view)
+        self.viewControllers = controllerArray.map { UINavigationController.init(rootViewController: $0)}
     }
 }
