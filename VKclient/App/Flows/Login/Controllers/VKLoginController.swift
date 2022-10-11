@@ -39,9 +39,9 @@ class VKLoginController: UIViewController, WKUIDelegate {
         ]
 
         let request = URLRequest(url: components.url!)
-        DispatchQueue.main.async {
+//        DispatchQueue.main.async {
             self.webView.load(request)
-        }
+//        }
     }
     
     func setupUI() {
@@ -93,7 +93,7 @@ extension VKLoginController: WKNavigationDelegate {
 
         let next = LoginViewController()
         self.navigationController?.pushViewController(next, animated: true)
-
+        
         decisionHandler(.cancel)
     }
 }
