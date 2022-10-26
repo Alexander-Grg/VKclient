@@ -64,20 +64,25 @@ struct News: Codable {
     }
 
     var rowsCounter: [NewsTypes] {
+        
         var rowsCounter = [NewsTypes]()
-
+        
+        guard !text.isEmpty || attachmentPhotoUrl != nil else {
+            return rowsCounter
+        }
+        
         rowsCounter.append(.header)
-
+        
         if !text.isEmpty {
             rowsCounter.append(.text)
         }
-
+        
         if attachmentPhotoUrl != nil {
             rowsCounter.append(.photo)
         }
 
         rowsCounter.append(.footer)
-
+        
         return rowsCounter
     }
 
