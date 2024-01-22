@@ -7,6 +7,7 @@
 
 import Foundation
 import Combine
+import KeychainAccess
 
 class APIProvider<Endpoint: EndpointProtocol> {
     func getData(from endpoint: Endpoint) -> AnyPublisher<Data, Error> {
@@ -25,11 +26,13 @@ class APIProvider<Endpoint: EndpointProtocol> {
             return nil
         }
 
+        let keychainToken = try? Keychain().get("token")
+
         urlComponents.queryItems = endpoint.parameters.compactMap({ param -> URLQueryItem in
             return URLQueryItem(name: param.key, value: param.value)
         })
         
-        urlComponents.queryItems?.append(URLQueryItem(name: "access_token", value: Session.instance.token))
+        urlComponents.queryItems?.append(URLQueryItem(name: "access_token", value: keychainToken))
         urlComponents.queryItems?.append(URLQueryItem(name: "v", value: "5.131"))
         
         guard let url = urlComponents.url else {
