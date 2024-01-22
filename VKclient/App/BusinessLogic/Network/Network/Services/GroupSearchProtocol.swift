@@ -8,7 +8,11 @@
 import Foundation
 import Combine
 
-protocol GroupSearchProtocol {
+struct GroupsSearchKey: InjectionKey {
+   static var currentValue: GroupSearchProtocol = GroupSearchService()
+}
+
+protocol GroupSearchProtocol: AnyObject {
     func requestGroupsSearch(search: String) -> AnyPublisher<Data, Error>
 }
 

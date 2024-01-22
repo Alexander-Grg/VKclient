@@ -8,7 +8,11 @@
 import Foundation
 import Combine
 
-protocol NewsServiceProtocol {
+struct NewsServiceKey: InjectionKey {
+   static var currentValue: NewsServiceProtocol = NewsService()
+}
+
+protocol NewsServiceProtocol: AnyObject {
     func getNews(startFrom: String, startTime: Double?, _ completion: @escaping ([News], String)
                  -> Void)
 }

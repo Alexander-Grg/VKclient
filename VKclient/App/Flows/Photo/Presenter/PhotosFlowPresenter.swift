@@ -22,9 +22,8 @@ protocol PhotosFlowViewOutput: AnyObject {
 }
 
 final class PhotosFlowPresenter {
-    
+    @Injected (\.photosService) var photosService
     private var cancellable = Set<AnyCancellable>()
-    private let photosService = PhotosService()
     var friendID = Session.instance.friendID
     var realmPhotos: Results<RealmPhotos>?
     var photosNotification: NotificationToken?

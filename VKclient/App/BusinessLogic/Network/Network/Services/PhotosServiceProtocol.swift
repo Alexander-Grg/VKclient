@@ -8,7 +8,11 @@
 import Foundation
 import Combine
 
-protocol PhotosServiceProtocol {
+struct PhotosServiceKey: InjectionKey {
+   static var currentValue: PhotosServiceProtocol = PhotosService()
+}
+
+protocol PhotosServiceProtocol: AnyObject {
     func requestPhotos(id: String) -> AnyPublisher<Data, Error>
 }
 

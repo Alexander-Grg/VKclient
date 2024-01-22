@@ -25,19 +25,14 @@ protocol GroupsFlowViewOutput: AnyObject {
 }
 
 final class GroupsFlowPresenter {
+    @Injected (\.groupsService) var groupService: GroupsServiceProtocol
     private var cancellable = Set<AnyCancellable>()
-    private let groupService = GroupsService()
     var groupsfromRealm: Results<GroupsRealm>?
     var groupsNotification: NotificationToken?
     var dictOfGroups: [Character: [GroupsRealm]] = [:]
     var firstLetters = [Character]()
     weak var viewInput: (UIViewController & GroupsFlowViewInput)?
-//    private var groupsHolder = [GroupsObjects]() {
-//        didSet {
-//            self.viewInput?.updateTableView()
-//        }
-//    }
-    
+
     private func groupsFilteredFromRealm(with groups: Results<GroupsRealm>?) {
         self.dictOfGroups.removeAll()
         self.firstLetters.removeAll()
@@ -128,6 +123,7 @@ final class GroupsFlowPresenter {
 }
 
 extension GroupsFlowPresenter: GroupsFlowViewOutput {
+
     func fetchData() {
         self.fetchDataFromNetwork()
     }

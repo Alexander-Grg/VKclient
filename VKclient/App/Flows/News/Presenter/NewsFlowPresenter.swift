@@ -55,7 +55,7 @@ protocol NewsFlowViewOutput {
 }
 
 final class NewsFlowPresenter {
-    private let newsService = NewsService()
+    @Injected (\.newsService) var newsService
     internal var newsPost: [News] = []
     internal var nextNews = ""
     internal var isLoading = false
@@ -63,7 +63,7 @@ final class NewsFlowPresenter {
     weak var viewInput: (UIViewController & NewsFlowViewInput)?
     
     private func loadData() {
-        newsService.getNews { [weak self] news, nextFrom in
+        newsService.getNews(startFrom: "", startTime: nil) { [weak self] news, nextFrom in
             guard let self = self else { return }
             DispatchQueue.main.async {
                 self.newsPost = news
@@ -74,7 +74,7 @@ final class NewsFlowPresenter {
     }
     
     func loadNextData(startFrom: String, completion: @escaping ([News], String) -> Void) {
-        newsService.getNews(startFrom: startFrom) { newNews, nextFrom in
+        newsService.getNews(startFrom: startFrom, startTime: nil) { newNews, nextFrom in
             DispatchQueue.main.async {
                 completion(newNews, nextFrom)
             }

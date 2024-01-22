@@ -8,7 +8,11 @@
 import Foundation
 import Combine
 
-protocol GroupsServiceProtocol {
+ struct GroupsServiceKey: InjectionKey {
+    static var currentValue: GroupsServiceProtocol = GroupsService()
+}
+
+protocol GroupsServiceProtocol: AnyObject {
     func requestGroups() -> AnyPublisher<Data, Error>
 }
 
