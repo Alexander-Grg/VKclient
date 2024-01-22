@@ -8,9 +8,9 @@
 import UIKit
 import SDWebImage
 import RealmSwift
+import KeychainAccess
 
 class ExtendedPhotoViewController: UIViewController {
-    var friendID = Session.instance.friendID
     var indexOfSelectedPhoto: Int
     var arrayOfPhotosFromDB: [String]
     var leftImage: UIImageView!

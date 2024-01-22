@@ -9,6 +9,7 @@ import Foundation
 import Combine
 import RealmSwift
 import UIKit
+import KeychainAccess
 
 protocol FriendsFlowViewInput: AnyObject {
     func updateTableView()
@@ -117,7 +118,11 @@ final class FriendsFlowPresenter {
         let firstLetter = self.firstLetters[indexPath.section]
         if let users = self.dictOfUsers[firstLetter] {
             let userID = users[indexPath.row].id
-            Session.instance.friendID = userID
+            do {
+               try Keychain().set("\(userID)", key: "userID")
+            } catch let error as NSError {
+                print(error.localizedDescription)
+            }
             let viewController = PhotosFlowBuilder.build()
             self.viewInput?.navigationController?.pushViewController(viewController.self, animated: true)
         }

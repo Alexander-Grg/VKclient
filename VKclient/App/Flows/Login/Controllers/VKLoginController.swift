@@ -7,6 +7,7 @@
 
 import UIKit
 import WebKit
+import KeychainAccess
 
 class VKLoginController: UIViewController, WKUIDelegate {
     private(set) lazy var webView: WKWebView = {
@@ -88,8 +89,13 @@ extension VKLoginController: WKNavigationDelegate {
             decisionHandler(.allow)
             return
         }
+        let keychain = Keychain()
+        do {
+           try keychain.set(token, key: "token")
+        } catch let error as NSError {
+            print("\(error.localizedDescription)")
+        }
 
-        Session.instance.token = token
 
         let next = LoginViewController()
         self.navigationController?.pushViewController(next, animated: true)

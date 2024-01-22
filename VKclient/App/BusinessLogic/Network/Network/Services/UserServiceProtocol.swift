@@ -22,6 +22,5 @@ final class UserService: UserServiceProtocol {
     func requestUsers() -> AnyPublisher<Data, Error> {
         return apiProvider.getData(from: .getFriends)
             .eraseToAnyPublisher()
-            
     }
 }

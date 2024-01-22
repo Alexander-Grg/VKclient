@@ -9,6 +9,7 @@ import Foundation
 import RealmSwift
 import UIKit
 import Combine
+import KeychainAccess
 
 protocol PhotosFlowViewInput: AnyObject {
     func updateTableView()
@@ -24,7 +25,7 @@ protocol PhotosFlowViewOutput: AnyObject {
 final class PhotosFlowPresenter {
     @Injected (\.photosService) var photosService
     private var cancellable = Set<AnyCancellable>()
-    var friendID = Session.instance.friendID
+    var friendID = try? Keychain().get("userID")
     var realmPhotos: Results<RealmPhotos>?
     var photosNotification: NotificationToken?
     var photosForExtendedController: [String] = []
@@ -32,7 +33,7 @@ final class PhotosFlowPresenter {
     weak var viewInput: (UIViewController & PhotosFlowViewInput)?
     
     private func fetchDataFromNetwork() {
-        photosService.requestPhotos(id: String(friendID))
+        photosService.requestPhotos(id: friendID ?? "")
             .decode(type: PhotosResponse.self, decoder: JSONDecoder())
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { error in
@@ -57,8 +58,9 @@ final class PhotosFlowPresenter {
     }
     
     private func loadDataFromRealm() {
+        guard let intFriendID = Int(friendID ?? "") else { return }
         do {
-            self.realmPhotos = try RealmService.get(type: RealmPhotos.self).filter(NSPredicate(format: "ownerID == %d", friendID))
+            self.realmPhotos = try RealmService.get(type: RealmPhotos.self).filter(NSPredicate(format: "ownerID == %d", intFriendID))
         } catch {
             print("Loading from Realm error")
         }
