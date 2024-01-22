@@ -25,8 +25,8 @@ protocol FriendsFlowViewOutput: AnyObject {
 }
 
 final class FriendsFlowPresenter {
+    @Injected (\.userService) var userService
     private var cancellable = Set<AnyCancellable>()
-    private let userService = UserService()
     private var friendsFromRealm: Results<UserRealm>?
     private var notificationFriends: NotificationToken?
     internal var dictOfUsers: [Character: [UserRealm]] = [:]

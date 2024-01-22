@@ -8,7 +8,11 @@
 import Foundation
 import Combine
 
-protocol UserServiceProtocol {
+struct UserServiceKey: InjectionKey {
+   static var currentValue: UserServiceProtocol = UserService()
+}
+
+protocol UserServiceProtocol: AnyObject {
     func requestUsers() -> AnyPublisher<Data, Error>
 }
 

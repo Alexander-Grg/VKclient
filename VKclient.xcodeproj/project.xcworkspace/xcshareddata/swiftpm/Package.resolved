@@ -12,7 +12,7 @@
     {
       "identity" : "realm-swift",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/realm/realm-swift.git",
+      "location" : "https://github.com/realm/realm-swift",
       "state" : {
         "branch" : "master",
         "revision" : "f45856548a324259c629c37e0032a14db9d4aa87"
@@ -21,10 +21,10 @@
     {
       "identity" : "sdwebimage",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/SDWebImage/SDWebImage.git",
+      "location" : "https://github.com/SDWebImage/SDWebImage",
       "state" : {
-        "revision" : "3e48cb68d8e668d146dc59c73fb98cb628616236",
-        "version" : "5.13.2"
+        "revision" : "59730af512c06fb569c119d737df4c1c499e001d",
+        "version" : "5.18.10"
       }
     }
   ],

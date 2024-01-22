@@ -19,8 +19,8 @@ protocol SearchGroupsFlowViewOutput: AnyObject {
 }
 
 final class SearchGroupsFlowPresenter {
+    @Injected (\.groupsSearchService) var groupsSearchService
     private var cancellable = Set<AnyCancellable>()
-    private let groupsSearchService = GroupSearchService()
     var groupsHolder = [GroupsObjects]() {
         didSet {
             self.viewInput?.updateTableView()
