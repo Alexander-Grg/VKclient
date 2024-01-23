@@ -230,11 +230,11 @@
 			children = (
 				628114982833BD9C00E042D6 /* AppDelegate.swift */,
 				6281149A2833BDDF00E042D6 /* AppStartManager.swift */,
+				71259ADB2B5E7318005B3C03 /* DependencyInjection.swift */,
 				627C31482859DD6900C9D2A8 /* Assembly */,
 				627C31302859DAD200C9D2A8 /* Flows */,
 				627C312F2859DAA600C9D2A8 /* Entity */,
 				627C312E2859DA2100C9D2A8 /* BusinessLogic */,
-				71259ADB2B5E7318005B3C03 /* DependencyInjection.swift */,
 			);
 			path = App;
 			sourceTree = "<group>";

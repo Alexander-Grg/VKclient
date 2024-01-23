@@ -15,8 +15,8 @@ final class AppStartManager {
     }
     
     func start() {
-        let rootVC = VKLoginController()
-        
+        let rootVC = LoginViewController()
+
         let navVC = self.configuredNavigationController
         navVC.viewControllers = [rootVC]
         
