@@ -122,7 +122,7 @@ final class LoginView: UIView {
     }
     private func addSubviews() {
         self.addSubview(self.wallpaper)
-        self.addSubview(self.stackView)
+//        self.addSubview(self.stackView)
         self.addSubview(self.appName)
         self.addSubview(self.enterActionButton)
         self.addSubview(self.newUserActionButton)
@@ -140,8 +140,10 @@ final class LoginView: UIView {
             self.enterActionButton.topAnchor.constraint(equalTo: self.appName.bottomAnchor, constant: 50),
             self.newUserActionButton.centerXAnchor.constraint(equalTo: self.enterActionButton.centerXAnchor),
             self.newUserActionButton.topAnchor.constraint(equalTo: self.enterActionButton.bottomAnchor, constant: 25),
-            self.stackView.centerXAnchor.constraint(equalTo: self.newUserActionButton.centerXAnchor),
-            self.stackView.topAnchor.constraint(equalTo: self.newUserActionButton.bottomAnchor, constant: 20)
+//            self.stackView.centerXAnchor.constraint(equalTo: self.enterActionButton.centerXAnchor),
+//            self.stackView.topAnchor.constraint(equalTo: self.newUserActionButton.bottomAnchor, constant: 30),
+//            self.stackView.heightAnchor.constraint(equalToConstant: 30),
+//            self.stackView.widthAnchor.constraint(equalToConstant: 300)
 
         ])
     }
