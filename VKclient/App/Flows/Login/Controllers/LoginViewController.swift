@@ -6,9 +6,14 @@
 //
 
 import UIKit
+import SafariServices
 
 protocol LoginDelegate: AnyObject {
     func didTap(_ tap: Bool)
+}
+
+protocol RegistrationDelegate: AnyObject {
+    func didNewUserTap(_ tap: Bool)
 }
 
 class LoginViewController: UIViewController {
@@ -67,6 +72,7 @@ class LoginViewController: UIViewController {
         super.viewDidLoad()
         safeArea = view.layoutMarginsGuide
         loginView.loginDelegate = self
+        loginView.registrationDelegate = self
     }
     override func loadView() {
         self.view = loginView
@@ -86,12 +92,23 @@ class LoginViewController: UIViewController {
 }
 
 extension LoginViewController: LoginDelegate {
-
     func didTap(_ tap: Bool) {
         let nexVC = TabBarController()
         if tap == true {
             self.view.window?.rootViewController = nexVC
             self.view.window?.makeKeyAndVisible()
+        }
+    }
+}
+
+extension LoginViewController: RegistrationDelegate {
+    func didNewUserTap(_ tap: Bool) {
+        if tap == true {
+            if let url = URL(string: "https://vk.com/?lang=en") {
+                let safariController = SFSafariViewController(url: url)
+                safariController.configuration.entersReaderIfAvailable = true
+                present(safariController, animated: true)
+            }
         }
     }
 }

@@ -51,44 +51,31 @@ final class LoginView: UIView {
         return image
     }()
 
-    private(set) lazy var loginEntryField: UITextField = {
-        let text = UITextField()
-        text.translatesAutoresizingMaskIntoConstraints = false
-        text.placeholder = "Login"
-        text.font = .systemFont(ofSize: 17.0)
-        text.textColor = .black
-        text.textAlignment = .center
-        text.backgroundColor = .white
-        text.borderStyle = .roundedRect
-
-        return text
-    }()
-
-    private(set) lazy var passwordEntryField: UITextField = {
-        let text = UITextField()
-        text.translatesAutoresizingMaskIntoConstraints = false
-        text.placeholder = "Password"
-        text.font = .systemFont(ofSize: 17.0)
-        text.textColor = .black
-        text.textAlignment = .center
-        text.isSecureTextEntry = true
-        text.backgroundColor = .white
-        text.borderStyle = .roundedRect
-
-        return text
-    }()
-
     private(set) lazy var enterActionButton: UIButton = {
+        var button = UIButton(type: .custom)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        if #available(iOS 15.0, *) {
+            button.configuration = .bordered()
+        } else {
+        }
+        button.setTitleColor(UIColor.black, for: .normal)
+        button.setTitle("Sign in", for: .normal)
+        button.addTarget(self, action: #selector(self.buttonTap), for: .touchUpInside)
+        button.layer.cornerRadius = 4.0
+
+        return button
+    }()
+
+    private(set) lazy var newUserActionButton: UIButton = {
         let button = UIButton(type: .custom)
         button.translatesAutoresizingMaskIntoConstraints = false
         if #available(iOS 15.0, *) {
             button.configuration = UIButton.Configuration.gray()
         } else {
-            // Fallback on earlier versions
         }
         button.setTitleColor(UIColor.black, for: .normal)
-        button.setTitle("Enter", for: .normal)
-        button.addTarget(self, action: #selector(self.buttonTap), for: .touchUpInside)
+        button.setTitle("New here? Sign up!", for: .normal)
+        button.addTarget(self, action: #selector(self.newUserButtonTap), for: .touchUpInside)
         button.layer.cornerRadius = 4.0
 
         return button
@@ -116,6 +103,8 @@ final class LoginView: UIView {
         return stack
     }()
     weak var loginDelegate: LoginDelegate?
+    weak var registrationDelegate: RegistrationDelegate?
+
     // MARK: - Init
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -133,10 +122,10 @@ final class LoginView: UIView {
     }
     private func addSubviews() {
         self.addSubview(self.wallpaper)
-        self.addSubview(self.loginEntryField)
-        self.addSubview(self.passwordEntryField)
-        self.addSubview(self.enterActionButton)
+        self.addSubview(self.stackView)
         self.addSubview(self.appName)
+        self.addSubview(self.enterActionButton)
+        self.addSubview(self.newUserActionButton)
     }
     private func setupConstraints() {
         let safeArea = safeAreaLayoutGuide
@@ -147,24 +136,20 @@ final class LoginView: UIView {
             self.wallpaper.bottomAnchor.constraint(equalTo: self.bottomAnchor),
             self.appName.centerXAnchor.constraint(equalTo: safeArea.centerXAnchor),
             self.appName.topAnchor.constraint(equalTo: safeArea.topAnchor, constant: 150),
-            self.appName.bottomAnchor.constraint(equalTo: loginEntryField.topAnchor, constant: -50),
-            self.loginEntryField.topAnchor.constraint(equalTo: self.appName.bottomAnchor),
-            self.loginEntryField.centerXAnchor.constraint(equalTo: safeArea.centerXAnchor),
-            self.loginEntryField.widthAnchor.constraint(equalToConstant: 150),
-            self.loginEntryField.heightAnchor.constraint(equalToConstant: 34),
-            self.loginEntryField.bottomAnchor.constraint(equalTo: self.passwordEntryField.topAnchor, constant: -20),
-            self.passwordEntryField.topAnchor.constraint(equalTo: self.loginEntryField.bottomAnchor),
-            self.passwordEntryField.centerXAnchor.constraint(equalTo: safeArea.centerXAnchor),
-            self.passwordEntryField.widthAnchor.constraint(equalToConstant: 150),
-            self.passwordEntryField.heightAnchor.constraint(equalToConstant: 34),
-            self.passwordEntryField.bottomAnchor.constraint(equalTo: self.enterActionButton.topAnchor, constant: -20),
             self.enterActionButton.centerXAnchor.constraint(equalTo: safeArea.centerXAnchor),
-            self.enterActionButton.topAnchor.constraint(equalTo: self.passwordEntryField.bottomAnchor),
-            self.enterActionButton.widthAnchor.constraint(equalToConstant: 70),
-            self.enterActionButton.heightAnchor.constraint(equalToConstant: 50)
+            self.enterActionButton.topAnchor.constraint(equalTo: self.appName.bottomAnchor, constant: 50),
+            self.newUserActionButton.centerXAnchor.constraint(equalTo: self.enterActionButton.centerXAnchor),
+            self.newUserActionButton.topAnchor.constraint(equalTo: self.enterActionButton.bottomAnchor, constant: 25),
+            self.stackView.centerXAnchor.constraint(equalTo: self.newUserActionButton.centerXAnchor),
+            self.stackView.topAnchor.constraint(equalTo: self.newUserActionButton.bottomAnchor, constant: 20)
+
         ])
     }
     @objc func buttonTap() {
         self.loginDelegate?.didTap(true)
+    }
+
+    @objc func newUserButtonTap() {
+        self.registrationDelegate?.didNewUserTap(true)
     }
 }
