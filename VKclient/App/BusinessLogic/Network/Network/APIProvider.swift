@@ -15,7 +15,6 @@ class APIProvider<Endpoint: EndpointProtocol> {
             return Fail(error: APIProviderErrors.invalidURL)
                 .eraseToAnyPublisher()
         }
-        
         return loadData(with: request)
             .eraseToAnyPublisher()
     }

@@ -19,7 +19,7 @@ final class AppStartManager {
 
         let navVC = self.configuredNavigationController
         navVC.viewControllers = [rootVC]
-        
+
         window?.rootViewController = navVC
         window?.makeKeyAndVisible()
     }
