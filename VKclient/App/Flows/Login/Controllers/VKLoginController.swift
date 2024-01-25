@@ -24,7 +24,8 @@ class VKLoginController: UIViewController, WKUIDelegate {
         self.setupUI()
         loadWebView()
         }
-    
+
+
     func loadWebView() {
         var components = URLComponents()
         components.scheme = "https"
@@ -40,9 +41,7 @@ class VKLoginController: UIViewController, WKUIDelegate {
         ]
 
         let request = URLRequest(url: components.url!)
-//        DispatchQueue.main.async {
             self.webView.load(request)
-//        }
     }
     
     func setupUI() {
@@ -90,16 +89,19 @@ extension VKLoginController: WKNavigationDelegate {
             return
         }
         let keychain = Keychain()
+
+        
         do {
            try keychain.set(token, key: "token")
         } catch let error as NSError {
             print("\(error.localizedDescription)")
         }
 
+        let next = TabBarController()
+        self.view.window?.rootViewController = next
+        self.view.window?.makeKeyAndVisible()
 
-        let next = LoginViewController()
-        self.navigationController?.pushViewController(next, animated: true)
-        
         decisionHandler(.cancel)
     }
+
 }

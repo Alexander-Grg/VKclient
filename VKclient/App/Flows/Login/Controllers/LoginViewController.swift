@@ -7,6 +7,7 @@
 
 import UIKit
 import SafariServices
+import KeychainAccess
 
 protocol LoginDelegate: AnyObject {
     func didTap(_ tap: Bool)
@@ -93,9 +94,16 @@ class LoginViewController: UIViewController {
 
 extension LoginViewController: LoginDelegate {
     func didTap(_ tap: Bool) {
-        let nexVC = TabBarController()
+        var token = ""
+        do {
+            token =  try Keychain().get("token") ?? ""
+        } catch let error as NSError {
+            print(error.localizedDescription)
+        }
+        let nextVC = token.isEmpty ? VKLoginController() : TabBarController()
+
         if tap == true {
-            self.view.window?.rootViewController = nexVC
+            self.view.window?.rootViewController = nextVC
             self.view.window?.makeKeyAndVisible()
         }
     }
