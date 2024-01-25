@@ -127,11 +127,39 @@ final class FriendsFlowPresenter {
             self.viewInput?.navigationController?.pushViewController(viewController.self, animated: true)
         }
     }
-    
+
+    private func alertOfExit() {
+        let alertController = UIAlertController(title: "Exit", message: "Do you really want to leave?", preferredStyle: .alert)
+
+        let logoutAction = UIAlertAction(title: "Sign out VK account", style: .default) { action in
+            do {
+                try Keychain().remove("token")
+            } catch let error as NSError {
+                print("\(error.localizedDescription)")
+            }
+                    let loginVC = LoginViewController()
+            self.viewInput?.view.window?.rootViewController = loginVC
+            self.viewInput?.view.window?.makeKeyAndVisible()
+        }
+
+        let toTheLoginScreenAction = UIAlertAction(title: "Back to the login page", style: .default) { action in
+                    let loginVC = LoginViewController()
+            self.viewInput?.view.window?.rootViewController = loginVC
+            self.viewInput?.view.window?.makeKeyAndVisible()
+        }
+
+        let cancel = UIAlertAction(title: "Cancel", style: .cancel)
+        
+
+        alertController.addAction(logoutAction)
+        alertController.addAction(toTheLoginScreenAction)
+        alertController.addAction(cancel)
+
+        viewInput?.present(alertController, animated: true)
+    }
+
     internal func logout() {
-        let loginVC = LoginViewController()
-        viewInput?.view.window?.rootViewController = loginVC
-        viewInput?.view.window?.makeKeyAndVisible()
+        alertOfExit()
     }
 }
 

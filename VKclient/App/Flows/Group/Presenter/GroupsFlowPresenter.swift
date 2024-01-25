@@ -9,6 +9,7 @@ import Foundation
 import UIKit
 import RealmSwift
 import Combine
+import KeychainAccess
 
 protocol GroupsFlowViewInput: AnyObject {
     func updateTableView()
@@ -114,11 +115,39 @@ final class GroupsFlowPresenter {
         let nextVC = SearchGroupsFlowBuilder.build()
         self.viewInput?.navigationController?.pushViewController(nextVC, animated: true)
     }
-    
+
+    private func alertOfExit() {
+        let alertController = UIAlertController(title: "Exit", message: "Do you really want to leave?", preferredStyle: .alert)
+
+        let logoutAction = UIAlertAction(title: "Sign out VK account", style: .default) { action in
+            do {
+                try Keychain().remove("token")
+            } catch let error as NSError {
+                print("\(error.localizedDescription)")
+            }
+                    let loginVC = LoginViewController()
+            self.viewInput?.view.window?.rootViewController = loginVC
+            self.viewInput?.view.window?.makeKeyAndVisible()
+        }
+
+        let toTheLoginScreenAction = UIAlertAction(title: "Back to the login page", style: .default) { action in
+                    let loginVC = LoginViewController()
+            self.viewInput?.view.window?.rootViewController = loginVC
+            self.viewInput?.view.window?.makeKeyAndVisible()
+        }
+
+        let cancel = UIAlertAction(title: "Cancel", style: .cancel)
+
+
+        alertController.addAction(logoutAction)
+        alertController.addAction(toTheLoginScreenAction)
+        alertController.addAction(cancel)
+
+        viewInput?.present(alertController, animated: true)
+    }
+
     private func logout() {
-        let loginVC = LoginViewController()
-        self.viewInput?.view.window?.rootViewController = loginVC
-        self.viewInput?.view.window?.makeKeyAndVisible()
+        alertOfExit()
     }
 }
 
