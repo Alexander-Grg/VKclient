@@ -6,9 +6,11 @@
 //
 
 import UIKit
+import KeychainAccess
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
+    let keychain = Keychain()
     var window: UIWindow?
     var appStartManager: AppStartManager?
 
@@ -19,5 +21,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
 
-    
+    func applicationWillTerminate(_ application: UIApplication) {
+        do {
+            try keychain.remove("token")
+        } catch let error as NSError {
+            print("\(error.localizedDescription)")
+        }
+    }
+
+    func applicationDidEnterBackground(_ application: UIApplication) {
+        do {
+            try keychain.remove("token")
+        } catch let error as NSError {
+            print("\(error.localizedDescription)")
+        }
+    }
 }
