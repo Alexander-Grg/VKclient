@@ -24,8 +24,8 @@ final class LoginView: UIView {
     private(set) lazy var circle1: UIImageView = {
         let image = UIImageView()
         image.translatesAutoresizingMaskIntoConstraints = false
-        image.image = UIImage(named: "circle.fill")
-        image.tintColor = .systemTeal
+        image.image = UIImage(systemName: "circle.fill")
+        image.tintColor = .black
         image.clipsToBounds = true
 
         return image
@@ -34,8 +34,8 @@ final class LoginView: UIView {
     private(set) lazy var circle2: UIImageView = {
         let image = UIImageView()
         image.translatesAutoresizingMaskIntoConstraints = false
-        image.image = UIImage(named: "circle.fill")
-        image.tintColor = .systemTeal
+        image.image = UIImage(systemName: "circle.fill")
+        image.tintColor = .black
         image.clipsToBounds = true
 
         return image
@@ -44,8 +44,8 @@ final class LoginView: UIView {
     private(set) lazy var circle3: UIImageView = {
         let image = UIImageView()
         image.translatesAutoresizingMaskIntoConstraints = false
-        image.image = UIImage(named: "circle.fill")
-        image.tintColor = .systemTeal
+        image.image = UIImage(systemName: "circle.fill")
+        image.tintColor = .black
         image.clipsToBounds = true
 
         return image
@@ -93,12 +93,10 @@ final class LoginView: UIView {
     }()
     private(set) lazy var stackView: UIStackView = {
         let stack = UIStackView()
+        stack.translatesAutoresizingMaskIntoConstraints = false
         stack.axis = .horizontal
         stack.distribution = .fillEqually
-        stack.spacing = 10
-        stack.addArrangedSubview(self.circle1)
-        stack.addArrangedSubview(self.circle2)
-        stack.addArrangedSubview(self.circle3)
+        stack.spacing = 5
 
         return stack
     }()
@@ -115,17 +113,27 @@ final class LoginView: UIView {
         super.init(coder: aDecoder)
         self.configureUI()
     }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        animateCircles()
+    }
+
     // MARK: - setting UI
     private func configureUI() {
         self.addSubviews()
         self.setupConstraints()
+        self.animateCircles()
     }
     private func addSubviews() {
         self.addSubview(self.wallpaper)
-//        self.addSubview(self.stackView)
         self.addSubview(self.appName)
         self.addSubview(self.enterActionButton)
         self.addSubview(self.newUserActionButton)
+        self.addSubview(self.stackView)
+        stackView.addArrangedSubview(self.circle1)
+        stackView.addArrangedSubview(self.circle2)
+        stackView.addArrangedSubview(self.circle3)
     }
     private func setupConstraints() {
         let safeArea = safeAreaLayoutGuide
@@ -140,13 +148,34 @@ final class LoginView: UIView {
             self.enterActionButton.topAnchor.constraint(equalTo: self.appName.bottomAnchor, constant: 50),
             self.newUserActionButton.centerXAnchor.constraint(equalTo: self.enterActionButton.centerXAnchor),
             self.newUserActionButton.topAnchor.constraint(equalTo: self.enterActionButton.bottomAnchor, constant: 25),
-//            self.stackView.centerXAnchor.constraint(equalTo: self.enterActionButton.centerXAnchor),
-//            self.stackView.topAnchor.constraint(equalTo: self.newUserActionButton.bottomAnchor, constant: 30),
-//            self.stackView.heightAnchor.constraint(equalToConstant: 30),
-//            self.stackView.widthAnchor.constraint(equalToConstant: 300)
+            self.stackView.centerXAnchor.constraint(equalTo: newUserActionButton.centerXAnchor),
+            self.stackView.topAnchor.constraint(equalTo: self.newUserActionButton.bottomAnchor, constant: 30),
+            self.stackView.heightAnchor.constraint(equalToConstant: 20),
+            self.stackView.widthAnchor.constraint(equalToConstant: 70)
 
         ])
     }
+
+    private func animateCircles() {
+        let animationDuration = 1.5
+
+        circle1.alpha = 0.0
+        circle2.alpha = 0.0
+        circle3.alpha = 0.0
+
+        UIView.animate(withDuration: animationDuration, delay: 0, options: [.repeat, .autoreverse]) {
+            self.circle1.alpha = 1.0
+        }
+
+        UIView.animate(withDuration: animationDuration, delay: 0.5, options: [.repeat, .autoreverse]) {
+            self.circle2.alpha = 1.0
+        }
+
+        UIView.animate(withDuration: animationDuration, delay: 1.0, options: [.repeat, .autoreverse]) {
+            self.circle3.alpha = 1.0
+        }
+    }
+
     @objc func buttonTap() {
         self.loginDelegate?.didTap(true)
     }
