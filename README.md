@@ -10,6 +10,9 @@ Current functional:
 1) Authentification to the VK services via OAuth 2.0;
 2) Review friends added to the account;
 3) Review the photo album of each friend;
-4) Review group where the user participated;
+4) Review groups where the user participating;
 5) Use the search bar to search over different communities;
-6) News feed that reflects added communities and friend's posts, showing likes, comments, reposts, and the number of total views.
+6) News feed that reflects added communities and friend's posts, showing likes, comments, reposts, and the number of total views;
+7) To the news feed added an infinite scrolling function that constantly updates data from the VK servers;
+8) Everything is added to the Realm database;
+9) The user's token is safely added to the Keychain.
