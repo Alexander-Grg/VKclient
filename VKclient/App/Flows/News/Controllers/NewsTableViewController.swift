@@ -14,7 +14,7 @@ final class NewsTableViewController: UIViewController {
         return table
     }()
     private let textCellFont = UIFont(name: "Avenir-Light", size: 16.0)!
-    private let defaultCellHeight: CGFloat = 200
+    private let defaultCellHeight: CGFloat = 130
     private var presenter: NewsFlowViewOutput
     
     init(presenter: NewsFlowViewOutput) {
@@ -90,9 +90,12 @@ extension NewsTableViewController: UITableViewDataSource {
             
             return cell
         case .text:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: NewsTableViewCellPost.identifier) as? NewsTableViewCellPost else { return NewsTableViewCellPost() }
-            
-            let textHeight = news.text.heightWithConstrainedWidth(width: tableView.frame.width, font: textCellFont)
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: NewsTableViewCellPost.identifier) as? NewsTableViewCellPost,
+                  let text = news.text
+            else { return NewsTableViewCellPost() }
+
+            let textHeight = text.heightWithConstrainedWidth(width: tableView.frame.width, font: textCellFont)
+
             cell.configureCell(news, isTapped: textHeight > defaultCellHeight)
             cell.delegate = self
             
