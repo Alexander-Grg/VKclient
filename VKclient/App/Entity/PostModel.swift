@@ -39,7 +39,7 @@ struct News: Codable {
 
     var sourceId: Int
     var date: Double
-    var text: String
+    var text: String?
     var attachments: [Attachments]?
     var comments: Comments?
     var likes: Likes?
@@ -66,23 +66,27 @@ struct News: Codable {
     var rowsCounter: [NewsTypes] {
         
         var rowsCounter = [NewsTypes]()
-        
-        guard !text.isEmpty || attachmentPhotoUrl != nil else {
-            return rowsCounter
+
+        guard let textValue = text,
+              let urlValue = attachmentPhotoUrl
+        else { return rowsCounter }
+
+        if !textValue.isEmpty || !urlValue.absoluteString.isEmpty {
+            rowsCounter.append(.header)
         }
-        
-        rowsCounter.append(.header)
-        
-        if !text.isEmpty {
+
+        if !textValue.isEmpty {
             rowsCounter.append(.text)
         }
-        
-        if attachmentPhotoUrl != nil {
+
+        if !urlValue.absoluteString.isEmpty {
             rowsCounter.append(.photo)
         }
 
-        rowsCounter.append(.footer)
-        
+        if !textValue.isEmpty || !urlValue.absoluteString.isEmpty {
+            rowsCounter.append(.footer)
+        }
+
         return rowsCounter
     }
 
