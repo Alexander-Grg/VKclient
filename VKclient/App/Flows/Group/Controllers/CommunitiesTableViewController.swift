@@ -107,7 +107,11 @@ extension CommunitiesTableViewController: GroupsFlowViewInput {
     func updateTableView() {
         self.tableView.reloadData()
     }
-    
+
+    func toTheGroupsDetail() {
+        
+    }
+
     @objc func exitButtonPressed() {
         self.presenter.exit()
     }

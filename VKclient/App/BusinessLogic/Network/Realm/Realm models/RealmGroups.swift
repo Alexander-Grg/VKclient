@@ -11,6 +11,7 @@ class GroupsRealm: Object {
     @Persisted var name: String = ""
     @Persisted(primaryKey: true) var id: Int = 0
     @Persisted var photo: String = ""
+    @Persisted var photo200: String = ""
 }
 
 extension GroupsRealm {
@@ -21,5 +22,6 @@ extension GroupsRealm {
         self.name = groups.name
         self.id = groups.id
         self.photo = groups.photo
+        self.photo200 = groups.photo200
     }
 }
