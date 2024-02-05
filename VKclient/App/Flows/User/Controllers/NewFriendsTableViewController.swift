@@ -127,7 +127,7 @@ extension NewFriendsTableViewController: UITableViewDelegate {
         
         self.presenter.goNextScreen(index: indexPath)
         
-        defer { tableView.deselectRow(at: indexPath, animated: true)}
+        tableView.deselectRow(at: indexPath, animated: true)
     }
 }
 

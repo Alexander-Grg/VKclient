@@ -45,7 +45,7 @@ final class SearchGroupsFlowPresenter {
                 .store(in: &cancellable)
         }
     }
-    
+
 }
 
 extension SearchGroupsFlowPresenter: SearchGroupsFlowViewOutput {
