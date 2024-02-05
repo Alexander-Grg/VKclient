@@ -10,6 +10,7 @@ import Combine
 
 class GroupsSearchTableViewController: UIViewController {
     private let presenter: SearchGroupsFlowViewOutput
+
     private let emptyView = UIView()
     private let emptyViewlabel = UILabel()
 
