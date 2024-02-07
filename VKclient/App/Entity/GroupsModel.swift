@@ -28,8 +28,8 @@ struct GroupsObjects: Codable {
     var photo: String = ""
     var photo200: String = ""
     var cover: Cover?
-    var isClosed: Int?
-    var isMember: Int?
+    var isClosed: Int
+    var isMember: Int
     var isDeactivated: String?
     enum CodingKeys: String, CodingKey {
         case name = "name"
@@ -44,12 +44,23 @@ struct GroupsObjects: Codable {
 }
 
 struct Cover: Codable {
-    var isEnabled: Int
+    var isEnabled: Int?
     var images: [CoverImage]?
+
+    enum CodingKeys: String, CodingKey {
+        case isEnabled
+        case images
+    }
 }
 
 struct CoverImage: Codable {
     var url: String
     var width: Int
     var height: Int
+
+    enum CodingKeys: String, CodingKey {
+        case url
+        case width
+        case height
+    }
 }

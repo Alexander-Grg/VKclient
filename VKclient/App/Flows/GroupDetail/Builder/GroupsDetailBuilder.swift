@@ -8,12 +8,11 @@
 import UIKit
 
 final class GroupsDetailModuleBuilder {
-//    static func build() -> (UIViewController & GroupsDetailInput) {
-//        let presenter = GroupsDetailPresenter(group: <#T##GroupsObjects?#> )
-//        let viewController = CommunitiesTableViewController(presenter: presenter)
-//        presenter.viewInput = viewController
-//
-//        return viewController
-//    }
-}
+    static func build(_ group: GroupsRealm) -> (UIViewController & GroupsDetailInput) {
+        let presenter = GroupsDetailPresenter(group: group)
+        let viewController = GroupDetailViewController(presenter: presenter)
+        presenter.viewInput = viewController
 
+        return viewController
+    }
+}
