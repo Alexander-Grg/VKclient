@@ -99,6 +99,7 @@ class CommunitiesTableViewController: UITableViewController, UISearchBarDelegate
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         do { tableView.deselectRow(at: indexPath, animated: true)}
+        presenter.goDetailGroupScreen(index: indexPath)
     }
 }
 
@@ -107,7 +108,11 @@ extension CommunitiesTableViewController: GroupsFlowViewInput {
     func updateTableView() {
         self.tableView.reloadData()
     }
-    
+
+    func toTheGroupsDetail() {
+        
+    }
+
     @objc func exitButtonPressed() {
         self.presenter.exit()
     }
