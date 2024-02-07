@@ -483,6 +483,7 @@
 		627C31482859DD6900C9D2A8 /* Assembly */ = {
 			isa = PBXGroup;
 			children = (
+				71F999082B72252800146890 /* Protocols */,
 				627C31492859DD9100C9D2A8 /* CustomElements */,
 				628E852D26FF874D00FB5FAE /* CustomTransition */,
 			);
@@ -690,6 +691,13 @@
 				71482A822B71206100257566 /* GroupDetailView.swift */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		71F999082B72252800146890 /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Protocols;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

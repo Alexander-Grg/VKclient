@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class GroupDetailView: UIView {
+class GroupDetailView: UIView {
 
 //    MARK: Properties
 
@@ -79,30 +79,61 @@ final class GroupDetailView: UIView {
     }
     
     required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        self.configureUI()
         fatalError("init(coder:) has not been implemented")
     }
 
     //    MARK: Methods
 
     private func configureUI() {
+        backgroundColor = .white
         self.addSubviews()
         self.setupConstraints()
     }
 
     private func addSubviews() {
-        self.addSubview(groupCoverImage)
+//        self.addSubview(groupCoverImage)
         self.addSubview(groupImage)
         self.addSubview(groupNameLabel)
         self.addSubview(groupStatusLabel)
+        self.addSubview(isMemberLabel)
         self.addSubview(isDeletedLabel)
     }
 
     private func setupConstraints() {
+        
+        let s = safeAreaLayoutGuide
 
         NSLayoutConstraint.activate([
-            
 
+//            groupCoverImage.topAnchor.constraint(equalTo: s.topAnchor, constant: 20),
+//            groupCoverImage.leftAnchor.constraint(equalTo: s.leftAnchor),
+//            groupCoverImage.rightAnchor.constraint(equalTo: s.rightAnchor),
 
+            groupImage.topAnchor.constraint(equalTo: s.topAnchor, constant: 20),
+            groupImage.centerXAnchor.constraint(equalTo: s.centerXAnchor),
+            groupImage.heightAnchor.constraint(equalToConstant: 100),
+            groupImage.widthAnchor.constraint(equalToConstant: 100),
+
+            groupNameLabel.topAnchor.constraint(equalTo: groupImage.bottomAnchor),
+            groupNameLabel.leftAnchor.constraint(equalTo: s.leftAnchor),
+            groupNameLabel.rightAnchor.constraint(equalTo: s.rightAnchor),
+            groupNameLabel.centerXAnchor.constraint(equalTo: groupImage.centerXAnchor),
+            groupNameLabel.heightAnchor.constraint(equalToConstant: 25),
+            groupNameLabel.widthAnchor.constraint(equalToConstant: 100),
+
+            groupStatusLabel.topAnchor.constraint(equalTo: groupNameLabel.bottomAnchor, constant: 10),
+            groupStatusLabel.leftAnchor.constraint(equalTo: s.leftAnchor),
+            groupStatusLabel.rightAnchor.constraint(equalTo: s.rightAnchor),
+
+            isMemberLabel.topAnchor.constraint(equalTo: groupStatusLabel.bottomAnchor, constant: 10),
+            isMemberLabel.leftAnchor.constraint(equalTo: s.leftAnchor),
+            isMemberLabel.rightAnchor.constraint(equalTo: s.rightAnchor),
+
+            isDeletedLabel.topAnchor.constraint(equalTo: isMemberLabel.bottomAnchor, constant: 10),
+            isDeletedLabel.leftAnchor.constraint(equalTo: s.leftAnchor),
+            isDeletedLabel.rightAnchor.constraint(equalTo: s.rightAnchor)
         ])
     }
 }

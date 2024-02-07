@@ -99,6 +99,7 @@ class CommunitiesTableViewController: UITableViewController, UISearchBarDelegate
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         do { tableView.deselectRow(at: indexPath, animated: true)}
+        presenter.goDetailGroupScreen(index: indexPath)
     }
 }
 

@@ -9,14 +9,17 @@ import UIKit
 
 class GroupDetailViewController: UIViewController {
 
-    let groupsDetailView = GroupDetailView()
-    weak var presenter: GroupsDetailOutput?
+    var groupsDetailView = GroupDetailView()
+    private let presenter: GroupsDetailOutput
 
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    init(presenter: GroupsDetailOutput) {
+        self.presenter = presenter
+        super.init(nibName: nil, bundle: nil)
+    }
 
-        // Do any additional setup after loading the view.
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 
     override func loadView() {
@@ -24,6 +27,11 @@ class GroupDetailViewController: UIViewController {
         self.view = groupsDetailView
     }
 
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        presenter.viewDidLoad()
+    }
 }
 
 extension GroupDetailViewController: GroupsDetailInput {

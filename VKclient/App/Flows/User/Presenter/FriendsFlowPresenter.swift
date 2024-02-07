@@ -37,31 +37,38 @@ final class FriendsFlowPresenter {
     
     // MARK: - Function for tableView sections
     private func usersFilteredFromRealm(with friends: Results<UserRealm>?) {
-        self.dictOfUsers.removeAll()
-        self.firstLetters.removeAll()
-        
-        if let filteredFriends = friends {
-            for user in filteredFriends {
-                guard let dictKey = user.lastName.first else { continue }
-                if var users = self.dictOfUsers[dictKey] {
-                    users.append(user)
-                    self.dictOfUsers[dictKey] = users
-                } else {
-                    self.firstLetters.append(dictKey)
-                    self.dictOfUsers[dictKey] = [user]
-                }
-            }
-            self.firstLetters.sort()
-        }
-        self.viewInput?.updateTableView()
+        guard let filteredFriends = friends else { return }
+        dictOfUsers.removeAll()
+         firstLetters.removeAll()
+
+        filteredFriends.forEach { friend in
+             guard let dictKey = friend.lastName.first else { return }
+
+             var groupsForLetter = dictOfUsers[dictKey, default: []]
+             groupsForLetter.append(friend)
+             dictOfUsers[dictKey] = groupsForLetter
+
+             if !firstLetters.contains(dictKey) {
+                 firstLetters.append(dictKey)
+             }
+         }
+
+         firstLetters.sort()
+         viewInput?.updateTableView()
     }
-    
+
     private func fetchDataFromNetwork() {
         userService.requestUsers()
             .decode(type: UserResponse.self, decoder: JSONDecoder())
             .receive(on: DispatchQueue.main)
-            .sink(receiveCompletion: { error in
-                print(error)
+            .sink(receiveCompletion: { completion in
+                switch completion {
+                case .failure(let error):
+                    print("THERE IS NO DATA: \(error.localizedDescription)")
+                    self.alertOfNoData()
+                case .finished:
+                    print("The data is received")
+                }
             }, receiveValue: { [weak self] value in
                 guard let self = self else { return }
                 self.savingDataToRealm(value.response.items)
@@ -154,6 +161,20 @@ final class FriendsFlowPresenter {
         alertController.addAction(logoutAction)
         alertController.addAction(toTheLoginScreenAction)
         alertController.addAction(cancel)
+
+        viewInput?.present(alertController, animated: true)
+    }
+
+    private func alertOfNoData() {
+        let alertController = UIAlertController(title: "Error", message: "The App could not get the data. Please sign in again.", preferredStyle: .alert)
+
+        let logoutAction = UIAlertAction(title: "Ok", style: .default) { action in
+
+                    let VKlogin = VKLoginController()
+            self.viewInput?.view.window?.rootViewController = VKlogin
+            self.viewInput?.view.window?.makeKeyAndVisible()
+        }
+        alertController.addAction(logoutAction)
 
         viewInput?.present(alertController, animated: true)
     }

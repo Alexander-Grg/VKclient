@@ -23,6 +23,7 @@ protocol GroupsFlowViewOutput: AnyObject {
     func didSearch(search: String)
     func exit()
     func goNextGroupSearchScreen()
+    func goDetailGroupScreen(index: IndexPath)
 }
 
 final class GroupsFlowPresenter {
@@ -35,23 +36,24 @@ final class GroupsFlowPresenter {
     weak var viewInput: (UIViewController & GroupsFlowViewInput)?
 
     private func groupsFilteredFromRealm(with groups: Results<GroupsRealm>?) {
-        self.dictOfGroups.removeAll()
-        self.firstLetters.removeAll()
+        guard let filteredGroups = groups else { return }
+        dictOfGroups.removeAll()
+         firstLetters.removeAll()
 
-        if let filteredGroups = groups {
-            for group in filteredGroups {
-                guard let dictKey = group.name.first else { continue }
-                if var groups = self.dictOfGroups[dictKey] {
-                    groups.append(group)
-                    self.dictOfGroups[dictKey] = groups
-                } else {
-                    self.firstLetters.append(dictKey)
-                    self.dictOfGroups[dictKey] = [group]
-                }
-            }
-            self.firstLetters.sort()
-        }
-        self.viewInput?.updateTableView()
+         filteredGroups.forEach { group in
+             guard let dictKey = group.name.first else { return }
+
+             var groupsForLetter = dictOfGroups[dictKey, default: []]
+             groupsForLetter.append(group)
+             dictOfGroups[dictKey] = groupsForLetter
+
+             if !firstLetters.contains(dictKey) {
+                 firstLetters.append(dictKey)
+             }
+         }
+
+         firstLetters.sort()
+         viewInput?.updateTableView()
     }
 
     private func fetchDataFromNetwork() {
@@ -116,6 +118,14 @@ final class GroupsFlowPresenter {
         self.viewInput?.navigationController?.pushViewController(nextVC, animated: true)
     }
 
+    private func toTheExactGroup(index: IndexPath) {
+        let firstLetter = self.firstLetters[index.section]
+        if let groups = self.dictOfGroups[firstLetter] {
+            let nextVC = GroupsDetailModuleBuilder.build(groups[index.row])
+            self.viewInput?.navigationController?.pushViewController(nextVC, animated: true)
+        }
+    }
+
     private func alertOfExit() {
         let alertController = UIAlertController(title: "Exit", message: "Do you really want to leave?", preferredStyle: .alert)
 
@@ -173,5 +183,9 @@ extension GroupsFlowPresenter: GroupsFlowViewOutput {
     
     func goNextGroupSearchScreen() {
         self.toTheGroupSearch()
+    }
+
+    func goDetailGroupScreen(index: IndexPath) {
+        self.toTheExactGroup(index: index)
     }
 }
