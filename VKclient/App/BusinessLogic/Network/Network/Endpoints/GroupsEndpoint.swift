@@ -16,7 +16,7 @@ enum GroupsEndpoint: EndpointProtocol {
     
     var parameters: [String : String] {
         return ["extended" : "1",
-                "fields" : "photo_100"]
+                "fields" : "photo_100,photo_200,cover,is_closed,deactivated,is_member"]
     }
 }
 
