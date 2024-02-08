@@ -72,4 +72,9 @@ extension InjectedValues {
         get { Self[NewsServiceKey.self] }
         set { Self[NewsServiceKey.self] = newValue }
     }
+
+    var groupActionsService: GroupsActionProtocol {
+        get { Self[GroupsActionsKey.self] }
+        set { Self[GroupsActionsKey.self] = newValue }
+    }
 }

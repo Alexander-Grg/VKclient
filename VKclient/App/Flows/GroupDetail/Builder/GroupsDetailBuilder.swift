@@ -15,4 +15,12 @@ final class GroupsDetailModuleBuilder {
 
         return viewController
     }
+
+    static func buildForNetworkGroups(_ group: GroupsObjects) -> (UIViewController & GroupsDetailInput) {
+        let presenter = GroupsDetailPresenter(networkGroup: group)
+        let viewController = GroupDetailViewController(presenter: presenter)
+        presenter.viewInput = viewController
+
+        return viewController
+    }
 }
