@@ -16,6 +16,7 @@ protocol SearchGroupsFlowViewInput: AnyObject {
 protocol SearchGroupsFlowViewOutput: AnyObject {
     var groupsHolder: [GroupsObjects] { get }
     func didSearch(_ searchText: String)
+    func toTheGroupDetails(index: IndexPath)
 }
 
 final class SearchGroupsFlowPresenter {
@@ -46,10 +47,19 @@ final class SearchGroupsFlowPresenter {
         }
     }
 
+    private func toTheExactGroup(index: IndexPath) {
+        let groups = self.groupsHolder[index.row]
+        let nextVC = GroupsDetailModuleBuilder.buildForNetworkGroups(groups)
+        self.viewInput?.navigationController?.pushViewController(nextVC, animated: true)
+    }
 }
 
 extension SearchGroupsFlowPresenter: SearchGroupsFlowViewOutput {
     func didSearch(_ searchText: String) {
         self.searchForGroups(searchText)
+    }
+
+    func toTheGroupDetails(index: IndexPath) {
+        self.toTheExactGroup(index: index)
     }
 }

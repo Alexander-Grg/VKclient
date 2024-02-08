@@ -56,6 +56,7 @@ class CommunitiesTableViewController: UITableViewController, UISearchBarDelegate
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        self.presenter.fetchData()
         self.presenter.dataUpdates()
     }
    
