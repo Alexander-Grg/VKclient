@@ -13,31 +13,8 @@ class GroupsRealm: Object {
     @Persisted var photo: String = ""
     @Persisted var photo200: String = ""
     @Persisted var isDeleted: String = ""
-    @Persisted var groupStatus: Int
-    @Persisted var isMember: Int
-
-    var isMemberString: String {
-        switch isMember {
-        case 0:
-            return "You're not a member"
-        case 1:
-            return "You're a group member"
-        default:
-           return ""
-        }
-    }
-    var groupStatusString: String {
-        switch groupStatus {
-        case 0:
-            return "The group is open"
-        case 1:
-            return "The group is closed"
-        case 2:
-            return "The group is private"
-        default:
-            return ""
-        }
-    }
+    @Persisted var groupStatus: String
+    @Persisted var isMember: String
 }
 
 extension GroupsRealm {
@@ -50,7 +27,7 @@ extension GroupsRealm {
         self.photo = groups.photo
         self.photo200 = groups.photo200
         self.isDeleted = groups.isDeactivated ?? ""
-        self.groupStatus = groups.isClosed
-        self.isMember = groups.isMember
+        self.groupStatus = groups.groupStatusString
+        self.isMember = groups.isMemberString
     }
 }
