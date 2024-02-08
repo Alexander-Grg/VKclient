@@ -7,9 +7,14 @@
 
 import UIKit
 
+protocol GroupDetailDelegate: AnyObject {
+    func didInviteTap(_ isTapped: Bool)
+}
+
 class GroupDetailView: UIView {
 
 //    MARK: Properties
+    weak var delegate: GroupDetailDelegate?
 
     private (set) lazy var groupImage: UIImageView = {
         let image = UIImageView()
@@ -71,6 +76,19 @@ class GroupDetailView: UIView {
         return image
     }()
 
+    private (set) lazy var joinGroupButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.addTarget(self, action: #selector(joinTap), for: .touchUpInside)
+        button.setTitle("Join group", for: .normal)
+        if #available(iOS 15.0, *) {
+            button.configuration = .bordered()
+        } else {
+            // Fallback on earlier versions
+        }
+        return button
+    }()
+
 //    MARK: Lifecycle
 
     override init(frame: CGRect) {
@@ -98,6 +116,7 @@ class GroupDetailView: UIView {
         self.addSubview(groupNameLabel)
         self.addSubview(groupStatusLabel)
         self.addSubview(isMemberLabel)
+        self.addSubview(joinGroupButton)
         self.addSubview(isDeletedLabel)
     }
 
@@ -131,9 +150,18 @@ class GroupDetailView: UIView {
             isMemberLabel.leftAnchor.constraint(equalTo: s.leftAnchor),
             isMemberLabel.rightAnchor.constraint(equalTo: s.rightAnchor),
 
-            isDeletedLabel.topAnchor.constraint(equalTo: isMemberLabel.bottomAnchor, constant: 10),
+            joinGroupButton.topAnchor.constraint(equalTo: isMemberLabel.bottomAnchor, constant: 20),
+            joinGroupButton.centerXAnchor.constraint(equalTo: s.centerXAnchor),
+            joinGroupButton.heightAnchor.constraint(equalToConstant: 30),
+            joinGroupButton.widthAnchor.constraint(equalToConstant: 150),
+
+            isDeletedLabel.topAnchor.constraint(equalTo: joinGroupButton.bottomAnchor, constant: 10),
             isDeletedLabel.leftAnchor.constraint(equalTo: s.leftAnchor),
             isDeletedLabel.rightAnchor.constraint(equalTo: s.rightAnchor)
         ])
+    }
+
+    @objc func joinTap() {
+        delegate?.didInviteTap(true)
     }
 }
