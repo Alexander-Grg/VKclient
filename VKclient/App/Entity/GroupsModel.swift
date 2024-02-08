@@ -87,3 +87,7 @@ struct CoverImage: Codable {
         case height
     }
 }
+
+struct GroupsActionsResponse: Codable {
+    let response: Int
+}

@@ -8,6 +8,7 @@
 import UIKit
 import RealmSwift
 import SDWebImage
+import Combine
 
 protocol GroupsDetailInput: AnyObject {
     var groupsDetailView: GroupDetailView { get set }
@@ -15,10 +16,12 @@ protocol GroupsDetailInput: AnyObject {
 
 protocol GroupsDetailOutput: AnyObject {
     func viewDidLoad()
+    func joinGroup()
 }
 
 final class GroupsDetailPresenter {
-    
+    @Injected (\.groupActionsService) var groupService: GroupsActionProtocol
+    private var cancellable = Set<AnyCancellable>()
     weak var viewInput: (UIViewController & GroupsDetailInput)?
     var isNetwork = false
     var group: GroupsRealm? = nil
@@ -36,6 +39,8 @@ final class GroupsDetailPresenter {
     }
 
     private func configureView() {
+
+        
         if isNetwork {
             guard let group = networkGroup,
                   let networkImageURL = URL(string: group.photo200)
@@ -62,11 +67,51 @@ final class GroupsDetailPresenter {
             viewInput?.groupsDetailView.isMemberLabel.text = group.isMember
         }
     }
+
+    internal func joinGroupRequest() {
+        var id = (isNetwork ? networkGroup?.id : group?.id) ?? 0
+        groupService.requestGroupsJoin(id: id)
+            .decode(type: GroupsActionsResponse.self, decoder: JSONDecoder())
+            .receive(on: DispatchQueue.main)
+            .sink(receiveCompletion: { (error) in
+                print("Join group request is failed: \(String(describing: error))")
+            }, receiveValue: { (result) in
+                if result.response == 1 {
+                    print("Join group is succesful")
+                }
+            })
+            .store(in: &cancellable)
+    }
+
+//    private func fetchDataFromNetwork() {
+//        groupService.requestGroups()
+//            .decode(type: GroupsResponse.self, decoder: JSONDecoder())
+//            .receive(on: DispatchQueue.main)
+//            .sink(receiveCompletion: { error in
+//                print(error)
+//            }, receiveValue: { [weak self] value in
+//                guard let self = self else { return }
+//                self.savingDataToRealm(value.response.items)
+//                self.loadDataFromRealm()
+//                self.groupsFilteredFromRealm(with: self.groupsfromRealm)
+//            }
+//            )
+//            .store(in: &cancellable)
+//    }
+
+    private func leaveGroup(groupID: Int) {
+        groupService.requestGroupsLeave(id: groupID)
+    }
 }
 
 extension GroupsDetailPresenter: GroupsDetailOutput {
     func viewDidLoad() {
         self.configureView()
+        viewInput?.reloadInputViews()
+    }
+
+    func joinGroup() {
+        self.joinGroupRequest()
         viewInput?.reloadInputViews()
     }
 }
