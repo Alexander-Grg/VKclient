@@ -31,6 +31,29 @@ struct GroupsObjects: Codable {
     var isClosed: Int
     var isMember: Int
     var isDeactivated: String?
+
+    var isMemberString: String {
+        switch isMember {
+        case 0:
+            return "You're not a member"
+        case 1:
+            return "You're a group member"
+        default:
+           return ""
+        }
+    }
+    var groupStatusString: String {
+        switch isClosed {
+        case 0:
+            return "The group is open"
+        case 1:
+            return "The group is closed"
+        case 2:
+            return "The group is private"
+        default:
+            return ""
+        }
+    }
     enum CodingKeys: String, CodingKey {
         case name = "name"
         case id = "id"
@@ -63,4 +86,8 @@ struct CoverImage: Codable {
         case width
         case height
     }
+}
+
+struct GroupsActionsResponse: Codable {
+    let response: Int
 }

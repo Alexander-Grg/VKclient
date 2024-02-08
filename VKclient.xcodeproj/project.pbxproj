@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		6200E5B228ABA0540040A00B /* UserServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6200E5B128ABA0540040A00B /* UserServiceProtocol.swift */; };
-		6200E5B728ABAEEA0040A00B /* GroupsEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6200E5B628ABAEEA0040A00B /* GroupsEndpoint.swift */; };
 		6200E5B928ABB25B0040A00B /* GroupsServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6200E5B828ABB25B0040A00B /* GroupsServiceProtocol.swift */; };
 		6200E5BB28ABB59D0040A00B /* PhotosEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6200E5BA28ABB59D0040A00B /* PhotosEndpoint.swift */; };
 		6200E5BD28ABB6780040A00B /* PhotosServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6200E5BC28ABB6780040A00B /* PhotosServiceProtocol.swift */; };
@@ -79,11 +78,11 @@
 		71482A852B7120A100257566 /* GroupDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71482A842B7120A100257566 /* GroupDetailViewController.swift */; };
 		71482A872B7120CC00257566 /* GroupsDetailPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71482A862B7120CC00257566 /* GroupsDetailPresenter.swift */; };
 		71482A892B7120E900257566 /* GroupsDetailBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71482A882B7120E900257566 /* GroupsDetailBuilder.swift */; };
+		7190BE342B751A6000E2F1D7 /* GroupsJoinEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7190BE332B751A6000E2F1D7 /* GroupsJoinEndpoint.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		6200E5B128ABA0540040A00B /* UserServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserServiceProtocol.swift; sourceTree = "<group>"; };
-		6200E5B628ABAEEA0040A00B /* GroupsEndpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupsEndpoint.swift; sourceTree = "<group>"; };
 		6200E5B828ABB25B0040A00B /* GroupsServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupsServiceProtocol.swift; sourceTree = "<group>"; };
 		6200E5BA28ABB59D0040A00B /* PhotosEndpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotosEndpoint.swift; sourceTree = "<group>"; };
 		6200E5BC28ABB6780040A00B /* PhotosServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotosServiceProtocol.swift; sourceTree = "<group>"; };
@@ -151,6 +150,7 @@
 		71482A842B7120A100257566 /* GroupDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupDetailViewController.swift; sourceTree = "<group>"; };
 		71482A862B7120CC00257566 /* GroupsDetailPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupsDetailPresenter.swift; sourceTree = "<group>"; };
 		71482A882B7120E900257566 /* GroupsDetailBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupsDetailBuilder.swift; sourceTree = "<group>"; };
+		7190BE332B751A6000E2F1D7 /* GroupsJoinEndpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupsJoinEndpoint.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -559,7 +559,7 @@
 			children = (
 				62962C3A28AA751300A59927 /* EndpointProtocol.swift */,
 				62962C3D28AA754600A59927 /* FriendsEndpoint.swift */,
-				6200E5B628ABAEEA0040A00B /* GroupsEndpoint.swift */,
+				7190BE332B751A6000E2F1D7 /* GroupsJoinEndpoint.swift */,
 				6200E5BA28ABB59D0040A00B /* PhotosEndpoint.swift */,
 				62BBED6528AD29FC00D09864 /* GroupSearchEndpoint.swift */,
 				62BBED6928AD33AB00D09864 /* NewsfeedEndpoint.swift */,
@@ -784,7 +784,6 @@
 				62BBED6C28AD3E1700D09864 /* NewsServiceProtocol.swift in Sources */,
 				71482A872B7120CC00257566 /* GroupsDetailPresenter.swift in Sources */,
 				62BBDB6E26CA6A3700144345 /* LoginViewController.swift in Sources */,
-				6200E5B728ABAEEA0040A00B /* GroupsEndpoint.swift in Sources */,
 				71482A832B71206100257566 /* GroupDetailView.swift in Sources */,
 				628E853B26FFABD400FB5FAE /* customNavigator.swift in Sources */,
 				628114992833BD9C00E042D6 /* AppDelegate.swift in Sources */,
@@ -839,6 +838,7 @@
 				628E853826FFA94F00FB5FAE /* popAnimator.swift in Sources */,
 				62E56F3326D6742800F825A7 /* CommunitiesTableViewController.swift in Sources */,
 				626A00E9270F78A1000E8F4C /* GroupsModel.swift in Sources */,
+				7190BE342B751A6000E2F1D7 /* GroupsJoinEndpoint.swift in Sources */,
 				62BBED6A28AD33AB00D09864 /* NewsfeedEndpoint.swift in Sources */,
 				71482A852B7120A100257566 /* GroupDetailViewController.swift in Sources */,
 				62F69BBF27329E130090B3BC /* NewFriendsViewCell.swift in Sources */,
