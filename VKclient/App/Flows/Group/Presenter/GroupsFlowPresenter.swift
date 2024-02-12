@@ -12,7 +12,9 @@ import Combine
 import KeychainAccess
 
 protocol GroupsFlowViewInput: AnyObject {
+     var tableView: UITableView { get set }
     func updateTableView()
+
 }
 
 protocol GroupsFlowViewOutput: AnyObject {
@@ -102,11 +104,17 @@ final class GroupsFlowPresenter {
             guard let self = self else { return }
             switch changes {
             case .initial:
-                break
-            case .update:
-                self.viewInput?.updateTableView()
-                self.loadDataFromRealm()
-                self.groupsFilteredFromRealm(with: self.groupsfromRealm)
+                viewInput?.updateTableView()
+            case let .update(groupsRealm, deletions, insertions, modifications):
+                guard let tableView = viewInput?.tableView else { return }
+                tableView.beginUpdates()
+                               tableView.insertRows(at: insertions.map({ IndexPath(row: $0, section: 0)}),
+                                                         with: .none)
+                               tableView.reloadRows(at: modifications.map({ IndexPath(row: $0, section: 0)}),
+                                                         with: .none)
+                               tableView.deleteRows(at: deletions.map({ IndexPath(row: $0, section: 0)}),
+                                                         with: .none)
+                               tableView.endUpdates()
             case let .error(error):
                 print(error)
             }

@@ -8,9 +8,13 @@
 import UIKit
 import SDWebImage
 
-class CommunitiesTableViewController: UITableViewController, UISearchBarDelegate {
+class CommunitiesTableViewController: UIViewController, UISearchBarDelegate, UITableViewDelegate, UITableViewDataSource {
     private let presenter: GroupsFlowViewOutput
-    
+    lazy var tableView: UITableView = {
+        let table = UITableView()
+        return table
+    }()
+
     private(set) lazy var searchBar: UISearchBar = {
         let search = UISearchBar()
         search.searchBarStyle = .default
@@ -46,6 +50,9 @@ class CommunitiesTableViewController: UITableViewController, UISearchBarDelegate
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.setupTableView()
+        self.tableView.delegate = self
+        self.tableView.dataSource = self
         self.tableView.register(GroupsTableViewCell.self, forCellReuseIdentifier: GroupsTableViewCell.identifier)
         searchBar.delegate = self
         navigationItem.titleView = searchBar
@@ -64,16 +71,26 @@ class CommunitiesTableViewController: UITableViewController, UISearchBarDelegate
         self.presenter.didSearch(search: searchText)
     }
 
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    private func setupTableView() {
+        self.view.addSubview(tableView)
+
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        tableView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
+        tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        tableView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
+    }
+
+     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         let nameFirstLetter = self.presenter.firstLetters[section]
         return self.presenter.dictOfGroups[nameFirstLetter]?.count ?? 0
     }
 
-    override func numberOfSections(in tableView: UITableView) -> Int {
+     func numberOfSections(in tableView: UITableView) -> Int {
         self.presenter.firstLetters.count
     }
 
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(
             withIdentifier: GroupsTableViewCell.identifier,
             for: indexPath) as? GroupsTableViewCell
@@ -86,19 +103,19 @@ class CommunitiesTableViewController: UITableViewController, UISearchBarDelegate
         return cell
     }
 
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         88.0
     }
 
-    override func sectionIndexTitles(for tableView: UITableView) -> [String]? {
+     func sectionIndexTitles(for tableView: UITableView) -> [String]? {
         self.presenter.firstLetters.map { String($0) }
     }
 
-    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         String(self.presenter.firstLetters[section])
     }
 
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         do { tableView.deselectRow(at: indexPath, animated: true)}
         presenter.goDetailGroupScreen(index: indexPath)
     }
