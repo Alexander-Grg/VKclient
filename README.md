@@ -1,4 +1,5 @@
 # VKclient
+The very first pet project was developed in 2021. Later refactored.
 UIkit clean code MVP architecture + COMBINE for the network layer + REALM for data persistence + natively created custom Dependency injector to handle DI. Everything is created entirely programmatically.
 **_Video demonstration of the app:_**
 [Watch the video](https://drive.google.com/uc?id=16zBZS8E_mrlsjcHuxBYRbAiHgBDGZ5nB&export=sharing)
@@ -10,7 +11,7 @@ Current functional:
 1) Authentification to the VK services via OAuth 2.0;
 2) Review friends added to the account;
 3) Review the photo album of each friend;
-4) Review groups where the user participating;
+4) Review groups where the user is participating;
 5) Use the search bar to search over different communities;
 6) News feed that reflects added communities and friend's posts, showing likes, comments, reposts, and the number of total views;
 7) To the news feed added an infinite scrolling function that constantly updates data from the VK servers;
