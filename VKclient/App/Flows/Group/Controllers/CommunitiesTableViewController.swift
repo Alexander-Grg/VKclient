@@ -14,7 +14,6 @@ class CommunitiesTableViewController: UIViewController, UISearchBarDelegate, UIT
         let table = UITableView()
         return table
     }()
-
     private(set) lazy var searchBar: UISearchBar = {
         let search = UISearchBar()
         search.searchBarStyle = .default
@@ -58,13 +57,11 @@ class CommunitiesTableViewController: UIViewController, UISearchBarDelegate, UIT
         navigationItem.titleView = searchBar
         navigationItem.leftBarButtonItem = exitButton
         navigationItem.rightBarButtonItem = addGroupButton
-        self.presenter.fetchData()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.presenter.fetchData()
-        self.presenter.dataUpdates()
+            self.presenter.updateData()
     }
    
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
@@ -119,17 +116,18 @@ class CommunitiesTableViewController: UIViewController, UISearchBarDelegate, UIT
         do { tableView.deselectRow(at: indexPath, animated: true)}
         presenter.goDetailGroupScreen(index: indexPath)
     }
+
+     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            let firstLetter = self.presenter.firstLetters[indexPath.section]
+            if let groups = self.presenter.dictOfGroups[firstLetter] {
+                presenter.removeGroup(id: groups[indexPath.row].id, index: indexPath)
+            }
+        }
+    }
 }
 
 extension CommunitiesTableViewController: GroupsFlowViewInput {
-    
-    func updateTableView() {
-        self.tableView.reloadData()
-    }
-
-    func toTheGroupsDetail() {
-        
-    }
 
     @objc func exitButtonPressed() {
         self.presenter.exit()
