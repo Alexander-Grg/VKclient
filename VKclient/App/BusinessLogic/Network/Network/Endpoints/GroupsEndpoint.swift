@@ -1,5 +1,5 @@
 //
-//  GroupsJoinEndpoint.swift
+//  GroupsEndpoint.swift
 //  VKclient
 //
 //  Created by Alexander Grigoryev on 2024-02-08.

@@ -9,12 +9,14 @@ import UIKit
 import RealmSwift
 import SDWebImage
 import Combine
+import KeychainAccess
 
 protocol GroupsDetailInput: AnyObject {
     var groupsDetailView: GroupDetailView { get set }
 }
 
 protocol GroupsDetailOutput: AnyObject {
+    var isMember: Bool { get }
     func viewDidLoad()
     func joinGroup()
 }
@@ -24,6 +26,17 @@ final class GroupsDetailPresenter {
     private var cancellable = Set<AnyCancellable>()
     weak var viewInput: (UIViewController & GroupsDetailInput)?
     var isNetwork = false
+    var isMember: Bool {
+        let status = (isNetwork ? networkGroup?.isMember : group?.isMemberStatus) ?? 0
+        switch status {
+        case 1:
+            return true
+        case 0:
+            return false
+        default:
+            return false
+        }
+    }
     var group: GroupsRealm? = nil
     var networkGroup: GroupsObjects? = nil
 
@@ -39,8 +52,6 @@ final class GroupsDetailPresenter {
     }
 
     private func configureView() {
-
-        
         if isNetwork {
             guard let group = networkGroup,
                   let networkImageURL = URL(string: group.photo200)
@@ -64,12 +75,12 @@ final class GroupsDetailPresenter {
             if !group.isDeleted.isEmpty {
                 viewInput?.groupsDetailView.isDeletedLabel.text = group.isDeleted
             }
-            viewInput?.groupsDetailView.isMemberLabel.text = group.isMember
+            viewInput?.groupsDetailView.isMemberLabel.text = group.isMemberString
         }
     }
 
-    internal func joinGroupRequest() {
-        var id = (isNetwork ? networkGroup?.id : group?.id) ?? 0
+    private func joinGroupRequest() {
+        let id = (isNetwork ? networkGroup?.id : group?.id) ?? 0
         groupService.requestGroupsJoin(id: id)
             .decode(type: GroupsActionsResponse.self, decoder: JSONDecoder())
             .receive(on: DispatchQueue.main)
@@ -78,40 +89,34 @@ final class GroupsDetailPresenter {
             }, receiveValue: { (result) in
                 if result.response == 1 {
                     print("Join group is succesful")
+                    self.alertOfJoinStatus()
                 }
             })
             .store(in: &cancellable)
     }
 
-//    private func fetchDataFromNetwork() {
-//        groupService.requestGroups()
-//            .decode(type: GroupsResponse.self, decoder: JSONDecoder())
-//            .receive(on: DispatchQueue.main)
-//            .sink(receiveCompletion: { error in
-//                print(error)
-//            }, receiveValue: { [weak self] value in
-//                guard let self = self else { return }
-//                self.savingDataToRealm(value.response.items)
-//                self.loadDataFromRealm()
-//                self.groupsFilteredFromRealm(with: self.groupsfromRealm)
-//            }
-//            )
-//            .store(in: &cancellable)
-//    }
+    private func alertOfJoinStatus() {
+        let alertController = UIAlertController(title: "Success", message: "You've succesfully joined the group", preferredStyle: .alert)
 
-    private func leaveGroup(groupID: Int) {
-        groupService.requestGroupsLeave(id: groupID)
+        let updateDataAction = UIAlertAction(title: "Ok", style: .default) { action in
+            self.viewInput?.groupsDetailView.setupJoinLeaveButton(isJoined: self.isMember)
+            self.configureView()
+        }
+
+
+
+        alertController.addAction(updateDataAction)
+
+        viewInput?.present(alertController, animated: true)
     }
 }
 
 extension GroupsDetailPresenter: GroupsDetailOutput {
     func viewDidLoad() {
         self.configureView()
-        viewInput?.reloadInputViews()
     }
 
     func joinGroup() {
         self.joinGroupRequest()
-        viewInput?.reloadInputViews()
     }
 }

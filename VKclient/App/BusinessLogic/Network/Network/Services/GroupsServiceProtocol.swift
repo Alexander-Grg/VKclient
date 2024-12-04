@@ -43,7 +43,7 @@ final class GroupsActionsService: GroupsActionProtocol {
     }
 
     func requestGroupsLeave(id: Int) -> AnyPublisher<Data, Error> {
-        return apiProvider.getData(from: .joinGroup(groupID: id))
+        return apiProvider.getData(from: .leaveGroup(groupID: id))
             .eraseToAnyPublisher()
     }
 }

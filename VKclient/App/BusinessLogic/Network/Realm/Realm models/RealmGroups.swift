@@ -14,7 +14,8 @@ class GroupsRealm: Object {
     @Persisted var photo200: String = ""
     @Persisted var isDeleted: String = ""
     @Persisted var groupStatus: String
-    @Persisted var isMember: String
+    @Persisted var isMemberString: String
+    @Persisted var isMemberStatus: Int
 }
 
 extension GroupsRealm {
@@ -28,6 +29,7 @@ extension GroupsRealm {
         self.photo200 = groups.photo200
         self.isDeleted = groups.isDeactivated ?? ""
         self.groupStatus = groups.groupStatusString
-        self.isMember = groups.isMemberString
+        self.isMemberString = groups.isMemberString
+        self.isMemberStatus = groups.isMember
     }
 }
