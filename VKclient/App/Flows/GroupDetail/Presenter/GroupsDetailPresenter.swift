@@ -22,7 +22,8 @@ protocol GroupsDetailOutput: AnyObject {
 }
 
 final class GroupsDetailPresenter {
-    @Injected(\.groupActionsService) var groupService: GroupsActionProtocol
+    @Injected(\.groupActionsService) var groupActionsService: GroupsActionProtocol
+    @Injected(\.groupsService) var groupService: GroupsServiceProtocol
     private var cancellable = Set<AnyCancellable>()
     weak var viewInput: (UIViewController & GroupsDetailInput)?
     var isNetwork = false
@@ -37,20 +38,22 @@ final class GroupsDetailPresenter {
             return false
         }
     }
+    
+    var isGroupJoined = false
     var group: GroupsRealm? = nil
     var networkGroup: GroupsObjects? = nil
-
+    
     convenience init(group: GroupsRealm?) {
         self.init()
         self.group = group
     }
-
+    
     convenience init(networkGroup: GroupsObjects?) {
         self.init()
         self.isNetwork = true
         self.networkGroup = networkGroup
     }
-
+    
     private func configureView() {
         if isNetwork {
             guard let group = networkGroup,
@@ -58,7 +61,7 @@ final class GroupsDetailPresenter {
             else { return }
             viewInput?.groupsDetailView.groupNameLabel.text = group.name
             viewInput?.groupsDetailView.groupImage.sd_setImage(with: networkImageURL)
-
+            
             viewInput?.groupsDetailView.groupStatusLabel.text = group.groupStatusString
             if !((group.isDeactivated?.isEmpty) != nil) {
                 viewInput?.groupsDetailView.isDeletedLabel.text = group.isDeactivated
@@ -78,35 +81,36 @@ final class GroupsDetailPresenter {
             viewInput?.groupsDetailView.isMemberLabel.text = group.isMemberString
         }
     }
-
+    
     private func joinGroupRequest() {
         let id = (isNetwork ? networkGroup?.id : group?.id) ?? 0
-        groupService.requestGroupsJoin(id: id)
+        groupActionsService.requestGroupsJoin(id: id)
             .decode(type: GroupsActionsResponse.self, decoder: JSONDecoder())
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { (error) in
                 print("Join group request is failed: \(String(describing: error))")
             }, receiveValue: { (result) in
                 if result.response == 1 {
-                    print("Join group is succesful")
+                    print("Join group is successful")
                     self.alertOfJoinStatus()
+                    if self.isNetwork {
+                        self.networkGroup?.isMember = 1
+                    } else {
+                        self.group?.isMemberStatus = 1
+                    }
                 }
             })
             .store(in: &cancellable)
     }
-
+    
     private func alertOfJoinStatus() {
         let alertController = UIAlertController(title: "Success", message: "You've succesfully joined the group", preferredStyle: .alert)
-
         let updateDataAction = UIAlertAction(title: "Ok", style: .default) { action in
             self.viewInput?.groupsDetailView.setupJoinLeaveButton(isJoined: self.isMember)
             self.configureView()
         }
-
-
-
         alertController.addAction(updateDataAction)
-
+        
         viewInput?.present(alertController, animated: true)
     }
 }
@@ -115,7 +119,7 @@ extension GroupsDetailPresenter: GroupsDetailOutput {
     func viewDidLoad() {
         self.configureView()
     }
-
+    
     func joinGroup() {
         self.joinGroupRequest()
     }
