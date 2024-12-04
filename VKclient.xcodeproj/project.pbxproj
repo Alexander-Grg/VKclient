@@ -78,7 +78,7 @@
 		71482A852B7120A100257566 /* GroupDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71482A842B7120A100257566 /* GroupDetailViewController.swift */; };
 		71482A872B7120CC00257566 /* GroupsDetailPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71482A862B7120CC00257566 /* GroupsDetailPresenter.swift */; };
 		71482A892B7120E900257566 /* GroupsDetailBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71482A882B7120E900257566 /* GroupsDetailBuilder.swift */; };
-		7190BE342B751A6000E2F1D7 /* GroupsJoinEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7190BE332B751A6000E2F1D7 /* GroupsJoinEndpoint.swift */; };
+		7190BE342B751A6000E2F1D7 /* GroupsEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7190BE332B751A6000E2F1D7 /* GroupsEndpoint.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -150,7 +150,7 @@
 		71482A842B7120A100257566 /* GroupDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupDetailViewController.swift; sourceTree = "<group>"; };
 		71482A862B7120CC00257566 /* GroupsDetailPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupsDetailPresenter.swift; sourceTree = "<group>"; };
 		71482A882B7120E900257566 /* GroupsDetailBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupsDetailBuilder.swift; sourceTree = "<group>"; };
-		7190BE332B751A6000E2F1D7 /* GroupsJoinEndpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupsJoinEndpoint.swift; sourceTree = "<group>"; };
+		7190BE332B751A6000E2F1D7 /* GroupsEndpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupsEndpoint.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -559,7 +559,7 @@
 			children = (
 				62962C3A28AA751300A59927 /* EndpointProtocol.swift */,
 				62962C3D28AA754600A59927 /* FriendsEndpoint.swift */,
-				7190BE332B751A6000E2F1D7 /* GroupsJoinEndpoint.swift */,
+				7190BE332B751A6000E2F1D7 /* GroupsEndpoint.swift */,
 				6200E5BA28ABB59D0040A00B /* PhotosEndpoint.swift */,
 				62BBED6528AD29FC00D09864 /* GroupSearchEndpoint.swift */,
 				62BBED6928AD33AB00D09864 /* NewsfeedEndpoint.swift */,
@@ -838,7 +838,7 @@
 				628E853826FFA94F00FB5FAE /* popAnimator.swift in Sources */,
 				62E56F3326D6742800F825A7 /* CommunitiesTableViewController.swift in Sources */,
 				626A00E9270F78A1000E8F4C /* GroupsModel.swift in Sources */,
-				7190BE342B751A6000E2F1D7 /* GroupsJoinEndpoint.swift in Sources */,
+				7190BE342B751A6000E2F1D7 /* GroupsEndpoint.swift in Sources */,
 				62BBED6A28AD33AB00D09864 /* NewsfeedEndpoint.swift in Sources */,
 				71482A852B7120A100257566 /* GroupDetailViewController.swift in Sources */,
 				62F69BBF27329E130090B3BC /* NewFriendsViewCell.swift in Sources */,

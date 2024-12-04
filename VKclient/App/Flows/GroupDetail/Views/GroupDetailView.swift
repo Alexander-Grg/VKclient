@@ -79,8 +79,6 @@ class GroupDetailView: UIView {
     private (set) lazy var joinGroupButton: UIButton = {
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.addTarget(self, action: #selector(joinTap), for: .touchUpInside)
-        button.setTitle("Join group", for: .normal)
         if #available(iOS 15.0, *) {
             button.configuration = .bordered()
         } else {
@@ -153,7 +151,7 @@ class GroupDetailView: UIView {
             joinGroupButton.topAnchor.constraint(equalTo: isMemberLabel.bottomAnchor, constant: 20),
             joinGroupButton.centerXAnchor.constraint(equalTo: s.centerXAnchor),
             joinGroupButton.heightAnchor.constraint(equalToConstant: 30),
-            joinGroupButton.widthAnchor.constraint(equalToConstant: 150),
+            joinGroupButton.widthAnchor.constraint(equalToConstant: 200),
 
             isDeletedLabel.topAnchor.constraint(equalTo: joinGroupButton.bottomAnchor, constant: 10),
             isDeletedLabel.leftAnchor.constraint(equalTo: s.leftAnchor),
@@ -163,5 +161,16 @@ class GroupDetailView: UIView {
 
     @objc func joinTap() {
         delegate?.didInviteTap(true)
+    }
+
+    func setupJoinLeaveButton(isJoined: Bool) {
+        joinGroupButton.addTarget(self, action: #selector(joinTap), for: .touchUpInside)
+        joinGroupButton.setTitle("Join group", for: .normal)
+        joinGroupButton.setTitle("You're in the group", for: .disabled)
+        if isJoined {
+            joinGroupButton.isEnabled = false
+        } else {
+            joinGroupButton.isEnabled = true
+        }
     }
 }

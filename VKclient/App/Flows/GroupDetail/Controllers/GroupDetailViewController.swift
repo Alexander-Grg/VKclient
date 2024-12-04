@@ -12,7 +12,6 @@ class GroupDetailViewController: UIViewController {
     var groupsDetailView = GroupDetailView()
     private let presenter: GroupsDetailOutput
 
-
     init(presenter: GroupsDetailOutput) {
         self.presenter = presenter
         super.init(nibName: nil, bundle: nil)
@@ -32,12 +31,19 @@ class GroupDetailViewController: UIViewController {
         groupsDetailView.delegate = self
         presenter.viewDidLoad()
     }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        groupsDetailView.setupJoinLeaveButton(isJoined: presenter.isMember)
+    }
 }
 
 extension GroupDetailViewController: GroupsDetailInput {
+    
 }
 
 extension GroupDetailViewController: GroupDetailDelegate {
+    
     func didInviteTap(_ isTapped: Bool) {
         if isTapped {
             presenter.joinGroup()
