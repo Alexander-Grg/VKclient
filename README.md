@@ -1,7 +1,7 @@
 # VKclient
 UIkit clean code MVP architecture + COMBINE for the network layer + REALM for data persistence + natively created custom Dependency injector to handle DI. Everything is created entirely programmatically.
 **_Video demonstration of the app:_**
-https://drive.google.com/file/d/16zBZS8E_mrlsjcHuxBYRbAiHgBDGZ5nB/view?usp=sharing
+[Watch the video](https://drive.google.com/uc?id=16zBZS8E_mrlsjcHuxBYRbAiHgBDGZ5nB&export=download)
 
 You can try it by signing up on the website https://vk.com/ 
 Data source https://dev.vk.com
