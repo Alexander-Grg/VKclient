@@ -1,5 +1,5 @@
 # VKclient
-The very first pet project was developed in 2021. Later refactored.
+**_The very first pet project was developed in 2021._**
 UIkit clean code MVP architecture + COMBINE for the network layer + REALM for data persistence + natively created custom Dependency injector to handle DI. Everything is created entirely programmatically.
 **_Video demonstration of the app:_**
 https://drive.google.com/uc?id=16zBZS8E_mrlsjcHuxBYRbAiHgBDGZ5nB&export=sharing
