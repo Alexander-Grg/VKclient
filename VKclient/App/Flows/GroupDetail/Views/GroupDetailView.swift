@@ -16,7 +16,7 @@ class GroupDetailView: UIView {
 //    MARK: Properties
     weak var delegate: GroupDetailDelegate?
 
-    private (set) lazy var groupImage: UIImageView = {
+    private(set) lazy var groupImage: UIImageView = {
         let image = UIImageView()
         image.translatesAutoresizingMaskIntoConstraints = false
         image.contentMode = .scaleAspectFit
@@ -25,7 +25,7 @@ class GroupDetailView: UIView {
         return image
     }()
 
-    private (set) lazy var groupNameLabel: UILabel = {
+    private(set) lazy var groupNameLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.numberOfLines = 1
@@ -36,7 +36,7 @@ class GroupDetailView: UIView {
         return label
     }()
 
-    private (set) lazy var groupStatusLabel: UILabel = {
+    private(set) lazy var groupStatusLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.numberOfLines = 1
@@ -47,7 +47,7 @@ class GroupDetailView: UIView {
         return label
     }()
 
-    private (set) lazy var isDeletedLabel: UILabel = {
+    private(set) lazy var isDeletedLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.numberOfLines = 1
@@ -58,7 +58,7 @@ class GroupDetailView: UIView {
         return label
     }()
 
-    private (set) lazy var isMemberLabel: UILabel = {
+    private(set) lazy var isMemberLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.numberOfLines = 1
@@ -69,14 +69,14 @@ class GroupDetailView: UIView {
         return label
     }()
 
-    private (set) lazy var groupCoverImage: UIImageView = {
+    private(set) lazy var groupCoverImage: UIImageView = {
         let image = UIImageView()
         image.translatesAutoresizingMaskIntoConstraints = false
         image.contentMode = .scaleAspectFill
         return image
     }()
 
-    private (set) lazy var joinGroupButton: UIButton = {
+    private(set) lazy var joinGroupButton: UIButton = {
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
         if #available(iOS 15.0, *) {
