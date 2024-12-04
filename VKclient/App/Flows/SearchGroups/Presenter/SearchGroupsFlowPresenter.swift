@@ -15,6 +15,7 @@ protocol SearchGroupsFlowViewInput: AnyObject {
 
 protocol SearchGroupsFlowViewOutput: AnyObject {
     var groupsHolder: [GroupsObjects] { get }
+    var searchTextForGroup: String { get set }
     func didSearch(_ searchText: String)
     func toTheGroupDetails(index: IndexPath)
 }
@@ -28,6 +29,8 @@ final class SearchGroupsFlowPresenter {
         }
     }
     weak var viewInput: (UIViewController & SearchGroupsFlowViewInput)?
+    
+    var searchTextForGroup: String = ""
     
     private func searchForGroups(_ searchText: String) {
         if searchText.isEmpty {
@@ -46,7 +49,7 @@ final class SearchGroupsFlowPresenter {
                 .store(in: &cancellable)
         }
     }
-
+    
     private func toTheExactGroup(index: IndexPath) {
         let groups = self.groupsHolder[index.row]
         let nextVC = GroupsDetailModuleBuilder.buildForNetworkGroups(groups)
@@ -58,7 +61,7 @@ extension SearchGroupsFlowPresenter: SearchGroupsFlowViewOutput {
     func didSearch(_ searchText: String) {
         self.searchForGroups(searchText)
     }
-
+    
     func toTheGroupDetails(index: IndexPath) {
         self.toTheExactGroup(index: index)
     }
