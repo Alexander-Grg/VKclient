@@ -13,13 +13,13 @@ import KeychainAccess
 
 protocol GroupsFlowViewInput: AnyObject {
      var tableView: UITableView { get set }
+     func reloadData()
 }
 
 protocol GroupsFlowViewOutput: AnyObject {
     var dictOfGroups: [Character: [GroupsRealm]] { get }
     var firstLetters: [Character] { get }
     func removeGroup(id: Int, index: IndexPath)
-    func fetchFilterAndGetData()
     func didSearch(search: String)
     func updateData()
     func exit()
@@ -78,14 +78,20 @@ final class GroupsFlowPresenter {
         groupService.requestGroups()
             .decode(type: GroupsResponse.self, decoder: JSONDecoder())
             .receive(on: DispatchQueue.main)
-            .sink(receiveCompletion: { error in
-                print(error)
+            .sink(receiveCompletion: { completion in
+                switch completion {
+                case .finished:
+                    print("Fetching groups from network is finished")
+                case .failure(let error):
+                    print("Error: \(error)")
+                }
             }, receiveValue: { [weak self] value in
                 guard let self = self else { return }
                     self.savingDataToRealm(value.response.items)
             }
             )
             .store(in: &cancellable)
+        self.fetchAndFilterDataFromRealm()
     }
     
     private func savingDataToRealm(_ data: [GroupsObjects]) {
@@ -151,8 +157,8 @@ final class GroupsFlowPresenter {
     }
 
     private func updateRealmObjects() {
-        self.fetchFilterAndGetData()
-
+        self.fetchNetworkDataAndUploadToRealm()
+        
         groupsNotification = groupsfromRealm?.observe(on: .main, { [weak self] changes in
             guard let self = self
             else { return }
@@ -172,7 +178,6 @@ final class GroupsFlowPresenter {
                     guard let (index, section) = self.getIndexAndSectionForNewObject(indeces: insertions, groups: updatedGroupsRealm)
                     else { return }
                         self.insertRow(index: index, section: section)
-                    self.fetchFilterAndGetData()
                 }
 
                 if modifications.count > 0 {
@@ -254,10 +259,6 @@ final class GroupsFlowPresenter {
 }
 
 extension GroupsFlowPresenter: GroupsFlowViewOutput {
-
-    func fetchFilterAndGetData()  {
-            self.fetchNetworkDataAndUploadToRealm()
-    }
 
     func removeGroup(id: Int, index: IndexPath) {
         self.leaveGroupRequest(id: id, index: index)

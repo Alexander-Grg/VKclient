@@ -136,4 +136,8 @@ extension CommunitiesTableViewController: GroupsFlowViewInput {
     @objc func addGroupButtonPressed() {
         self.presenter.goNextGroupSearchScreen()
     }
+
+    func reloadData() {
+        self.tableView.reloadData()
+    }
 }
