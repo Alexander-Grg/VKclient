@@ -23,7 +23,7 @@ protocol PhotosFlowViewOutput: AnyObject {
 }
 
 final class PhotosFlowPresenter {
-    @Injected (\.photosService) var photosService
+    @Injected(\.photosService) var photosService
     private var cancellable = Set<AnyCancellable>()
     var friendID = try? Keychain().get("userID")
     var realmPhotos: Results<RealmPhotos>?

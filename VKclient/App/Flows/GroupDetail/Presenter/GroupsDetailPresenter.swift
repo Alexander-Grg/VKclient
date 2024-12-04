@@ -22,7 +22,7 @@ protocol GroupsDetailOutput: AnyObject {
 }
 
 final class GroupsDetailPresenter {
-    @Injected (\.groupActionsService) var groupService: GroupsActionProtocol
+    @Injected(\.groupActionsService) var groupService: GroupsActionProtocol
     private var cancellable = Set<AnyCancellable>()
     weak var viewInput: (UIViewController & GroupsDetailInput)?
     var isNetwork = false

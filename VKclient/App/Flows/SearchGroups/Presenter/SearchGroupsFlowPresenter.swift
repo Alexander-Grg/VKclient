@@ -20,7 +20,7 @@ protocol SearchGroupsFlowViewOutput: AnyObject {
 }
 
 final class SearchGroupsFlowPresenter {
-    @Injected (\.groupsSearchService) var groupsSearchService
+    @Injected(\.groupsSearchService) var groupsSearchService
     private var cancellable = Set<AnyCancellable>()
     var groupsHolder = [GroupsObjects]() {
         didSet {
