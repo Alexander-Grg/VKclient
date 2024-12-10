@@ -50,7 +50,6 @@ final class GroupsFlowPresenter {
              dictOfGroups[dictKey] = groupsForLetter
              if !firstLetters.contains(dictKey) {
                  firstLetters.append(dictKey)
-
              }
          }
 
@@ -91,7 +90,6 @@ final class GroupsFlowPresenter {
             }
             )
             .store(in: &cancellable)
-        self.fetchAndFilterDataFromRealm()
     }
     
     private func savingDataToRealm(_ data: [GroupsObjects]) {
@@ -157,6 +155,7 @@ final class GroupsFlowPresenter {
     }
 
     private func updateRealmObjects() {
+
         self.fetchNetworkDataAndUploadToRealm()
         
         groupsNotification = groupsfromRealm?.observe(on: .main, { [weak self] changes in
@@ -166,10 +165,8 @@ final class GroupsFlowPresenter {
             case .initial:
                 viewInput?.tableView.reloadData()
             case let .update(updatedGroupsRealm, deletions, insertions, modifications):
-                print("Updates for \(updatedGroupsRealm.count) objects")
-
                 if deletions.count > 0 {
-                    guard let (index, section) = self.getIndexAndSectionForNewObject(indeces: insertions, groups: updatedGroupsRealm)
+                    guard let (index, section) = self.getIndexAndSectionForNewObject(indeces: deletions, groups: updatedGroupsRealm)
                     else { return }
                     self.deleteRow(at: index, section: section)
                 }
@@ -181,10 +178,11 @@ final class GroupsFlowPresenter {
                 }
 
                 if modifications.count > 0 {
-                    guard let (index, section) = self.getIndexAndSectionForNewObject(indeces: insertions, groups: updatedGroupsRealm)
+                    guard let (index, section) = self.getIndexAndSectionForNewObject(indeces: modifications, groups: updatedGroupsRealm)
                     else { return }
                     self.updateRow(at: index, section: section)
                 }
+                viewInput?.tableView.reloadData()
             case let .error(error):
                 print(error)
             }
@@ -192,14 +190,15 @@ final class GroupsFlowPresenter {
     }
     
     private func toTheGroupSearch() {
-        let nextVC = SearchGroupsFlowBuilder.build()
+        let nextVC = SearchGroupsFlowBuilder.build(updateDelegate: self)
         self.viewInput?.navigationController?.pushViewController(nextVC, animated: true)
     }
 
     private func toTheExactGroup(index: IndexPath) {
         let firstLetter = self.firstLetters[index.section]
         if let groups = self.dictOfGroups[firstLetter] {
-            let nextVC = GroupsDetailModuleBuilder.build(groups[index.row])
+            let nextVC = GroupsDetailModuleBuilder.build(groups[index.row], joinGroupDelegate: self, removeGroupDelegate: self)
+
             self.viewInput?.navigationController?.pushViewController(nextVC, animated: true)
         }
     }
@@ -253,23 +252,34 @@ final class GroupsFlowPresenter {
             .store(in: &cancellable)
     }
 
+    private func removeSpecificGroup(id: Int) {
+           if let groups = self.groupsfromRealm {
+               let data = groups.filter("id == %@", id)
+               self.removeDataFromRealm(data)
+               self.updateData()
+           }
+    }
+
     private func logout() {
         alertOfExit()
     }
 }
 
 extension GroupsFlowPresenter: GroupsFlowViewOutput {
-
+    
     func removeGroup(id: Int, index: IndexPath) {
         self.leaveGroupRequest(id: id, index: index)
     }
-
+    
     func updateData() {
         self.updateRealmObjects()
+        self.fetchAndFilterDataFromRealm()
+        self.viewInput?.reloadData()
     }
 
     func didSearch(search: String) {
         self.filterGroups(with: search)
+        self.viewInput?.reloadData()
     }
     
     func exit() {
@@ -282,5 +292,26 @@ extension GroupsFlowPresenter: GroupsFlowViewOutput {
 
     func goDetailGroupScreen(index: IndexPath) {
         self.toTheExactGroup(index: index)
+    }
+}
+
+extension GroupsFlowPresenter: JoinGroupDelegate {
+    func joinGroupDelegation(_ isJoined: Bool) {
+        if isJoined {
+            self.updateData()
+        }
+    }
+}
+
+extension GroupsFlowPresenter: RemoveGroupDelegate {
+    func removeGroup(_ groupId: Int?) {
+        guard let id = groupId else { return }
+        self.removeSpecificGroup(id: id)
+    }
+}
+
+extension GroupsFlowPresenter: SearchGroupsUpdateDelegate {
+    func didAddGroup() {
+        self.updateData()
     }
 }

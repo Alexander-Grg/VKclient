@@ -6,7 +6,7 @@
 //
 
 import UIKit
-import WebKit
+@preconcurrency import WebKit
 import KeychainAccess
 
 class VKLoginController: UIViewController, WKUIDelegate {
