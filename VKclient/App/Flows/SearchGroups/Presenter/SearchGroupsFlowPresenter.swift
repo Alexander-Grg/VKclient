@@ -9,6 +9,10 @@ import Foundation
 import UIKit
 import Combine
 
+protocol SearchGroupsUpdateDelegate: AnyObject {
+    func didAddGroup()
+}
+
 protocol SearchGroupsFlowViewInput: AnyObject {
     func updateTableView()
 }
@@ -22,6 +26,7 @@ protocol SearchGroupsFlowViewOutput: AnyObject {
 
 final class SearchGroupsFlowPresenter {
     @Injected(\.groupsSearchService) var groupsSearchService
+    weak var updateDelegate: SearchGroupsUpdateDelegate?
     private var cancellable = Set<AnyCancellable>()
     var groupsHolder = [GroupsObjects]() {
         didSet {
@@ -52,7 +57,7 @@ final class SearchGroupsFlowPresenter {
     
     private func toTheExactGroup(index: IndexPath) {
         let groups = self.groupsHolder[index.row]
-        let nextVC = GroupsDetailModuleBuilder.buildForNetworkGroups(groups)
+        let nextVC = GroupsDetailModuleBuilder.buildForNetworkGroups(groups, joinGroupDelegate: self.updateDelegate as! JoinGroupDelegate, removeGroupDelegate: self.updateDelegate as! RemoveGroupDelegate)
         self.viewInput?.navigationController?.pushViewController(nextVC, animated: true)
     }
 }

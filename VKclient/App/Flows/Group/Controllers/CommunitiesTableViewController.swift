@@ -52,8 +52,8 @@ class CommunitiesTableViewController: UIViewController, UISearchBarDelegate, UIT
         self.setupTableView()
         self.tableView.delegate = self
         self.tableView.dataSource = self
+        self.searchBar.delegate = self
         self.tableView.register(GroupsTableViewCell.self, forCellReuseIdentifier: GroupsTableViewCell.identifier)
-        searchBar.delegate = self
         navigationItem.titleView = searchBar
         navigationItem.leftBarButtonItem = exitButton
         navigationItem.rightBarButtonItem = addGroupButton
