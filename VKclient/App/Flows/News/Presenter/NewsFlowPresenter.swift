@@ -55,7 +55,7 @@ protocol NewsFlowViewOutput {
 }
 
 final class NewsFlowPresenter {
-    @Injected (\.newsService) var newsService
+    @Injected(\.newsService) var newsService
     internal var newsPost: [News] = []
     internal var nextNews = ""
     internal var isLoading = false

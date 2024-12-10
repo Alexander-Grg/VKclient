@@ -28,7 +28,7 @@ class GroupDetailViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        groupsDetailView.delegate = self
+        groupsDetailView.groupDetaildelegate = self
         presenter.viewDidLoad()
     }
 
@@ -39,13 +39,13 @@ class GroupDetailViewController: UIViewController {
 }
 
 extension GroupDetailViewController: GroupsDetailInput {
-    
 }
 
 extension GroupDetailViewController: GroupDetailDelegate {
-    
-    func didInviteTap(_ isTapped: Bool) {
-        if isTapped {
+    func didGroupButtonTap(_ isTapped: Bool) {
+        if isTapped && presenter.isMember == true {
+            presenter.leaveGroup()
+        } else if isTapped && presenter.isMember == false {
             presenter.joinGroup()
         }
     }

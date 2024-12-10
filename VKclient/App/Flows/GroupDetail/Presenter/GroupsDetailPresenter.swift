@@ -10,6 +10,16 @@ import RealmSwift
 import SDWebImage
 import Combine
 import KeychainAccess
+import Realm
+
+
+protocol RemoveGroupDelegate: AnyObject {
+    func removeGroup(_ id: Int?)
+}
+
+protocol JoinGroupDelegate: AnyObject {
+    func joinGroupDelegation(_ isJoined: Bool)
+}
 
 protocol GroupsDetailInput: AnyObject {
     var groupsDetailView: GroupDetailView { get set }
@@ -17,12 +27,18 @@ protocol GroupsDetailInput: AnyObject {
 
 protocol GroupsDetailOutput: AnyObject {
     var isMember: Bool { get }
+    var group: GroupsRealm? { get }
     func viewDidLoad()
     func joinGroup()
+    func leaveGroup()
 }
 
 final class GroupsDetailPresenter {
-    @Injected (\.groupActionsService) var groupService: GroupsActionProtocol
+    @Injected(\.groupActionsService) var groupActionsService: GroupsActionProtocol
+    @Injected(\.groupsService) var groupService: GroupsServiceProtocol
+    weak var joinGroupDelegate: JoinGroupDelegate?
+    weak var removeGroupDelegate: RemoveGroupDelegate?
+
     private var cancellable = Set<AnyCancellable>()
     weak var viewInput: (UIViewController & GroupsDetailInput)?
     var isNetwork = false
@@ -37,8 +53,11 @@ final class GroupsDetailPresenter {
             return false
         }
     }
-    var group: GroupsRealm? = nil
+
+    var isGroupJoined = false
+    var realmGroups: Results<GroupsRealm>? = nil
     var networkGroup: GroupsObjects? = nil
+    var group: GroupsRealm? = nil
 
     convenience init(group: GroupsRealm?) {
         self.init()
@@ -79,17 +98,49 @@ final class GroupsDetailPresenter {
         }
     }
 
+    private func leaveGroupRequest() {
+        let id = (isNetwork ? networkGroup?.id : group?.id) ?? 0
+        groupActionsService.requestGroupsLeave(id: id)
+            .decode(type: GroupsActionsResponse.self, decoder: JSONDecoder())
+            .receive(on: DispatchQueue.main)
+            .sink(receiveCompletion: { completion in
+                switch completion {
+                case .finished:
+                    print("The process of leaving group is finished")
+                case .failure(let error):
+                    print("The leave group process failed: \(String(describing: error))")
+                }
+            }, receiveValue: { (result) in
+                if result.response == 1 {
+                    if self.isNetwork {
+                        self.networkGroup?.isMember = 0
+                        self.removeGroupDelegate?.removeGroup(self.networkGroup?.id)
+                    } else {
+                        self.removeGroupDelegate?.removeGroup(self.group?.id)
+                    }
+                    self.viewInput?.navigationController?.popViewController(animated: true)
+                }
+            })
+            .store(in: &cancellable)
+    }
+
     private func joinGroupRequest() {
         let id = (isNetwork ? networkGroup?.id : group?.id) ?? 0
-        groupService.requestGroupsJoin(id: id)
+        groupActionsService.requestGroupsJoin(id: id)
             .decode(type: GroupsActionsResponse.self, decoder: JSONDecoder())
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { (error) in
                 print("Join group request is failed: \(String(describing: error))")
             }, receiveValue: { (result) in
                 if result.response == 1 {
-                    print("Join group is succesful")
+                    print("Join group is successful")
                     self.alertOfJoinStatus()
+                    self.joinGroupDelegate?.joinGroupDelegation(true)
+                    if self.isNetwork {
+                        self.networkGroup?.isMember = 1
+                    } else {
+                        self.group?.isMemberStatus = 1
+                    }
                 }
             })
             .store(in: &cancellable)
@@ -97,16 +148,12 @@ final class GroupsDetailPresenter {
 
     private func alertOfJoinStatus() {
         let alertController = UIAlertController(title: "Success", message: "You've succesfully joined the group", preferredStyle: .alert)
-
         let updateDataAction = UIAlertAction(title: "Ok", style: .default) { action in
             self.viewInput?.groupsDetailView.setupJoinLeaveButton(isJoined: self.isMember)
             self.configureView()
         }
-
-
-
         alertController.addAction(updateDataAction)
-
+        
         viewInput?.present(alertController, animated: true)
     }
 }
@@ -115,8 +162,20 @@ extension GroupsDetailPresenter: GroupsDetailOutput {
     func viewDidLoad() {
         self.configureView()
     }
-
+    
     func joinGroup() {
         self.joinGroupRequest()
+    }
+
+    func leaveGroup() {
+        self.leaveGroupRequest()
+    }
+}
+
+extension GroupsDetailPresenter: JoinGroupDelegate {
+    func joinGroupDelegation(_ isJoined: Bool) {
+        if isJoined {
+            joinGroupDelegate?.joinGroupDelegation(true)
+          }
     }
 }
