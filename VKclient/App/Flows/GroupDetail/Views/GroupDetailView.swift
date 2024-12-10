@@ -8,14 +8,14 @@
 import UIKit
 
 protocol GroupDetailDelegate: AnyObject {
-    func didInviteTap(_ isTapped: Bool)
+    func didGroupButtonTap(_ isTapped: Bool)
 }
 
 class GroupDetailView: UIView {
-    
+
+    weak var groupDetaildelegate: GroupDetailDelegate?
+
     //    MARK: Properties
-    weak var delegate: GroupDetailDelegate?
-    
     private(set) lazy var groupImage: UIImageView = {
         let image = UIImageView()
         image.translatesAutoresizingMaskIntoConstraints = false
@@ -84,11 +84,11 @@ class GroupDetailView: UIView {
         } else {
             // Fallback on earlier versions
         }
-        button.addTarget(self, action: #selector(joinTap), for: .touchUpInside)
+        button.addTarget(self, action: #selector(groupButtonTap), for: .touchUpInside)
         
         return button
     }()
-    
+
     //    MARK: Lifecycle
     
     override init(frame: CGRect) {
@@ -154,19 +154,19 @@ class GroupDetailView: UIView {
             joinGroupButton.centerXAnchor.constraint(equalTo: s.centerXAnchor),
             joinGroupButton.heightAnchor.constraint(equalToConstant: 30),
             joinGroupButton.widthAnchor.constraint(equalToConstant: 200),
-            
+
             isDeletedLabel.topAnchor.constraint(equalTo: joinGroupButton.bottomAnchor, constant: 10),
             isDeletedLabel.leftAnchor.constraint(equalTo: s.leftAnchor),
             isDeletedLabel.rightAnchor.constraint(equalTo: s.rightAnchor)
         ])
     }
     
-    @objc func joinTap() {
-        delegate?.didInviteTap(true)
+    @objc func groupButtonTap() {
+        groupDetaildelegate?.didGroupButtonTap(true)
     }
-    
+
     func setupJoinLeaveButton(isJoined: Bool) {
-        joinGroupButton.setTitle(isJoined ? "You're in the group" : "Join group", for: .normal)
-        joinGroupButton.isEnabled = !isJoined
+        joinGroupButton.setTitle(isJoined ? "Leave group" : "Join group", for: .normal)
+        joinGroupButton.setTitleColor( isJoined ? UIColor.red :  UIColor.blue, for: .normal)
     }
 }

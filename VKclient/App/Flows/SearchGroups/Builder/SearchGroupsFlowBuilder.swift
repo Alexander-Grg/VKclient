@@ -8,11 +8,12 @@
 import UIKit
 
 final class SearchGroupsFlowBuilder {
-    static func build() -> (UIViewController & SearchGroupsFlowViewInput) {
+    static func build(updateDelegate: SearchGroupsUpdateDelegate) -> (UIViewController & SearchGroupsFlowViewInput) {
         let presenter = SearchGroupsFlowPresenter()
         let viewController = GroupsSearchTableViewController(presenter: presenter)
         presenter.viewInput = viewController
-        
+        presenter.updateDelegate = updateDelegate
+
         return viewController
     }
 }
