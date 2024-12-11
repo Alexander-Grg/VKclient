@@ -25,7 +25,7 @@ struct Newsfeed: Codable {
     var items: [News]
     var profiles: [User]
     var groups: [Community]
-    var nextFrom: String
+    var nextFrom: String?
     enum CodingKeys: String, CodingKey {
         case items
         case profiles
