@@ -13,10 +13,11 @@ final class NewsTableViewController: UIViewController {
         
         return table
     }()
-    private let textCellFont = UIFont(name: "Avenir-Light", size: 16.0)!
+    private let textCellFont = UIFont(name: "Avenir-Light", size: 16.0) ?? UIFont.systemFont(ofSize: 16)
     private let defaultCellHeight: CGFloat = 130
     private var presenter: NewsFlowViewOutput
-    
+    private var isPressedState: [IndexPath: Bool] = [:]
+
     init(presenter: NewsFlowViewOutput) {
         self.presenter = presenter
         super.init(nibName: nil, bundle: nil)
@@ -53,11 +54,11 @@ final class NewsTableViewController: UIViewController {
     
     @objc private func didRefresh() {
         tableView.refreshControl?.beginRefreshing()
-        _ = Date().timeIntervalSince1970 + 1
-        
         self.presenter.loadNews()
-        DispatchQueue.main.async {
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) { // Simulate refresh delay
             self.tableView.refreshControl?.endRefreshing()
+            self.tableView.reloadData()
         }
     }
     
@@ -131,8 +132,8 @@ extension NewsTableViewController: UITableViewDataSource {
             let newsCGfloatRatio = CGFloat(ratio)
             return newsCGfloatRatio * tableWidth
         case .text:
-            let cell = tableView.cellForRow(at: indexPath) as? NewsTableViewCellPost
-            return (cell?.isPressed ?? false) ? UITableView.automaticDimension : defaultCellHeight
+            let isPressed = isPressedState[indexPath] ?? false
+              return isPressed ? UITableView.automaticDimension : defaultCellHeight
         }
     }
 }
@@ -147,25 +148,30 @@ extension NewsTableViewController: UITableViewDelegate {
 extension NewsTableViewController: UITableViewDataSourcePrefetching {
     
     func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
-        
         guard let maxSections = indexPaths.map({ $0.section }).max() else { return }
-        
-        if maxSections > self.presenter.newsPost.count - 3, self.presenter.isLoading == false {
+
+        if maxSections > self.presenter.newsPost.count - 3, !self.presenter.isLoading {
             self.presenter.isLoading = true
-            
+
             self.presenter.loadNextData(startFrom: self.presenter.nextNews) { news, nextFrom in
                 DispatchQueue.main.async {
-                    let indexSet = IndexSet(integersIn: (self.presenter.newsPost.count) ..< ((self.presenter.newsPost.count) + news.count))
-                    
+                    let startingIndex = self.presenter.newsPost.count
+                    let indexSet = IndexSet(integersIn: startingIndex ..< (startingIndex + news.count))
                     self.presenter.newsPost.append(contentsOf: news)
-                    
                     self.presenter.nextNews = nextFrom
-                    
+
+                    for section in startingIndex..<self.presenter.newsPost.count {
+                        for row in 0..<self.presenter.newsPost[section].rowsCounter.count {
+                            let indexPath = IndexPath(row: row, section: section)
+                            self.isPressedState[indexPath] = false // Default state
+                        }
+                    }
+
                     tableView.beginUpdates()
-                    self.tableView.insertSections(indexSet, with: .automatic)
+                    tableView.insertSections(indexSet, with: .automatic)
                     tableView.endUpdates()
+
                     self.presenter.isLoading = false
-                    self.tableView.reloadData()
                 }
             }
         }
@@ -174,13 +180,26 @@ extension NewsTableViewController: UITableViewDataSourcePrefetching {
 
 extension NewsTableViewController: NewsDelegate {
     func buttonTapped(cell: NewsTableViewCellPost) {
-        tableView.beginUpdates()
-        tableView.endUpdates()
+        if let indexPath = tableView.indexPath(for: cell) {
+            isPressedState[indexPath] = !(isPressedState[indexPath] ?? false)
+            tableView.beginUpdates()
+            tableView.endUpdates()
+        }
     }
 }
 
 extension NewsTableViewController: NewsFlowViewInput {
     func updateTableView() {
+        var newState: [IndexPath: Bool] = [:]
+
+        for section in 0..<self.presenter.newsPost.count {
+            for row in 0..<self.presenter.newsPost[section].rowsCounter.count {
+                let indexPath = IndexPath(row: row, section: section)
+                newState[indexPath] = self.isPressedState[indexPath] ?? false
+            }
+        }
+
+        self.isPressedState = newState
         self.tableView.reloadData()
     }
 }

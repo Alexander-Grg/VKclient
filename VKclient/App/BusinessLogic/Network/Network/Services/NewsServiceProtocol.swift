@@ -17,6 +17,11 @@ protocol NewsServiceProtocol: AnyObject {
                  -> Void)
 }
 
+struct FallbackSource: NewsSource {
+    var name = "Unknown Source"
+    var urlString = ""
+}
+
 final class NewsService: NewsServiceProtocol {
     
     var cancellable = Set<AnyCancellable>()
@@ -35,20 +40,17 @@ final class NewsService: NewsServiceProtocol {
                 let groups = value.response.groups
                 let nextFrom = value.response.nextFrom
                 
-                let newsWithSources = news.compactMap { posts -> News? in
-                    if posts.sourceId > 0 {
-                        var news = posts
-                        guard let newsID = profiles.first(where: { $0.id == posts.sourceId})
-                        else { return nil }
-                        news.urlProtocol = newsID
-                        return news
+
+                let newsWithSources = news.map { post -> News in
+                    var newPost = post
+                    if post.sourceId > 0 {
+                        // If no profile is found, assign fallback
+                        newPost.urlProtocol = profiles.first(where: { $0.id == post.sourceId }) ?? FallbackSource()
                     } else {
-                        var news = posts
-                        guard let newsID = groups.first(where: { -$0.id == posts.sourceId})
-                        else { return nil }
-                        news.urlProtocol = newsID
-                        return news
+                        // If no group is found, assign fallback
+                        newPost.urlProtocol = groups.first(where: { -$0.id == post.sourceId }) ?? FallbackSource()
                     }
+                    return newPost
                 }
                 completion(newsWithSources, nextFrom)
             }
