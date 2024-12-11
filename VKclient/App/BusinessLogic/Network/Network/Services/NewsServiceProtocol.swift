@@ -50,7 +50,7 @@ final class NewsService: NewsServiceProtocol {
                         return news
                     }
                 }
-                completion(newsWithSources, nextFrom)
+                completion(newsWithSources, nextFrom ?? "")
             }
             )
             .store(in: &cancellable)
