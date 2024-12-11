@@ -30,10 +30,10 @@ protocol GroupsFlowViewOutput: AnyObject {
 final class GroupsFlowPresenter {
     @Injected(\.groupsService) var groupService: GroupsServiceProtocol
     @Injected(\.groupActionsService) var groupActionService: GroupsActionProtocol
+    @Injected(\.realmService) var realmService: RealmServiceProtocol
     private var cancellable = Set<AnyCancellable>()
     var groupsfromRealm: Results<GroupsRealm>?
     var groupsNotification: NotificationToken?
-    var realm: RealmService?
     var dictOfGroups: [Character: [GroupsRealm]] = [:]
     var firstLetters = [Character]()
     weak var viewInput: (UIViewController & GroupsFlowViewInput)?
@@ -95,7 +95,7 @@ final class GroupsFlowPresenter {
     private func savingDataToRealm(_ data: [GroupsObjects]) {
           do {
               let dataRealm = data.map {GroupsRealm(groups: $0)}
-              try RealmService.save(items: dataRealm)
+              try self.realmService.save(items: dataRealm, configuration: .defaultConfiguration, update: .modified)
           } catch {
               print("Saving to Realm failed")
           }
@@ -105,7 +105,7 @@ final class GroupsFlowPresenter {
         guard let objectToDelete = data else { return }
 
         do {
-            try RealmService.delete(object: objectToDelete)
+            try self.realmService.delete(object: objectToDelete)
         } catch {
             print("Deletion from Realm failed")
         }
@@ -113,7 +113,7 @@ final class GroupsFlowPresenter {
 
     private func fetchAndFilterDataFromRealm() {
         do {
-            self.groupsfromRealm = try RealmService.get(type: GroupsRealm.self)
+            self.groupsfromRealm = try self.realmService.get(type: GroupsRealm.self, configuration: .defaultConfiguration)
         } catch {
             print("Download from Realm failed")
         }

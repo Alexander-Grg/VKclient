@@ -23,7 +23,8 @@ protocol PhotosFlowViewOutput: AnyObject {
 }
 
 final class PhotosFlowPresenter {
-    @Injected(\.photosService) var photosService
+    @Injected(\.photosService) var photosService: PhotosServiceProtocol
+    @Injected(\.realmService) var realmService: RealmServiceProtocol
     private var cancellable = Set<AnyCancellable>()
     var friendID = try? Keychain().get("userID")
     var realmPhotos: Results<RealmPhotos>?
@@ -51,7 +52,7 @@ final class PhotosFlowPresenter {
     private func savingToRealm(_ value: [PhotosObject]) {
         do {
             let realm = value.map { RealmPhotos(photos: $0)}
-            try RealmService.save(items: realm)
+            try self.realmService.save(items: realm, configuration: .defaultConfiguration, update: .modified)
         } catch {
             print("Saving to Realm failed")
         }
@@ -60,7 +61,7 @@ final class PhotosFlowPresenter {
     private func loadDataFromRealm() {
         guard let intFriendID = Int(friendID ?? "") else { return }
         do {
-            self.realmPhotos = try RealmService.get(type: RealmPhotos.self).filter(NSPredicate(format: "ownerID == %d", intFriendID))
+            self.realmPhotos = try self.realmService.get(type: RealmPhotos.self, configuration: .defaultConfiguration).filter(NSPredicate(format: "ownerID == %d", intFriendID))
         } catch {
             print("Loading from Realm error")
         }

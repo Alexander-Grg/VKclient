@@ -7,38 +7,64 @@
 
 import RealmSwift
 
-final class RealmService {
+struct RealmServiceKey: InjectionKey {
+   static var currentValue: RealmServiceProtocol = RealmService()
+}
 
-    static let deleteIfMigration = Realm.Configuration(deleteRealmIfMigrationNeeded: true)
+protocol RealmServiceProtocol {
+    func save<T: Object>(
+        items: [T],
+        configuration: Realm.Configuration,
+        update: Realm.UpdatePolicy
+    ) throws
 
-    static func save<T: Object> (
-        items: [T], configuration: Realm.Configuration = deleteIfMigration, update: Realm.UpdatePolicy = .modified)
-    throws {
+    func load<T: Object>(typeOf: T.Type) throws -> Results<T>
+
+    func delete<T: Object>(object: Results<T>) throws
+
+    func get<T: Object>(
+        type: T.Type,
+        configuration: Realm.Configuration
+    ) throws -> Results<T>
+}
+
+final class RealmService: RealmServiceProtocol {
+    private let defaultConfiguration: Realm.Configuration
+
+    init(configuration: Realm.Configuration = Realm.Configuration(deleteRealmIfMigrationNeeded: true)) {
+        self.defaultConfiguration = configuration
+    }
+
+    func save<T: Object>(
+        items: [T],
+        configuration: Realm.Configuration = Realm.Configuration(deleteRealmIfMigrationNeeded: true),
+        update: Realm.UpdatePolicy = .modified
+    ) throws {
         let realm = try Realm(configuration: configuration)
         print(configuration.fileURL ?? "")
-        try realm.write({
+        try realm.write {
             realm.add(items, update: update)
-        })
+        }
     }
 
-    static func load<T: Object>(typeOf: T.Type) throws -> Results<T> {
-        let realm = try Realm()
-        return realm.objects(T.self)
+    func load<T: Object>(typeOf: T.Type) throws -> Results<T> {
+        let realm = try Realm(configuration: self.defaultConfiguration)
+        return realm.objects(typeOf)
     }
 
-    static func delete<T: Object>(object: Results<T>) throws {
-        let realm = try Realm()
+    func delete<T: Object>(object: Results<T>) throws {
+        let realm = try Realm(configuration: self.defaultConfiguration)
         try realm.write {
             realm.delete(object)
         }
     }
 
-    static func get<T: Object>(
+    func get<T: Object>(
         type: T.Type,
-        configuration: Realm.Configuration = deleteIfMigration
+        configuration: Realm.Configuration = Realm.Configuration(deleteRealmIfMigrationNeeded: true)
     ) throws -> Results<T> {
         let realm = try Realm(configuration: configuration)
         print(configuration.fileURL ?? "")
-        return realm.objects(T.self)
+        return realm.objects(type)
     }
 }
