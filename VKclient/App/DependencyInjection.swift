@@ -77,4 +77,9 @@ extension InjectedValues {
         get { Self[GroupsActionsKey.self] }
         set { Self[GroupsActionsKey.self] = newValue }
     }
+
+    var realmService: RealmServiceProtocol {
+        get { Self[RealmServiceKey.self] }
+        set { Self[RealmServiceKey.self] = newValue }
+    }
 }

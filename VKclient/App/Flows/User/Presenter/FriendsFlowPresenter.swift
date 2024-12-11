@@ -27,6 +27,7 @@ protocol FriendsFlowViewOutput: AnyObject {
 
 final class FriendsFlowPresenter {
     @Injected(\.userService) var userService
+    @Injected(\.realmService) var realmService
     private var cancellable = Set<AnyCancellable>()
     private var friendsFromRealm: Results<UserRealm>?
     private var notificationFriends: NotificationToken?
@@ -82,7 +83,7 @@ final class FriendsFlowPresenter {
     private func savingDataToRealm(_ data: [UserObject]) {
         do {
             let dataRealm = data.map {UserRealm(user: $0)}
-            try RealmService.save(items: dataRealm)
+            try realmService.save(items: dataRealm, configuration: .defaultConfiguration, update: .modified)
         } catch {
             print("Saving to Realm failed")
         }
@@ -90,7 +91,7 @@ final class FriendsFlowPresenter {
     
     private func loadDataFromRealm() {
         do {
-            self.friendsFromRealm = try RealmService.get(type: UserRealm.self)
+            self.friendsFromRealm = try realmService.get(type: UserRealm.self, configuration: .defaultConfiguration)
         } catch {
             print("Download from Realm failed")
         }
