@@ -14,7 +14,6 @@ protocol NewsDelegate: AnyObject {
 class NewsTableViewCellPost: UITableViewCell {
 
     // MARK: - Properties
-
     var isPressed: Bool = false
     weak var delegate: NewsDelegate?
 
