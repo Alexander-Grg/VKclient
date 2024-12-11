@@ -154,8 +154,6 @@ extension NewsTableViewController: UITableViewDataSourcePrefetching {
             self.presenter.isLoading = true
             
             self.presenter.loadNextData(startFrom: self.presenter.nextNews) { news, nextFrom in
-                
-                
                 DispatchQueue.main.async {
                     let indexSet = IndexSet(integersIn: (self.presenter.newsPost.count) ..< ((self.presenter.newsPost.count) + news.count))
                     

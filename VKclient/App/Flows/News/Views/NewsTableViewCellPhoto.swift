@@ -11,8 +11,6 @@ import SDWebImage
 class NewsTableViewCellPhoto: UITableViewCell {
 
 // MARK: - Properties
-    private var aspectRatioConstraint: NSLayoutConstraint?
-
     private(set) lazy var newsPhoto: UIImageView = {
         let photo = UIImageView()
         photo.contentMode = .center
@@ -56,16 +54,7 @@ class NewsTableViewCellPhoto: UITableViewCell {
 
     func configure(_ image: News) {
         guard let imageURL = image.attachmentPhotoUrl else { return }
-        newsPhoto.sd_setImage(with: imageURL, completed: { [weak self] image, _, _, _ in
-            guard let self = self, let image = image else { return }
-            let aspectRatio = image.size.width / image.size.height
-            if let aspectRatioConstraint = self.aspectRatioConstraint {
-                self.newsPhoto.removeConstraint(aspectRatioConstraint)
-            }
-            self.aspectRatioConstraint = self.newsPhoto.widthAnchor.constraint(equalTo: self.newsPhoto.heightAnchor, multiplier: aspectRatio)
-            self.aspectRatioConstraint?.isActive = true
-            self.layoutIfNeeded()
-        })
+        newsPhoto.sd_setImage(with: imageURL)
     }
 
 
