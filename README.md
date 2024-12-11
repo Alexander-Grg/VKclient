@@ -1,5 +1,5 @@
 # VKclient
-**_The very first iOS project that was developed in 2021, minor improvements are periodically added. _**
+The first iOS project was developed in 2021, minor improvements are periodically added.
 UIkit clean code MVP architecture + COMBINE for the network layer + REALM for data persistence + natively created custom Dependency injector to handle DI. Everything is created entirely programmatically.
 
 You can try it by signing up on the website https://vk.com/ 
