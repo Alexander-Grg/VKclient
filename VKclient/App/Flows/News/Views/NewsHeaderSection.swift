@@ -11,7 +11,6 @@ import SDWebImage
 class NewsHeaderSection: UITableViewCell {
 
     // MARK: - Properties
-
     private(set) lazy var avatarView: UIImageView = {
         let avatar = UIImageView()
         avatar.translatesAutoresizingMaskIntoConstraints = false

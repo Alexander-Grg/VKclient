@@ -62,28 +62,34 @@ struct News: Codable {
         else { return 0.0 }
         return aspect
     }
+    var isPressed: Bool = false
 
     var rowsCounter: [NewsTypes] {
-        
         var rowsCounter = [NewsTypes]()
+        let hasText = !(text?.isEmpty ?? true)
+        let hasPhoto = attachmentPhotoUrl != nil
+        let hasVideo = attachments?.contains(where: { $0.type == "video" }) ?? false
 
-        guard let textValue = text,
-              let urlValue = attachmentPhotoUrl
-        else { return rowsCounter }
-
-        if !textValue.isEmpty || !urlValue.absoluteString.isEmpty {
+        if hasText || hasPhoto
+//            || hasVideo
+        {
             rowsCounter.append(.header)
         }
 
-        if !textValue.isEmpty {
+        if hasText {
             rowsCounter.append(.text)
         }
 
-        if !urlValue.absoluteString.isEmpty {
+        if hasPhoto {
             rowsCounter.append(.photo)
+        } else if hasVideo {
+//            TODO: Handle videos
+            // rowsCounter.append(.video)
         }
 
-        if !textValue.isEmpty || !urlValue.absoluteString.isEmpty {
+        if hasText || hasPhoto
+//            || hasVideo
+        {
             rowsCounter.append(.footer)
         }
 
