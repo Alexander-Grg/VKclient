@@ -65,9 +65,9 @@ class ExtendedPhotoViewController: UIViewController {
         mainImage = UIImageView()
         rightImage = UIImageView()
 
-        leftImage.contentMode = .scaleAspectFill
-        mainImage.contentMode = .scaleAspectFill
-        rightImage.contentMode = .scaleAspectFill
+        leftImage.contentMode = .scaleAspectFit
+        mainImage.contentMode = .scaleAspectFit
+        rightImage.contentMode = .scaleAspectFit
 
         view.addSubview(leftImage)
         view.addSubview(mainImage)

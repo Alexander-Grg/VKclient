@@ -48,7 +48,6 @@ struct News: Codable {
 
     var urlProtocol: NewsSource?
 
-    // Computed property to fetch the first photo URL
     var attachmentPhotoUrl: URL? {
         guard let image = attachments?.first(where: { $0.type == "photo" }),
               let photo = image.photo?.sizes["x"] else {
@@ -57,7 +56,13 @@ struct News: Codable {
         return URL(string: photo)
     }
 
-    // Computed property to fetch the first video player URL
+    var attachmentPhotos: [String] {
+        guard let images = attachments?.filter({ $0.type == "photo" }) else {
+            return []
+        }
+        return images.compactMap { $0.photo?.sizes["x"] }
+    }
+
     var attachmentVideoUrl: URL? {
         guard let videoAttachment = attachments?.first(where: { $0.type == "video" }),
               let url =  videoAttachment.video?.trackCode
@@ -69,7 +74,6 @@ struct News: Codable {
         return URL(string: url)
     }
 
-    // Computed property for photo aspect ratio
     var aspectRatio: Float {
         guard let image = attachments?.first(where: { $0.type == "photo" }),
               let aspect = image.photo?.aspectRatio else {
@@ -78,7 +82,6 @@ struct News: Codable {
         return aspect
     }
 
-    // Computed property for video aspect ratio
     var videoAspectRatio: CGFloat {
         guard let videoAttachment = attachments?.first(where: { $0.type == "video" }),
               let video = videoAttachment.video,
@@ -92,7 +95,6 @@ struct News: Codable {
 
     var isPressed: Bool = false
 
-    // Dynamically determine row types based on content
     var rowsCounter: [NewsTypes] {
         var rowsCounter = [NewsTypes]()
         let hasText = !(text?.isEmpty ?? true)
