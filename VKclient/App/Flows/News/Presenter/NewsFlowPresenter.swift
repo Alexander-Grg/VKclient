@@ -14,7 +14,8 @@ enum NewsTypes {
     case text
     case header
     case footer
-    
+    case video
+
     func rowsToDisplay() -> UITableViewCell.Type {
         switch self {
         case .photo:
@@ -25,6 +26,8 @@ enum NewsTypes {
             return NewsFooterSection.self
         case .header:
             return NewsHeaderSection.self
+        case .video:
+            return NewsTableViewCellVideo.self
         }
     }
     
@@ -38,6 +41,8 @@ enum NewsTypes {
             return NewsFooterSection.identifier
         case .header:
             return NewsHeaderSection.identifier
+        case .video:
+            return NewsTableViewCellVideo.identifier
         }
     }
 }

@@ -1,6 +1,6 @@
 //
 //  AvatarView.swift
-//  MyFirstApp
+//  VKclient
 //
 //  Created by Alexander Grigoryev on 06.09.2021.
 //
