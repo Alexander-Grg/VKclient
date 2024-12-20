@@ -58,6 +58,7 @@ class NewsTableViewCellVideo: UITableViewCell {
     // MARK: - Setup
 
     private func setupView() {
+        self.selectionStyle = .none
         contentView.addSubview(videoContainerView)
         videoContainerView.translatesAutoresizingMaskIntoConstraints = false
 

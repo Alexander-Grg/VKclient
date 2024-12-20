@@ -70,7 +70,7 @@ class NewsTableViewCellPost: UITableViewCell {
     }
 
     private func setupConstraints() {
-
+        self.selectionStyle = .none
         textForPost.translatesAutoresizingMaskIntoConstraints = false
         showMoreTextButton.translatesAutoresizingMaskIntoConstraints = false
 
