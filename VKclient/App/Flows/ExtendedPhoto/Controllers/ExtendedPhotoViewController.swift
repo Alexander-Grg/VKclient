@@ -105,7 +105,13 @@ class ExtendedPhotoViewController: UIViewController {
         leftImage.sd_setImage(with: URL(string: arrayOfPhotosFromDB[leftPhotoIndex]))
         mainImage.sd_setImage(with: URL(string: arrayOfPhotosFromDB[mainPhotoIndex]))
         rightImage.sd_setImage(with: URL(string: arrayOfPhotosFromDB[rightPhotoIndex]))
-        numberOfPhotosLabel.text = "\(indexOfSelectedPhoto + 1) | \(arrayOfPhotosFromDB.count)"
+        if arrayOfPhotosFromDB.count == 1 {
+            numberOfPhotosLabel.text = "1 image"
+        } else {
+            numberOfPhotosLabel.text = "\(indexOfSelectedPhoto + 1) of \(arrayOfPhotosFromDB.count) images"
+        }
+
+        numberOfPhotosLabel.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
 
         mainImage.layer.cornerRadius = 8
         rightImage.layer.cornerRadius = 8
