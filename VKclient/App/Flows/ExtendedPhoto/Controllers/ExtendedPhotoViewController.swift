@@ -16,6 +16,7 @@ class ExtendedPhotoViewController: UIViewController {
     var leftImage: UIImageView!
     var mainImage: UIImageView!
     var rightImage: UIImageView!
+    var numberOfPhotosLabel: UILabel!
     var swipeToRight: UIViewPropertyAnimator!
     var swipeToLeft: UIViewPropertyAnimator!
 
@@ -65,6 +66,8 @@ class ExtendedPhotoViewController: UIViewController {
         mainImage = UIImageView()
         rightImage = UIImageView()
 
+        numberOfPhotosLabel = UILabel()
+
         leftImage.contentMode = .scaleAspectFit
         mainImage.contentMode = .scaleAspectFit
         rightImage.contentMode = .scaleAspectFit
@@ -72,10 +75,12 @@ class ExtendedPhotoViewController: UIViewController {
         view.addSubview(leftImage)
         view.addSubview(mainImage)
         view.addSubview(rightImage)
+        view.addSubview(numberOfPhotosLabel)
 
         leftImage.translatesAutoresizingMaskIntoConstraints = false
         mainImage.translatesAutoresizingMaskIntoConstraints = false
         rightImage.translatesAutoresizingMaskIntoConstraints = false
+        numberOfPhotosLabel.translatesAutoresizingMaskIntoConstraints = false
 
         NSLayoutConstraint.activate([
             mainImage.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30),
@@ -91,12 +96,16 @@ class ExtendedPhotoViewController: UIViewController {
             rightImage.leadingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
             rightImage.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             rightImage.heightAnchor.constraint(equalTo: mainImage.heightAnchor),
-            rightImage.widthAnchor.constraint(equalTo: mainImage.widthAnchor)
+            rightImage.widthAnchor.constraint(equalTo: mainImage.widthAnchor),
+
+            numberOfPhotosLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            numberOfPhotosLabel.topAnchor.constraint(equalTo: mainImage.bottomAnchor, constant: 40)
         ])
 
         leftImage.sd_setImage(with: URL(string: arrayOfPhotosFromDB[leftPhotoIndex]))
         mainImage.sd_setImage(with: URL(string: arrayOfPhotosFromDB[mainPhotoIndex]))
         rightImage.sd_setImage(with: URL(string: arrayOfPhotosFromDB[rightPhotoIndex]))
+        numberOfPhotosLabel.text = "\(indexOfSelectedPhoto + 1) | \(arrayOfPhotosFromDB.count)"
 
         mainImage.layer.cornerRadius = 8
         rightImage.layer.cornerRadius = 8

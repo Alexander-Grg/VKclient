@@ -113,8 +113,10 @@ extension NewsTableViewController: UITableViewDataSource {
         case .footer:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: NewsFooterSection.identifier) as? NewsFooterSection
             else { return NewsFooterSection() }
-            cell.configureCell(news)
-            
+            cell.configureCell(news, currentLikeState: news.likes)
+            cell.likesButton.delegate = self
+
+
             return cell
             
         case .video:
@@ -134,7 +136,7 @@ extension NewsTableViewController: UITableViewDataSource {
         case .header:
             return 75
         case .footer:
-            return 40
+            return 60
         case .photo:
             let tableWidth = tableView.bounds.width
             let ratio = self.presenter.newsPost[indexPath.section].aspectRatio
@@ -222,5 +224,15 @@ extension NewsTableViewController: NewsTableViewCellPhotoDelegate {
     func didTapPhotoCell(images: [String], index: Int) {
         let vc = ExtendedPhotoViewController(arrayOfPhotosFromDB: images, indexOfSelectedPhoto: index)
         self.navigationController?.pushViewController(vc, animated: true)
+    }
+}
+
+extension NewsTableViewController: LikeControlDelegate {
+    func didLike() {
+          guard let cell = tableView.dequeueReusableCell(withIdentifier: NewsFooterSection.identifier) as? NewsFooterSection,
+                let indexPath = tableView.indexPath(for: cell) else
+        { return }
+
+          presenter.setLike(itemID: String(self.presenter.newsPost[indexPath.section].sourceId))
     }
 }

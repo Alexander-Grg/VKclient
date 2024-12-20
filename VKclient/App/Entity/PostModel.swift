@@ -163,13 +163,16 @@ struct Views: Codable {
 }
 
 // MARK: - Likes
-struct Likes {
-    var count: Int
-}
+struct Likes: Codable {
+    let canLike, count, userLikes, canPublish: Int
+    let repostDisabled: Bool
 
-extension Likes: Codable {
     enum CodingKeys: String, CodingKey {
+        case canLike = "can_like"
         case count
+        case userLikes = "user_likes"
+        case canPublish = "can_publish"
+        case repostDisabled = "repost_disabled"
     }
 }
 
@@ -236,3 +239,4 @@ struct VideoImage: Codable {
         case withPadding = "with_padding"
     }
 }
+
