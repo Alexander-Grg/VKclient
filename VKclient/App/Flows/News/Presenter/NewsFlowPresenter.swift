@@ -57,7 +57,8 @@ protocol NewsFlowViewOutput {
     var isLoading: Bool { get set }
     func loadNews()
     func loadNextData(startFrom: String, completion: @escaping ([News], String) -> Void)
-    func setLike(itemID: String)
+    func setLike(itemID: String, ownerID: String)
+    func removeLike(itemID: String, ownerID: String)
 }
 
 final class NewsFlowPresenter {
@@ -90,8 +91,8 @@ final class NewsFlowPresenter {
         }
     }
 
-    func setLike(itemID: String) {
-        likesService.setLike(type: "post", itemID: itemID)
+    func setLike(itemID: String, ownerID: String) {
+        likesService.setLike(type: "post", itemID: itemID, ownerID: ownerID)
             .decode(type: Likes.self, decoder: JSONDecoder())
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { completion in
@@ -107,8 +108,8 @@ final class NewsFlowPresenter {
                 }).store(in: &cancellable)
     }
 
-    func removeLike(itemID: String) {
-        likesService.removeLike(type: "post", itemID: itemID)
+    func removeLike(itemID: String, ownerID: String) {
+        likesService.removeLike(type: "post", itemID: itemID, ownerID: ownerID)
             .decode(type: Likes.self, decoder: JSONDecoder())
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { completion in
@@ -124,9 +125,9 @@ final class NewsFlowPresenter {
                 }).store(in: &cancellable)
     }
 
-    func isLiked(itemID: String) -> Bool {
+    func isLiked(itemID: String, ownerID: String) -> Bool {
         var isThisItemLiked: Bool = false
-        likesService.isLiked(type: "post", itemID: itemID)
+        likesService.isLiked(type: "post", itemID: itemID, ownerID: ownerID)
             .decode(type: Likes.self, decoder: JSONDecoder())
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { completion in

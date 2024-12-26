@@ -6,37 +6,40 @@
 //
 import Foundation
 enum LikesEndpoint: EndpointProtocol {
-    case setLike(type: String, itemID: String)
-    case removeLike(type: String, itemID: String)
-    case isLiked(type: String, itemID: String)
+    case setLike(type: String, itemID: String, ownerID: String)
+    case removeLike(type: String, itemID: String, ownerID: String)
+    case isLiked(type: String, itemID: String, ownerID: String)
 
     var absoluteURL: String {
         switch self {
-        case let .setLike(type, itemID):
-            return baseURL + "method/likes.add"
-        case let .isLiked(type, itemID):
-            return baseURL + "method/likes.isLiked"
-        case let .removeLike(type, itemID):
-            return baseURL + "method/likes.delete"
+        case .setLike(_, _,_):
+            return baseURL + "/method/likes.add"
+        case .isLiked(_, _, _):
+            return baseURL + "/method/likes.isLiked"
+        case .removeLike(_, _, _):
+            return baseURL + "/method/likes.delete"
         }
     }
 
     var parameters: [String : String] {
         switch self {
-        case let .setLike(type, itemID):
+        case let .setLike(type, itemID, ownerID):
             return [
                 "type" : type,
-                "item_id" : itemID
+                "item_id" : itemID,
+                "owner_id" : ownerID
             ]
-        case let .isLiked(type, itemID):
+        case let .isLiked(type, itemID, ownerID):
             return [
                 "type" : type,
-                "item_id" : itemID
+                "item_id" : itemID,
+                "owner_id" : ownerID
             ]
-        case let .removeLike(type, itemID):
+        case let .removeLike(type, itemID, ownerID):
             return [
                 "type" : type,
-                "item_id" : itemID
+                "item_id" : itemID,
+                "owner_id" : ownerID
             ]
         }
     }

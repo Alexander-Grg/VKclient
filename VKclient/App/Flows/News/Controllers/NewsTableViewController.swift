@@ -34,7 +34,7 @@ final class NewsTableViewController: UIViewController {
         tableView.prefetchDataSource = self
         tableView.dataSource = self
         tableView.delegate = self
-        
+        self.view.isUserInteractionEnabled = true
         configRefreshControl()
         
         self.tableView.register(NewsHeaderSection.self, forCellReuseIdentifier: NewsHeaderSection.identifier)
@@ -114,15 +114,13 @@ extension NewsTableViewController: UITableViewDataSource {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: NewsFooterSection.identifier) as? NewsFooterSection
             else { return NewsFooterSection() }
             cell.configureCell(news, currentLikeState: news.likes)
+//            cell.isUserInteractionEnabled = true
             cell.likesButton.delegate = self
-
-
             return cell
             
         case .video:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: NewsTableViewCellVideo.identifier) as? NewsTableViewCellVideo else { return NewsTableViewCellVideo() }
             cell.configure(news)
-            
             return cell
         }
     }
@@ -228,11 +226,21 @@ extension NewsTableViewController: NewsTableViewCellPhotoDelegate {
 }
 
 extension NewsTableViewController: LikeControlDelegate {
-    func didLike() {
-          guard let cell = tableView.dequeueReusableCell(withIdentifier: NewsFooterSection.identifier) as? NewsFooterSection,
-                let indexPath = tableView.indexPath(for: cell) else
-        { return }
+    func didLike(in cell: NewsFooterSection?) {
+        guard let cell = cell,
+              let indexPath = tableView.indexPath(for: cell) else { return }
 
-          presenter.setLike(itemID: String(self.presenter.newsPost[indexPath.section].sourceId))
+        let news = presenter.newsPost[indexPath.section]
+
+        if news.likes?.canLike == 1 {
+            presenter.setLike(itemID: String(news.postID), ownerID: String(news.sourceId))
+            tableView.reloadRows(at: [indexPath], with: .none)
+        } else if news.likes?.canLike == 0 {
+            presenter.removeLike(itemID: String(news.postID),ownerID: String(news.sourceId))
+            tableView.reloadRows(at: [indexPath], with: .none)
+        }
+        self.presenter.loadNews()
+        cell.configureCell(news, currentLikeState: news.likes)
+        tableView.reloadRows(at: [indexPath], with: .none)
     }
 }
