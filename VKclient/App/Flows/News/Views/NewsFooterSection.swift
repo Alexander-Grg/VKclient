@@ -7,12 +7,9 @@
 
 import UIKit
 
-class NewsFooterSection: UITableViewCell, LikeControlDelegate {
-    func didLike() {
-
-    }
-    
+class NewsFooterSection: UITableViewCell {
     // MARK: - Properties
+    weak var delegate: LikeControlDelegate?
     private(set) lazy var repostButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -34,6 +31,7 @@ class NewsFooterSection: UITableViewCell, LikeControlDelegate {
     private(set) lazy var likesButton: LikeControl = {
         let likesControl = LikeControl()
         likesControl.translatesAutoresizingMaskIntoConstraints = false
+        likesControl.isUserInteractionEnabled = true
 
         return likesControl
     }()
@@ -77,34 +75,36 @@ class NewsFooterSection: UITableViewCell, LikeControlDelegate {
     }
 
     private func addSubviews() {
-        self.addSubview(self.commentsButton)
-        self.addSubview(self.likesButton)
-        self.addSubview(self.repostButton)
-        self.addSubview(self.viewsCounter)
-        print(self.subviews)
+        self.contentView.isUserInteractionEnabled = true
+        self.contentView.addSubview(self.commentsButton)
+        self.contentView.addSubview(self.likesButton)
+        self.contentView.addSubview(self.repostButton)
+        self.contentView.addSubview(self.viewsCounter)
+    }
+
+    override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+        let view = super.hitTest(point, with: event)
+        print("Hit test CELL result: \(String(describing: view))")
+        return view
     }
 
     private func setupConstraints() {
-        self.selectionStyle = .none
-        self.isUserInteractionEnabled = true
-        let safeArea = safeAreaLayoutGuide
-
         NSLayoutConstraint.activate([
-            self.likesButton.topAnchor.constraint(equalTo: safeArea.topAnchor, constant: 5),
-            self.likesButton.leftAnchor.constraint(equalTo: safeArea.leftAnchor, constant: 25),
-            self.likesButton.bottomAnchor.constraint(equalTo: safeArea.bottomAnchor, constant: 5),
+            self.likesButton.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: 5),
+            self.likesButton.leftAnchor.constraint(equalTo: self.contentView.leftAnchor, constant: 25),
+            self.likesButton.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: 5),
 
             self.commentsButton.leftAnchor.constraint(equalTo: likesButton.rightAnchor, constant: 25),
-            self.commentsButton.topAnchor.constraint(equalTo: safeArea.topAnchor, constant: 5),
-            self.commentsButton.bottomAnchor.constraint(equalTo: safeArea.bottomAnchor, constant: 5),
+            self.commentsButton.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: 5),
+            self.commentsButton.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: 5),
 
             self.repostButton.leftAnchor.constraint(equalTo: commentsButton.rightAnchor, constant: 25),
-            self.repostButton.topAnchor.constraint(equalTo: safeArea.topAnchor, constant: 5),
-            self.repostButton.bottomAnchor.constraint(equalTo: safeArea.bottomAnchor, constant: 5),
+            self.repostButton.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: 5),
+            self.repostButton.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: 5),
 
-            self.viewsCounter.rightAnchor.constraint(equalTo: safeArea.rightAnchor, constant: -5),
-            self.viewsCounter.topAnchor.constraint(equalTo: safeArea.topAnchor, constant: 5),
-            self.viewsCounter.bottomAnchor.constraint(equalTo: safeArea.bottomAnchor, constant: 5)
+            self.viewsCounter.rightAnchor.constraint(equalTo: self.contentView.rightAnchor, constant: -5),
+            self.viewsCounter.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: 5),
+            self.viewsCounter.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: 5)
         ])
     }
 
@@ -120,9 +120,8 @@ class NewsFooterSection: UITableViewCell, LikeControlDelegate {
         self.commentsButton.setTitle("\(comments.count)", for: .normal)
         //        MARK: Configure likes control
         if let isLiked = currentLikeState,
-           let canLike = isLiked.canLike == 1 ? true : false {
+           let canLike = isLiked.canLike == 1 ? false : true {
             self.likesButton.configureDataSource(with: canLike, totalLikes: likes.count)
-            self.likesButton.delegate = self
         }
     }
 }

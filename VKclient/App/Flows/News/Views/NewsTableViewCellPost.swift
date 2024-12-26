@@ -104,7 +104,6 @@ class NewsTableViewCellPost: UITableViewCell {
     private func buttonStateName() -> String {
         isPressed ? "Show Less": "Show More"
     }
-
 }
 
 extension NewsTableViewCellPost: ReusableView {
