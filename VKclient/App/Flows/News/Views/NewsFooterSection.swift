@@ -64,12 +64,13 @@ class NewsFooterSection: UITableViewCell {
         self.repostButton.setTitle("0", for: .normal)
         self.commentsButton.setTitle("0", for: .normal)
         self.likesButton.likesCount = 0
-        self.likesButton.isLiked = false
+        self.likesButton.isLiked = nil
     }
 
     // MARK: - UI
 
     private func configureUI() {
+        self.selectionStyle = .none
         self.addSubviews()
         self.setupConstraints()
     }
@@ -80,12 +81,6 @@ class NewsFooterSection: UITableViewCell {
         self.contentView.addSubview(self.likesButton)
         self.contentView.addSubview(self.repostButton)
         self.contentView.addSubview(self.viewsCounter)
-    }
-
-    override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
-        let view = super.hitTest(point, with: event)
-        print("Hit test CELL result: \(String(describing: view))")
-        return view
     }
 
     private func setupConstraints() {
@@ -114,7 +109,6 @@ class NewsFooterSection: UITableViewCell {
               let reposts = data.reposts,
               let comments = data.comments
         else { return }
-
         self.viewsCounter.setTitle("\(view.count)", for: .normal)
         self.repostButton.setTitle("\(reposts.count)", for: .normal)
         self.commentsButton.setTitle("\(comments.count)", for: .normal)

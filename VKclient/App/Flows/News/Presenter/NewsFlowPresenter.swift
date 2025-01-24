@@ -82,7 +82,7 @@ final class NewsFlowPresenter {
             }
         }
     }
-    
+
     func loadNextData(startFrom: String, completion: @escaping ([News], String) -> Void) {
         newsService.getNews(startFrom: startFrom, startTime: nil) { newNews, nextFrom in
             DispatchQueue.main.async {
@@ -123,6 +123,7 @@ final class NewsFlowPresenter {
                     self.likesCount = value.count
                     print("The like is removed")
                 }).store(in: &cancellable)
+//        self.loadData()
     }
 
     func isLiked(itemID: String, ownerID: String) -> Bool {
@@ -138,11 +139,7 @@ final class NewsFlowPresenter {
                     print("The error appeared during the isLike method \(error)")
                 }}, receiveValue: {[weak self] value in
                     guard let self = self else { return }
-                    if value.canLike == 1 {
-                        isThisItemLiked = true
-                    } else {
-                        isThisItemLiked = false
-                    }
+                    isThisItemLiked = value.canLike == 1 ? true : false
                 }).store(in: &cancellable)
         
         return isThisItemLiked

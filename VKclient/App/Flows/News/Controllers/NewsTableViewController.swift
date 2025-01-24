@@ -10,7 +10,9 @@ import UIKit
 final class NewsTableViewController: UIViewController {
     private(set) lazy var tableView: UITableView = {
         let table = UITableView()
-        
+
+        table.separatorStyle = .singleLine
+
         return table
     }()
     private let textCellFont = UIFont(name: "Avenir-Light", size: 16.0) ?? UIFont.systemFont(ofSize: 16)
@@ -42,7 +44,6 @@ final class NewsTableViewController: UIViewController {
         self.tableView.register(NewsTableViewCellPhoto.self, forCellReuseIdentifier: NewsTableViewCellPhoto.identifier)
         self.tableView.register(NewsFooterSection.self, forCellReuseIdentifier: NewsFooterSection.identifier)
         self.tableView.register(NewsTableViewCellVideo.self, forCellReuseIdentifier: NewsTableViewCellVideo.identifier)
-        
     }
     
     private func configRefreshControl() {
@@ -62,7 +63,31 @@ final class NewsTableViewController: UIViewController {
             self.tableView.reloadData()
         }
     }
-    
+
+    private func updateNextNews(tableView: UITableView) {
+        self.presenter.loadNextData(startFrom: self.presenter.nextNews) { news, nextFrom in
+            DispatchQueue.main.async {
+                let startingIndex = self.presenter.newsPost.count
+                let indexSet = IndexSet(integersIn: startingIndex ..< (startingIndex + news.count))
+                self.presenter.newsPost.append(contentsOf: news)
+                self.presenter.nextNews = nextFrom
+
+                for section in startingIndex..<self.presenter.newsPost.count {
+                    for row in 0..<self.presenter.newsPost[section].rowsCounter.count {
+                        let indexPath = IndexPath(row: row, section: section)
+                        self.isPressedState[indexPath] = false // Default state
+                    }
+                }
+                tableView.performBatchUpdates {
+                    tableView.insertSections(indexSet, with: .automatic)
+                }
+                self.presenter.isLoading = false
+            }
+        }
+
+        tableView.reloadData()
+    }
+
     private func setupTableView() {
         self.view.addSubview(tableView)
         tableView.translatesAutoresizingMaskIntoConstraints = false
@@ -80,11 +105,8 @@ extension NewsTableViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        
         let news = self.presenter.newsPost[indexPath.section]
-        
-        
+
         switch news.rowsCounter[indexPath.row] {
         case .header:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: NewsHeaderSection.identifier) as? NewsHeaderSection else { return NewsHeaderSection() }
@@ -98,29 +120,27 @@ extension NewsTableViewController: UITableViewDataSource {
             
             let textHeight = text.heightWithConstrainedWidth(width: tableView.frame.width, font: textCellFont)
             
-            cell.configureCell(news, isTapped: textHeight > defaultCellHeight)
+            cell.configureCell(news, isTapped: textHeight > defaultCellHeight, isButtonPressed: self.isPressedState[indexPath] ?? false)
             cell.delegate = self
             
             return cell
         case .photo:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: NewsTableViewCellPhoto.identifier) as? NewsTableViewCellPhoto else { return NewsTableViewCellPhoto() }
-            
-            
             cell.configure(images: news.attachmentPhotos, index: 0)
             cell.delegate = self
-            
+
             return cell
         case .footer:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: NewsFooterSection.identifier) as? NewsFooterSection
             else { return NewsFooterSection() }
             cell.configureCell(news, currentLikeState: news.likes)
-//            cell.isUserInteractionEnabled = true
             cell.likesButton.delegate = self
+
             return cell
-            
         case .video:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: NewsTableViewCellVideo.identifier) as? NewsTableViewCellVideo else { return NewsTableViewCellVideo() }
             cell.configure(news)
+
             return cell
         }
     }
@@ -128,7 +148,7 @@ extension NewsTableViewController: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
         self.presenter.newsPost.count
     }
-    
+
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         switch self.presenter.newsPost[indexPath.section].rowsCounter[indexPath.row] {
         case .header:
@@ -165,28 +185,7 @@ extension NewsTableViewController: UITableViewDataSourcePrefetching {
         
         if maxSections > self.presenter.newsPost.count - 3, !self.presenter.isLoading {
             self.presenter.isLoading = true
-            
-            self.presenter.loadNextData(startFrom: self.presenter.nextNews) { news, nextFrom in
-                DispatchQueue.main.async {
-                    let startingIndex = self.presenter.newsPost.count
-                    let indexSet = IndexSet(integersIn: startingIndex ..< (startingIndex + news.count))
-                    self.presenter.newsPost.append(contentsOf: news)
-                    self.presenter.nextNews = nextFrom
-                    
-                    for section in startingIndex..<self.presenter.newsPost.count {
-                        for row in 0..<self.presenter.newsPost[section].rowsCounter.count {
-                            let indexPath = IndexPath(row: row, section: section)
-                            self.isPressedState[indexPath] = false // Default state
-                        }
-                    }
-                    
-                    tableView.beginUpdates()
-                    tableView.insertSections(indexSet, with: .automatic)
-                    tableView.endUpdates()
-                    
-                    self.presenter.isLoading = false
-                }
-            }
+            self.updateNextNews(tableView: tableView)
         }
     }
 }
@@ -195,9 +194,9 @@ extension NewsTableViewController: NewsDelegate {
     func buttonTapped(cell: NewsTableViewCellPost) {
         if let indexPath = tableView.indexPath(for: cell) {
             isPressedState[indexPath] = !(isPressedState[indexPath] ?? false)
-            tableView.beginUpdates()
-            tableView.endUpdates()
-            self.tableView.reloadData()
+            tableView.performBatchUpdates {
+                self.tableView.reloadData()
+            }
         }
     }
 }
@@ -228,19 +227,23 @@ extension NewsTableViewController: NewsTableViewCellPhotoDelegate {
 extension NewsTableViewController: LikeControlDelegate {
     func didLike(in cell: NewsFooterSection?) {
         guard let cell = cell,
-              let indexPath = tableView.indexPath(for: cell) else { return }
+              let indexPath = tableView.indexPath(for: cell)
+        else { return }
 
         let news = presenter.newsPost[indexPath.section]
 
         if news.likes?.canLike == 1 {
             presenter.setLike(itemID: String(news.postID), ownerID: String(news.sourceId))
-            tableView.reloadRows(at: [indexPath], with: .none)
         } else if news.likes?.canLike == 0 {
             presenter.removeLike(itemID: String(news.postID),ownerID: String(news.sourceId))
-            tableView.reloadRows(at: [indexPath], with: .none)
         }
-        self.presenter.loadNews()
-        cell.configureCell(news, currentLikeState: news.likes)
-        tableView.reloadRows(at: [indexPath], with: .none)
+        DispatchQueue.main.async {
+            if self.presenter.newsPost.count > 20 {
+                self.updateNextNews(tableView: self.tableView)
+                self.updateTableView()
+            } else {
+                self.presenter.loadNews()
+            }
+        }
     }
 }

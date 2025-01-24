@@ -24,16 +24,8 @@ class LikeControl: UIControl {
         return button
     }()
 
-    var isLiked: Bool? {
-        didSet {
-            updateButton()
-        }
-    }
-    var likesCount: Int? {
-        didSet {
-            updateButton()
-        }
-    }
+    var isLiked: Bool?
+    var likesCount = 0
 
 // MARK: - Init
     override init(frame: CGRect) {
@@ -52,12 +44,6 @@ class LikeControl: UIControl {
         super.layoutSubviews()
     }
 
-    override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
-        let view = super.hitTest(point, with: event)
-        print("Hit test for LikeControl: \(String(describing: view))")
-        return view
-    }
-
     @objc func likeButtonHandler() {
         if let cell = self.superview?.superview as? NewsFooterSection {
             delegate?.didLike(in: cell)
@@ -66,7 +52,8 @@ class LikeControl: UIControl {
 
     func configureDataSource(with isLiked: Bool?, totalLikes: Int?) {
         self.isLiked = isLiked
-        self.likesCount = totalLikes
+        self.likesCount = totalLikes ?? 0
+        self.updateButton()
     }
 
     private func configureControl() {
@@ -76,11 +63,8 @@ class LikeControl: UIControl {
         NSLayoutConstraint.activate([
             likeButton.centerXAnchor.constraint(equalTo: self.centerXAnchor),
             likeButton.centerYAnchor.constraint(equalTo: self.centerYAnchor),
-            likeButton.widthAnchor.constraint(equalToConstant: 40),
-            likeButton.heightAnchor.constraint(equalToConstant: 40),
-
-            self.widthAnchor.constraint(equalToConstant: 40),
-            self.heightAnchor.constraint(equalToConstant: 40)
+            self.widthAnchor.constraint(equalTo: likeButton.widthAnchor),
+            self.heightAnchor.constraint(equalTo: likeButton.heightAnchor)
         ])
 
         self.isUserInteractionEnabled = true
@@ -88,7 +72,7 @@ class LikeControl: UIControl {
     }
 
     private func updateButton() {
-        let countText = likesCount.map { "\($0)" } ?? "0"
+        let countText = "\(likesCount)"
         let image = isLiked ?? false ? UIImage(systemName: "heart.fill") : UIImage(systemName: "heart")
         likeButton.setImage(image, for: .normal)
         likeButton.setTitle(countText, for: .normal)
