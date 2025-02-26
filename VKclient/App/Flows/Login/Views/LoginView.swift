@@ -87,7 +87,7 @@ final class LoginView: UIView {
         label.font = UIFont.boldSystemFont(ofSize: 36.0)
         label.textColor = .black
         label.textAlignment = .center
-        label.text = "VKclient"
+        label.text = "Swifty VK"
 
         return label
     }()
