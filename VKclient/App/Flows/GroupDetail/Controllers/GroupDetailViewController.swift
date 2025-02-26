@@ -22,7 +22,6 @@ class GroupDetailViewController: UIViewController {
     }
 
     override func loadView() {
-        super.loadView()
         self.view = groupsDetailView
     }
 
