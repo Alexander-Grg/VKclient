@@ -57,6 +57,7 @@ class CommunitiesTableViewController: UIViewController, UISearchBarDelegate, UIT
         navigationItem.titleView = searchBar
         navigationItem.leftBarButtonItem = exitButton
         navigationItem.rightBarButtonItem = addGroupButton
+        self.presenter.fetchData()
     }
     
     override func viewWillAppear(_ animated: Bool) {

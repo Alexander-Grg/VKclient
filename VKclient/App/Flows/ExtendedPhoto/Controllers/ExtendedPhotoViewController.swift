@@ -49,6 +49,7 @@ class ExtendedPhotoViewController: UIViewController {
     }
 
     func imagesSettings() {
+        guard !arrayOfPhotosFromDB.isEmpty else { return }
 
         var leftPhotoIndex = indexOfSelectedPhoto - 1
         let mainPhotoIndex = indexOfSelectedPhoto
@@ -130,6 +131,12 @@ class ExtendedPhotoViewController: UIViewController {
     }
 
     func animationStarts() {
+        guard mainImage != nil,
+        rightImage != nil,
+        leftImage != nil
+
+        else { return }
+
         imagesSettings()
         UIView.animate(
             withDuration: 1,
@@ -143,6 +150,11 @@ class ExtendedPhotoViewController: UIViewController {
     }
 
     @objc func panSettings(_ recognizer: UIPanGestureRecognizer) {
+        guard mainImage != nil,
+        rightImage != nil,
+        leftImage != nil
+
+        else { return }
 
         switch recognizer.state {
         case .began:

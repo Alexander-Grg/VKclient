@@ -25,6 +25,7 @@ protocol GroupsFlowViewOutput: AnyObject {
     func exit()
     func goNextGroupSearchScreen()
     func goDetailGroupScreen(index: IndexPath)
+    func fetchData()
 }
 
 final class GroupsFlowPresenter {
@@ -154,7 +155,7 @@ final class GroupsFlowPresenter {
 
     private func updateRealmObjects() {
 
-        self.fetchNetworkDataAndUploadToRealm()
+//        self.fetchNetworkDataAndUploadToRealm()
         
         groupsNotification = groupsfromRealm?.observe(on: .main, { [weak self] changes in
             guard let self = self
@@ -270,9 +271,18 @@ extension GroupsFlowPresenter: GroupsFlowViewOutput {
     }
     
     func updateData() {
-        self.updateRealmObjects()
-        self.fetchAndFilterDataFromRealm()
-        self.viewInput?.reloadData()
+        DispatchQueue.main.async {
+            self.fetchAndFilterDataFromRealm()
+            self.viewInput?.reloadData()
+            self.updateRealmObjects()
+        }
+    }
+
+    func fetchData() {
+        self.fetchNetworkDataAndUploadToRealm()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            self.updateData()
+        }
     }
 
     func didSearch(search: String) {
