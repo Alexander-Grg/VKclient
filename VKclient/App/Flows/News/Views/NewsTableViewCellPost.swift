@@ -64,7 +64,6 @@ class NewsTableViewCellPost: UITableViewCell {
     }
 
     @objc private func buttonTap() {
-        isPressed = !isPressed
         showMoreTextButton.setTitle(buttonStateName(), for: .normal)
         delegate?.buttonTapped(cell: self)
     }
@@ -90,10 +89,10 @@ class NewsTableViewCellPost: UITableViewCell {
 
     // MARK: - Configuring cell
 
-    func configureCell(_ postText: News, isTapped: Bool) {
+    func configureCell(_ postText: News, isTapped: Bool, isButtonPressed: Bool) {
         textForPost.text = postText.text
         if isTapped {
-            self.isPressed = false
+            self.isPressed = isButtonPressed
             showMoreTextButton.setTitle(self.buttonStateName(), for: .normal)
             showMoreTextButton.isHidden = false
         } else {

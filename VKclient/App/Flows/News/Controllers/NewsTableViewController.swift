@@ -10,7 +10,8 @@ import UIKit
 final class NewsTableViewController: UIViewController {
     private(set) lazy var tableView: UITableView = {
         let table = UITableView()
-        
+        table.separatorStyle = .singleLine
+
         return table
     }()
     private let textCellFont = UIFont(name: "Avenir-Light", size: 16.0) ?? UIFont.systemFont(ofSize: 16)
@@ -98,7 +99,7 @@ extension NewsTableViewController: UITableViewDataSource {
             
             let textHeight = text.heightWithConstrainedWidth(width: tableView.frame.width, font: textCellFont)
             
-            cell.configureCell(news, isTapped: textHeight > defaultCellHeight)
+            cell.configureCell(news, isTapped: textHeight > defaultCellHeight, isButtonPressed: self.isPressedState[indexPath] ?? false)
             cell.delegate = self
             
             return cell
@@ -114,7 +115,6 @@ extension NewsTableViewController: UITableViewDataSource {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: NewsFooterSection.identifier) as? NewsFooterSection
             else { return NewsFooterSection() }
             cell.configureCell(news, currentLikeState: news.likes)
-//            cell.isUserInteractionEnabled = true
             cell.likesButton.delegate = self
             return cell
             
@@ -180,10 +180,9 @@ extension NewsTableViewController: UITableViewDataSourcePrefetching {
                         }
                     }
                     
-                    tableView.beginUpdates()
-                    tableView.insertSections(indexSet, with: .automatic)
-                    tableView.endUpdates()
-                    
+                    tableView.performBatchUpdates {
+                        tableView.insertSections(indexSet, with: .automatic)
+                    }
                     self.presenter.isLoading = false
                 }
             }
@@ -195,9 +194,9 @@ extension NewsTableViewController: NewsDelegate {
     func buttonTapped(cell: NewsTableViewCellPost) {
         if let indexPath = tableView.indexPath(for: cell) {
             isPressedState[indexPath] = !(isPressedState[indexPath] ?? false)
-            tableView.beginUpdates()
-            tableView.endUpdates()
-            self.tableView.reloadData()
+            tableView.performBatchUpdates {
+                self.tableView.reloadData()
+            }
         }
     }
 }
@@ -228,16 +227,15 @@ extension NewsTableViewController: NewsTableViewCellPhotoDelegate {
 extension NewsTableViewController: LikeControlDelegate {
     func didLike(in cell: NewsFooterSection?) {
         guard let cell = cell,
-              let indexPath = tableView.indexPath(for: cell) else { return }
+              let indexPath = tableView.indexPath(for: cell)
+        else { return }
 
         let news = presenter.newsPost[indexPath.section]
 
         if news.likes?.canLike == 1 {
             presenter.setLike(itemID: String(news.postID), ownerID: String(news.sourceId))
-            tableView.reloadRows(at: [indexPath], with: .none)
         } else if news.likes?.canLike == 0 {
             presenter.removeLike(itemID: String(news.postID),ownerID: String(news.sourceId))
-            tableView.reloadRows(at: [indexPath], with: .none)
         }
         self.presenter.loadNews()
         cell.configureCell(news, currentLikeState: news.likes)

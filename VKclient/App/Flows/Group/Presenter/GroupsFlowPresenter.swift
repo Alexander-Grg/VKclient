@@ -131,20 +131,18 @@ final class GroupsFlowPresenter {
     private func insertRow(index: Int, section: Int) {
         guard let tableView = viewInput?.tableView
         else { return }
-        tableView.beginUpdates()
-        let indexPath = IndexPath(item: index, section: section)
-        tableView.insertRows(at: [indexPath], with: .automatic)
-
-        tableView.endUpdates()
+        tableView.performBatchUpdates {
+            let indexPath = IndexPath(item: index, section: section)
+            tableView.insertRows(at: [indexPath], with: .automatic)
+        }
     }
 
     private func deleteRow(at index: Int, section: Int) {
         guard let tableView = viewInput?.tableView else { return }
-        tableView.beginUpdates()
-        let indexPath = IndexPath(item: index, section: section)
-        tableView.deleteRows(at: [indexPath], with: .automatic)
-
-        tableView.endUpdates()
+        tableView.performBatchUpdates {
+            let indexPath = IndexPath(item: index, section: section)
+            tableView.deleteRows(at: [indexPath], with: .automatic)
+        }
     }
 
     private func updateRow(at index: Int, section: Int) {
