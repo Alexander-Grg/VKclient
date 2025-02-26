@@ -138,11 +138,7 @@ final class NewsFlowPresenter {
                     print("The error appeared during the isLike method \(error)")
                 }}, receiveValue: {[weak self] value in
                     guard let self = self else { return }
-                    if value.canLike == 1 {
-                        isThisItemLiked = true
-                    } else {
-                        isThisItemLiked = false
-                    }
+                    isThisItemLiked = value.canLike == 1 ? true : false
                 }).store(in: &cancellable)
         
         return isThisItemLiked
