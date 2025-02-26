@@ -57,8 +57,6 @@ class CommunitiesTableViewController: UIViewController, UISearchBarDelegate, UIT
         navigationItem.titleView = searchBar
         navigationItem.leftBarButtonItem = exitButton
         navigationItem.rightBarButtonItem = addGroupButton
-        self.presenter.fetchData()
-//    TODO: Find out the reason why the app is crashing after removing the current group
     }
     
     override func viewWillAppear(_ animated: Bool) {
