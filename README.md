@@ -1,6 +1,6 @@
 # VKclient
-The first iOS project was developed in 2021, minor improvements are periodically added.
-UIkit clean code MVP architecture + COMBINE for the network layer + REALM for data persistence + natively created custom Dependency injector to handle DI. Everything is created entirely programmatically.
+The iOS project was initially developed in 2021 as a client for the VK.com social network. Improvements are periodically added.
+UIkit clean code MVP architecture + reactive COMBINE for the network layer + REALM for data persistence + natively created custom Dependency injector to handle DI. Everything is made entirely programmatically.
 
 You can try it by signing up on the website https://vk.com/ 
 Data source open VK API https://dev.vk.com
