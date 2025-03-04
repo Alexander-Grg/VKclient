@@ -36,7 +36,6 @@ class NewFriendsTableViewController: UIViewController, UISearchBarDelegate {
     }()
     
     //    MARK: - LifeCycle
-    
     init(presenter: FriendsFlowViewOutput) {
         self.presenter = presenter
         super.init(nibName: nil, bundle: nil)
@@ -58,7 +57,6 @@ class NewFriendsTableViewController: UIViewController, UISearchBarDelegate {
         navigationItem.titleView?.tintColor = .systemBlue
         navigationItem.leftBarButtonItem = exitButton
         self.presenter.fetchData()
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {

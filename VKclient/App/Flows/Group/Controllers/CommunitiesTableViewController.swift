@@ -61,7 +61,7 @@ class CommunitiesTableViewController: UIViewController, UISearchBarDelegate, UIT
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-            self.presenter.updateData()
+        self.presenter.fetchAndUpdateData()
     }
    
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
@@ -128,16 +128,18 @@ class CommunitiesTableViewController: UIViewController, UISearchBarDelegate, UIT
 }
 
 extension CommunitiesTableViewController: GroupsFlowViewInput {
-
+    
     @objc func exitButtonPressed() {
         self.presenter.exit()
     }
-
+    
     @objc func addGroupButtonPressed() {
         self.presenter.goNextGroupSearchScreen()
     }
-
+    
     func reloadData() {
-        self.tableView.reloadData()
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
+        }
     }
 }

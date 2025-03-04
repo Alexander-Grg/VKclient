@@ -21,7 +21,7 @@ protocol GroupsFlowViewOutput: AnyObject {
     var firstLetters: [Character] { get }
     func removeGroup(id: Int, index: IndexPath)
     func didSearch(search: String)
-    func updateData()
+    func fetchAndUpdateData()
     func exit()
     func goNextGroupSearchScreen()
     func goDetailGroupScreen(index: IndexPath)
@@ -41,19 +41,20 @@ final class GroupsFlowPresenter {
     private func groupsFilteredFromRealm(with groups: Results<GroupsRealm>?) {
         guard let filteredGroups = groups else { return }
         dictOfGroups.removeAll()
-         firstLetters.removeAll()
+        firstLetters.removeAll()
 
-         filteredGroups.forEach { group in
-             guard let dictKey = group.name.first else { return }
-             var groupsForLetter = dictOfGroups[dictKey, default: []]
-             groupsForLetter.append(group)
-             dictOfGroups[dictKey] = groupsForLetter
-             if !firstLetters.contains(dictKey) {
-                 firstLetters.append(dictKey)
-             }
-         }
+        filteredGroups.forEach { group in
+            guard let dictKey = group.name.first else { return }
+            var groupsForLetter = dictOfGroups[dictKey, default: []]
+            groupsForLetter.append(group)
+            dictOfGroups[dictKey] = groupsForLetter
+            if !firstLetters.contains(dictKey) {
+                firstLetters.append(dictKey)
+            }
+        }
 
-         firstLetters.sort()
+        firstLetters.sort()
+        self.viewInput?.reloadData()
     }
 
     private func getIndexAndSectionForNewObject(indeces: [Int], groups: Results<GroupsRealm>) -> (newIndex: Int, newSection: Int)? {
@@ -73,7 +74,7 @@ final class GroupsFlowPresenter {
         return nil
     }
 
-    private func fetchNetworkDataAndUploadToRealm() {
+    private func fetchDataFromNetworkAndSaveToRealm() {
         groupService.requestGroups()
             .decode(type: GroupsResponse.self, decoder: JSONDecoder())
             .receive(on: DispatchQueue.main)
@@ -86,7 +87,7 @@ final class GroupsFlowPresenter {
                 }
             }, receiveValue: { [weak self] value in
                 guard let self = self else { return }
-                    self.savingDataToRealm(value.response.items)
+                self.savingDataToRealm(value.response.items)
             }
             )
             .store(in: &cancellable)
@@ -153,9 +154,7 @@ final class GroupsFlowPresenter {
     }
 
     private func updateRealmObjects() {
-
-        self.fetchNetworkDataAndUploadToRealm()
-        
+        self.fetchDataFromNetworkAndSaveToRealm()
         groupsNotification = groupsfromRealm?.observe(on: .main, { [weak self] changes in
             guard let self = self
             else { return }
@@ -243,7 +242,7 @@ final class GroupsFlowPresenter {
                     if let groups = self.groupsfromRealm {
                         let data = groups.filter("id == %@", id)
                         self.removeDataFromRealm(data)
-                        self.updateData()
+                        self.fetchAndUpdateData()
                     }
                 }
             })
@@ -254,7 +253,7 @@ final class GroupsFlowPresenter {
            if let groups = self.groupsfromRealm {
                let data = groups.filter("id == %@", id)
                self.removeDataFromRealm(data)
-               self.updateData()
+               self.fetchAndUpdateData()
            }
     }
 
@@ -264,17 +263,15 @@ final class GroupsFlowPresenter {
 }
 
 extension GroupsFlowPresenter: GroupsFlowViewOutput {
-    
+
     func removeGroup(id: Int, index: IndexPath) {
         self.leaveGroupRequest(id: id, index: index)
     }
-    
-    func updateData() {
-        DispatchQueue.main.async {
-            self.updateRealmObjects()
-            self.fetchAndFilterDataFromRealm()
-            self.viewInput?.reloadData()
-        }
+
+    func fetchAndUpdateData() {
+        self.updateRealmObjects()
+        self.fetchAndFilterDataFromRealm()
+        self.viewInput?.reloadData()
     }
 
     func didSearch(search: String) {
@@ -298,7 +295,8 @@ extension GroupsFlowPresenter: GroupsFlowViewOutput {
 extension GroupsFlowPresenter: JoinGroupDelegate {
     func joinGroupDelegation(_ isJoined: Bool) {
         if isJoined {
-            self.updateData()
+            self.fetchAndUpdateData()
+            viewInput?.reloadData()
         }
     }
 }
@@ -312,6 +310,8 @@ extension GroupsFlowPresenter: RemoveGroupDelegate {
 
 extension GroupsFlowPresenter: SearchGroupsUpdateDelegate {
     func didAddGroup() {
-        self.updateData()
+        self.fetchAndUpdateData()
     }
 }
+
+//TODO: Groups are loading properly, except for the initial load. When loading initially it is empty. Fix that.
