@@ -81,6 +81,10 @@
 		714CA1022D09B6E1000FABB8 /* NewsTableViewCellVideo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 714CA1012D09B6DC000FABB8 /* NewsTableViewCellVideo.swift */; };
 		71557C622D0C5D9900813C9E /* LikesEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71557C612D0C5D9200813C9E /* LikesEndpoint.swift */; };
 		71557C642D0C5F9600813C9E /* LikesServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71557C632D0C5F9000813C9E /* LikesServiceProtocol.swift */; };
+		718C2FF42D7D5A8500101AED /* UserProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 718C2FF32D7D5A7700101AED /* UserProfileViewController.swift */; };
+		718C2FF62D7D5A9A00101AED /* UserProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 718C2FF52D7D5A9400101AED /* UserProfileView.swift */; };
+		718C2FF82D7D5AB700101AED /* UserProfilePresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 718C2FF72D7D5AB100101AED /* UserProfilePresenter.swift */; };
+		718C2FFA2D7D5ACB00101AED /* UserProfileBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 718C2FF92D7D5AC600101AED /* UserProfileBuilder.swift */; };
 		7190BE342B751A6000E2F1D7 /* GroupsEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7190BE332B751A6000E2F1D7 /* GroupsEndpoint.swift */; };
 /* End PBXBuildFile section */
 
@@ -156,6 +160,10 @@
 		714CA1012D09B6DC000FABB8 /* NewsTableViewCellVideo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsTableViewCellVideo.swift; sourceTree = "<group>"; };
 		71557C612D0C5D9200813C9E /* LikesEndpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikesEndpoint.swift; sourceTree = "<group>"; };
 		71557C632D0C5F9000813C9E /* LikesServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikesServiceProtocol.swift; sourceTree = "<group>"; };
+		718C2FF32D7D5A7700101AED /* UserProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileViewController.swift; sourceTree = "<group>"; };
+		718C2FF52D7D5A9400101AED /* UserProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileView.swift; sourceTree = "<group>"; };
+		718C2FF72D7D5AB100101AED /* UserProfilePresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfilePresenter.swift; sourceTree = "<group>"; };
+		718C2FF92D7D5AC600101AED /* UserProfileBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileBuilder.swift; sourceTree = "<group>"; };
 		7190BE332B751A6000E2F1D7 /* GroupsEndpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupsEndpoint.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -278,6 +286,7 @@
 		627C31302859DAD200C9D2A8 /* Flows */ = {
 			isa = PBXGroup;
 			children = (
+				718C2FEE2D7D5A4B00101AED /* UserProfile */,
 				627C31352859DB1900C9D2A8 /* Login */,
 				627C31312859DAE300C9D2A8 /* User */,
 				627C31322859DAEE00C9D2A8 /* Group */,
@@ -702,6 +711,49 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
+		718C2FEE2D7D5A4B00101AED /* UserProfile */ = {
+			isa = PBXGroup;
+			children = (
+				718C2FF22D7D5A6900101AED /* Builder */,
+				718C2FF12D7D5A6400101AED /* Presenter */,
+				718C2FF02D7D5A5C00101AED /* Views */,
+				718C2FEF2D7D5A5100101AED /* Controllers */,
+			);
+			path = UserProfile;
+			sourceTree = "<group>";
+		};
+		718C2FEF2D7D5A5100101AED /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				718C2FF32D7D5A7700101AED /* UserProfileViewController.swift */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		718C2FF02D7D5A5C00101AED /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				718C2FF52D7D5A9400101AED /* UserProfileView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		718C2FF12D7D5A6400101AED /* Presenter */ = {
+			isa = PBXGroup;
+			children = (
+				718C2FF72D7D5AB100101AED /* UserProfilePresenter.swift */,
+			);
+			path = Presenter;
+			sourceTree = "<group>";
+		};
+		718C2FF22D7D5A6900101AED /* Builder */ = {
+			isa = PBXGroup;
+			children = (
+				718C2FF92D7D5AC600101AED /* UserProfileBuilder.swift */,
+			);
+			path = Builder;
+			sourceTree = "<group>";
+		};
 		71F999082B72252800146890 /* Protocols */ = {
 			isa = PBXGroup;
 			children = (
@@ -794,6 +846,7 @@
 				71482A872B7120CC00257566 /* GroupsDetailPresenter.swift in Sources */,
 				62BBDB6E26CA6A3700144345 /* LoginViewController.swift in Sources */,
 				71482A832B71206100257566 /* GroupDetailView.swift in Sources */,
+				718C2FF42D7D5A8500101AED /* UserProfileViewController.swift in Sources */,
 				628E853B26FFABD400FB5FAE /* customNavigator.swift in Sources */,
 				628114992833BD9C00E042D6 /* AppDelegate.swift in Sources */,
 				62E39E99277E03C5000215E0 /* NewsTableViewCellPost.swift in Sources */,
@@ -824,6 +877,7 @@
 				6287BD8F26D67AAF0087D600 /* PhotoCollectionViewController.swift in Sources */,
 				6200E5B228ABA0540040A00B /* UserServiceProtocol.swift in Sources */,
 				62F69BBD27329D4E0090B3BC /* NewFriendsTableViewController.swift in Sources */,
+				718C2FF62D7D5A9A00101AED /* UserProfileView.swift in Sources */,
 				62962C3928AA74F800A59927 /* APIProvider.swift in Sources */,
 				62317876271CB98A00A42097 /* RealmPhotos.swift in Sources */,
 				626610C2270CF15E0089C651 /* UserModel.swift in Sources */,
@@ -839,6 +893,7 @@
 				62C4855C28C378630006921D /* GroupsFlowBuilder.swift in Sources */,
 				6281149F2833F93D00E042D6 /* GroupsSearchCell.swift in Sources */,
 				6201BB512708C33400036E76 /* VKLoginController.swift in Sources */,
+				718C2FF82D7D5AB700101AED /* UserProfilePresenter.swift in Sources */,
 				62074C602752766F005D0418 /* UserNewsModel.swift in Sources */,
 				71482A892B7120E900257566 /* GroupsDetailBuilder.swift in Sources */,
 				621AA0BB28AE3C6700CBBADC /* FriendsFlowPresenter.swift in Sources */,
@@ -853,6 +908,7 @@
 				71557C642D0C5F9600813C9E /* LikesServiceProtocol.swift in Sources */,
 				62BBED6A28AD33AB00D09864 /* NewsfeedEndpoint.swift in Sources */,
 				71482A852B7120A100257566 /* GroupDetailViewController.swift in Sources */,
+				718C2FFA2D7D5ACB00101AED /* UserProfileBuilder.swift in Sources */,
 				62F69BBF27329E130090B3BC /* NewFriendsViewCell.swift in Sources */,
 				6200E5BB28ABB59D0040A00B /* PhotosEndpoint.swift in Sources */,
 				62FB4FE62832A56600CD6F6D /* LoginView.swift in Sources */,
