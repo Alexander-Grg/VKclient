@@ -14,6 +14,13 @@ class NewFriendsTableViewController: UIViewController, UISearchBarDelegate {
     
     private(set) lazy var tableView: UITableView = {
         let table = UITableView()
+        table.delegate = self
+        table.dataSource = self
+        table.register(
+            NewFriendsViewCell.self,
+            forCellReuseIdentifier: NewFriendsViewCell.identifier
+        )
+
         return table
     }()
     
@@ -23,7 +30,8 @@ class NewFriendsTableViewController: UIViewController, UISearchBarDelegate {
         searchBar.sizeToFit()
         searchBar.isTranslucent = true
         searchBar.barTintColor = .green
-        
+        searchBar.delegate = self
+
         return searchBar
     }()
     
@@ -48,11 +56,6 @@ class NewFriendsTableViewController: UIViewController, UISearchBarDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setupTableView()
-        
-        searchBar.delegate = self
-        self.tableView.delegate = self
-        self.tableView.dataSource = self
-        self.tableView.register(NewFriendsViewCell.self, forCellReuseIdentifier: NewFriendsViewCell.identifier)
         navigationItem.titleView = searchBar
         navigationItem.titleView?.tintColor = .systemBlue
         navigationItem.leftBarButtonItem = exitButton

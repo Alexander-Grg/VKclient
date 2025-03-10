@@ -13,6 +13,9 @@ class UserRealm: Object {
     @Persisted var lastName: String = ""
     @Persisted(primaryKey: true) var id: Int = 0
     @Persisted var avatar: String = ""
+    @Persisted var birthday: String = ""
+    @Persisted var sex: String = ""
+    @Persisted var location: String = ""
 }
 
 extension UserRealm {
@@ -22,5 +25,8 @@ extension UserRealm {
         self.lastName = user.lastName
         self.id = user.id
         self.avatar = user.avatar
+        self.birthday = user.birthdayMapped ?? ""
+        self.sex = user.sexMapped
+        self.location = user.city?.title ?? ""
     }
 }

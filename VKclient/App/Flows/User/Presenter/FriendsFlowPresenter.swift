@@ -122,17 +122,32 @@ final class FriendsFlowPresenter {
         self.viewInput?.updateTableView()
     }
     
-    private func openFriendsPhotos(indexPath: IndexPath) {
+//    private func openFriendsPhotos(indexPath: IndexPath) {
+//        let firstLetter = self.firstLetters[indexPath.section]
+//        if let users = self.dictOfUsers[firstLetter] {
+//            let userID = users[indexPath.row].id
+//            do {
+//               try Keychain().set("\(userID)", key: "userID")
+//            } catch let error as NSError {
+//                print(error.localizedDescription)
+//            }
+//            let viewController = PhotosFlowBuilder.build()
+//            self.viewInput?.navigationController?.pushViewController(viewController.self, animated: true)
+//        }
+//    }
+
+    private func openFriendsProfile(indexPath: IndexPath) {
         let firstLetter = self.firstLetters[indexPath.section]
         if let users = self.dictOfUsers[firstLetter] {
             let userID = users[indexPath.row].id
             do {
-               try Keychain().set("\(userID)", key: "userID")
+                try Keychain().set("\(userID)", key: "userID")
             } catch let error as NSError {
                 print(error.localizedDescription)
             }
-            let viewController = PhotosFlowBuilder.build()
-            self.viewInput?.navigationController?.pushViewController(viewController.self, animated: true)
+
+            let viewController = UserProfileFlowBuilder.build(user: users[indexPath.row], index: indexPath.row)
+            self.viewInput?.navigationController?.pushViewController(viewController, animated: true)
         }
     }
 
@@ -202,6 +217,6 @@ extension FriendsFlowPresenter: FriendsFlowViewOutput {
     }
     
     func goNextScreen(index: IndexPath) {
-        self.openFriendsPhotos(indexPath: index)
+        self.openFriendsProfile(indexPath: index)
     }
 }
