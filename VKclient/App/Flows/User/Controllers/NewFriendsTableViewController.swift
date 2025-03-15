@@ -8,7 +8,7 @@
 import UIKit
 import SDWebImage
 
-class NewFriendsTableViewController: UIViewController, UISearchBarDelegate {
+final class NewFriendsTableViewController: UIViewController, UISearchBarDelegate {
     
     private let presenter: FriendsFlowViewOutput
     

@@ -7,7 +7,7 @@
 
 import UIKit
 
-class GroupDetailViewController: UIViewController {
+final class GroupDetailViewController: UIViewController {
 
     var groupsDetailView = GroupDetailView()
     private let presenter: GroupsDetailOutput

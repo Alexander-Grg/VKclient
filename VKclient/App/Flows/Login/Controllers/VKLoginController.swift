@@ -9,7 +9,7 @@ import UIKit
 @preconcurrency import WebKit
 import KeychainAccess
 
-class VKLoginController: UIViewController, WKUIDelegate {
+final class VKLoginController: UIViewController, WKUIDelegate {
     private(set) lazy var webView: WKWebView = {
         let webConfiguration = WKWebViewConfiguration()
         let webView = WKWebView(frame: .zero, configuration: webConfiguration)

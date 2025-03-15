@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 import SDWebImage
 
-class NewFriendsViewCell: UITableViewCell {
+final class NewFriendsViewCell: UITableViewCell {
 
     // MARK: - Properties
 

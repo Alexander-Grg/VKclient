@@ -7,7 +7,7 @@
 
 import UIKit
 
-class NewsFooterSection: UITableViewCell {
+final class NewsFooterSection: UITableViewCell {
     // MARK: - Properties
     weak var delegate: LikeControlDelegate?
     private(set) lazy var repostButton: UIButton = {

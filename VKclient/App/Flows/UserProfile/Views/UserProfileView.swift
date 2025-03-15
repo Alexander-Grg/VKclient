@@ -7,7 +7,7 @@
 
 import UIKit
 
-class UserProfileView: UIView {
+final class UserProfileView: UIView {
     private(set) lazy var profileAvatar: AvatarView = {
         let avatar = AvatarView()
 

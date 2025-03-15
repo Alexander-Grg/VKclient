@@ -11,7 +11,7 @@ protocol NewsDelegate: AnyObject {
     func buttonTapped(cell: NewsTableViewCellPost)
 }
 
-class NewsTableViewCellPost: UITableViewCell {
+final class NewsTableViewCellPost: UITableViewCell {
 
     // MARK: - Properties
     var isPressed: Bool = false

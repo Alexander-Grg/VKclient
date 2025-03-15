@@ -7,7 +7,7 @@
 
 import UIKit
 
-class AvatarView: UIView {
+final class AvatarView: UIView {
 
 // MARK: - Properties
    private(set) lazy var imageView: UIImageView = {

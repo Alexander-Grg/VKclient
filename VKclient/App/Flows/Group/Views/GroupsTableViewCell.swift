@@ -8,7 +8,7 @@
 import UIKit
 import SDWebImage
 
-class GroupsTableViewCell: UITableViewCell {
+final class GroupsTableViewCell: UITableViewCell {
 
     // MARK: - Properties
 

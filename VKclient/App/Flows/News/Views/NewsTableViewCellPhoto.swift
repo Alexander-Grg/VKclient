@@ -12,7 +12,7 @@ protocol NewsTableViewCellPhotoDelegate: AnyObject {
     func didTapPhotoCell(images: [String], index: Int)
 }
 
-class NewsTableViewCellPhoto: UITableViewCell {
+final class NewsTableViewCellPhoto: UITableViewCell {
     
     weak var delegate: NewsTableViewCellPhotoDelegate?
     

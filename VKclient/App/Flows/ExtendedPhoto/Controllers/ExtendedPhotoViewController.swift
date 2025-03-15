@@ -10,7 +10,7 @@ import SDWebImage
 import RealmSwift
 import KeychainAccess
 
-class ExtendedPhotoViewController: UIViewController {
+final class ExtendedPhotoViewController: UIViewController {
     var indexOfSelectedPhoto: Int
     var arrayOfPhotosFromDB: [String]
     var leftImage: UIImageView!
@@ -86,7 +86,7 @@ class ExtendedPhotoViewController: UIViewController {
         NSLayoutConstraint.activate([
             mainImage.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30),
             mainImage.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30),
-            mainImage.heightAnchor.constraint(equalTo: mainImage.widthAnchor, multiplier: 4/3),
+            mainImage.heightAnchor.constraint(lessThanOrEqualTo: view.heightAnchor, multiplier: 0.7),
             mainImage.centerYAnchor.constraint(equalTo: view.centerYAnchor),
 
             leftImage.trailingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
