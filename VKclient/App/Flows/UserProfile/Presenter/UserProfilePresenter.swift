@@ -13,13 +13,15 @@ import Combine
 
 protocol UserProfileInput {
     var userProfileView: UserProfileView { get set }
-    func setupExtendedViewController()
+    func updatePhotoPreview(with photos: [String])
 }
 
 protocol UserProfileOutput {
     var user: UserRealm? { get }
     func viewDidLoad()
     func updatesForPhotos()
+    func makeTransitionToThePhotos()
+    func loadPhotosForPreview()
 }
 
 final class UserProfilePresenter {
@@ -112,7 +114,7 @@ final class UserProfilePresenter {
             self.realmPhotos = try self.realmService.get(type: RealmPhotos.self, configuration: .defaultConfiguration).filter(NSPredicate(format: "ownerID == %d", intFriendID))
             self.loadPhotosForExtendedVC()
             DispatchQueue.main.async {
-                self.viewInput?.setupExtendedViewController()
+                self.loadPhotosForPreview()
             }
         } catch {
             print("Loading from Realm error")
@@ -132,6 +134,23 @@ final class UserProfilePresenter {
             }
         }
     }
+
+    private func transitionToThePhotoAlbum() {
+//        let firstLetter = self.firstLetters[indexPath.section]
+//           if let users = self.dictOfUsers[firstLetter] {
+//               let userID = users[indexPath.row].id
+//               do {
+//                  try Keychain().set("\(userID)", key: "userID")
+//               } catch let error as NSError {
+//                   print(error.localizedDescription)
+//               }
+//               let viewController = PhotosFlowBuilder.build()
+//               self.viewInput?.navigationController?.pushViewController(viewController.self, animated: true)
+//           }
+
+        let viewController = PhotosFlowBuilder.build()
+        self.viewInput?.navigationController?.pushViewController(viewController, animated: true)
+    }
 }
 
 extension UserProfilePresenter: UserProfileOutput {
@@ -143,4 +162,16 @@ extension UserProfilePresenter: UserProfileOutput {
     func updatesForPhotos() {
         self.updatesFromRealm()
     }
+
+    func makeTransitionToThePhotos() {
+        self.transitionToThePhotoAlbum()
+    }
+
+    func loadPhotosForPreview() {
+         guard let viewInput = viewInput else { return }
+         let previewImages = Array(photosForExtendedController.prefix(3))
+         DispatchQueue.main.async {
+             viewInput.updatePhotoPreview(with: previewImages)
+         }
+     }
 }

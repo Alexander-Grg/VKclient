@@ -85,6 +85,7 @@ final class PhotosFlowPresenter {
     private func openExtendedPhotoView(_ indexPath: IndexPath) {
         guard let userPhotos = realmPhotos
         else { return }
+        photosForExtendedController.removeAll()
         for element in userPhotos {
             photosForExtendedController.append(element.sizes["x"]!)
         }
