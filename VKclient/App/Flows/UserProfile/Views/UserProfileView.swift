@@ -89,24 +89,24 @@ final class UserProfileView: UIView {
         let safeArea = self.safeAreaLayoutGuide
 
         NSLayoutConstraint.activate([
-            self.profileAvatar.topAnchor.constraint(equalTo: safeArea.topAnchor, constant: 50),
+            self.profileAvatar.topAnchor.constraint(equalTo: safeArea.topAnchor, constant: 5),
             self.profileAvatar.centerXAnchor.constraint(equalTo: safeArea.centerXAnchor),
             self.profileAvatar.widthAnchor.constraint(equalToConstant: 100),
             self.profileAvatar.heightAnchor.constraint(equalToConstant: 100),
 
-            self.profileName.topAnchor.constraint(equalTo: self.profileAvatar.bottomAnchor, constant: 20),
+            self.profileName.topAnchor.constraint(equalTo: self.profileAvatar.bottomAnchor, constant: 5),
             self.profileName.centerXAnchor.constraint(equalTo: safeArea.centerXAnchor),
 
-            self.locationLabel.topAnchor.constraint(equalTo: self.profileName.bottomAnchor, constant: 20),
+            self.locationLabel.topAnchor.constraint(equalTo: self.profileName.bottomAnchor, constant: 5),
             self.locationLabel.centerXAnchor.constraint(equalTo: safeArea.centerXAnchor),
 
-            self.sexLabel.topAnchor.constraint(equalTo: self.locationLabel.bottomAnchor, constant: 20),
+            self.sexLabel.topAnchor.constraint(equalTo: self.locationLabel.bottomAnchor, constant: 5),
             self.sexLabel.centerXAnchor.constraint(equalTo: safeArea.centerXAnchor),
 
-            self.birthdayLabel.topAnchor.constraint(equalTo: self.sexLabel.bottomAnchor, constant: 20),
+            self.birthdayLabel.topAnchor.constraint(equalTo: self.sexLabel.bottomAnchor, constant: 5),
             self.birthdayLabel.centerXAnchor.constraint(equalTo: safeArea.centerXAnchor),
 
-            self.albumLabel.topAnchor.constraint(equalTo: self.birthdayLabel.bottomAnchor, constant: 20),
+            self.albumLabel.topAnchor.constraint(equalTo: self.birthdayLabel.bottomAnchor, constant: 10),
             self.albumLabel.centerXAnchor.constraint(equalTo: safeArea.centerXAnchor)
 
         ])

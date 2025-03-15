@@ -9,7 +9,7 @@ import UIKit
 
 final class UserProfileViewController: UIViewController {
     private let presenter: UserProfileOutput
-    private var photosViewController: ExtendedPhotoViewController?
+    private let photoPreviewView = PhotoPreviewView()
     var userProfileView = UserProfileView()
 
     init(presenter: UserProfileOutput) {
@@ -25,6 +25,7 @@ final class UserProfileViewController: UIViewController {
         super.viewDidLoad()
         presenter.viewDidLoad()
         self.configureUI()
+        presenter.loadPhotosForPreview()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -35,7 +36,7 @@ final class UserProfileViewController: UIViewController {
     private func configureUI() {
         self.view.backgroundColor = .white
         self.setupUserProfileView()
-        self.setupExtendedViewController()
+        self.setupPhotoPreviewView()
     }
 
     private func setupUserProfileView() {
@@ -50,28 +51,28 @@ final class UserProfileViewController: UIViewController {
         ])
     }
 
-    func setupExtendedViewController() {
-        guard let userProfilePresenter = presenter as? UserProfilePresenter else { return }
-        let safeAreaInsets = self.view.safeAreaLayoutGuide
-         let extendedVC = ExtendedPhotoViewController(
-            arrayOfPhotosFromDB: userProfilePresenter.photosForExtendedController,
-             indexOfSelectedPhoto: userProfilePresenter.index ?? 0
-         )
+    func setupPhotoPreviewView() {
+        view.addSubview(photoPreviewView)
+        photoPreviewView.translatesAutoresizingMaskIntoConstraints = false
+        let safeArea = view.safeAreaLayoutGuide
 
-         addChild(extendedVC)
-         view.addSubview(extendedVC.view)
-         extendedVC.didMove(toParent: self)
-         extendedVC.view.translatesAutoresizingMaskIntoConstraints = false
-
-            NSLayoutConstraint.activate([
-                extendedVC.view.topAnchor.constraint(equalTo: self.userProfileView.bottomAnchor),
-                extendedVC.view.leadingAnchor.constraint(equalTo: safeAreaInsets.leadingAnchor),
-                extendedVC.view.trailingAnchor.constraint(equalTo: safeAreaInsets.trailingAnchor),
-                extendedVC.view.bottomAnchor.constraint(equalTo: safeAreaInsets.bottomAnchor),
-                extendedVC.view.heightAnchor.constraint(equalToConstant: 200)
-            ])
-         self.photosViewController = extendedVC
+        NSLayoutConstraint.activate([
+            photoPreviewView.topAnchor.constraint(equalTo: userProfileView.bottomAnchor, constant: 20),
+            photoPreviewView.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor, constant: 20),
+            photoPreviewView.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor, constant: -20),
+            photoPreviewView.heightAnchor.constraint(equalToConstant: 100) // Adjust height as needed
+        ])
+        let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(pressPhotoHandler))
+        photoPreviewView.addGestureRecognizer(gestureRecognizer)
    }
+
+    func updatePhotoPreview(with photos: [String]) {
+        photoPreviewView.images = Array(photos.prefix(3)) // Show only the first 3 images
+    }
+
+    @objc func pressPhotoHandler() {
+        presenter.makeTransitionToThePhotos()
+    }
 }
 
 //TODO: To fix the photosViewController, not displaying.

@@ -46,6 +46,8 @@ final class ExtendedPhotoViewController: UIViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         view.subviews.forEach({ $0.removeFromSuperview() })
+        arrayOfPhotosFromDB.removeAll()
+        indexOfSelectedPhoto = 0
     }
 
     func imagesSettings() {
@@ -86,7 +88,7 @@ final class ExtendedPhotoViewController: UIViewController {
         NSLayoutConstraint.activate([
             mainImage.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30),
             mainImage.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30),
-            mainImage.heightAnchor.constraint(lessThanOrEqualTo: view.heightAnchor, multiplier: 0.7),
+            mainImage.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 1/2),
             mainImage.centerYAnchor.constraint(equalTo: view.centerYAnchor),
 
             leftImage.trailingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
