@@ -13,6 +13,7 @@ import Combine
 
 protocol UserProfileInput {
     var userProfileView: UserProfileView { get set }
+    func setupExtendedViewController()
 }
 
 protocol UserProfileOutput {
@@ -110,6 +111,9 @@ final class UserProfilePresenter {
         do {
             self.realmPhotos = try self.realmService.get(type: RealmPhotos.self, configuration: .defaultConfiguration).filter(NSPredicate(format: "ownerID == %d", intFriendID))
             self.loadPhotosForExtendedVC()
+            DispatchQueue.main.async {
+                self.viewInput?.setupExtendedViewController()
+            }
         } catch {
             print("Loading from Realm error")
         }
@@ -132,8 +136,8 @@ final class UserProfilePresenter {
 
 extension UserProfilePresenter: UserProfileOutput {
     func viewDidLoad() {
-        self.fetchDataFromNetwork()
         self.configureData()
+        self.fetchDataFromNetwork()
     }
 
     func updatesForPhotos() {

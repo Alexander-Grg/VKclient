@@ -7,7 +7,7 @@
 
 import UIKit
 
-class GroupsSearchCell: UITableViewCell {
+final class GroupsSearchCell: UITableViewCell {
 
     // MARK: - Properties
 

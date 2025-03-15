@@ -8,7 +8,7 @@
 import UIKit
 import AVFoundation
 
-class NewsTableViewCellVideo: UITableViewCell {
+final class NewsTableViewCellVideo: UITableViewCell {
 
     // MARK: - Properties
     private var player: AVPlayer?

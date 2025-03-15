@@ -12,7 +12,7 @@ protocol LikeControlDelegate: AnyObject {
     func didLike(in cell: NewsFooterSection?)
 }
 
-class LikeControl: UIControl {
+final class LikeControl: UIControl {
 
 // MARK: - Properties
     weak var delegate: LikeControlDelegate?

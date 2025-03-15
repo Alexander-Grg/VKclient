@@ -7,18 +7,14 @@
 
 import UIKit
 
-class UserProfileViewController: UIViewController {
+final class UserProfileViewController: UIViewController {
     private let presenter: UserProfileOutput
-    lazy var userProfileView = UserProfileView()
     private var photosViewController: ExtendedPhotoViewController?
+    var userProfileView = UserProfileView()
 
     init(presenter: UserProfileOutput) {
         self.presenter = presenter
         super.init(nibName: nil, bundle: nil)
-    }
-
-    override func loadView() {
-        self.view = userProfileView
     }
 
     required init?(coder: NSCoder) {
@@ -38,52 +34,44 @@ class UserProfileViewController: UIViewController {
 
     private func configureUI() {
         self.view.backgroundColor = .white
+        self.setupUserProfileView()
         self.setupExtendedViewController()
-        self.setupConstraints()
     }
 
-    private func setupExtendedViewController() {
-        guard let userProfilePresenter = presenter as? UserProfilePresenter else { return }
-
-        if let existingPhotosVC = self.photosViewController {
-            existingPhotosVC.willMove(toParent: nil)
-            existingPhotosVC.view.removeFromSuperview()
-            existingPhotosVC.removeFromParent()
-        }
-
-        let extendedVC = ExtendedPhotoViewController(
-            arrayOfPhotosFromDB: userProfilePresenter.photosForExtendedController,
-            indexOfSelectedPhoto: userProfilePresenter.index ?? 0
-        )
-
-        addChild(extendedVC)
-        view.addSubview(extendedVC.view)
-        extendedVC.didMove(toParent: self)
-        extendedVC.view.translatesAutoresizingMaskIntoConstraints = false
-
-        self.photosViewController = extendedVC
-    }
-    private func setupConstraints() {
-
+    private func setupUserProfileView() {
+        self.view.addSubview(userProfileView)
+        self.userProfileView.translatesAutoresizingMaskIntoConstraints = false
         let safeAreaInsets = self.view.safeAreaLayoutGuide
-
         NSLayoutConstraint.activate([
             self.userProfileView.topAnchor.constraint(equalTo: safeAreaInsets.topAnchor),
             self.userProfileView.leadingAnchor.constraint(equalTo: safeAreaInsets.leadingAnchor),
             self.userProfileView.trailingAnchor.constraint(equalTo: safeAreaInsets.trailingAnchor),
-            self.userProfileView.heightAnchor.constraint(equalToConstant: 300)
+            self.userProfileView.heightAnchor.constraint(equalToConstant: 200)
         ])
-
-        if let photosView = self.photosViewController?.view {
-            NSLayoutConstraint.activate([
-                photosView.topAnchor.constraint(equalTo: self.userProfileView.bottomAnchor),
-                photosView.leadingAnchor.constraint(equalTo: safeAreaInsets.leadingAnchor),
-                photosView.trailingAnchor.constraint(equalTo: safeAreaInsets.trailingAnchor),
-                photosView.bottomAnchor.constraint(equalTo: safeAreaInsets.bottomAnchor),
-                photosView.widthAnchor.constraint(equalToConstant: 150)
-            ])
-        }
     }
+
+    func setupExtendedViewController() {
+        guard let userProfilePresenter = presenter as? UserProfilePresenter else { return }
+        let safeAreaInsets = self.view.safeAreaLayoutGuide
+         let extendedVC = ExtendedPhotoViewController(
+            arrayOfPhotosFromDB: userProfilePresenter.photosForExtendedController,
+             indexOfSelectedPhoto: userProfilePresenter.index ?? 0
+         )
+
+         addChild(extendedVC)
+         view.addSubview(extendedVC.view)
+         extendedVC.didMove(toParent: self)
+         extendedVC.view.translatesAutoresizingMaskIntoConstraints = false
+
+            NSLayoutConstraint.activate([
+                extendedVC.view.topAnchor.constraint(equalTo: self.userProfileView.bottomAnchor),
+                extendedVC.view.leadingAnchor.constraint(equalTo: safeAreaInsets.leadingAnchor),
+                extendedVC.view.trailingAnchor.constraint(equalTo: safeAreaInsets.trailingAnchor),
+                extendedVC.view.bottomAnchor.constraint(equalTo: safeAreaInsets.bottomAnchor),
+                extendedVC.view.heightAnchor.constraint(equalToConstant: 200)
+            ])
+         self.photosViewController = extendedVC
+   }
 }
 
 //TODO: To fix the photosViewController, not displaying.

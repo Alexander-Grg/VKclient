@@ -9,7 +9,7 @@ import UIKit
 import RealmSwift
 import Combine
 
-class PhotoViewController: UIViewController {
+final class PhotoViewController: UIViewController {
     private var presenter: PhotosFlowViewOutput
     
     private let collectionView: UICollectionView = {

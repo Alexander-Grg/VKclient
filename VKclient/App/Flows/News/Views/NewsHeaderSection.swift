@@ -8,7 +8,7 @@
 import UIKit
 import SDWebImage
 
-class NewsHeaderSection: UITableViewCell {
+final class NewsHeaderSection: UITableViewCell {
 
     // MARK: - Properties
     private(set) lazy var avatarView: UIImageView = {

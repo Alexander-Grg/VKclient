@@ -8,7 +8,7 @@
 import UIKit
 import SDWebImage
 
-class CommunitiesTableViewController: UIViewController, UISearchBarDelegate, UITableViewDelegate, UITableViewDataSource {
+final class CommunitiesTableViewController: UIViewController, UISearchBarDelegate, UITableViewDelegate, UITableViewDataSource {
     private let presenter: GroupsFlowViewOutput
     lazy var tableView: UITableView = {
         let table = UITableView()
