@@ -6,7 +6,7 @@
 //
 
 import UIKit
-// TODO: After the latest changes the newsfeed does not work, check and fix. On main runs fine. Maybe it causes by the changes in Model.
+
 final class NewsTableViewController: UIViewController {
     private(set) lazy var tableView: UITableView = {
         let table = UITableView()

@@ -88,6 +88,10 @@ final class GroupsFlowPresenter {
             }, receiveValue: { [weak self] value in
                 guard let self = self else { return }
                 self.savingDataToRealm(value.response.items)
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    self.fetchAndFilterDataFromRealm()
+                    self.viewInput?.reloadData()
+                }
             }
             )
             .store(in: &cancellable)
@@ -103,13 +107,15 @@ final class GroupsFlowPresenter {
       }
 
     private func removeDataFromRealm(_ data: Results<GroupsRealm>?) {
-        guard let objectToDelete = data else { return }
-
-        do {
-            try self.realmService.delete(object: objectToDelete)
-        } catch {
-            print("Deletion from Realm failed")
-        }
+        guard let objectToDelete = data, !objectToDelete.isEmpty else {
+             print("Warning: No data found to delete from Realm.")
+             return
+         }
+         do {
+             try self.realmService.delete(object: objectToDelete)
+         } catch {
+             print("Error: Deletion from Realm failed - \(error.localizedDescription)")
+         }
     }
 
     private func fetchAndFilterDataFromRealm() {
@@ -160,6 +166,7 @@ final class GroupsFlowPresenter {
             else { return }
             switch changes {
             case .initial:
+                self.fetchAndFilterDataFromRealm()
                 viewInput?.tableView.reloadData()
             case let .update(updatedGroupsRealm, deletions, insertions, modifications):
                 if deletions.count > 0 {
@@ -203,7 +210,8 @@ final class GroupsFlowPresenter {
     private func alertOfExit() {
         let alertController = UIAlertController(title: "Exit", message: "Do you really want to leave?", preferredStyle: .alert)
 
-        let logoutAction = UIAlertAction(title: "Sign out VK account", style: .default) { action in
+        let logoutAction = UIAlertAction(title: "Sign out VK account", style: .default) { [weak self] _ in
+            guard let self = self else { return }
             do {
                 try Keychain().remove("token")
             } catch let error as NSError {
@@ -269,9 +277,17 @@ extension GroupsFlowPresenter: GroupsFlowViewOutput {
     }
 
     func fetchAndUpdateData() {
-        self.updateRealmObjects()
-        self.fetchAndFilterDataFromRealm()
-        self.viewInput?.reloadData()
+//        self.fetchAndFilterDataFromRealm()
+//        if self.groupsfromRealm?.isEmpty == true { // If no data, fetch from network
+//             self.fetchDataFromNetworkAndSaveToRealm()
+//         }
+//        self.updateRealmObjects()
+//        self.viewInput?.reloadData()
+        if let groups = self.groupsfromRealm, !groups.isEmpty {
+            self.fetchAndFilterDataFromRealm()
+        } else {
+            self.fetchDataFromNetworkAndSaveToRealm()
+        }
     }
 
     func didSearch(search: String) {
@@ -313,5 +329,3 @@ extension GroupsFlowPresenter: SearchGroupsUpdateDelegate {
         self.fetchAndUpdateData()
     }
 }
-
-//TODO: Groups are loading properly, except for the initial load. When loading initially it is empty. Fix that.

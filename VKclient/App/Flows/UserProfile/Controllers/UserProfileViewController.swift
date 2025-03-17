@@ -75,8 +75,6 @@ final class UserProfileViewController: UIViewController {
     }
 }
 
-//TODO: To fix the photosViewController, not displaying.
-
 extension UserProfileViewController: UserProfileInput {
 
 }

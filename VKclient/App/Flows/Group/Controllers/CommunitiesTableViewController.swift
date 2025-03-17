@@ -57,6 +57,9 @@ final class CommunitiesTableViewController: UIViewController, UISearchBarDelegat
         navigationItem.titleView = searchBar
         navigationItem.leftBarButtonItem = exitButton
         navigationItem.rightBarButtonItem = addGroupButton
+        DispatchQueue.main.async {
+             self.presenter.fetchAndUpdateData()
+         }
     }
     
     override func viewWillAppear(_ animated: Bool) {
