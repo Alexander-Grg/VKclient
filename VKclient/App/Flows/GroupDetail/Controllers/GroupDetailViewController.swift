@@ -7,7 +7,7 @@
 
 import UIKit
 
-class GroupDetailViewController: UIViewController {
+final class GroupDetailViewController: UIViewController {
 
     var groupsDetailView = GroupDetailView()
     private let presenter: GroupsDetailOutput
@@ -22,7 +22,6 @@ class GroupDetailViewController: UIViewController {
     }
 
     override func loadView() {
-        super.loadView()
         self.view = groupsDetailView
     }
 

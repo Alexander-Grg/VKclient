@@ -16,3 +16,4 @@ final class FriendsFlowModuleBuilder {
         return viewController
     }
 }
+

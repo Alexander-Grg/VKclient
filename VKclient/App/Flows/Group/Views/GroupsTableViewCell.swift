@@ -8,7 +8,7 @@
 import UIKit
 import SDWebImage
 
-class GroupsTableViewCell: UITableViewCell {
+final class GroupsTableViewCell: UITableViewCell {
 
     // MARK: - Properties
 
@@ -18,7 +18,6 @@ class GroupsTableViewCell: UITableViewCell {
         recognizer.numberOfTapsRequired = 1
         recognizer.numberOfTouchesRequired = 1
         avatar.addGestureRecognizer(recognizer)
-        avatar.isUserInteractionEnabled = true
 
         return avatar
     }()

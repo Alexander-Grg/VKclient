@@ -45,6 +45,7 @@ struct News: Codable {
     var likes: Likes?
     var views: Views?
     var reposts: Reposts?
+    var postID: Int?
 
     var urlProtocol: NewsSource?
 
@@ -128,6 +129,7 @@ struct News: Codable {
         case likes
         case views
         case reposts
+        case postID = "post_id"
     }
 }
 
@@ -163,13 +165,19 @@ struct Views: Codable {
 }
 
 // MARK: - Likes
-struct Likes {
-    var count: Int
-}
+struct Likes: Codable {
+    let canLike: Int
+    let count: Int
+    let userLikes: Int
+    let canPublish: Int
+    let repostDisabled: Bool
 
-extension Likes: Codable {
     enum CodingKeys: String, CodingKey {
+        case canLike = "can_like"
         case count
+        case userLikes = "user_likes"
+        case canPublish = "can_publish"
+        case repostDisabled = "repost_disabled"
     }
 }
 
@@ -236,3 +244,4 @@ struct VideoImage: Codable {
         case withPadding = "with_padding"
     }
 }
+

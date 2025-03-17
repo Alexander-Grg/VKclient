@@ -57,14 +57,19 @@ protocol NewsFlowViewOutput {
     var isLoading: Bool { get set }
     func loadNews()
     func loadNextData(startFrom: String, completion: @escaping ([News], String) -> Void)
+    func setLike(itemID: String, ownerID: String)
+    func removeLike(itemID: String, ownerID: String)
 }
 
 final class NewsFlowPresenter {
     @Injected(\.newsService) var newsService
+    @Injected(\.likesService) var likesService
+    private var cancellable = Set<AnyCancellable>()
     internal var newsPost: [News] = []
     internal var nextNews = ""
     internal var isLoading = false
-    
+    internal var likesCount = 0
+
     weak var viewInput: (UIViewController & NewsFlowViewInput)?
     
     private func loadData() {
@@ -84,6 +89,59 @@ final class NewsFlowPresenter {
                 completion(newNews, nextFrom)
             }
         }
+    }
+
+    func setLike(itemID: String, ownerID: String) {
+        likesService.setLike(type: "post", itemID: itemID, ownerID: ownerID)
+            .decode(type: Likes.self, decoder: JSONDecoder())
+            .receive(on: DispatchQueue.main)
+            .sink(receiveCompletion: { completion in
+                switch completion {
+                case .finished:
+                    print("The like method is finished")
+                case .failure(let error):
+                    print("The error appeared during the set like method \(error)")
+                }}, receiveValue: {[weak self] value in
+                    guard let self = self else { return }
+                    self.likesCount = value.count
+                    print("The like is set")
+                }).store(in: &cancellable)
+    }
+
+    func removeLike(itemID: String, ownerID: String) {
+        likesService.removeLike(type: "post", itemID: itemID, ownerID: ownerID)
+            .decode(type: Likes.self, decoder: JSONDecoder())
+            .receive(on: DispatchQueue.main)
+            .sink(receiveCompletion: { completion in
+                switch completion {
+                case .finished:
+                    print("The remove like method is finished")
+                case .failure(let error):
+                    print("The error appeared during the like removal method \(error)")
+                }}, receiveValue: {[weak self] value in
+                    guard let self = self else { return }
+                    self.likesCount = value.count
+                    print("The like is removed")
+                }).store(in: &cancellable)
+    }
+
+    func isLiked(itemID: String, ownerID: String) -> Bool {
+        var isThisItemLiked: Bool = false
+        likesService.isLiked(type: "post", itemID: itemID, ownerID: ownerID)
+            .decode(type: Likes.self, decoder: JSONDecoder())
+            .receive(on: DispatchQueue.main)
+            .sink(receiveCompletion: { completion in
+                switch completion {
+                case .finished:
+                    print("The isLike method is finished")
+                case .failure(let error):
+                    print("The error appeared during the isLike method \(error)")
+                }}, receiveValue: {[weak self] value in
+                    guard let self = self else { return }
+                    isThisItemLiked = value.canLike == 1 ? true : false
+                }).store(in: &cancellable)
+        
+        return isThisItemLiked
     }
 }
 

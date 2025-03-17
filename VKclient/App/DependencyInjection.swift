@@ -82,4 +82,9 @@ extension InjectedValues {
         get { Self[RealmServiceKey.self] }
         set { Self[RealmServiceKey.self] = newValue }
     }
+
+    var likesService: LikesServiceProtocol {
+        get { Self[LikesServiceKey.self] }
+        set { Self[LikesServiceKey.self] = newValue }
+    }
 }

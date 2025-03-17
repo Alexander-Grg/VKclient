@@ -11,7 +11,7 @@ protocol GroupDetailDelegate: AnyObject {
     func didGroupButtonTap(_ isTapped: Bool)
 }
 
-class GroupDetailView: UIView {
+final class GroupDetailView: UIView {
 
     weak var groupDetaildelegate: GroupDetailDelegate?
 

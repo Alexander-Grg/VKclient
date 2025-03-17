@@ -10,12 +10,13 @@ import SDWebImage
 import RealmSwift
 import KeychainAccess
 
-class ExtendedPhotoViewController: UIViewController {
+final class ExtendedPhotoViewController: UIViewController {
     var indexOfSelectedPhoto: Int
     var arrayOfPhotosFromDB: [String]
     var leftImage: UIImageView!
     var mainImage: UIImageView!
     var rightImage: UIImageView!
+    var numberOfPhotosLabel: UILabel!
     var swipeToRight: UIViewPropertyAnimator!
     var swipeToLeft: UIViewPropertyAnimator!
 
@@ -45,9 +46,12 @@ class ExtendedPhotoViewController: UIViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         view.subviews.forEach({ $0.removeFromSuperview() })
+        arrayOfPhotosFromDB.removeAll()
+        indexOfSelectedPhoto = 0
     }
 
     func imagesSettings() {
+        guard !arrayOfPhotosFromDB.isEmpty else { return }
 
         var leftPhotoIndex = indexOfSelectedPhoto - 1
         let mainPhotoIndex = indexOfSelectedPhoto
@@ -65,6 +69,8 @@ class ExtendedPhotoViewController: UIViewController {
         mainImage = UIImageView()
         rightImage = UIImageView()
 
+        numberOfPhotosLabel = UILabel()
+
         leftImage.contentMode = .scaleAspectFit
         mainImage.contentMode = .scaleAspectFit
         rightImage.contentMode = .scaleAspectFit
@@ -72,15 +78,17 @@ class ExtendedPhotoViewController: UIViewController {
         view.addSubview(leftImage)
         view.addSubview(mainImage)
         view.addSubview(rightImage)
+        view.addSubview(numberOfPhotosLabel)
 
         leftImage.translatesAutoresizingMaskIntoConstraints = false
         mainImage.translatesAutoresizingMaskIntoConstraints = false
         rightImage.translatesAutoresizingMaskIntoConstraints = false
+        numberOfPhotosLabel.translatesAutoresizingMaskIntoConstraints = false
 
         NSLayoutConstraint.activate([
             mainImage.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30),
             mainImage.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30),
-            mainImage.heightAnchor.constraint(equalTo: mainImage.widthAnchor, multiplier: 4/3),
+            mainImage.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 1/2),
             mainImage.centerYAnchor.constraint(equalTo: view.centerYAnchor),
 
             leftImage.trailingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
@@ -91,12 +99,22 @@ class ExtendedPhotoViewController: UIViewController {
             rightImage.leadingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
             rightImage.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             rightImage.heightAnchor.constraint(equalTo: mainImage.heightAnchor),
-            rightImage.widthAnchor.constraint(equalTo: mainImage.widthAnchor)
+            rightImage.widthAnchor.constraint(equalTo: mainImage.widthAnchor),
+
+            numberOfPhotosLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            numberOfPhotosLabel.topAnchor.constraint(equalTo: mainImage.bottomAnchor, constant: 40)
         ])
 
         leftImage.sd_setImage(with: URL(string: arrayOfPhotosFromDB[leftPhotoIndex]))
         mainImage.sd_setImage(with: URL(string: arrayOfPhotosFromDB[mainPhotoIndex]))
         rightImage.sd_setImage(with: URL(string: arrayOfPhotosFromDB[rightPhotoIndex]))
+        if arrayOfPhotosFromDB.count == 1 {
+            numberOfPhotosLabel.text = "1 image"
+        } else {
+            numberOfPhotosLabel.text = "\(indexOfSelectedPhoto + 1) of \(arrayOfPhotosFromDB.count) images"
+        }
+
+        numberOfPhotosLabel.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
 
         mainImage.layer.cornerRadius = 8
         rightImage.layer.cornerRadius = 8
@@ -115,6 +133,12 @@ class ExtendedPhotoViewController: UIViewController {
     }
 
     func animationStarts() {
+        guard mainImage != nil,
+        rightImage != nil,
+        leftImage != nil
+
+        else { return }
+
         imagesSettings()
         UIView.animate(
             withDuration: 1,
@@ -128,6 +152,11 @@ class ExtendedPhotoViewController: UIViewController {
     }
 
     @objc func panSettings(_ recognizer: UIPanGestureRecognizer) {
+        guard mainImage != nil,
+        rightImage != nil,
+        leftImage != nil
+
+        else { return }
 
         switch recognizer.state {
         case .began:

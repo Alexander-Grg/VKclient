@@ -8,7 +8,7 @@
 import UIKit
 import SDWebImage
 
-class CommunitiesTableViewController: UIViewController, UISearchBarDelegate, UITableViewDelegate, UITableViewDataSource {
+final class CommunitiesTableViewController: UIViewController, UISearchBarDelegate, UITableViewDelegate, UITableViewDataSource {
     private let presenter: GroupsFlowViewOutput
     lazy var tableView: UITableView = {
         let table = UITableView()
@@ -57,11 +57,14 @@ class CommunitiesTableViewController: UIViewController, UISearchBarDelegate, UIT
         navigationItem.titleView = searchBar
         navigationItem.leftBarButtonItem = exitButton
         navigationItem.rightBarButtonItem = addGroupButton
+        DispatchQueue.main.async {
+             self.presenter.fetchAndUpdateData()
+         }
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-            self.presenter.updateData()
+        self.presenter.fetchAndUpdateData()
     }
    
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
@@ -128,16 +131,18 @@ class CommunitiesTableViewController: UIViewController, UISearchBarDelegate, UIT
 }
 
 extension CommunitiesTableViewController: GroupsFlowViewInput {
-
+    
     @objc func exitButtonPressed() {
         self.presenter.exit()
     }
-
+    
     @objc func addGroupButtonPressed() {
         self.presenter.goNextGroupSearchScreen()
     }
-
+    
     func reloadData() {
-        self.tableView.reloadData()
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
+        }
     }
 }

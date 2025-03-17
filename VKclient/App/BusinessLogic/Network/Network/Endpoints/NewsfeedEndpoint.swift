@@ -17,7 +17,7 @@ case getNews(startFrom: String = "")
         switch self {
         case let .getNews(startFrom):
             return [
-                "filters" : "post,photo,video",
+                "filters" : "post, photo, photo_tag, wall_photo, friend",
                 "count" : "20",
                 "start_from" : startFrom
             ]

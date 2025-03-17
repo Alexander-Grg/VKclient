@@ -12,7 +12,7 @@ protocol NewsTableViewCellPhotoDelegate: AnyObject {
     func didTapPhotoCell(images: [String], index: Int)
 }
 
-class NewsTableViewCellPhoto: UITableViewCell {
+final class NewsTableViewCellPhoto: UITableViewCell {
     
     weak var delegate: NewsTableViewCellPhotoDelegate?
     
@@ -29,7 +29,7 @@ class NewsTableViewCellPhoto: UITableViewCell {
         tapGestureRecognizer.delegate = self
         photo.addGestureRecognizer(tapGestureRecognizer)
         photo.isUserInteractionEnabled = true
-        
+
         return photo
     }()
     
@@ -43,7 +43,7 @@ class NewsTableViewCellPhoto: UITableViewCell {
         tapGestureRecognizer.delegate = self
         label.addGestureRecognizer(tapGestureRecognizer)
         label.isUserInteractionEnabled = true
-        
+
         return label
     }()
     
@@ -68,8 +68,8 @@ class NewsTableViewCellPhoto: UITableViewCell {
     private func setView() {
         contentView.addSubview(tapLabel)
         contentView.addSubview(newsPhoto)
-        self.isUserInteractionEnabled = true
-        
+        self.selectionStyle = .none
+
         newsPhoto.translatesAutoresizingMaskIntoConstraints = false
         tapLabel.translatesAutoresizingMaskIntoConstraints = false
         
