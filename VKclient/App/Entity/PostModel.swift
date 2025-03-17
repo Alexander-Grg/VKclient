@@ -45,7 +45,7 @@ struct News: Codable {
     var likes: Likes?
     var views: Views?
     var reposts: Reposts?
-    var postID: Int
+    var postID: Int?
 
     var urlProtocol: NewsSource?
 
