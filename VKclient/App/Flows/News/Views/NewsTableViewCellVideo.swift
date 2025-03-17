@@ -8,7 +8,7 @@
 import UIKit
 import AVFoundation
 
-class NewsTableViewCellVideo: UITableViewCell {
+final class NewsTableViewCellVideo: UITableViewCell {
 
     // MARK: - Properties
     private var player: AVPlayer?
@@ -58,6 +58,7 @@ class NewsTableViewCellVideo: UITableViewCell {
     // MARK: - Setup
 
     private func setupView() {
+        self.selectionStyle = .none
         contentView.addSubview(videoContainerView)
         videoContainerView.translatesAutoresizingMaskIntoConstraints = false
 

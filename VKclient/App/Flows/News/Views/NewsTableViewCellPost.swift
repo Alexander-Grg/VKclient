@@ -11,7 +11,7 @@ protocol NewsDelegate: AnyObject {
     func buttonTapped(cell: NewsTableViewCellPost)
 }
 
-class NewsTableViewCellPost: UITableViewCell {
+final class NewsTableViewCellPost: UITableViewCell {
 
     // MARK: - Properties
     var isPressed: Bool = false
@@ -64,13 +64,12 @@ class NewsTableViewCellPost: UITableViewCell {
     }
 
     @objc private func buttonTap() {
-        isPressed = !isPressed
         showMoreTextButton.setTitle(buttonStateName(), for: .normal)
         delegate?.buttonTapped(cell: self)
     }
 
     private func setupConstraints() {
-
+        self.selectionStyle = .none
         textForPost.translatesAutoresizingMaskIntoConstraints = false
         showMoreTextButton.translatesAutoresizingMaskIntoConstraints = false
 
@@ -90,10 +89,10 @@ class NewsTableViewCellPost: UITableViewCell {
 
     // MARK: - Configuring cell
 
-    func configureCell(_ postText: News, isTapped: Bool) {
+    func configureCell(_ postText: News, isTapped: Bool, isButtonPressed: Bool) {
         textForPost.text = postText.text
         if isTapped {
-            self.isPressed = false
+            self.isPressed = isButtonPressed
             showMoreTextButton.setTitle(self.buttonStateName(), for: .normal)
             showMoreTextButton.isHidden = false
         } else {
@@ -104,7 +103,6 @@ class NewsTableViewCellPost: UITableViewCell {
     private func buttonStateName() -> String {
         isPressed ? "Show Less": "Show More"
     }
-
 }
 
 extension NewsTableViewCellPost: ReusableView {

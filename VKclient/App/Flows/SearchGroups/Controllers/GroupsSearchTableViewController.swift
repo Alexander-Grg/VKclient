@@ -8,7 +8,7 @@
 import UIKit
 import Combine
 
-class GroupsSearchTableViewController: UIViewController {
+final class GroupsSearchTableViewController: UIViewController {
     private let presenter: SearchGroupsFlowViewOutput
     
     private let emptyView = UIView()

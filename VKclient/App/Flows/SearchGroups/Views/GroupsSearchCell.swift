@@ -7,7 +7,7 @@
 
 import UIKit
 
-class GroupsSearchCell: UITableViewCell {
+final class GroupsSearchCell: UITableViewCell {
 
     // MARK: - Properties
 
@@ -17,7 +17,6 @@ class GroupsSearchCell: UITableViewCell {
         recognizer.numberOfTapsRequired = 1
         recognizer.numberOfTouchesRequired = 1
         avatar.addGestureRecognizer(recognizer)
-        avatar.isUserInteractionEnabled = true
 
         return avatar
     }()

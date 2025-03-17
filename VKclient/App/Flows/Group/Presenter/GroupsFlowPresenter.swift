@@ -21,7 +21,7 @@ protocol GroupsFlowViewOutput: AnyObject {
     var firstLetters: [Character] { get }
     func removeGroup(id: Int, index: IndexPath)
     func didSearch(search: String)
-    func updateData()
+    func fetchAndUpdateData()
     func exit()
     func goNextGroupSearchScreen()
     func goDetailGroupScreen(index: IndexPath)
@@ -41,19 +41,20 @@ final class GroupsFlowPresenter {
     private func groupsFilteredFromRealm(with groups: Results<GroupsRealm>?) {
         guard let filteredGroups = groups else { return }
         dictOfGroups.removeAll()
-         firstLetters.removeAll()
+        firstLetters.removeAll()
 
-         filteredGroups.forEach { group in
-             guard let dictKey = group.name.first else { return }
-             var groupsForLetter = dictOfGroups[dictKey, default: []]
-             groupsForLetter.append(group)
-             dictOfGroups[dictKey] = groupsForLetter
-             if !firstLetters.contains(dictKey) {
-                 firstLetters.append(dictKey)
-             }
-         }
+        filteredGroups.forEach { group in
+            guard let dictKey = group.name.first else { return }
+            var groupsForLetter = dictOfGroups[dictKey, default: []]
+            groupsForLetter.append(group)
+            dictOfGroups[dictKey] = groupsForLetter
+            if !firstLetters.contains(dictKey) {
+                firstLetters.append(dictKey)
+            }
+        }
 
-         firstLetters.sort()
+        firstLetters.sort()
+        self.viewInput?.reloadData()
     }
 
     private func getIndexAndSectionForNewObject(indeces: [Int], groups: Results<GroupsRealm>) -> (newIndex: Int, newSection: Int)? {
@@ -73,7 +74,7 @@ final class GroupsFlowPresenter {
         return nil
     }
 
-    private func fetchNetworkDataAndUploadToRealm() {
+    private func fetchDataFromNetworkAndSaveToRealm() {
         groupService.requestGroups()
             .decode(type: GroupsResponse.self, decoder: JSONDecoder())
             .receive(on: DispatchQueue.main)
@@ -86,7 +87,11 @@ final class GroupsFlowPresenter {
                 }
             }, receiveValue: { [weak self] value in
                 guard let self = self else { return }
-                    self.savingDataToRealm(value.response.items)
+                self.savingDataToRealm(value.response.items)
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    self.fetchAndFilterDataFromRealm()
+                    self.viewInput?.reloadData()
+                }
             }
             )
             .store(in: &cancellable)
@@ -103,7 +108,6 @@ final class GroupsFlowPresenter {
 
     private func removeDataFromRealm(_ data: Results<GroupsRealm>?) {
         guard let objectToDelete = data else { return }
-
         do {
             try self.realmService.delete(object: objectToDelete)
         } catch {
@@ -131,20 +135,18 @@ final class GroupsFlowPresenter {
     private func insertRow(index: Int, section: Int) {
         guard let tableView = viewInput?.tableView
         else { return }
-        tableView.beginUpdates()
-        let indexPath = IndexPath(item: index, section: section)
-        tableView.insertRows(at: [indexPath], with: .automatic)
-
-        tableView.endUpdates()
+        tableView.performBatchUpdates {
+            let indexPath = IndexPath(item: index, section: section)
+            tableView.insertRows(at: [indexPath], with: .automatic)
+        }
     }
 
     private func deleteRow(at index: Int, section: Int) {
         guard let tableView = viewInput?.tableView else { return }
-        tableView.beginUpdates()
-        let indexPath = IndexPath(item: index, section: section)
-        tableView.deleteRows(at: [indexPath], with: .automatic)
-
-        tableView.endUpdates()
+        tableView.performBatchUpdates {
+            let indexPath = IndexPath(item: index, section: section)
+            tableView.deleteRows(at: [indexPath], with: .automatic)
+        }
     }
 
     private func updateRow(at index: Int, section: Int) {
@@ -155,14 +157,13 @@ final class GroupsFlowPresenter {
     }
 
     private func updateRealmObjects() {
-
-        self.fetchNetworkDataAndUploadToRealm()
-        
+        self.fetchDataFromNetworkAndSaveToRealm()
         groupsNotification = groupsfromRealm?.observe(on: .main, { [weak self] changes in
             guard let self = self
             else { return }
             switch changes {
             case .initial:
+                self.fetchAndFilterDataFromRealm()
                 viewInput?.tableView.reloadData()
             case let .update(updatedGroupsRealm, deletions, insertions, modifications):
                 if deletions.count > 0 {
@@ -206,7 +207,8 @@ final class GroupsFlowPresenter {
     private func alertOfExit() {
         let alertController = UIAlertController(title: "Exit", message: "Do you really want to leave?", preferredStyle: .alert)
 
-        let logoutAction = UIAlertAction(title: "Sign out VK account", style: .default) { action in
+        let logoutAction = UIAlertAction(title: "Sign out VK account", style: .default) { [weak self] _ in
+            guard let self = self else { return }
             do {
                 try Keychain().remove("token")
             } catch let error as NSError {
@@ -245,7 +247,7 @@ final class GroupsFlowPresenter {
                     if let groups = self.groupsfromRealm {
                         let data = groups.filter("id == %@", id)
                         self.removeDataFromRealm(data)
-                        self.updateData()
+                        self.fetchAndUpdateData()
                     }
                 }
             })
@@ -256,7 +258,7 @@ final class GroupsFlowPresenter {
            if let groups = self.groupsfromRealm {
                let data = groups.filter("id == %@", id)
                self.removeDataFromRealm(data)
-               self.updateData()
+               self.fetchAndUpdateData()
            }
     }
 
@@ -266,15 +268,17 @@ final class GroupsFlowPresenter {
 }
 
 extension GroupsFlowPresenter: GroupsFlowViewOutput {
-    
+
     func removeGroup(id: Int, index: IndexPath) {
         self.leaveGroupRequest(id: id, index: index)
     }
-    
-    func updateData() {
-        self.updateRealmObjects()
+
+    func fetchAndUpdateData() {
         self.fetchAndFilterDataFromRealm()
-        self.viewInput?.reloadData()
+        if self.groupsfromRealm?.isEmpty == true { // If no data, fetch from network
+             self.fetchDataFromNetworkAndSaveToRealm()
+         }
+        self.updateRealmObjects()
     }
 
     func didSearch(search: String) {
@@ -298,7 +302,8 @@ extension GroupsFlowPresenter: GroupsFlowViewOutput {
 extension GroupsFlowPresenter: JoinGroupDelegate {
     func joinGroupDelegation(_ isJoined: Bool) {
         if isJoined {
-            self.updateData()
+            self.fetchAndUpdateData()
+            viewInput?.reloadData()
         }
     }
 }
@@ -312,6 +317,6 @@ extension GroupsFlowPresenter: RemoveGroupDelegate {
 
 extension GroupsFlowPresenter: SearchGroupsUpdateDelegate {
     func didAddGroup() {
-        self.updateData()
+        self.fetchAndUpdateData()
     }
 }

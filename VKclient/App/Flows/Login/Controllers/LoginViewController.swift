@@ -17,7 +17,7 @@ protocol RegistrationDelegate: AnyObject {
     func didNewUserTap(_ tap: Bool)
 }
 
-class LoginViewController: UIViewController {
+final class LoginViewController: UIViewController {
 
     private(set) lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()

@@ -8,7 +8,7 @@
 import UIKit
 import SDWebImage
 
-class NewsHeaderSection: UITableViewCell {
+final class NewsHeaderSection: UITableViewCell {
 
     // MARK: - Properties
     private(set) lazy var avatarView: UIImageView = {
@@ -67,7 +67,6 @@ class NewsHeaderSection: UITableViewCell {
     // MARK: - UI
 
     private func configureUI() {
-        self.isUserInteractionEnabled = false
         self.addSubviews()
         self.setupConstraints()
     }
@@ -79,6 +78,7 @@ class NewsHeaderSection: UITableViewCell {
     }
 
     private func setupConstraints() {
+        self.selectionStyle = .none
         NSLayoutConstraint.activate([
             self.avatarView.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 5),
             self.avatarView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 5),
