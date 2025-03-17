@@ -233,9 +233,9 @@ extension NewsTableViewController: LikeControlDelegate {
         let news = presenter.newsPost[indexPath.section]
 
         if news.likes?.canLike == 1 {
-            presenter.setLike(itemID: String(news.postID), ownerID: String(news.sourceId))
+            presenter.setLike(itemID: String(news.postID ?? 0), ownerID: String(news.sourceId))
         } else if news.likes?.canLike == 0 {
-            presenter.removeLike(itemID: String(news.postID),ownerID: String(news.sourceId))
+            presenter.removeLike(itemID: String(news.postID ?? 0),ownerID: String(news.sourceId))
         }
         self.presenter.loadNews()
         cell.configureCell(news, currentLikeState: news.likes)
