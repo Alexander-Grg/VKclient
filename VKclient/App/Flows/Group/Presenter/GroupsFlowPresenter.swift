@@ -107,15 +107,12 @@ final class GroupsFlowPresenter {
       }
 
     private func removeDataFromRealm(_ data: Results<GroupsRealm>?) {
-        guard let objectToDelete = data, !objectToDelete.isEmpty else {
-             print("Warning: No data found to delete from Realm.")
-             return
-         }
-         do {
-             try self.realmService.delete(object: objectToDelete)
-         } catch {
-             print("Error: Deletion from Realm failed - \(error.localizedDescription)")
-         }
+        guard let objectToDelete = data else { return }
+        do {
+            try self.realmService.delete(object: objectToDelete)
+        } catch {
+            print("Deletion from Realm failed")
+        }
     }
 
     private func fetchAndFilterDataFromRealm() {
@@ -277,17 +274,11 @@ extension GroupsFlowPresenter: GroupsFlowViewOutput {
     }
 
     func fetchAndUpdateData() {
-//        self.fetchAndFilterDataFromRealm()
-//        if self.groupsfromRealm?.isEmpty == true { // If no data, fetch from network
-//             self.fetchDataFromNetworkAndSaveToRealm()
-//         }
-//        self.updateRealmObjects()
-//        self.viewInput?.reloadData()
-        if let groups = self.groupsfromRealm, !groups.isEmpty {
-            self.fetchAndFilterDataFromRealm()
-        } else {
-            self.fetchDataFromNetworkAndSaveToRealm()
-        }
+        self.fetchAndFilterDataFromRealm()
+        if self.groupsfromRealm?.isEmpty == true { // If no data, fetch from network
+             self.fetchDataFromNetworkAndSaveToRealm()
+         }
+        self.updateRealmObjects()
     }
 
     func didSearch(search: String) {

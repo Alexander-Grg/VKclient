@@ -67,7 +67,7 @@ final class UserProfileViewController: UIViewController {
    }
 
     func updatePhotoPreview(with photos: [String]) {
-        photoPreviewView.images = Array(photos.prefix(3)) // Show only the first 3 images
+        photoPreviewView.images = Array(photos.prefix(3))
     }
 
     @objc func pressPhotoHandler() {
