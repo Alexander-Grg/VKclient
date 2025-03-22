@@ -64,17 +64,27 @@ struct News: Codable {
         return images.compactMap { $0.photo?.sizes["x"] }
     }
 
-    var attachmentVideoUrl: URL? {
+    var videoAccessString: String? {
+        var result = ""
         guard let videoAttachment = attachments?.first(where: { $0.type == "video" }),
-              let url =  videoAttachment.video?.trackCode
+              let video = videoAttachment.video,
+              let ownerID =  video.ownerID,
+              let videoID = video.id
         else {
             print("No video attachment found for sourceId: \(sourceId)")
             return nil
         }
 
-        return URL(string: url)
+        if let accessKey = video.accessKey {
+            if accessKey.isEmpty {
+                result = "\(ownerID)_\(videoID)"
+            } else {
+                result = "\(ownerID)_\(videoID)_\(accessKey)"
+            }
+        }
+        return result
     }
-
+    
     var aspectRatio: Float {
         guard let image = attachments?.first(where: { $0.type == "photo" }),
               let aspect = image.photo?.aspectRatio else {
