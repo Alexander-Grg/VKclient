@@ -3,6 +3,7 @@
 //  VKclient
 //
 //  Created by Alexander Grigoryev on 2024-02-05.
+//  Copyright © 2024–2025 Alexander Grigoryev. All rights reserved.
 //
 
 import UIKit

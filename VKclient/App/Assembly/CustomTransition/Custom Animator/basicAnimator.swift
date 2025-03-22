@@ -3,6 +3,7 @@
 //  MyFirstApp
 //
 //  Created by Alexander Grigoryev on 9/25/21.
+//  Copyright © 2021–2025 Alexander Grigoryev. All rights reserved.
 //
 
 import UIKit

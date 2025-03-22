@@ -3,6 +3,7 @@
 //  VKclient
 //
 //  Created by Alexander Grigoryev on 22/3/25.
+//  Copyright © 2022–2025 Alexander Grigoryev. All rights reserved.
 //
 import Combine
 import Foundation
