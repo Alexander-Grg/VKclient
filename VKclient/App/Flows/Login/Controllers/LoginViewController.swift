@@ -3,6 +3,7 @@
 //  ProjectTestLocalUI
 //
 //  Created by Alexander Grigoryev on 16.08.2021.
+//  Copyright © 2021–2025 Alexander Grigoryev. All rights reserved.
 //
 
 import UIKit
