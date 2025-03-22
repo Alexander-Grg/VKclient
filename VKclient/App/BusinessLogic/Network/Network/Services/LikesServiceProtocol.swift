@@ -3,6 +3,7 @@
 //  VKclient
 //
 //  Created by Alexander Grigoryev on 13/12/24.
+//  Copyright © 2024–2025 Alexander Grigoryev. All rights reserved.
 //
 
 import Combine
