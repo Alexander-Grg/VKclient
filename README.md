@@ -18,7 +18,5 @@ Current functional:
 10) Groups, Friends, and Photos are saved to the Realm database;
 11) The Keychain safely manages the user's token.
 
-
-
-Copyright © 2021–2025 Alexander Grigoryev (also known as Aleksandr Grigorev). All rights reserved.
-This repository has been under copyright protection since its first commit.
+## License  
+This project is proprietary. See [LICENSE.txt](LICENSE.txt) for details.  
