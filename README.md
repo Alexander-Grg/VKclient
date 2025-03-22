@@ -15,8 +15,9 @@ Current functional:
 7) Use the search bar to search over different communities;
 8) News feed that reflects added communities and friend's posts, showing likes, comments, reposts, and the number of total views;
 9) To the news feed added an infinite scrolling function that constantly updates data from the VK servers;
-10) Groups, Friends, and Photos are saved to the Realm database;
-11) The Keychain safely manages the user's token.
+10) Watch videos in the newsfeed;
+11) Groups, Friends, and Photos are saved to the Realm database;
+12) The Keychain safely manages the user's token.
 
 ## License  
 This project is proprietary. See [LICENSE.txt](LICENSE.txt) for details.  
