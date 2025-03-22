@@ -87,4 +87,9 @@ extension InjectedValues {
         get { Self[LikesServiceKey.self] }
         set { Self[LikesServiceKey.self] = newValue }
     }
+
+    var videosService: VideosServiceProtocol {
+        get { Self[VideosServiceKey.self] }
+        set { Self[VideosServiceKey.self] = newValue }
+    }
 }

@@ -6,13 +6,17 @@
 //
 
 import UIKit
-import AVFoundation
+import WebKit
 
 final class NewsTableViewCellVideo: UITableViewCell {
 
-    // MARK: - Properties
-    private var player: AVPlayer?
-    private var playerLayer: AVPlayerLayer?
+    private var webView: WKWebView = {
+        let webView = WKWebView()
+        webView.scrollView.isScrollEnabled = false
+        webView.backgroundColor = .black
+        return webView
+    }()
+
     private var thumbnailImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
@@ -38,7 +42,7 @@ final class NewsTableViewCellVideo: UITableViewCell {
         return button
     }()
 
-    // MARK: - Init
+    private var videoURL: URL?
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -52,10 +56,8 @@ final class NewsTableViewCellVideo: UITableViewCell {
 
     override func layoutSubviews() {
         super.layoutSubviews()
-        playerLayer?.frame = videoContainerView.bounds
+        webView.frame = videoContainerView.bounds
     }
-
-    // MARK: - Setup
 
     private func setupView() {
         self.selectionStyle = .none
@@ -86,80 +88,78 @@ final class NewsTableViewCellVideo: UITableViewCell {
             playButton.widthAnchor.constraint(equalToConstant: 50),
             playButton.heightAnchor.constraint(equalToConstant: 50)
         ])
+
+        videoContainerView.addSubview(webView)
+        webView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            webView.topAnchor.constraint(equalTo: videoContainerView.topAnchor),
+            webView.bottomAnchor.constraint(equalTo: videoContainerView.bottomAnchor),
+            webView.leadingAnchor.constraint(equalTo: videoContainerView.leadingAnchor),
+            webView.trailingAnchor.constraint(equalTo: videoContainerView.trailingAnchor)
+        ])
+
+        webView.isHidden = true
     }
 
     // MARK: - Configuration
 
-    func configure(_ news: News) {
-        guard let videoURL = news.attachmentVideoUrl else {
+    func configure(_ video: VideoItem?) {
+        guard let playerURLString = video?.player,
+              let url = URL(string: playerURLString) else {
             print("No video URL found for news item.")
-            cleanupPlayer()
+            cleanupWebView()
             return
         }
 
-        generateThumbnail(from: videoURL)
+        self.videoURL = url
 
-        cleanupPlayer()
-        let player = AVPlayer(url: videoURL)
-        let playerLayer = AVPlayerLayer(player: player)
-        playerLayer.videoGravity = .resizeAspectFill
-
-        videoContainerView.layer.insertSublayer(playerLayer, below: playButton.layer)
-        self.player = player
-        self.playerLayer = playerLayer
-        playerLayer.frame = videoContainerView.bounds
-    }
-
-    // MARK: - Actions
-    @objc private func didTapPlayButton() {
-        guard let player = player else { return }
-
-        if player.timeControlStatus == .playing {
-            player.pause()
-            playButton.setTitle("▶︎", for: .normal)
-        } else {
-            thumbnailImageView.isHidden = true
-            playButton.isHidden = true
-            player.play()
+        if let imageUrl = video?.image.last?.url,
+           let url = URL(string: imageUrl) {
+            loadImage(from: url)
         }
+
+        cleanupWebView()
     }
 
-    // MARK: - Helper Methods
-    private func cleanupPlayer() {
-        player?.pause()
-        playerLayer?.removeFromSuperlayer()
-        player = nil
-        playerLayer = nil
+    @objc private func didTapPlayButton() {
+        guard let url = videoURL else { return }
+
+        thumbnailImageView.isHidden = true
+        playButton.isHidden = true
+        webView.isHidden = false
+
+        let request = URLRequest(url: url)
+        webView.load(request)
+    }
+
+    private func cleanupWebView() {
+        webView.stopLoading()
+        webView.loadHTMLString("", baseURL: nil)
+        webView.isHidden = true
         thumbnailImageView.isHidden = false
         playButton.isHidden = false
     }
 
-    private func generateThumbnail(from url: URL) {
+    private func loadImage(from url: URL) {
         DispatchQueue.global().async {
-            let asset = AVAsset(url: url)
-            let imageGenerator = AVAssetImageGenerator(asset: asset)
-            imageGenerator.appliesPreferredTrackTransform = true
-
-            do {
-                let cgImage = try imageGenerator.copyCGImage(at: .zero, actualTime: nil)
-                let image = UIImage(cgImage: cgImage)
-
+            if let data = try? Data(contentsOf: url),
+               let image = UIImage(data: data) {
                 DispatchQueue.main.async {
                     self.thumbnailImageView.image = image
                     self.thumbnailImageView.isHidden = false
                 }
-            } catch {
+            } else {
                 DispatchQueue.main.async {
                     self.thumbnailImageView.image = UIImage(named: "video_placeholder")
                 }
-                print("Error generating thumbnail: \(error.localizedDescription)")
+                print("Error loading thumbnail image from URL: \(url.absoluteString)")
             }
         }
     }
 
     override func prepareForReuse() {
         super.prepareForReuse()
-        cleanupPlayer()
+        cleanupWebView()
     }
 }
 

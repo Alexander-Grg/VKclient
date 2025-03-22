@@ -74,6 +74,9 @@
 		711E4C1A2B5E5F23000D7DAE /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = 711E4C192B5E5F23000D7DAE /* SDWebImage */; };
 		711E4C1C2B5E5F23000D7DAE /* SDWebImageMapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 711E4C1B2B5E5F23000D7DAE /* SDWebImageMapKit */; };
 		71259ADC2B5E7318005B3C03 /* DependencyInjection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71259ADB2B5E7318005B3C03 /* DependencyInjection.swift */; };
+		713D18482D8EBDD200D4188E /* VideosEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 713D18472D8EBDCE00D4188E /* VideosEndpoint.swift */; };
+		713D184B2D8EBDE300D4188E /* VideosServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 713D184A2D8EBDDE00D4188E /* VideosServiceProtocol.swift */; };
+		713D184E2D8EC1F400D4188E /* VideosModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 713D184D2D8EC1F100D4188E /* VideosModel.swift */; };
 		71482A832B71206100257566 /* GroupDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71482A822B71206100257566 /* GroupDetailView.swift */; };
 		71482A852B7120A100257566 /* GroupDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71482A842B7120A100257566 /* GroupDetailViewController.swift */; };
 		71482A872B7120CC00257566 /* GroupsDetailPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71482A862B7120CC00257566 /* GroupsDetailPresenter.swift */; };
@@ -154,6 +157,9 @@
 		62F69BBE27329E130090B3BC /* NewFriendsViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewFriendsViewCell.swift; sourceTree = "<group>"; };
 		62FB4FE52832A56600CD6F6D /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		71259ADB2B5E7318005B3C03 /* DependencyInjection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DependencyInjection.swift; sourceTree = "<group>"; };
+		713D18472D8EBDCE00D4188E /* VideosEndpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideosEndpoint.swift; sourceTree = "<group>"; };
+		713D184A2D8EBDDE00D4188E /* VideosServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideosServiceProtocol.swift; sourceTree = "<group>"; };
+		713D184D2D8EC1F100D4188E /* VideosModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideosModel.swift; sourceTree = "<group>"; };
 		71482A822B71206100257566 /* GroupDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupDetailView.swift; sourceTree = "<group>"; };
 		71482A842B7120A100257566 /* GroupDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupDetailViewController.swift; sourceTree = "<group>"; };
 		71482A862B7120CC00257566 /* GroupsDetailPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupsDetailPresenter.swift; sourceTree = "<group>"; };
@@ -188,6 +194,7 @@
 		6200E5B528ABAD090040A00B /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				713D184A2D8EBDDE00D4188E /* VideosServiceProtocol.swift */,
 				71557C632D0C5F9000813C9E /* LikesServiceProtocol.swift */,
 				6200E5B128ABA0540040A00B /* UserServiceProtocol.swift */,
 				6200E5B828ABB25B0040A00B /* GroupsServiceProtocol.swift */,
@@ -275,6 +282,7 @@
 		627C312F2859DAA600C9D2A8 /* Entity */ = {
 			isa = PBXGroup;
 			children = (
+				713D184D2D8EC1F100D4188E /* VideosModel.swift */,
 				626A00E5270F785A000E8F4C /* PhotosModel.swift */,
 				626610C1270CF15E0089C651 /* UserModel.swift */,
 				626A00E8270F78A1000E8F4C /* GroupsModel.swift */,
@@ -576,6 +584,7 @@
 		62962C3C28AA751C00A59927 /* Endpoints */ = {
 			isa = PBXGroup;
 			children = (
+				713D18472D8EBDCE00D4188E /* VideosEndpoint.swift */,
 				71557C612D0C5D9200813C9E /* LikesEndpoint.swift */,
 				62962C3A28AA751300A59927 /* EndpointProtocol.swift */,
 				62962C3D28AA754600A59927 /* FriendsEndpoint.swift */,
@@ -860,6 +869,7 @@
 				628E853426FF887200FB5FAE /* basicAnimator.swift in Sources */,
 				62C4856E28C3BA190006921D /* NewsFlowPresenter.swift in Sources */,
 				62D3EB1E26E6A64B00B8F1A2 /* AvatarView.swift in Sources */,
+				713D184E2D8EC1F400D4188E /* VideosModel.swift in Sources */,
 				625B823028C2819E008286E3 /* FriendsFlowModuleBuilder.swift in Sources */,
 				71259ADC2B5E7318005B3C03 /* DependencyInjection.swift in Sources */,
 				6281149B2833BDDF00E042D6 /* AppStartManager.swift in Sources */,
@@ -879,6 +889,8 @@
 				6260D6AE26E7F8730003E12E /* PhotosCollectionViewCell.swift in Sources */,
 				6287BD8F26D67AAF0087D600 /* PhotoCollectionViewController.swift in Sources */,
 				714B08072D859A0D0000961E /* PhotoPreviewView.swift in Sources */,
+				713D18482D8EBDD200D4188E /* VideosEndpoint.swift in Sources */,
+				713D184B2D8EBDE300D4188E /* VideosServiceProtocol.swift in Sources */,
 				6200E5B228ABA0540040A00B /* UserServiceProtocol.swift in Sources */,
 				62F69BBD27329D4E0090B3BC /* NewFriendsTableViewController.swift in Sources */,
 				718C2FF62D7D5A9A00101AED /* UserProfileView.swift in Sources */,

@@ -53,19 +53,23 @@ protocol NewsFlowViewInput {
 
 protocol NewsFlowViewOutput {
     var newsPost: [News] { get set}
+    var newsVideos: [VideoItem] { get set }
     var nextNews: String { get set}
     var isLoading: Bool { get set }
     func loadNews()
     func loadNextData(startFrom: String, completion: @escaping ([News], String) -> Void)
     func setLike(itemID: String, ownerID: String)
     func removeLike(itemID: String, ownerID: String)
+    func getVideos(ownIDvidIDkey: String, completion: @escaping (VideoItem?) -> Void)
 }
 
 final class NewsFlowPresenter {
     @Injected(\.newsService) var newsService
     @Injected(\.likesService) var likesService
+    @Injected(\.videosService) var videosService
     private var cancellable = Set<AnyCancellable>()
     internal var newsPost: [News] = []
+    internal var newsVideos: [VideoItem] = []
     internal var nextNews = ""
     internal var isLoading = false
     internal var likesCount = 0
@@ -142,6 +146,24 @@ final class NewsFlowPresenter {
                 }).store(in: &cancellable)
         
         return isThisItemLiked
+    }
+
+    func getVideos(ownIDvidIDkey: String, completion: @escaping (VideoItem?) -> Void) {
+        videosService.requestVideos(ownIDvidIDkey: ownIDvidIDkey)
+            .decode(type: VideoApiResponse.self, decoder: JSONDecoder())
+            .receive(on: DispatchQueue.main)
+            .sink(receiveCompletion: { result in
+                switch result {
+                case .finished:
+                    print("Get videos method is finished")
+                case .failure(let error):
+                    print("The error appeared during the get videos method \(error)")
+                    completion(nil)
+                }
+            }, receiveValue: { value in
+                completion(value.response.items.first)
+            })
+            .store(in: &cancellable)
     }
 }
 
