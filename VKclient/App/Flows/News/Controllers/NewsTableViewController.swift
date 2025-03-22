@@ -6,6 +6,7 @@
 //
 
 import UIKit
+//TODO: Fix the videos, fix the likes when adding additional news. Add commends section to the app.
 
 final class NewsTableViewController: UIViewController {
     private(set) lazy var tableView: UITableView = {
@@ -81,11 +82,8 @@ extension NewsTableViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        
         let news = self.presenter.newsPost[indexPath.section]
-        
-        
+
         switch news.rowsCounter[indexPath.row] {
         case .header:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: NewsHeaderSection.identifier) as? NewsHeaderSection else { return NewsHeaderSection() }
@@ -120,7 +118,10 @@ extension NewsTableViewController: UITableViewDataSource {
             
         case .video:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: NewsTableViewCellVideo.identifier) as? NewsTableViewCellVideo else { return NewsTableViewCellVideo() }
-            cell.configure(news)
+            self.presenter.getVideos(ownIDvidIDkey: news.videoAccessString ?? "") { video in
+                cell.configure(video)
+            }
+
             return cell
         }
     }
