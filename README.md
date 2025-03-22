@@ -20,4 +20,4 @@ Current functional:
 
 
 
-Copyright © 2021–2025 Alexander Grigoryev. All rights reserved.
+Copyright © 2021–2025 Alexander Grigoryev (also known as Aleksandr Grigorev). All rights reserved.
