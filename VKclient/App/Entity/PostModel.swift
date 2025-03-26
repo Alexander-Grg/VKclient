@@ -76,12 +76,10 @@ struct News: Codable {
             return nil
         }
 
-        if let accessKey = video.accessKey {
-            if accessKey.isEmpty {
-                result = "\(ownerID)_\(videoID)"
-            } else {
-                result = "\(ownerID)_\(videoID)_\(accessKey)"
-            }
+        if let accessKey = video.accessKey, !accessKey.isEmpty {
+            result = "\(ownerID)_\(videoID)_\(accessKey)"
+        } else {
+            result = "\(ownerID)_\(videoID)"
         }
         return result
     }
