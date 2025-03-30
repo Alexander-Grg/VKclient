@@ -8,9 +8,14 @@
 
 import UIKit
 
+protocol CommentControlDelegate: AnyObject {
+    func didTapComment(in cell: NewsFooterSection?)
+}
+
 final class NewsFooterSection: UITableViewCell {
     // MARK: - Properties
-    weak var delegate: LikeControlDelegate?
+    weak var likeDelegate: LikeControlDelegate?
+    weak var commentDelegate: CommentControlDelegate?
     private(set) lazy var repostButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -25,6 +30,7 @@ final class NewsFooterSection: UITableViewCell {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setImage(UIImage(systemName: "message"), for: .normal)
         button.setTitleColor(.black, for: .normal)
+        button.addTarget(self, action: #selector(commentButtonHandler), for: .touchUpInside)
 
         return button
     }()
@@ -103,6 +109,10 @@ final class NewsFooterSection: UITableViewCell {
             self.viewsCounter.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: 5)
         ])
     }
+    
+        @objc func commentButtonHandler() {
+            commentDelegate?.didTapComment(in: self)
+        }
 
     func configureCell(_ data: News, currentLikeState: Likes?) {
         guard let likes = data.likes,

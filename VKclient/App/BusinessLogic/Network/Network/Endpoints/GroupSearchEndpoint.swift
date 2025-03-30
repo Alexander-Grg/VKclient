@@ -18,7 +18,7 @@ enum GroupSearchEndpoint: EndpointProtocol {
         switch self {
         case let .groupSearch(search):
             return [
-                "sort" : "6",
+                "sort" : "0",
                 "type" : "group",
                 "q": search,
                 "count" : "20"
