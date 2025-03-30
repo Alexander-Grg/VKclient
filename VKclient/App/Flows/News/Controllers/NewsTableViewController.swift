@@ -115,6 +115,7 @@ extension NewsTableViewController: UITableViewDataSource {
             else { return NewsFooterSection() }
             cell.configureCell(news, currentLikeState: news.likes)
             cell.likesButton.delegate = self
+            cell.commentDelegate = self
             return cell
             
         case .video:
@@ -243,4 +244,20 @@ extension NewsTableViewController: LikeControlDelegate {
         cell.configureCell(news, currentLikeState: news.likes)
         tableView.reloadRows(at: [indexPath], with: .none)
     }
+}
+
+extension NewsTableViewController: CommentControlDelegate {
+    func didTapComment(in cell: NewsFooterSection?) {
+           guard let cell = cell,
+                 let indexPath = tableView.indexPath(for: cell)
+           else {
+               print("Failed to get cell or indexPath")
+               return
+           }
+        let news = presenter.newsPost[indexPath.section]
+
+        let commentsVC = CommentsFlowViewBuilder.build(ownerID: news.sourceId, postID: news.postID ?? 0)
+           present(commentsVC, animated: true) {
+           }
+       }
 }

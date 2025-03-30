@@ -122,20 +122,6 @@ final class FriendsFlowPresenter {
         usersFilteredFromRealm(with: self.friendsFromRealm?.filter("firstName CONTAINS[cd] %@ OR lastName CONTAINS[cd] %@", text, text))
         self.viewInput?.updateTableView()
     }
-    
-//    private func openFriendsPhotos(indexPath: IndexPath) {
-//        let firstLetter = self.firstLetters[indexPath.section]
-//        if let users = self.dictOfUsers[firstLetter] {
-//            let userID = users[indexPath.row].id
-//            do {
-//               try Keychain().set("\(userID)", key: "userID")
-//            } catch let error as NSError {
-//                print(error.localizedDescription)
-//            }
-//            let viewController = PhotosFlowBuilder.build()
-//            self.viewInput?.navigationController?.pushViewController(viewController.self, animated: true)
-//        }
-//    }
 
     private func openFriendsProfile(indexPath: IndexPath) {
         let firstLetter = self.firstLetters[indexPath.section]
