@@ -1,6 +1,6 @@
 //
 //  RealmUsers.swift
-//  MyFirstApp
+//  VKclient
 //
 //  Created by Alexander Grigoryev on 17.10.2021.
 //  Copyright © 2021–2025 Alexander Grigoryev. All rights reserved.
@@ -20,7 +20,7 @@ class UserRealm: Object {
 }
 
 extension UserRealm {
-    convenience init(user: UserObject) {
+    convenience init(user: FriendObject) {
         self.init()
         self.firstName = user.firstName
         self.lastName = user.lastName

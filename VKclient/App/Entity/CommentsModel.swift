@@ -9,57 +9,57 @@
 
 import Foundation
 
-struct CommentsResponse: Codable {
-    let response: CommentList
+import Foundation
+
+struct CommentApiResponse: Decodable {
+    let response: CommentFirstLayer
 }
 
-struct CommentList: Codable {
+struct CommentFirstLayer: Decodable {
     let count: Int
-    let items: [Comment]
+    let items: [CommentModel]
     let currentLevelCount: Int
     let canPost: Bool
     let showReplyButton: Bool
 
     enum CodingKeys: String, CodingKey {
-        case count
-        case items
+        case count, items
         case currentLevelCount = "current_level_count"
         case canPost = "can_post"
         case showReplyButton = "show_reply_button"
     }
 }
 
-struct Comment: Codable {
+struct CommentModel: Decodable {
     let id: Int
-    let fromId: Int
+    let fromID: Int
     let date: Int
     let text: String
-    let postId: Int
-    let ownerId: Int
+    let postID: Int
+    let ownerID: Int
     let parentsStack: [Int]
-    let thread: CommentThread
+    let thread: Thread
 
     enum CodingKeys: String, CodingKey {
         case id
-        case fromId = "from_id"
+        case fromID = "from_id"
         case date
         case text
-        case postId = "post_id"
-        case ownerId = "owner_id"
+        case postID = "post_id"
+        case ownerID = "owner_id"
         case parentsStack = "parents_stack"
         case thread
     }
 }
 
-struct CommentThread: Codable {
+struct Thread: Decodable {
     let count: Int
-    let items: [Comment]
+    let items: [CommentModel]
     let canPost: Bool
     let showReplyButton: Bool
 
     enum CodingKeys: String, CodingKey {
-        case count
-        case items
+        case count, items
         case canPost = "can_post"
         case showReplyButton = "show_reply_button"
     }
