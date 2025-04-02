@@ -1,6 +1,6 @@
 //
 //  Post.swift
-//  MyFirstApp
+//  VKclient
 //
 //  Created by Alexander Grigoryev on 24.11.2021.
 //  Copyright © 2021–2025 Alexander Grigoryev. All rights reserved.
@@ -42,7 +42,7 @@ struct News: Codable {
     var date: Double
     var text: String?
     var attachments: [Attachment]?
-    var comments: Comments?
+    var comments: NewsComments?
     var likes: Likes?
     var views: Views?
     var reposts: Reposts?
@@ -156,7 +156,7 @@ struct Attachment: Codable {
 }
 
 // MARK: Comments
-struct Comments: Codable {
+struct NewsComments: Codable {
     var count: Int
 
     enum CodingKeys: String, CodingKey {

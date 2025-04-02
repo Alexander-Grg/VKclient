@@ -61,7 +61,7 @@ final class FriendsFlowPresenter {
 
     private func fetchDataFromNetwork() {
         userService.requestUsers()
-            .decode(type: UserResponse.self, decoder: JSONDecoder())
+            .decode(type: FriendResponse.self, decoder: JSONDecoder())
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { completion in
                 switch completion {
@@ -81,7 +81,7 @@ final class FriendsFlowPresenter {
             .store(in: &cancellable)
     }
     
-    private func savingDataToRealm(_ data: [UserObject]) {
+    private func savingDataToRealm(_ data: [FriendObject]) {
         do {
             let dataRealm = data.map {UserRealm(user: $0)}
             try realmService.save(items: dataRealm, configuration: .defaultConfiguration, update: .modified)

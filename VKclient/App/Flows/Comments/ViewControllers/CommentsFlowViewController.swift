@@ -10,9 +10,6 @@
 import UIKit
 
 final class CommentsFlowViewController: UIViewController {
-    let mockComments = ["Hi, I am comment 1",
-                        "Hi, I am comment 2",
-                        "Hi, I am comment 3"]
     private let presenter: CommentsFlowViewOutput
 
     private(set) lazy var commentsTableView: UITableView = {
@@ -45,7 +42,10 @@ final class CommentsFlowViewController: UIViewController {
         super.viewDidLoad()
         configureUI()
         configureSheetPresentation()
-        self.presenter.viewDidLoad()
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        self.presenter.loadData()
     }
 
     private func configureUI() {
@@ -95,8 +95,12 @@ extension CommentsFlowViewController: UITableViewDataSource {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: CommentsFlowCell.identifier) as? CommentsFlowCell else {
             return UITableViewCell()
         }
-        cell.configureData(with: presenter.comments[indexPath.row])
+        cell.configureData(with: presenter.comments[indexPath.row], with: presenter.profileNamesDict)
         return cell
+    }
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        self.commentsTableView.deselectRow(at: indexPath, animated: true)
     }
 }
 
