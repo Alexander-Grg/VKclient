@@ -13,7 +13,7 @@ struct UserModelResponse: Codable {
     let response: [UserModel]
 }
 
-struct UserModel: Codable {
+struct UserModel: Codable, Hashable {
     let id: Int
     let hasPhoto: Int
     let sex: Int

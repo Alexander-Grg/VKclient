@@ -20,7 +20,9 @@ enum CommentsEndpoint: EndpointProtocol {
         switch self {
         case let .getNewsComments(ownerID, postID):
             return ["owner_id" : "\(ownerID)",
-                    "post_id" : "\(postID)"]
+                    "post_id" : "\(postID)",
+                    "need_likes" : "1",
+                    "sort" : "desc"]
         }
     }
 }

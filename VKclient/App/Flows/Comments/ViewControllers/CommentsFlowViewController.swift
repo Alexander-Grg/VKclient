@@ -88,14 +88,15 @@ extension CommentsFlowViewController: UITableViewDelegate {}
 
 extension CommentsFlowViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return presenter.comments.count
+        return presenter.orderedCommentUserPairs.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: CommentsFlowCell.identifier) as? CommentsFlowCell else {
             return UITableViewCell()
         }
-        cell.configureData(with: presenter.comments[indexPath.row], with: presenter.profileNamesDict)
+        let pair = presenter.orderedCommentUserPairs[indexPath.row]
+        cell.configureData(with: pair.comment, with: pair.user)
         return cell
     }
 
