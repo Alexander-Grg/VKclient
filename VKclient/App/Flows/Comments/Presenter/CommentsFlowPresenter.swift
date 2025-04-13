@@ -11,9 +11,7 @@ import UIKit
 import Combine
 
 protocol CommentsFlowViewOutput {
-    var comments: [CommentModel] { get }
-    var profiles: [UserModel] { get }
-    var profileNamesDict: [Int: UserModel] { get }
+    var orderedCommentUserPairs: [(comment: CommentModel, user: UserModel)] { get }
     func loadData()
 }
 
@@ -28,10 +26,12 @@ final class CommentsFlowPresenter {
     weak var viewInput: (UIViewController & CommentsFlowViewInput)?
     let ownerID: Int?
     let postID: Int?
+    var finalComments: [CommentModel] = []
     var comments: [CommentModel] = []
     var profiles: [UserModel] = []
     var userIDs: [Int] = []
-    var profileNamesDict: [Int: UserModel] = [:]
+    var orderedCommentUserPairs: [(comment: CommentModel, user: UserModel)] = []
+    var commentUserDict: [CommentModel: UserModel] = [:]
 
     init(ownerID: Int?, postID: Int?) {
         self.ownerID = ownerID
@@ -61,7 +61,7 @@ final class CommentsFlowPresenter {
 
     func commentsToIDs(comments: [CommentModel]) {
         guard !comments.isEmpty else { return }
-        userIDs = comments.map { $0.id }
+        userIDs = comments.map { $0.fromID }
     }
 
     func getUsers() {
@@ -80,11 +80,22 @@ final class CommentsFlowPresenter {
                   }
               }, receiveValue: { [weak self] value in
                   guard let self = self else { return }
-                  self.profileNamesDict = Dictionary(uniqueKeysWithValues: value.response.map { ($0.id, $0) })
+                  self.buildCommentUserDictionary(users: value.response)
                   self.viewInput?.reloadData()
               })
               .store(in: &cancellable)
       }
+
+    private func buildCommentUserDictionary(users: [UserModel]) {
+        self.commentUserDict = [:]
+
+        for comment in self.comments {
+            if let user = users.first(where: { $0.id == comment.fromID }) {
+                self.commentUserDict[comment] = user
+                self.orderedCommentUserPairs.append((comment: comment, user: user))
+            }
+        }
+    }
 }
 
 extension CommentsFlowPresenter: CommentsFlowViewOutput {

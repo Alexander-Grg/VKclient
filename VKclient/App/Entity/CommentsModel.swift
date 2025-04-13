@@ -30,7 +30,7 @@ struct CommentFirstLayer: Decodable {
     }
 }
 
-struct CommentModel: Decodable {
+struct CommentModel: Decodable, Equatable, Hashable {
     let id: Int
     let fromID: Int
     let date: Int
@@ -39,6 +39,10 @@ struct CommentModel: Decodable {
     let ownerID: Int
     let parentsStack: [Int]
     let thread: Thread
+    let likes: CommentLikes?
+    var isLiked: Bool? {
+        self.likes?.canLike == 1 ? false : true
+    }
 
     enum CodingKeys: String, CodingKey {
         case id
@@ -49,6 +53,15 @@ struct CommentModel: Decodable {
         case ownerID = "owner_id"
         case parentsStack = "parents_stack"
         case thread
+        case likes
+    }
+
+    static func == (lhs: CommentModel, rhs: CommentModel) -> Bool {
+        return lhs.id == rhs.id
+    }
+
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
     }
 }
 
@@ -62,5 +75,17 @@ struct Thread: Decodable {
         case count, items
         case canPost = "can_post"
         case showReplyButton = "show_reply_button"
+    }
+}
+
+struct CommentLikes: Decodable {
+    let canLike: Int
+    let count: Int
+    let userLikes: Int
+
+    enum CodingKeys: String, CodingKey {
+        case canLike = "can_like"
+        case count
+        case userLikes = "user_likes"
     }
 }
