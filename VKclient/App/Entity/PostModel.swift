@@ -17,11 +17,11 @@ extension NewsSource {
     var urlImage: URL? { URL(string: urlString) }
 }
 
-struct NewsResponse: Codable {
+struct NewsResponse: Decodable {
     var response: Newsfeed
 }
 
-struct Newsfeed: Codable {
+struct Newsfeed: Decodable {
     var items: [News]
     var profiles: [User]
     var groups: [Community]
@@ -36,7 +36,7 @@ struct Newsfeed: Codable {
 }
 
 // MARK: News
-struct News: Codable {
+struct News: Decodable {
 
     var sourceId: Int
     var date: Double
@@ -143,7 +143,7 @@ struct News: Codable {
 }
 
 // MARK: Attachments
-struct Attachment: Codable {
+struct Attachment: Decodable {
     var type: String
     var photo: PhotosObject?
     var video: VideoObject?
@@ -158,6 +158,7 @@ struct Attachment: Codable {
 // MARK: Comments
 struct NewsComments: Codable {
     var count: Int
+    var filteredCount: Int?
 
     enum CodingKeys: String, CodingKey {
         case count
@@ -200,7 +201,7 @@ struct Reposts: Codable {
 }
 
 // MARK: Video Object
-struct VideoObject: Codable {
+struct VideoObject: Decodable {
     let canComment, canLike, canRepost, canSubscribe: Int?
     let canAddToFaves, canAdd, comments, date: Int?
     let description: String?

@@ -11,7 +11,8 @@ import UIKit
 import Combine
 
 protocol CommentsFlowViewOutput {
-    var orderedCommentUserPairs: [(comment: CommentModel, user: UserModel)] { get }
+    var comments: [CommentModel] { get }
+    func getDisplayName(for fromID: Int) -> String
     func loadData()
 }
 
@@ -22,16 +23,13 @@ protocol CommentsFlowViewInput {
 final class CommentsFlowPresenter {
     private var cancellable = Set<AnyCancellable>()
     @Injected(\.commentsService) var commentsService
-    @Injected(\.usersService) var usersService
     weak var viewInput: (UIViewController & CommentsFlowViewInput)?
     let ownerID: Int?
     let postID: Int?
-    var finalComments: [CommentModel] = []
     var comments: [CommentModel] = []
-    var profiles: [UserModel] = []
-    var userIDs: [Int] = []
-    var orderedCommentUserPairs: [(comment: CommentModel, user: UserModel)] = []
-    var commentUserDict: [CommentModel: UserModel] = [:]
+    var profiles: [CommentUserModel] = []
+    var groups: [CommentGroupModel] = []
+
 
     init(ownerID: Int?, postID: Int?) {
         self.ownerID = ownerID
@@ -53,48 +51,25 @@ final class CommentsFlowPresenter {
             }, receiveValue: { [weak self] value in
                 guard let self = self else { return }
                 self.comments = value.response.items
-                self.getUsers()
+                self.profiles = value.response.profiles
+                self.groups = value.response.groups
+                self.viewInput?.reloadData()
             }
             )
             .store(in: &cancellable)
     }
 
-    func commentsToIDs(comments: [CommentModel]) {
-        guard !comments.isEmpty else { return }
-        userIDs = comments.map { $0.fromID }
-    }
-
-    func getUsers() {
-          self.commentsToIDs(comments: self.comments)
-          guard !userIDs.isEmpty else { return }
-
-          usersService.requestUsers(Ids: self.userIDs)
-              .decode(type: UserModelResponse.self, decoder: JSONDecoder())
-              .receive(on: DispatchQueue.main)
-              .sink(receiveCompletion: { completion in
-                  switch completion {
-                  case .failure(let error):
-                      print("THERE IS NO DATA: \(error.localizedDescription)")
-                  case .finished:
-                      print("The data is received")
-                  }
-              }, receiveValue: { [weak self] value in
-                  guard let self = self else { return }
-                  self.buildCommentUserDictionary(users: value.response)
-                  self.viewInput?.reloadData()
-              })
-              .store(in: &cancellable)
-      }
-
-    private func buildCommentUserDictionary(users: [UserModel]) {
-        self.commentUserDict = [:]
-
-        for comment in self.comments {
-            if let user = users.first(where: { $0.id == comment.fromID }) {
-                self.commentUserDict[comment] = user
-                self.orderedCommentUserPairs.append((comment: comment, user: user))
+    func getDisplayName(for fromID: Int) -> String {
+        if fromID > 0 {
+            if let profile = profiles.first(where: { $0.id == fromID }) {
+                return "\(profile.firstName) \(profile.lastName)"
+            }
+        } else {
+            if let group = groups.first(where: { $0.id == fromID }) {
+                return group.name
             }
         }
+        return "Unknown"
     }
 }
 

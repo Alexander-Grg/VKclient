@@ -22,7 +22,8 @@ enum CommentsEndpoint: EndpointProtocol {
             return ["owner_id" : "\(ownerID)",
                     "post_id" : "\(postID)",
                     "need_likes" : "1",
-                    "sort" : "desc"]
+                    "sort" : "desc",
+                    "extended" : "1"]
         }
     }
 }

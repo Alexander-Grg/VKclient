@@ -67,9 +67,9 @@ final class NewsFooterSection: UITableViewCell {
 
     override func prepareForReuse() {
         super.prepareForReuse()
-        self.viewsCounter.setTitle("0", for: .normal)
-        self.repostButton.setTitle("0", for: .normal)
-        self.commentsButton.setTitle("0", for: .normal)
+        self.viewsCounter.setTitle(nil, for: .normal)
+        self.repostButton.setTitle(nil, for: .normal)
+        self.commentsButton.setTitle(nil, for: .normal)
         self.likesButton.likesCount = 0
         self.likesButton.isLiked = nil
     }
@@ -123,8 +123,8 @@ final class NewsFooterSection: UITableViewCell {
 
         self.viewsCounter.setTitle("\(view.count)", for: .normal)
         self.repostButton.setTitle("\(reposts.count)", for: .normal)
-        self.commentsButton.setTitle("\(comments.count)", for: .normal)
-        //        MARK: Configure likes control
+        let commentCount = comments.filteredCount ?? comments.count
+        self.commentsButton.setTitle("\(commentCount)", for: .normal)
         if let isLiked = currentLikeState,
            let canLike = isLiked.canLike == 1 ? false : true {
             self.likesButton.configureDataSource(with: canLike, totalLikes: likes.count)
