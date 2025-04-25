@@ -204,21 +204,38 @@ extension NewsTableViewController: NewsDelegate {
     }
 }
 
+//extension NewsTableViewController: NewsFlowViewInput {
+//    func updateTableView() {
+//        var newState: [IndexPath: Bool] = [:]
+//        
+//        for section in 0..<self.presenter.newsPost.count {
+//            for row in 0..<self.presenter.newsPost[section].rowsCounter.count {
+//                let indexPath = IndexPath(row: row, section: section)
+//                newState[indexPath] = self.isPressedState[indexPath] ?? false
+//            }
+//        }
+//        
+//        self.isPressedState = newState
+//        self.tableView.reloadData()
+//    }
+//}
+
+
 extension NewsTableViewController: NewsFlowViewInput {
     func updateTableView() {
         var newState: [IndexPath: Bool] = [:]
-        
-        for section in 0..<self.presenter.newsPost.count {
-            for row in 0..<self.presenter.newsPost[section].rowsCounter.count {
+        for section in 0..<presenter.newsPost.count {
+            for row in 0..<presenter.newsPost[section].rowsCounter.count {
                 let indexPath = IndexPath(row: row, section: section)
-                newState[indexPath] = self.isPressedState[indexPath] ?? false
+                newState[indexPath] = isPressedState[indexPath] ?? false
             }
         }
-        
-        self.isPressedState = newState
-        self.tableView.reloadData()
+        isPressedState = newState
+        print("Reloading entire table view")
+        tableView.reloadData()
     }
 }
+
 
 extension NewsTableViewController: NewsTableViewCellPhotoDelegate {
     func didTapPhotoCell(images: [String], index: Int) {
@@ -228,22 +245,33 @@ extension NewsTableViewController: NewsTableViewCellPhotoDelegate {
 }
 
 extension NewsTableViewController: LikeControlDelegate {
+//    func didLike(in cell: NewsFooterSection?) {
+//        guard let cell = cell,
+//              let indexPath = tableView.indexPath(for: cell)
+//        else { return }
+//
+//        let news = presenter.newsPost[indexPath.section]
+//
+//        if news.likes?.canLike == 1 {
+//            presenter.setLike(itemID: String(news.postID ?? 0), ownerID: String(news.sourceId))
+//        } else if news.likes?.canLike == 0 {
+//            presenter.removeLike(itemID: String(news.postID ?? 0),ownerID: String(news.sourceId))
+//        }
+//        self.presenter.loadNews()
+//        cell.configureCell(news, currentLikeState: news.likes)
+//        tableView.reloadRows(at: [indexPath], with: .none)
+//    }
     func didLike(in cell: NewsFooterSection?) {
-        guard let cell = cell,
-              let indexPath = tableView.indexPath(for: cell)
-        else { return }
-
-        let news = presenter.newsPost[indexPath.section]
-
-        if news.likes?.canLike == 1 {
-            presenter.setLike(itemID: String(news.postID ?? 0), ownerID: String(news.sourceId))
-        } else if news.likes?.canLike == 0 {
-            presenter.removeLike(itemID: String(news.postID ?? 0),ownerID: String(news.sourceId))
+            guard let cell = cell, let indexPath = tableView.indexPath(for: cell) else { return }
+            let news = presenter.newsPost[indexPath.section]
+            if news.likes?.canLike == 1 {
+                presenter.setLike(itemID: String(news.postID ?? 0), ownerID: String(news.sourceId))
+            } else {
+                presenter.removeLike(itemID: String(news.postID ?? 0), ownerID: String(news.sourceId))
+            }
+            // Reload only the affected section
+            tableView.reloadSections([indexPath.section], with: .automatic)
         }
-        self.presenter.loadNews()
-        cell.configureCell(news, currentLikeState: news.likes)
-        tableView.reloadRows(at: [indexPath], with: .none)
-    }
 }
 
 extension NewsTableViewController: CommentControlDelegate {

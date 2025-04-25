@@ -17,6 +17,8 @@ final class CommentsFlowViewController: UIViewController {
         table.translatesAutoresizingMaskIntoConstraints = false
         table.delegate = self
         table.dataSource = self
+        table.rowHeight = UITableView.automaticDimension
+        table.estimatedRowHeight = 150
         table.register(CommentsFlowCell.self, forCellReuseIdentifier: CommentsFlowCell.identifier)
         return table
     }()
@@ -45,6 +47,7 @@ final class CommentsFlowViewController: UIViewController {
     }
 
     override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         self.presenter.loadData()
     }
 
@@ -84,20 +87,31 @@ final class CommentsFlowViewController: UIViewController {
     }
 }
 
-extension CommentsFlowViewController: UITableViewDelegate {}
+extension CommentsFlowViewController: UITableViewDelegate {
+
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return UITableView.automaticDimension
+    }
+}
 
 extension CommentsFlowViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return presenter.orderedCommentUserPairs.count
+        return presenter.comments.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: CommentsFlowCell.identifier) as? CommentsFlowCell else {
             return UITableViewCell()
         }
-        let pair = presenter.orderedCommentUserPairs[indexPath.row]
-        cell.configureData(with: pair.comment, with: pair.user)
-        return cell
+        if indexPath.row < presenter.comments.count {
+                 let comment = presenter.comments[indexPath.row]
+                 let displayName = presenter.getDisplayName(for: comment.fromID)
+                 print("Configuring cell for comment ID: \(comment.id), displayName: \(displayName)")
+                 cell.configureData(with: comment, displayName: displayName)
+             } else {
+                 print("Index out of bounds: \(indexPath.row) >= \(presenter.comments.count)")
+             }
+             return cell
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
