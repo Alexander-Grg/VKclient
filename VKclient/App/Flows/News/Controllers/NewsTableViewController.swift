@@ -1,6 +1,6 @@
 //
 //  NewsTableViewController.swift
-//  MyFirstApp
+//  VKclient
 //
 //  Created by Alexander Grigoryev on 16.09.2021.
 //  Copyright © 2021–2025 Alexander Grigoryev. All rights reserved.
@@ -115,6 +115,7 @@ extension NewsTableViewController: UITableViewDataSource {
             else { return NewsFooterSection() }
             cell.configureCell(news, currentLikeState: news.likes)
             cell.likesButton.delegate = self
+            cell.commentDelegate = self
             return cell
             
         case .video:
@@ -203,21 +204,38 @@ extension NewsTableViewController: NewsDelegate {
     }
 }
 
+//extension NewsTableViewController: NewsFlowViewInput {
+//    func updateTableView() {
+//        var newState: [IndexPath: Bool] = [:]
+//        
+//        for section in 0..<self.presenter.newsPost.count {
+//            for row in 0..<self.presenter.newsPost[section].rowsCounter.count {
+//                let indexPath = IndexPath(row: row, section: section)
+//                newState[indexPath] = self.isPressedState[indexPath] ?? false
+//            }
+//        }
+//        
+//        self.isPressedState = newState
+//        self.tableView.reloadData()
+//    }
+//}
+
+
 extension NewsTableViewController: NewsFlowViewInput {
     func updateTableView() {
         var newState: [IndexPath: Bool] = [:]
-        
-        for section in 0..<self.presenter.newsPost.count {
-            for row in 0..<self.presenter.newsPost[section].rowsCounter.count {
+        for section in 0..<presenter.newsPost.count {
+            for row in 0..<presenter.newsPost[section].rowsCounter.count {
                 let indexPath = IndexPath(row: row, section: section)
-                newState[indexPath] = self.isPressedState[indexPath] ?? false
+                newState[indexPath] = isPressedState[indexPath] ?? false
             }
         }
-        
-        self.isPressedState = newState
-        self.tableView.reloadData()
+        isPressedState = newState
+        print("Reloading entire table view")
+        tableView.reloadData()
     }
 }
+
 
 extension NewsTableViewController: NewsTableViewCellPhotoDelegate {
     func didTapPhotoCell(images: [String], index: Int) {
@@ -227,20 +245,47 @@ extension NewsTableViewController: NewsTableViewCellPhotoDelegate {
 }
 
 extension NewsTableViewController: LikeControlDelegate {
+//    func didLike(in cell: NewsFooterSection?) {
+//        guard let cell = cell,
+//              let indexPath = tableView.indexPath(for: cell)
+//        else { return }
+//
+//        let news = presenter.newsPost[indexPath.section]
+//
+//        if news.likes?.canLike == 1 {
+//            presenter.setLike(itemID: String(news.postID ?? 0), ownerID: String(news.sourceId))
+//        } else if news.likes?.canLike == 0 {
+//            presenter.removeLike(itemID: String(news.postID ?? 0),ownerID: String(news.sourceId))
+//        }
+//        self.presenter.loadNews()
+//        cell.configureCell(news, currentLikeState: news.likes)
+//        tableView.reloadRows(at: [indexPath], with: .none)
+//    }
     func didLike(in cell: NewsFooterSection?) {
-        guard let cell = cell,
-              let indexPath = tableView.indexPath(for: cell)
-        else { return }
+            guard let cell = cell, let indexPath = tableView.indexPath(for: cell) else { return }
+            let news = presenter.newsPost[indexPath.section]
+            if news.likes?.canLike == 1 {
+                presenter.setLike(itemID: String(news.postID ?? 0), ownerID: String(news.sourceId))
+            } else {
+                presenter.removeLike(itemID: String(news.postID ?? 0), ownerID: String(news.sourceId))
+            }
+            // Reload only the affected section
+            tableView.reloadSections([indexPath.section], with: .automatic)
+        }
+}
 
+extension NewsTableViewController: CommentControlDelegate {
+    func didTapComment(in cell: NewsFooterSection?) {
+           guard let cell = cell,
+                 let indexPath = tableView.indexPath(for: cell)
+           else {
+               print("Failed to get cell or indexPath")
+               return
+           }
         let news = presenter.newsPost[indexPath.section]
 
-        if news.likes?.canLike == 1 {
-            presenter.setLike(itemID: String(news.postID ?? 0), ownerID: String(news.sourceId))
-        } else if news.likes?.canLike == 0 {
-            presenter.removeLike(itemID: String(news.postID ?? 0),ownerID: String(news.sourceId))
-        }
-        self.presenter.loadNews()
-        cell.configureCell(news, currentLikeState: news.likes)
-        tableView.reloadRows(at: [indexPath], with: .none)
-    }
+        let commentsVC = CommentsFlowViewBuilder.build(ownerID: news.sourceId, postID: news.postID ?? 0)
+           present(commentsVC, animated: true) {
+           }
+       }
 }

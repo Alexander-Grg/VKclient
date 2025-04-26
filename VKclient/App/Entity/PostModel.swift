@@ -1,6 +1,6 @@
 //
 //  Post.swift
-//  MyFirstApp
+//  VKclient
 //
 //  Created by Alexander Grigoryev on 24.11.2021.
 //  Copyright © 2021–2025 Alexander Grigoryev. All rights reserved.
@@ -17,11 +17,11 @@ extension NewsSource {
     var urlImage: URL? { URL(string: urlString) }
 }
 
-struct NewsResponse: Codable {
+struct NewsResponse: Decodable {
     var response: Newsfeed
 }
 
-struct Newsfeed: Codable {
+struct Newsfeed: Decodable {
     var items: [News]
     var profiles: [User]
     var groups: [Community]
@@ -36,13 +36,13 @@ struct Newsfeed: Codable {
 }
 
 // MARK: News
-struct News: Codable {
+struct News: Decodable {
 
     var sourceId: Int
     var date: Double
     var text: String?
     var attachments: [Attachment]?
-    var comments: Comments?
+    var comments: NewsComments?
     var likes: Likes?
     var views: Views?
     var reposts: Reposts?
@@ -143,7 +143,7 @@ struct News: Codable {
 }
 
 // MARK: Attachments
-struct Attachment: Codable {
+struct Attachment: Decodable {
     var type: String
     var photo: PhotosObject?
     var video: VideoObject?
@@ -156,7 +156,7 @@ struct Attachment: Codable {
 }
 
 // MARK: Comments
-struct Comments: Codable {
+struct NewsComments: Codable {
     var count: Int
 
     enum CodingKeys: String, CodingKey {
@@ -200,7 +200,7 @@ struct Reposts: Codable {
 }
 
 // MARK: Video Object
-struct VideoObject: Codable {
+struct VideoObject: Decodable {
     let canComment, canLike, canRepost, canSubscribe: Int?
     let canAddToFaves, canAdd, comments, date: Int?
     let description: String?

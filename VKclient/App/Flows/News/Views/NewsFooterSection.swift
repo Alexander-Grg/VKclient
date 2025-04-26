@@ -1,6 +1,6 @@
 //
 //  NewsFooterSection.swift
-//  MyFirstApp
+//  VKclient
 //
 //  Created by Alexander Grigoryev on 10.11.2021.
 //  Copyright © 2021–2025 Alexander Grigoryev. All rights reserved.
@@ -8,9 +8,14 @@
 
 import UIKit
 
+protocol CommentControlDelegate: AnyObject {
+    func didTapComment(in cell: NewsFooterSection?)
+}
+
 final class NewsFooterSection: UITableViewCell {
     // MARK: - Properties
-    weak var delegate: LikeControlDelegate?
+    weak var likeDelegate: LikeControlDelegate?
+    weak var commentDelegate: CommentControlDelegate?
     private(set) lazy var repostButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -25,6 +30,7 @@ final class NewsFooterSection: UITableViewCell {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setImage(UIImage(systemName: "message"), for: .normal)
         button.setTitleColor(.black, for: .normal)
+        button.addTarget(self, action: #selector(commentButtonHandler), for: .touchUpInside)
 
         return button
     }()
@@ -61,9 +67,9 @@ final class NewsFooterSection: UITableViewCell {
 
     override func prepareForReuse() {
         super.prepareForReuse()
-        self.viewsCounter.setTitle("0", for: .normal)
-        self.repostButton.setTitle("0", for: .normal)
-        self.commentsButton.setTitle("0", for: .normal)
+        self.viewsCounter.setTitle(nil, for: .normal)
+        self.repostButton.setTitle(nil, for: .normal)
+        self.commentsButton.setTitle(nil, for: .normal)
         self.likesButton.likesCount = 0
         self.likesButton.isLiked = nil
     }
@@ -103,6 +109,10 @@ final class NewsFooterSection: UITableViewCell {
             self.viewsCounter.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: 5)
         ])
     }
+    
+        @objc func commentButtonHandler() {
+            commentDelegate?.didTapComment(in: self)
+        }
 
     func configureCell(_ data: News, currentLikeState: Likes?) {
         guard let likes = data.likes,
@@ -114,7 +124,6 @@ final class NewsFooterSection: UITableViewCell {
         self.viewsCounter.setTitle("\(view.count)", for: .normal)
         self.repostButton.setTitle("\(reposts.count)", for: .normal)
         self.commentsButton.setTitle("\(comments.count)", for: .normal)
-        //        MARK: Configure likes control
         if let isLiked = currentLikeState,
            let canLike = isLiked.canLike == 1 ? false : true {
             self.likesButton.configureDataSource(with: canLike, totalLikes: likes.count)

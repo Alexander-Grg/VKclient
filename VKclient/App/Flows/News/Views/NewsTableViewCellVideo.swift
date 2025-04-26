@@ -160,6 +160,7 @@ final class NewsTableViewCellVideo: UITableViewCell {
 
     override func prepareForReuse() {
         super.prepareForReuse()
+        self.thumbnailImageView.image = nil
         cleanupWebView()
     }
 }

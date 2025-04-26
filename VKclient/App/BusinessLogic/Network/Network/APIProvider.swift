@@ -42,7 +42,7 @@ class APIProvider<Endpoint: EndpointProtocol> {
         let urlRequest = URLRequest(url: url,
                                     cachePolicy: .reloadRevalidatingCacheData,
                                     timeoutInterval: 30)
-        
+        print(keychainToken)
         return urlRequest
     }
     

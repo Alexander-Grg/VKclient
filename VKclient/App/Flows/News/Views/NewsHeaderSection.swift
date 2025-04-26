@@ -1,6 +1,6 @@
 //
 //  NewsHeaderSection.swift
-//  MyFirstApp
+//  VKclient
 //
 //  Created by Alexander Grigoryev on 10.11.2021.
 //  Copyright © 2021–2025 Alexander Grigoryev. All rights reserved.

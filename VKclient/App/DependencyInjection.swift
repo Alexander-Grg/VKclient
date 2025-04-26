@@ -93,4 +93,14 @@ extension InjectedValues {
         get { Self[VideosServiceKey.self] }
         set { Self[VideosServiceKey.self] = newValue }
     }
+
+    var commentsService: CommentsServiceProtocol {
+        get { Self[CommentsServiceKey.self] }
+        set { Self[CommentsServiceKey.self] = newValue }
+    }
+
+    var usersService: UsersServiceProtocol {
+        get { Self[UsersServiceKey.self] }
+        set { Self[UsersServiceKey.self] = newValue }
+    }
 }
