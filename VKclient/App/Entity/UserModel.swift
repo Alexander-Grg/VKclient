@@ -1,57 +1,34 @@
 //
-//  ClassesForParsing.swift
-//  MyFirstApp
 //
-//  Created by Alexander Grigoryev on 05.10.2021.
-//  Copyright © 2021–2025 Alexander Grigoryev. All rights reserved.
+//  UserModel.swift
+//  VKclient
 //
-
+//  Created by Alexander Grigoryev on 31.03.2025.
+//  Copyright © 2025 Alexander Grigoryev. All rights reserved.
+//
+    
 import Foundation
- struct UserResponse: Decodable {
-    var response: NextResponse
+
+struct UserModelResponse: Codable {
+    let response: [UserModel]
 }
 
-struct NextResponse: Decodable {
-    var count: Int
-    var items: [UserObject]
-    }
-
-
-struct UserObject: Decodable {
-    var firstName: String
-    var lastName: String
-    var id: Int
-    var avatar: String
-    var domain: String?
-    var sex: Int?
-    var birthday: String?
-    var city: City?
-    var sexMapped: String {
-        return sex == 1 ? "Female" : "Male"
-    }
-    var birthdayMapped: String? {
-        return birthday.flatMap { DateFormatter().date(from: $0) }
-            .flatMap { DateFormatter().string(from: $0) }
-    }
-
-    enum CodingKeys: String, CodingKey {
-        case firstName = "first_name"
-        case id = "id"
-        case lastName = "last_name"
-        case avatar = "photo_100"
-        case domain
-        case sex
-        case birthday = "bdate"
-
-    }
-}
-
-struct City: Decodable {
-    var id: Int
-    var title: String
+struct UserModel: Codable, Hashable {
+    let id: Int
+    let hasPhoto: Int
+    let sex: Int
+    let firstName: String
+    let lastName: String
+    let canAccessClosed: Bool
+    let isClosed: Bool
 
     enum CodingKeys: String, CodingKey {
         case id
-        case title
+        case hasPhoto = "has_photo"
+        case sex
+        case firstName = "first_name"
+        case lastName = "last_name"
+        case canAccessClosed = "can_access_closed"
+        case isClosed = "is_closed"
     }
 }

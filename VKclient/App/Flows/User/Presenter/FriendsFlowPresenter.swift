@@ -61,7 +61,7 @@ final class FriendsFlowPresenter {
 
     private func fetchDataFromNetwork() {
         userService.requestUsers()
-            .decode(type: UserResponse.self, decoder: JSONDecoder())
+            .decode(type: FriendResponse.self, decoder: JSONDecoder())
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { completion in
                 switch completion {
@@ -81,7 +81,7 @@ final class FriendsFlowPresenter {
             .store(in: &cancellable)
     }
     
-    private func savingDataToRealm(_ data: [UserObject]) {
+    private func savingDataToRealm(_ data: [FriendObject]) {
         do {
             let dataRealm = data.map {UserRealm(user: $0)}
             try realmService.save(items: dataRealm, configuration: .defaultConfiguration, update: .modified)
@@ -122,20 +122,6 @@ final class FriendsFlowPresenter {
         usersFilteredFromRealm(with: self.friendsFromRealm?.filter("firstName CONTAINS[cd] %@ OR lastName CONTAINS[cd] %@", text, text))
         self.viewInput?.updateTableView()
     }
-    
-//    private func openFriendsPhotos(indexPath: IndexPath) {
-//        let firstLetter = self.firstLetters[indexPath.section]
-//        if let users = self.dictOfUsers[firstLetter] {
-//            let userID = users[indexPath.row].id
-//            do {
-//               try Keychain().set("\(userID)", key: "userID")
-//            } catch let error as NSError {
-//                print(error.localizedDescription)
-//            }
-//            let viewController = PhotosFlowBuilder.build()
-//            self.viewInput?.navigationController?.pushViewController(viewController.self, animated: true)
-//        }
-//    }
 
     private func openFriendsProfile(indexPath: IndexPath) {
         let firstLetter = self.firstLetters[indexPath.section]

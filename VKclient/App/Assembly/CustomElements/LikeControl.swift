@@ -1,6 +1,6 @@
 //
 //  LikeControl.swift
-//  MyFirstApp
+//  VKclient
 //
 //  Created by Alexander Grigoryev on 29.11.2021.
 //  Copyright © 2021–2025 Alexander Grigoryev. All rights reserved.
@@ -76,13 +76,16 @@ final class LikeControl: UIControl {
         let countText = "\(likesCount)"
         let image = isLiked ?? false ? UIImage(systemName: "heart.fill") : UIImage(systemName: "heart")
         likeButton.setImage(image, for: .normal)
-        likeButton.setTitle(countText, for: .normal)
-        UIView.transition(with: self.likeButton,
-                         duration: 0.2,
-                         options: [.transitionFlipFromBottom]) {
-            self.likeButton.setTitle(countText, for: .normal)
+
+        if likesCount > 0 {
+            likeButton.setTitle(countText, for: .normal)
+            likeButton.setTitleColor(UIColor.black, for: .normal)
+            UIView.transition(with: self.likeButton,
+                             duration: 0.2,
+                             options: [.transitionFlipFromBottom]) {
+                self.likeButton.setTitle(countText, for: .normal)
+            }
         }
 
-        likeButton.setTitleColor(UIColor.black, for: .normal)
     }
 }
