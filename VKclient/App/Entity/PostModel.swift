@@ -158,7 +158,6 @@ struct Attachment: Decodable {
 // MARK: Comments
 struct NewsComments: Codable {
     var count: Int
-    var filteredCount: Int?
 
     enum CodingKeys: String, CodingKey {
         case count
