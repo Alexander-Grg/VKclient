@@ -72,7 +72,7 @@ final class LikeControl: UIControl {
         likeButton.isUserInteractionEnabled = false
     }
 
-    private func updateButton() {
+     func updateButton() {
         let countText = "\(likesCount)"
         let image = isLiked ?? false ? UIImage(systemName: "heart.fill") : UIImage(systemName: "heart")
         likeButton.setImage(image, for: .normal)
