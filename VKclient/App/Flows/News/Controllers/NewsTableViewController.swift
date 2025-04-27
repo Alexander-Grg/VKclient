@@ -234,6 +234,28 @@ extension NewsTableViewController: NewsFlowViewInput {
         print("Reloading entire table view")
         tableView.reloadData()
     }
+
+    func updateSpecificPost(at index: Int) {
+         // Only reload the specific section that contains the post
+         if index < self.tableView.numberOfSections {
+             // Save scroll position
+             let currentOffset = self.tableView.contentOffset
+
+             // Find cells for that section that show likes
+             let footerRow = presenter.newsPost[index].rowsCounter.firstIndex(of: .footer) ?? -1
+             if footerRow >= 0 {
+                 let indexPath = IndexPath(row: footerRow, section: index)
+
+                 // Only update the cell if it's visible
+                 if let cell = self.tableView.cellForRow(at: indexPath) as? NewsFooterSection {
+                     cell.configureCell(presenter.newsPost[index], currentLikeState: presenter.newsPost[index].likes)
+                 }
+             }
+
+             // Restore scroll position
+             self.tableView.setContentOffset(currentOffset, animated: false)
+         }
+     }
 }
 
 
@@ -245,33 +267,33 @@ extension NewsTableViewController: NewsTableViewCellPhotoDelegate {
 }
 
 extension NewsTableViewController: LikeControlDelegate {
-//    func didLike(in cell: NewsFooterSection?) {
-//        guard let cell = cell,
-//              let indexPath = tableView.indexPath(for: cell)
-//        else { return }
-//
-//        let news = presenter.newsPost[indexPath.section]
-//
-//        if news.likes?.canLike == 1 {
-//            presenter.setLike(itemID: String(news.postID ?? 0), ownerID: String(news.sourceId))
-//        } else if news.likes?.canLike == 0 {
-//            presenter.removeLike(itemID: String(news.postID ?? 0),ownerID: String(news.sourceId))
-//        }
-//        self.presenter.loadNews()
-//        cell.configureCell(news, currentLikeState: news.likes)
-//        tableView.reloadRows(at: [indexPath], with: .none)
-//    }
+
     func didLike(in cell: NewsFooterSection?) {
-            guard let cell = cell, let indexPath = tableView.indexPath(for: cell) else { return }
-            let news = presenter.newsPost[indexPath.section]
-            if news.likes?.canLike == 1 {
-                presenter.setLike(itemID: String(news.postID ?? 0), ownerID: String(news.sourceId))
-            } else {
-                presenter.removeLike(itemID: String(news.postID ?? 0), ownerID: String(news.sourceId))
-            }
-            // Reload only the affected section
-            tableView.reloadSections([indexPath.section], with: .automatic)
-        }
+         guard let cell = cell, let indexPath = tableView.indexPath(for: cell) else { return }
+         let news = presenter.newsPost[indexPath.section]
+
+         let currentOffset = tableView.contentOffset
+
+         if news.likes?.canLike == 1 {
+             presenter.setLike(itemID: String(news.postID ?? 0), ownerID: String(news.sourceId))
+
+             if let visibleCell = tableView.cellForRow(at: indexPath) as? NewsFooterSection {
+                 // Create a temporary visual update without modifying the model
+                 visibleCell.likesButton.isLiked = true
+                 visibleCell.likesButton.likesCount = (news.likes?.count ?? 0) + 1
+                 visibleCell.likesButton.updateButton()
+             }
+         } else {
+             presenter.removeLike(itemID: String(news.postID ?? 0), ownerID: String(news.sourceId))
+
+             if let visibleCell = tableView.cellForRow(at: indexPath) as? NewsFooterSection {
+                 visibleCell.likesButton.isLiked = false
+                 visibleCell.likesButton.likesCount = max(0, (news.likes?.count ?? 1) - 1)
+                 visibleCell.likesButton.updateButton()
+             }
+         }
+         tableView.setContentOffset(currentOffset, animated: false)
+     }
 }
 
 extension NewsTableViewController: CommentControlDelegate {

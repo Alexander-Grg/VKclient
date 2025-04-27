@@ -50,6 +50,7 @@ enum NewsTypes {
 
 protocol NewsFlowViewInput {
     func updateTableView()
+    func updateSpecificPost(at index: Int)
 }
 
 protocol NewsFlowViewOutput {
@@ -107,11 +108,24 @@ final class NewsFlowPresenter {
                     print("The like method is finished")
                 case .failure(let error):
                     print("The error appeared during the set like method \(error)")
-                }}, receiveValue: {[weak self] value in
-                    guard let self = self else { return }
-                    self.likesCount = value.count
-                    print("The like is set")
-                }).store(in: &cancellable)
+                }
+            }, receiveValue: { [weak self] value in
+                guard let self = self else { return }
+                self.likesCount = value.likes ?? 0
+
+                // Only refresh the data for the specific post that was liked
+                // Find the post index in newsPost array
+                if let postIndex = self.findPostIndex(itemID: itemID, ownerID: ownerID) {
+                    // Update just that post's likes data
+                    DispatchQueue.main.async {
+                        // Update the model with the new likes value from the API
+                        self.newsPost[postIndex].likes = value
+
+                        // Notify the view that it should update just this one post
+                        self.viewInput?.updateSpecificPost(at: postIndex)
+                    }
+                }
+            }).store(in: &cancellable)
     }
 
     func removeLike(itemID: String, ownerID: String) {
@@ -124,11 +138,30 @@ final class NewsFlowPresenter {
                     print("The remove like method is finished")
                 case .failure(let error):
                     print("The error appeared during the like removal method \(error)")
-                }}, receiveValue: {[weak self] value in
-                    guard let self = self else { return }
-                    self.likesCount = value.count
-                    print("The like is removed")
-                }).store(in: &cancellable)
+                }
+            }, receiveValue: { [weak self] value in
+                guard let self = self else { return }
+                self.likesCount = value.likes ?? 0
+
+                // Only refresh the data for the specific post that was unliked
+                // Find the post index in newsPost array
+                if let postIndex = self.findPostIndex(itemID: itemID, ownerID: ownerID) {
+                    // Update just that post's likes data
+                    DispatchQueue.main.async {
+                        // Update the model with the new likes value from the API
+                        self.newsPost[postIndex].likes = value
+
+                        // Notify the view that it should update just this one post
+                        self.viewInput?.updateSpecificPost(at: postIndex)
+                    }
+                }
+            }).store(in: &cancellable)
+    }
+
+    private func findPostIndex(itemID: String, ownerID: String) -> Int? {
+        return newsPost.firstIndex { post in
+            return post.postID == Int(itemID) && post.sourceId == Int(ownerID)
+        }
     }
 
     func isLiked(itemID: String, ownerID: String) -> Bool {
