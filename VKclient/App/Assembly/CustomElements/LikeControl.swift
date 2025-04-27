@@ -72,20 +72,16 @@ final class LikeControl: UIControl {
         likeButton.isUserInteractionEnabled = false
     }
 
-    private func updateButton() {
+    func updateButton() {
         let countText = "\(likesCount)"
         let image = isLiked ?? false ? UIImage(systemName: "heart.fill") : UIImage(systemName: "heart")
         likeButton.setImage(image, for: .normal)
-
-        if likesCount > 0 {
-            likeButton.setTitle(countText, for: .normal)
-            likeButton.setTitleColor(UIColor.black, for: .normal)
-            UIView.transition(with: self.likeButton,
-                             duration: 0.2,
-                             options: [.transitionFlipFromBottom]) {
-                self.likeButton.setTitle(countText, for: .normal)
-            }
+        likeButton.setTitle(countText, for: .normal)
+        likeButton.setTitleColor(UIColor.black, for: .normal)
+        UIView.transition(with: self.likeButton,
+                          duration: 0.2,
+                          options: [.transitionFlipFromBottom]) {
+            self.likeButton.setTitle(countText, for: .normal)
         }
-
     }
 }

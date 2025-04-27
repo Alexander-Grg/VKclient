@@ -70,8 +70,7 @@ final class NewsFooterSection: UITableViewCell {
         self.viewsCounter.setTitle(nil, for: .normal)
         self.repostButton.setTitle(nil, for: .normal)
         self.commentsButton.setTitle(nil, for: .normal)
-        self.likesButton.likesCount = 0
-        self.likesButton.isLiked = nil
+        self.likesButton.configureDataSource(with: nil, totalLikes: nil)
     }
 
     // MARK: - UI
@@ -124,8 +123,8 @@ final class NewsFooterSection: UITableViewCell {
         self.viewsCounter.setTitle("\(view.count)", for: .normal)
         self.repostButton.setTitle("\(reposts.count)", for: .normal)
         self.commentsButton.setTitle("\(comments.count)", for: .normal)
-        if let isLiked = currentLikeState,
-           let canLike = isLiked.canLike == 1 ? false : true {
+        if let isLiked = currentLikeState {
+            let canLike = isLiked.canLike == 1 ? false : true
             self.likesButton.configureDataSource(with: canLike, totalLikes: likes.count)
         }
     }
