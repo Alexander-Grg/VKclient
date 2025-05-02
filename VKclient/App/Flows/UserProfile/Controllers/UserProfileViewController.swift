@@ -61,7 +61,7 @@ final class UserProfileViewController: UIViewController {
             photoPreviewView.topAnchor.constraint(equalTo: userProfileView.bottomAnchor, constant: 20),
             photoPreviewView.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor, constant: 20),
             photoPreviewView.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor, constant: -20),
-            photoPreviewView.heightAnchor.constraint(equalToConstant: 100) // Adjust height as needed
+            photoPreviewView.heightAnchor.constraint(equalToConstant: 100)
         ])
         let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(pressPhotoHandler))
         photoPreviewView.addGestureRecognizer(gestureRecognizer)

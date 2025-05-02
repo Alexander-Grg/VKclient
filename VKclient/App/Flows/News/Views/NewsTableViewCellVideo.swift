@@ -102,8 +102,6 @@ final class NewsTableViewCellVideo: UITableViewCell {
         webView.isHidden = true
     }
 
-    // MARK: - Configuration
-
     func configure(_ video: VideoItem?) {
         guard let playerURLString = video?.player,
               let url = URL(string: playerURLString) else {

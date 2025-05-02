@@ -100,7 +100,7 @@ final class NewsFlowPresenter {
 
     func setLike(itemID: String, ownerID: String) {
         likesService.setLike(type: "post", itemID: itemID, ownerID: ownerID)
-            .decode(type: Likes.self, decoder: JSONDecoder())
+            .decode(type: LikesResponseAPI.self, decoder: JSONDecoder())
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { completion in
                 switch completion {
@@ -111,17 +111,12 @@ final class NewsFlowPresenter {
                 }
             }, receiveValue: { [weak self] value in
                 guard let self = self else { return }
-                self.likesCount = value.likes ?? 0
-
-                // Only refresh the data for the specific post that was liked
-                // Find the post index in newsPost array
+                self.likesCount = value.response.likes
                 if let postIndex = self.findPostIndex(itemID: itemID, ownerID: ownerID) {
-                    // Update just that post's likes data
                     DispatchQueue.main.async {
-                        // Update the model with the new likes value from the API
-                        self.newsPost[postIndex].likes = value
+                        let oldModel = self.newsPost[postIndex].likes
+                        self.newsPost[postIndex].likes = Likes(canLike: 0, count: value.response.likes, userLikes: oldModel?.userLikes, canPublish: oldModel?.canPublish, repostDisabled: oldModel?.repostDisabled)
 
-                        // Notify the view that it should update just this one post
                         self.viewInput?.updateSpecificPost(at: postIndex)
                     }
                 }
@@ -130,7 +125,7 @@ final class NewsFlowPresenter {
 
     func removeLike(itemID: String, ownerID: String) {
         likesService.removeLike(type: "post", itemID: itemID, ownerID: ownerID)
-            .decode(type: Likes.self, decoder: JSONDecoder())
+            .decode(type: LikesResponseAPI.self, decoder: JSONDecoder())
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { completion in
                 switch completion {
@@ -141,17 +136,12 @@ final class NewsFlowPresenter {
                 }
             }, receiveValue: { [weak self] value in
                 guard let self = self else { return }
-                self.likesCount = value.likes ?? 0
-
-                // Only refresh the data for the specific post that was unliked
-                // Find the post index in newsPost array
+                self.likesCount = value.response.likes
                 if let postIndex = self.findPostIndex(itemID: itemID, ownerID: ownerID) {
-                    // Update just that post's likes data
                     DispatchQueue.main.async {
-                        // Update the model with the new likes value from the API
-                        self.newsPost[postIndex].likes = value
+                        let oldModel = self.newsPost[postIndex].likes
+                        self.newsPost[postIndex].likes = Likes(canLike: 1, count: value.response.likes, userLikes: oldModel?.userLikes, canPublish: oldModel?.canPublish, repostDisabled: oldModel?.repostDisabled)
 
-                        // Notify the view that it should update just this one post
                         self.viewInput?.updateSpecificPost(at: postIndex)
                     }
                 }

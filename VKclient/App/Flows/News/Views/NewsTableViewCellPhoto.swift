@@ -16,8 +16,7 @@ protocol NewsTableViewCellPhotoDelegate: AnyObject {
 final class NewsTableViewCellPhoto: UITableViewCell {
     
     weak var delegate: NewsTableViewCellPhotoDelegate?
-    
-    // MARK: - Properties
+
     private(set) lazy var newsPhoto: UIImageView = {
         let photo = UIImageView()
         photo.contentMode = .center
@@ -50,10 +49,7 @@ final class NewsTableViewCellPhoto: UITableViewCell {
     
     private var images: [String] = []
     private var currentIndex: Int = 0
-    
-    
-    // MARK: - Init
-    
+
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         self.setView()
@@ -64,8 +60,7 @@ final class NewsTableViewCellPhoto: UITableViewCell {
         super.init(coder: aDecoder)
         self.setView()
     }
-    
-    // MARK: - UI
+
     private func setView() {
         contentView.addSubview(tapLabel)
         contentView.addSubview(newsPhoto)

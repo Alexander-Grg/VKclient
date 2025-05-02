@@ -47,27 +47,6 @@ struct VideoItem: Codable {
 //    let canDislike: Int
 
     enum CodingKeys: String, CodingKey {
-//        case canBePinned = "can_be_pinned"
-//        case isPinned = "is_pinned"
-//        case responseType = "response_type"
-//        case accessKey = "access_key"
-//        case canComment = "can_comment"
-//        case canLike = "can_like"
-//        case canRepost = "can_repost"
-//        case canSubscribe = "can_subscribe"
-//        case canAddToFaves = "can_add_to_faves"
-//        case canAdd = "can_add"
-//        case comments, date, description, duration, image
-//        case firstFrame = "first_frame"
-//        case width, height, id
-//        case ownerId = "owner_id"
-//        case ovId = "ov_id"
-//        case title, isFavorite, player, added
-//        case trackCode = "track_code"
-//        case type, views
-//        case localViews = "local_views"
-//        case likes, reposts
-//        case canDislike = "can_dislike"
         case player
         case image
     }

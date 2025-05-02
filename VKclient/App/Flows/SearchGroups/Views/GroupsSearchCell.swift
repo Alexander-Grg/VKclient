@@ -10,8 +10,6 @@ import UIKit
 
 final class GroupsSearchCell: UITableViewCell {
 
-    // MARK: - Properties
-
     private(set) lazy var avatar: AvatarView = {
         let avatar = AvatarView()
         let recognizer = UITapGestureRecognizer(target: self, action: #selector(self.buttonTap))
@@ -33,8 +31,6 @@ final class GroupsSearchCell: UITableViewCell {
         return label
     }()
 
-    // MARK: - Init
-
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         self.configureUI()
@@ -44,8 +40,6 @@ final class GroupsSearchCell: UITableViewCell {
         super.init(coder: aDecoder)
         self.configureUI()
     }
-
-    // MARK: - UI
 
     private func configureUI() {
         self.addSubviews()

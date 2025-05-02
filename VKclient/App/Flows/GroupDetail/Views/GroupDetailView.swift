@@ -16,7 +16,6 @@ final class GroupDetailView: UIView {
 
     weak var groupDetaildelegate: GroupDetailDelegate?
 
-    //    MARK: Properties
     private(set) lazy var groupImage: UIImageView = {
         let image = UIImageView()
         image.translatesAutoresizingMaskIntoConstraints = false
@@ -90,8 +89,6 @@ final class GroupDetailView: UIView {
         return button
     }()
 
-    //    MARK: Lifecycle
-    
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.configureUI()
@@ -103,8 +100,6 @@ final class GroupDetailView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    //    MARK: Methods
-    
     private func configureUI() {
         backgroundColor = .white
         self.addSubviews()
@@ -112,7 +107,6 @@ final class GroupDetailView: UIView {
     }
     
     private func addSubviews() {
-        //        self.addSubview(groupCoverImage)
         self.addSubview(groupImage)
         self.addSubview(groupNameLabel)
         self.addSubview(groupStatusLabel)
@@ -126,11 +120,6 @@ final class GroupDetailView: UIView {
         let s = safeAreaLayoutGuide
         
         NSLayoutConstraint.activate([
-            
-            //            groupCoverImage.topAnchor.constraint(equalTo: s.topAnchor, constant: 20),
-            //            groupCoverImage.leftAnchor.constraint(equalTo: s.leftAnchor),
-            //            groupCoverImage.rightAnchor.constraint(equalTo: s.rightAnchor),
-            
             groupImage.topAnchor.constraint(equalTo: s.topAnchor, constant: 20),
             groupImage.centerXAnchor.constraint(equalTo: s.centerXAnchor),
             groupImage.heightAnchor.constraint(equalToConstant: 100),

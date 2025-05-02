@@ -19,8 +19,7 @@ class APIProvider<Endpoint: EndpointProtocol> {
         return loadData(with: request)
             .eraseToAnyPublisher()
     }
-    
-    // MARK: - Request building
+
     private func performRequest(for endpoint: Endpoint) -> URLRequest? {
         guard var urlComponents = URLComponents(string: endpoint.absoluteURL) else {
             return nil
@@ -42,11 +41,9 @@ class APIProvider<Endpoint: EndpointProtocol> {
         let urlRequest = URLRequest(url: url,
                                     cachePolicy: .reloadRevalidatingCacheData,
                                     timeoutInterval: 30)
-        print(keychainToken)
         return urlRequest
     }
-    
-    // MARK: - Getting data
+
     private func loadData(with request: URLRequest) -> AnyPublisher<Data, Error> {
         return URLSession.shared.dataTaskPublisher(for: request)
             .mapError({ error -> Error in

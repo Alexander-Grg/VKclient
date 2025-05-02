@@ -12,8 +12,6 @@ import SDWebImage
 
 final class NewFriendsViewCell: UITableViewCell {
 
-    // MARK: - Properties
-
     private(set) lazy var nameView: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 17.0)
@@ -35,8 +33,6 @@ final class NewFriendsViewCell: UITableViewCell {
         return avatar
     }()
 
-    // MARK: - Lifecycle
-
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         self.configureUI()
@@ -50,8 +46,6 @@ final class NewFriendsViewCell: UITableViewCell {
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
     }
-
-    // MARK: - Configuring UI
 
     private func configureUI() {
         self.addSubviews()
@@ -80,8 +74,6 @@ final class NewFriendsViewCell: UITableViewCell {
             self.nameView.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: 10)
         ])
     }
-
-// MARK: - Private methods
 
     @objc private func onTap() {
         avatarAnimation()
