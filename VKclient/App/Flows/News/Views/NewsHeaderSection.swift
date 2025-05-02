@@ -11,7 +11,6 @@ import SDWebImage
 
 final class NewsHeaderSection: UITableViewCell {
 
-    // MARK: - Properties
     private(set) lazy var avatarView: UIImageView = {
         let avatar = UIImageView()
         avatar.translatesAutoresizingMaskIntoConstraints = false
@@ -45,8 +44,6 @@ final class NewsHeaderSection: UITableViewCell {
         return label
     }()
 
-    // MARK: - Lifecycle
-
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         self.configureUI()
@@ -64,8 +61,6 @@ final class NewsHeaderSection: UITableViewCell {
         userName.text = nil
         avatarView.image = nil
     }
-
-    // MARK: - UI
 
     private func configureUI() {
         self.addSubviews()

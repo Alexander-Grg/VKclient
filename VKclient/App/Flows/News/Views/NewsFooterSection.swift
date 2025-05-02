@@ -13,7 +13,6 @@ protocol CommentControlDelegate: AnyObject {
 }
 
 final class NewsFooterSection: UITableViewCell {
-    // MARK: - Properties
     weak var likeDelegate: LikeControlDelegate?
     weak var commentDelegate: CommentControlDelegate?
     private(set) lazy var repostButton: UIButton = {
@@ -52,8 +51,6 @@ final class NewsFooterSection: UITableViewCell {
         return button
     }()
 
-    // MARK: - Lifecycle
-
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         self.configureUI()
@@ -72,8 +69,6 @@ final class NewsFooterSection: UITableViewCell {
         self.commentsButton.setTitle(nil, for: .normal)
         self.likesButton.configureDataSource(with: nil, totalLikes: nil)
     }
-
-    // MARK: - UI
 
     private func configureUI() {
         self.selectionStyle = .none

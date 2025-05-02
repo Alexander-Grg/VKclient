@@ -36,8 +36,7 @@ final class FriendsFlowPresenter {
     internal var firstLetters = [Character]()
     
     weak var viewInput: (UIViewController & FriendsFlowViewInput)?
-    
-    // MARK: - Function for tableView sections
+
     private func usersFilteredFromRealm(with friends: Results<UserRealm>?) {
         guard let filteredFriends = friends else { return }
         dictOfUsers.removeAll()

@@ -11,8 +11,6 @@ import AuthenticationServices
 
 final class LoginView: UIView {
 
-    // MARK: - Properties
-
     private(set) lazy var wallpaper: UIImageView = {
         let image = UIImageView()
         image.translatesAutoresizingMaskIntoConstraints = false
@@ -104,7 +102,6 @@ final class LoginView: UIView {
     weak var loginDelegate: LoginDelegate?
     weak var registrationDelegate: RegistrationDelegate?
 
-    // MARK: - Init
     override init(frame: CGRect) {
         super.init(frame: frame)
 
@@ -120,7 +117,6 @@ final class LoginView: UIView {
         animateCircles()
     }
 
-    // MARK: - setting UI
     private func configureUI() {
         self.addSubviews()
         self.setupConstraints()
