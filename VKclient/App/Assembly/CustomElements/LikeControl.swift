@@ -15,7 +15,6 @@ protocol LikeControlDelegate: AnyObject {
 
 final class LikeControl: UIControl {
 
-// MARK: - Properties
     weak var delegate: LikeControlDelegate?
     private(set) lazy var likeButton: UIButton = {
         let button = UIButton()
@@ -28,7 +27,6 @@ final class LikeControl: UIControl {
     var isLiked: Bool?
     var likesCount = 0
 
-// MARK: - Init
     override init(frame: CGRect) {
         super.init(frame: frame)
         let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(likeButtonHandler))
@@ -76,8 +74,6 @@ final class LikeControl: UIControl {
         let countText = "\(likesCount)"
         let image = isLiked ?? false ? UIImage(systemName: "heart.fill") : UIImage(systemName: "heart")
         likeButton.setImage(image, for: .normal)
-
-        if likesCount > 0 {
             likeButton.setTitle(countText, for: .normal)
             likeButton.setTitleColor(UIColor.black, for: .normal)
             UIView.transition(with: self.likeButton,
@@ -85,7 +81,5 @@ final class LikeControl: UIControl {
                              options: [.transitionFlipFromBottom]) {
                 self.likeButton.setTitle(countText, for: .normal)
             }
-        }
-
     }
 }

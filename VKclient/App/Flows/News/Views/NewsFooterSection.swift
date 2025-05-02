@@ -13,7 +13,6 @@ protocol CommentControlDelegate: AnyObject {
 }
 
 final class NewsFooterSection: UITableViewCell {
-    // MARK: - Properties
     weak var likeDelegate: LikeControlDelegate?
     weak var commentDelegate: CommentControlDelegate?
     private(set) lazy var repostButton: UIButton = {
@@ -52,8 +51,6 @@ final class NewsFooterSection: UITableViewCell {
         return button
     }()
 
-    // MARK: - Lifecycle
-
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         self.configureUI()
@@ -70,11 +67,8 @@ final class NewsFooterSection: UITableViewCell {
         self.viewsCounter.setTitle(nil, for: .normal)
         self.repostButton.setTitle(nil, for: .normal)
         self.commentsButton.setTitle(nil, for: .normal)
-        self.likesButton.likesCount = 0
-        self.likesButton.isLiked = nil
+        self.likesButton.configureDataSource(with: nil, totalLikes: nil)
     }
-
-    // MARK: - UI
 
     private func configureUI() {
         self.selectionStyle = .none
@@ -124,8 +118,8 @@ final class NewsFooterSection: UITableViewCell {
         self.viewsCounter.setTitle("\(view.count)", for: .normal)
         self.repostButton.setTitle("\(reposts.count)", for: .normal)
         self.commentsButton.setTitle("\(comments.count)", for: .normal)
-        if let isLiked = currentLikeState,
-           let canLike = isLiked.canLike == 1 ? false : true {
+        if let isLiked = currentLikeState {
+            let canLike = isLiked.canLike == 1 ? false : true
             self.likesButton.configureDataSource(with: canLike, totalLikes: likes.count)
         }
     }

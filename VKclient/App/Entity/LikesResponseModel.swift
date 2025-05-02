@@ -9,10 +9,10 @@
     
 import Foundation
 
-struct LikesResponseModel: Decodable {
-    let likes: Int
+struct LikesResponseAPI: Codable {
+    let response: LikesResponseModel
+}
 
-    enum CodingKeys: String, CodingKey {
-        case likes
-    }
+struct LikesResponseModel: Codable {
+    let likes: Int
 }

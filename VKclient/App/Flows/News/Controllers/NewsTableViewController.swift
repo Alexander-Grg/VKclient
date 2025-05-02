@@ -7,7 +7,6 @@
 //
 
 import UIKit
-//TODO: Fix the videos, fix the likes when adding additional news. Add commends section to the app.
 
 final class NewsTableViewController: UIViewController {
     private(set) lazy var tableView: UITableView = {
@@ -60,7 +59,7 @@ final class NewsTableViewController: UIViewController {
         tableView.refreshControl?.beginRefreshing()
         self.presenter.loadNews()
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) { // Simulate refresh delay
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
             self.tableView.refreshControl?.endRefreshing()
             self.tableView.reloadData()
         }
@@ -179,7 +178,7 @@ extension NewsTableViewController: UITableViewDataSourcePrefetching {
                     for section in startingIndex..<self.presenter.newsPost.count {
                         for row in 0..<self.presenter.newsPost[section].rowsCounter.count {
                             let indexPath = IndexPath(row: row, section: section)
-                            self.isPressedState[indexPath] = false // Default state
+                            self.isPressedState[indexPath] = false
                         }
                     }
                     
@@ -204,23 +203,6 @@ extension NewsTableViewController: NewsDelegate {
     }
 }
 
-//extension NewsTableViewController: NewsFlowViewInput {
-//    func updateTableView() {
-//        var newState: [IndexPath: Bool] = [:]
-//        
-//        for section in 0..<self.presenter.newsPost.count {
-//            for row in 0..<self.presenter.newsPost[section].rowsCounter.count {
-//                let indexPath = IndexPath(row: row, section: section)
-//                newState[indexPath] = self.isPressedState[indexPath] ?? false
-//            }
-//        }
-//        
-//        self.isPressedState = newState
-//        self.tableView.reloadData()
-//    }
-//}
-
-
 extension NewsTableViewController: NewsFlowViewInput {
     func updateTableView() {
         var newState: [IndexPath: Bool] = [:]
@@ -236,23 +218,17 @@ extension NewsTableViewController: NewsFlowViewInput {
     }
 
     func updateSpecificPost(at index: Int) {
-         // Only reload the specific section that contains the post
          if index < self.tableView.numberOfSections {
-             // Save scroll position
              let currentOffset = self.tableView.contentOffset
 
-             // Find cells for that section that show likes
              let footerRow = presenter.newsPost[index].rowsCounter.firstIndex(of: .footer) ?? -1
              if footerRow >= 0 {
                  let indexPath = IndexPath(row: footerRow, section: index)
 
-                 // Only update the cell if it's visible
                  if let cell = self.tableView.cellForRow(at: indexPath) as? NewsFooterSection {
                      cell.configureCell(presenter.newsPost[index], currentLikeState: presenter.newsPost[index].likes)
                  }
              }
-
-             // Restore scroll position
              self.tableView.setContentOffset(currentOffset, animated: false)
          }
      }
@@ -276,21 +252,8 @@ extension NewsTableViewController: LikeControlDelegate {
 
          if news.likes?.canLike == 1 {
              presenter.setLike(itemID: String(news.postID ?? 0), ownerID: String(news.sourceId))
-
-             if let visibleCell = tableView.cellForRow(at: indexPath) as? NewsFooterSection {
-                 // Create a temporary visual update without modifying the model
-                 visibleCell.likesButton.isLiked = true
-                 visibleCell.likesButton.likesCount = (news.likes?.count ?? 0) + 1
-                 visibleCell.likesButton.updateButton()
-             }
          } else {
              presenter.removeLike(itemID: String(news.postID ?? 0), ownerID: String(news.sourceId))
-
-             if let visibleCell = tableView.cellForRow(at: indexPath) as? NewsFooterSection {
-                 visibleCell.likesButton.isLiked = false
-                 visibleCell.likesButton.likesCount = max(0, (news.likes?.count ?? 1) - 1)
-                 visibleCell.likesButton.updateButton()
-             }
          }
          tableView.setContentOffset(currentOffset, animated: false)
      }

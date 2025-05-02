@@ -276,7 +276,7 @@ extension GroupsFlowPresenter: GroupsFlowViewOutput {
 
     func fetchAndUpdateData() {
         self.fetchAndFilterDataFromRealm()
-        if self.groupsfromRealm?.isEmpty == true { // If no data, fetch from network
+        if self.groupsfromRealm?.isEmpty == true {
              self.fetchDataFromNetworkAndSaveToRealm()
          }
         self.updateRealmObjects()

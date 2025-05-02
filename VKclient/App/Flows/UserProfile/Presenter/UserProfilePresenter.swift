@@ -137,18 +137,6 @@ final class UserProfilePresenter {
     }
 
     private func transitionToThePhotoAlbum() {
-//        let firstLetter = self.firstLetters[indexPath.section]
-//           if let users = self.dictOfUsers[firstLetter] {
-//               let userID = users[indexPath.row].id
-//               do {
-//                  try Keychain().set("\(userID)", key: "userID")
-//               } catch let error as NSError {
-//                   print(error.localizedDescription)
-//               }
-//               let viewController = PhotosFlowBuilder.build()
-//               self.viewInput?.navigationController?.pushViewController(viewController.self, animated: true)
-//           }
-
         let viewController = PhotosFlowBuilder.build()
         self.viewInput?.navigationController?.pushViewController(viewController, animated: true)
     }

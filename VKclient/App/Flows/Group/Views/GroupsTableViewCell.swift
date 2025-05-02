@@ -10,9 +10,6 @@ import UIKit
 import SDWebImage
 
 final class GroupsTableViewCell: UITableViewCell {
-
-    // MARK: - Properties
-
     private(set) lazy var avatarView: AvatarView = {
         let avatar = AvatarView()
         let recognizer = UITapGestureRecognizer(target: self, action: #selector(onTap))
@@ -34,8 +31,6 @@ final class GroupsTableViewCell: UITableViewCell {
         return label
     }()
 
-    // MARK: - Lifecycle
-
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         self.configureUI()
@@ -49,8 +44,6 @@ final class GroupsTableViewCell: UITableViewCell {
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
     }
-
-    // MARK: - Configuring UI
 
     private func configureUI() {
         self.addSubviews()

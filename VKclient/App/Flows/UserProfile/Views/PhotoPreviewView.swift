@@ -65,7 +65,7 @@ final class PhotoPreviewView: UIView {
             imageView.contentMode = .scaleAspectFill
             imageView.clipsToBounds = true
             imageView.layer.cornerRadius = 8
-            imageView.isHidden = true // Initially hidden
+            imageView.isHidden = true
             stackView.addArrangedSubview(imageView)
             imageViews.append(imageView)
         }
