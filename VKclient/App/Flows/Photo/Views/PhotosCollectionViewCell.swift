@@ -13,9 +13,6 @@ protocol ReusableView: AnyObject {
 }
 
 final class PhotosCollectionViewCell: UICollectionViewCell {
-
-// MARK: - Properties
-
     private enum Constants {
         static let contentViewCornerRadius: CGFloat = 4.0
         static let imageHeight: CGFloat = 180.0
@@ -37,16 +34,12 @@ final class PhotosCollectionViewCell: UICollectionViewCell {
         return control
     }()
 
-// MARK: - Init
-
     override init(frame: CGRect) {
         super.init(frame: .zero)
         setupViews()
         setupLayouts()
     }
-
-// MARK: - UI
-
+    
     private func setupViews() {
         contentView.clipsToBounds = true
         contentView.layer.cornerRadius = Constants.contentViewCornerRadius

@@ -69,6 +69,7 @@
 		62F69BBF27329E130090B3BC /* NewFriendsViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62F69BBE27329E130090B3BC /* NewFriendsViewCell.swift */; };
 		62FB4FE62832A56600CD6F6D /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62FB4FE52832A56600CD6F6D /* LoginView.swift */; };
 		7100947D2B5EBDAA00F72E0D /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = 7100947C2B5EBDAA00F72E0D /* KeychainAccess */; };
+		710400AD2DBDEEB50050F003 /* LikesResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 710400AC2DBDEEA90050F003 /* LikesResponseModel.swift */; };
 		711759642D9907AE00BDDA59 /* CommentsFlowPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 711759632D9907A100BDDA59 /* CommentsFlowPresenter.swift */; };
 		711759662D9907B900BDDA59 /* CommentsFlowViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 711759652D9907B300BDDA59 /* CommentsFlowViewController.swift */; };
 		7117596A2D9907CB00BDDA59 /* CommentsFlowViewBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 711759692D9907C600BDDA59 /* CommentsFlowViewBuilder.swift */; };
@@ -166,6 +167,7 @@
 		62F69BBC27329D4E0090B3BC /* NewFriendsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewFriendsTableViewController.swift; sourceTree = "<group>"; };
 		62F69BBE27329E130090B3BC /* NewFriendsViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewFriendsViewCell.swift; sourceTree = "<group>"; };
 		62FB4FE52832A56600CD6F6D /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
+		710400AC2DBDEEA90050F003 /* LikesResponseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikesResponseModel.swift; sourceTree = "<group>"; };
 		711759632D9907A100BDDA59 /* CommentsFlowPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentsFlowPresenter.swift; sourceTree = "<group>"; };
 		711759652D9907B300BDDA59 /* CommentsFlowViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentsFlowViewController.swift; sourceTree = "<group>"; };
 		711759692D9907C600BDDA59 /* CommentsFlowViewBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentsFlowViewBuilder.swift; sourceTree = "<group>"; };
@@ -304,6 +306,7 @@
 		627C312F2859DAA600C9D2A8 /* Entity */ = {
 			isa = PBXGroup;
 			children = (
+				710400AC2DBDEEA90050F003 /* LikesResponseModel.swift */,
 				71FA43492D9A6D95009A1934 /* UserModel.swift */,
 				713106062D9956B300781AAF /* CommentsModel.swift */,
 				713D184D2D8EC1F100D4188E /* VideosModel.swift */,
@@ -942,6 +945,7 @@
 				62D3EB1E26E6A64B00B8F1A2 /* AvatarView.swift in Sources */,
 				713105FF2D991C7D00781AAF /* CommentsFlowCell.swift in Sources */,
 				713D184E2D8EC1F400D4188E /* VideosModel.swift in Sources */,
+				710400AD2DBDEEB50050F003 /* LikesResponseModel.swift in Sources */,
 				625B823028C2819E008286E3 /* FriendsFlowModuleBuilder.swift in Sources */,
 				71259ADC2B5E7318005B3C03 /* DependencyInjection.swift in Sources */,
 				6281149B2833BDDF00E042D6 /* AppStartManager.swift in Sources */,

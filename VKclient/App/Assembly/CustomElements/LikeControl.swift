@@ -15,7 +15,6 @@ protocol LikeControlDelegate: AnyObject {
 
 final class LikeControl: UIControl {
 
-// MARK: - Properties
     weak var delegate: LikeControlDelegate?
     private(set) lazy var likeButton: UIButton = {
         let button = UIButton()
@@ -28,7 +27,6 @@ final class LikeControl: UIControl {
     var isLiked: Bool?
     var likesCount = 0
 
-// MARK: - Init
     override init(frame: CGRect) {
         super.init(frame: frame)
         let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(likeButtonHandler))

@@ -68,7 +68,6 @@ final class PhotoViewController: UIViewController {
     }
     private func setupLayouts() {
         collectionView.translatesAutoresizingMaskIntoConstraints = false
-        // Layout constraints for `collectionView`
         NSLayoutConstraint.activate([
             collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),

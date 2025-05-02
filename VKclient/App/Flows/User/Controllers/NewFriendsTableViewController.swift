@@ -80,8 +80,6 @@ final class NewFriendsTableViewController: UIViewController, UISearchBarDelegate
 }
 
 extension NewFriendsTableViewController: UITableViewDataSource {
-    
-    // MARK: Sections configure
     func numberOfSections(in tableView: UITableView) -> Int {
         self.presenter.firstLetters.count
     }
@@ -96,7 +94,6 @@ extension NewFriendsTableViewController: UITableViewDataSource {
             withIdentifier: NewFriendsViewCell.identifier,
             for: indexPath) as? NewFriendsViewCell
         else { return UITableViewCell() }
-        // MARK: Load from Realm
         let firstLetter = self.presenter.firstLetters[indexPath.section]
         if let users = self.presenter.dictOfUsers[firstLetter] {
             cell.configure(users[indexPath.row])
@@ -111,8 +108,7 @@ extension NewFriendsTableViewController: UITableViewDataSource {
     func sectionIndexTitles(for tableView: UITableView) -> [String]? {
         self.presenter.firstLetters.map { String($0) }
     }
-    // MARK: Header of section
-    
+
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         String(self.presenter.firstLetters[section])
         

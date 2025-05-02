@@ -14,7 +14,6 @@ protocol NewsDelegate: AnyObject {
 
 final class NewsTableViewCellPost: UITableViewCell {
 
-    // MARK: - Properties
     var isPressed: Bool = false
     weak var delegate: NewsDelegate?
 
@@ -36,8 +35,6 @@ final class NewsTableViewCellPost: UITableViewCell {
         return button
     }()
 
-    // MARK: - Lifecycle
-
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         self.configureUI()
@@ -51,8 +48,6 @@ final class NewsTableViewCellPost: UITableViewCell {
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
     }
-
-    // MARK: - Configuring UI
 
     private func configureUI() {
         self.addSubviews()
@@ -87,8 +82,6 @@ final class NewsTableViewCellPost: UITableViewCell {
             showMoreTextButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: 5)
         ])
     }
-
-    // MARK: - Configuring cell
 
     func configureCell(_ postText: News, isTapped: Bool, isButtonPressed: Bool) {
         textForPost.text = postText.text

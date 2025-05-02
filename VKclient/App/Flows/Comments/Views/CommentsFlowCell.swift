@@ -12,8 +12,6 @@ import SDWebImage
 
 final class CommentsFlowCell: UITableViewCell {
 
-    // MARK: - UI Components
-
     private(set) lazy var nameTextLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -47,8 +45,6 @@ final class CommentsFlowCell: UITableViewCell {
         return likesControl
     }()
 
-    // MARK: - Initialization
-
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         configureUI()
@@ -67,8 +63,6 @@ final class CommentsFlowCell: UITableViewCell {
         likesButton.likesCount = 0
     }
 
-    // MARK: - Configuration
-
     func configureData(with comment: CommentModel, displayName: String) {
         nameTextLabel.text = displayName.isEmpty ? "Unknown" : displayName
 
@@ -79,8 +73,6 @@ final class CommentsFlowCell: UITableViewCell {
         configureLikes(for: comment)
         configureDate(timestamp: comment.date)
     }
-
-    // MARK: - Private Methods
 
     private func configureStickerIfNeeded(for comment: CommentModel) {
         guard let sticker = comment.attachmentSticker.first,

@@ -50,6 +50,7 @@ enum NewsTypes {
 
 protocol NewsFlowViewInput {
     func updateTableView()
+    func updateSpecificPost(at index: Int)
 }
 
 protocol NewsFlowViewOutput {
@@ -99,7 +100,7 @@ final class NewsFlowPresenter {
 
     func setLike(itemID: String, ownerID: String) {
         likesService.setLike(type: "post", itemID: itemID, ownerID: ownerID)
-            .decode(type: Likes.self, decoder: JSONDecoder())
+            .decode(type: LikesResponseAPI.self, decoder: JSONDecoder())
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { completion in
                 switch completion {
@@ -107,16 +108,24 @@ final class NewsFlowPresenter {
                     print("The like method is finished")
                 case .failure(let error):
                     print("The error appeared during the set like method \(error)")
-                }}, receiveValue: {[weak self] value in
-                    guard let self = self else { return }
-                    self.likesCount = value.count
-                    print("The like is set")
-                }).store(in: &cancellable)
+                }
+            }, receiveValue: { [weak self] value in
+                guard let self = self else { return }
+                self.likesCount = value.response.likes
+                if let postIndex = self.findPostIndex(itemID: itemID, ownerID: ownerID) {
+                    DispatchQueue.main.async {
+                        let oldModel = self.newsPost[postIndex].likes
+                        self.newsPost[postIndex].likes = Likes(canLike: 0, count: value.response.likes, userLikes: oldModel?.userLikes, canPublish: oldModel?.canPublish, repostDisabled: oldModel?.repostDisabled)
+
+                        self.viewInput?.updateSpecificPost(at: postIndex)
+                    }
+                }
+            }).store(in: &cancellable)
     }
 
     func removeLike(itemID: String, ownerID: String) {
         likesService.removeLike(type: "post", itemID: itemID, ownerID: ownerID)
-            .decode(type: Likes.self, decoder: JSONDecoder())
+            .decode(type: LikesResponseAPI.self, decoder: JSONDecoder())
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { completion in
                 switch completion {
@@ -124,11 +133,25 @@ final class NewsFlowPresenter {
                     print("The remove like method is finished")
                 case .failure(let error):
                     print("The error appeared during the like removal method \(error)")
-                }}, receiveValue: {[weak self] value in
-                    guard let self = self else { return }
-                    self.likesCount = value.count
-                    print("The like is removed")
-                }).store(in: &cancellable)
+                }
+            }, receiveValue: { [weak self] value in
+                guard let self = self else { return }
+                self.likesCount = value.response.likes
+                if let postIndex = self.findPostIndex(itemID: itemID, ownerID: ownerID) {
+                    DispatchQueue.main.async {
+                        let oldModel = self.newsPost[postIndex].likes
+                        self.newsPost[postIndex].likes = Likes(canLike: 1, count: value.response.likes, userLikes: oldModel?.userLikes, canPublish: oldModel?.canPublish, repostDisabled: oldModel?.repostDisabled)
+
+                        self.viewInput?.updateSpecificPost(at: postIndex)
+                    }
+                }
+            }).store(in: &cancellable)
+    }
+
+    private func findPostIndex(itemID: String, ownerID: String) -> Int? {
+        return newsPost.firstIndex { post in
+            return post.postID == Int(itemID) && post.sourceId == Int(ownerID)
+        }
     }
 
     func isLiked(itemID: String, ownerID: String) -> Bool {
