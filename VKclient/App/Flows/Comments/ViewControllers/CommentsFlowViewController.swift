@@ -85,6 +85,17 @@ final class CommentsFlowViewController: UIViewController {
             sheet.largestUndimmedDetentIdentifier = .medium
         }
     }
+
+    func updateSpecificPost(at index: Int) {
+        let indexPath = IndexPath(row: index, section: 0)
+        if index < presenter.comments.count, commentsTableView.indexPathsForVisibleRows?.contains(indexPath) ?? false {
+            if let cell = commentsTableView.cellForRow(at: indexPath) as? CommentsFlowCell {
+                let comment = presenter.comments[index]
+                let displayName = presenter.getDisplayName(for: comment.fromID)
+                cell.configureData(with: comment, displayName: displayName)
+            }
+        }
+    }
 }
 
 extension CommentsFlowViewController: UITableViewDelegate {
@@ -104,14 +115,15 @@ extension CommentsFlowViewController: UITableViewDataSource {
             return UITableViewCell()
         }
         if indexPath.row < presenter.comments.count {
-                 let comment = presenter.comments[indexPath.row]
-                 let displayName = presenter.getDisplayName(for: comment.fromID)
-                 print("Configuring cell for comment ID: \(comment.id), displayName: \(displayName)")
-                 cell.configureData(with: comment, displayName: displayName)
-             } else {
-                 print("Index out of bounds: \(indexPath.row) >= \(presenter.comments.count)")
-             }
-             return cell
+            let comment = presenter.comments[indexPath.row]
+            let displayName = presenter.getDisplayName(for: comment.fromID)
+            print("Configuring cell for comment ID: \(comment.id), displayName: \(displayName)")
+            cell.configureData(with: comment, displayName: displayName)
+            cell.likesButton.commentDelegate = self
+        } else {
+            print("Index out of bounds: \(indexPath.row) >= \(presenter.comments.count)")
+        }
+        return cell
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -122,5 +134,17 @@ extension CommentsFlowViewController: UITableViewDataSource {
 extension CommentsFlowViewController: CommentsFlowViewInput {
     func reloadData() {
         commentsTableView.reloadData()
+    }
+}
+
+extension CommentsFlowViewController: LikeCommentDelegate {
+    func didLike(in cell: CommentsFlowCell?) {
+        guard let cell = cell, let indexPath = commentsTableView.indexPath(for: cell) else { return }
+        let comments = presenter.comments[indexPath.row]
+        if comments.likes?.canLike == 1 {
+            presenter.setLike(itemID: String(comments.id), ownerID: String(comments.ownerID ?? 0))
+        } else {
+            presenter.removeLike(itemID: String(comments.id), ownerID: String(comments.ownerID ?? 0))
+        }
     }
 }

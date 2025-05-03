@@ -44,11 +44,8 @@ struct CommentModel: Decodable, Equatable, Hashable {
     let ownerID: Int?
     let parentsStack: [Int]
     let thread: Thread
-    let likes: CommentLikes?
+    var likes: CommentLikes?
     let attachments: [CommentsAttachment]?
-    var isLiked: Bool? {
-        self.likes?.canLike == 1 ? false : true
-    }
     let deleted: Bool?
 
     var attachmentSticker: [(url: String, width: Int, height: Int)] {
