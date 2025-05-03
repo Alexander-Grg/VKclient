@@ -113,7 +113,7 @@ extension NewsTableViewController: UITableViewDataSource {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: NewsFooterSection.identifier) as? NewsFooterSection
             else { return NewsFooterSection() }
             cell.configureCell(news, currentLikeState: news.likes)
-            cell.likesButton.delegate = self
+            cell.likesButton.postDelegate = self
             cell.commentDelegate = self
             return cell
             
@@ -242,7 +242,7 @@ extension NewsTableViewController: NewsTableViewCellPhotoDelegate {
     }
 }
 
-extension NewsTableViewController: LikeControlDelegate {
+extension NewsTableViewController: LikePostDelegate {
 
     func didLike(in cell: NewsFooterSection?) {
          guard let cell = cell, let indexPath = tableView.indexPath(for: cell) else { return }

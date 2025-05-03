@@ -13,7 +13,7 @@ protocol CommentControlDelegate: AnyObject {
 }
 
 final class NewsFooterSection: UITableViewCell {
-    weak var likeDelegate: LikeControlDelegate?
+    weak var likeDelegate: LikePostDelegate?
     weak var commentDelegate: CommentControlDelegate?
     private(set) lazy var repostButton: UIButton = {
         let button = UIButton()
