@@ -59,8 +59,7 @@ final class CommentsFlowCell: UITableViewCell {
         nameTextLabel.text = ""
         mainDateLabel.text = ""
         mainTextLabel.text = ""
-        likesButton.isLiked = false
-        likesButton.likesCount = 0
+        likesButton.configureDataSource(with: nil, totalLikes: nil)
     }
 
     func configureData(with comment: CommentModel, displayName: String) {
@@ -145,13 +144,17 @@ final class CommentsFlowCell: UITableViewCell {
     }
 
     private func configureLikes(for comment: CommentModel) {
-        guard let likes = comment.likes else { return }
-
-        let shouldShowCount = likes.userLikes > 0
-        likesButton.configureDataSource(
-            with: comment.isLiked ?? false,
-            totalLikes: shouldShowCount ? likes.userLikes : 0
-        )
+//        guard let likes = comment.likes else { return }
+//
+//        let shouldShowCount = likes.count > 0
+//        likesButton.configureDataSource(
+//            with: comment.isLiked ?? false,
+//            totalLikes: shouldShowCount ? likes.count : 0
+//        )
+        if let isLiked = comment.likes {
+            let canLike = isLiked.canLike == 1 ? false : true
+            self.likesButton.configureDataSource(with: canLike, totalLikes: comment.likes?.count)
+        }
     }
 
     private func configureDate(timestamp: Int) {
@@ -201,7 +204,7 @@ final class CommentsFlowCell: UITableViewCell {
             mainDateLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -8),
 
             mainTextLabel.topAnchor.constraint(equalTo: nameTextLabel.bottomAnchor, constant: 8),
-            mainTextLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            mainTextLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 8),
             mainTextLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             mainTextLabel.bottomAnchor.constraint(lessThanOrEqualTo: likesButton.topAnchor, constant: -8),
 
