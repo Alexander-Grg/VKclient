@@ -9,13 +9,17 @@
 import Foundation
 import UIKit
 
-protocol LikeControlDelegate: AnyObject {
+protocol LikeCommentDelegate: AnyObject {
+    func didLike(in cell: CommentsFlowCell?)
+}
+protocol LikePostDelegate: AnyObject {
     func didLike(in cell: NewsFooterSection?)
 }
 
 final class LikeControl: UIControl {
 
-    weak var delegate: LikeControlDelegate?
+    weak var postDelegate: LikePostDelegate?
+    weak var commentDelegate: LikeCommentDelegate?
     private(set) lazy var likeButton: UIButton = {
         let button = UIButton()
         button.setContentHuggingPriority(.defaultLow, for: .horizontal)
@@ -45,7 +49,9 @@ final class LikeControl: UIControl {
 
     @objc func likeButtonHandler() {
         if let cell = self.superview?.superview as? NewsFooterSection {
-            delegate?.didLike(in: cell)
+            postDelegate?.didLike(in: cell)
+        } else if let cell = self.superview?.superview as? CommentsFlowCell {
+            commentDelegate?.didLike(in: cell)
         }
 }
 

@@ -75,7 +75,6 @@ final class NewsFlowPresenter {
     internal var nextNews = ""
     internal var isLoading = false
     internal var likesCount = 0
-    private let commentFetchQueue = DispatchQueue(label: "com.app.commentFetch")
 
     weak var viewInput: (UIViewController & NewsFlowViewInput)?
     
