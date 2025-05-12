@@ -44,9 +44,9 @@ struct Injected<T> {
 }
 
 extension InjectedValues {
-    var userService: UserServiceProtocol {
-        get { Self[UserServiceKey.self] }
-        set { Self[UserServiceKey.self] = newValue }
+    var userService: FriendsServiceProtocol {
+        get { Self[FriendsServiceKey.self] }
+        set { Self[FriendsServiceKey.self] = newValue }
     }
 
     var groupsService: GroupsServiceProtocol {

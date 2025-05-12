@@ -14,10 +14,10 @@ struct NewsServiceKey: InjectionKey {
 }
 
 protocol NewsServiceProtocol: AnyObject {
-    func getNews(startFrom: String, startTime: Double?, _ completion: @escaping ([News], String) -> Void)
+    func getNews(startFrom: String, startTime: Double?, _ completion: @escaping ([Post], String) -> Void)
 }
 
-struct FallbackSource: NewsSource {
+struct FallbackSource: PostSource {
     var name = "Unknown Source"
     var urlString = ""
 }
@@ -27,9 +27,9 @@ final class NewsService: NewsServiceProtocol {
     var cancellable = Set<AnyCancellable>()
     private let apiProvider = APIProvider<NewsfeedEndpoint>()
 
-    func getNews(startFrom: String = "", startTime: Double? = nil, _ completion: @escaping ([News], String) -> Void) {
+    func getNews(startFrom: String = "", startTime: Double? = nil, _ completion: @escaping ([Post], String) -> Void) {
         apiProvider.getData(from: .getNews(startFrom: startFrom))
-            .decode(type: NewsResponse.self, decoder: JSONDecoder())
+            .decode(type: PostResponse.self, decoder: JSONDecoder())
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { error in
                 print("Error while fetching news: \(error)")
@@ -37,17 +37,19 @@ final class NewsService: NewsServiceProtocol {
                 let news = response.response.items
                 let profiles = response.response.profiles
                 let groups = response.response.groups
-                let nextFrom = response.response.nextFrom
+                let nextFrom = response.response.nextFrom ?? ""
 
-                let mappedNews = news.map { post -> News in
+                let mappedNews = news.map { post -> Post in
                     var updatedPost = post
-                    if post.sourceId > 0 {
-                        updatedPost.urlProtocol = profiles.first(where: { $0.id == post.sourceId }) ?? FallbackSource()
-
+                    if let sourceId = post.sourceId {
+                        if sourceId > 0 {
+                            updatedPost.urlProtocol = profiles.first(where: { $0.id == sourceId }) ?? FallbackSource()
+                        } else {
+                            updatedPost.urlProtocol = groups.first(where: { -$0.id == sourceId }) ?? FallbackSource()
+                        }
                     } else {
-                        updatedPost.urlProtocol = groups.first(where: { -$0.id == post.sourceId }) ?? FallbackSource()
+                        updatedPost.urlProtocol = FallbackSource()
                     }
-
                     return updatedPost
                 }
                 completion(mappedNews, nextFrom)

@@ -13,7 +13,7 @@ protocol LikeCommentDelegate: AnyObject {
     func didLike(in cell: CommentsFlowCell?)
 }
 protocol LikePostDelegate: AnyObject {
-    func didLike(in cell: NewsFooterSection?)
+    func didLike(in cell: FeedFooterSectionCell?)
 }
 
 final class LikeControl: UIControl {
@@ -48,7 +48,7 @@ final class LikeControl: UIControl {
     }
 
     @objc func likeButtonHandler() {
-        if let cell = self.superview?.superview as? NewsFooterSection {
+        if let cell = self.superview?.superview as? FeedFooterSectionCell {
             postDelegate?.didLike(in: cell)
         } else if let cell = self.superview?.superview as? CommentsFlowCell {
             commentDelegate?.didLike(in: cell)

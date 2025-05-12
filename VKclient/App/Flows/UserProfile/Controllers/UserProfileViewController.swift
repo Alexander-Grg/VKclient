@@ -12,6 +12,7 @@ final class UserProfileViewController: UIViewController {
     private let presenter: UserProfileOutput
     private let photoPreviewView = PhotoPreviewView()
     var userProfileView = UserProfileView()
+    var feedViewController: FeedTableViewController?
 
     init(presenter: UserProfileOutput) {
         self.presenter = presenter
@@ -38,6 +39,7 @@ final class UserProfileViewController: UIViewController {
         self.view.backgroundColor = .white
         self.setupUserProfileView()
         self.setupPhotoPreviewView()
+        self.setupFeedViewController()
     }
 
     private func setupUserProfileView() {
@@ -66,6 +68,33 @@ final class UserProfileViewController: UIViewController {
         let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(pressPhotoHandler))
         photoPreviewView.addGestureRecognizer(gestureRecognizer)
    }
+
+    private func setupFeedViewController() {
+        let titleLabel = UILabel()
+        titleLabel.text = "User's posts"
+        titleLabel.font = .systemFont(ofSize: 16, weight: .heavy)
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+
+        let feedVC = FeedFlowBuilder.buildUserWall(id: presenter.friendID ?? "")
+        addChild(feedVC)
+        view.addSubview(titleLabel)
+        view.addSubview(feedVC.view)
+        feedViewController = feedVC as? FeedTableViewController
+
+        feedVC.view.translatesAutoresizingMaskIntoConstraints = false
+        let safeArea = view.safeAreaLayoutGuide
+        NSLayoutConstraint.activate([
+            titleLabel.topAnchor.constraint(equalTo: photoPreviewView.bottomAnchor, constant: 20),
+            titleLabel.centerXAnchor.constraint(equalTo: safeArea.centerXAnchor),
+
+            feedVC.view.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 8),
+            feedVC.view.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor),
+            feedVC.view.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor),
+            feedVC.view.bottomAnchor.constraint(equalTo: safeArea.bottomAnchor)
+        ])
+
+        feedVC.didMove(toParent: self)
+    }
 
     func updatePhotoPreview(with photos: [String]) {
         photoPreviewView.images = Array(photos.prefix(3))

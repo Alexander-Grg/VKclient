@@ -8,46 +8,48 @@
 
 import Foundation
 
-protocol NewsSource {
+protocol PostSource {
     var name: String { get }
     var urlString: String { get }
 }
 
-extension NewsSource {
+extension PostSource {
     var urlImage: URL? { URL(string: urlString) }
 }
 
-struct NewsResponse: Decodable {
-    var response: Newsfeed
+struct PostResponse: Decodable {
+    var response: PostFeed
 }
 
-struct Newsfeed: Decodable {
-    var items: [News]
+struct PostFeed: Decodable {
+    var items: [Post]
     var profiles: [User]
     var groups: [Community]
-    var nextFrom: String
+    var nextFrom: String?
+    var count: Int?
 
     enum CodingKeys: String, CodingKey {
         case items
         case profiles
         case groups
         case nextFrom = "next_from"
+        case count
     }
 }
 
-struct News: Decodable {
+struct Post: Decodable {
 
-    var sourceId: Int
-    var date: Double
+    var sourceId: Int?
+    var date: Double?
     var text: String?
     var attachments: [Attachment]?
-    var comments: NewsComments?
+    var comments: PostComments?
     var likes: Likes?
     var views: Views?
     var reposts: Reposts?
     var postID: Int?
 
-    var urlProtocol: NewsSource?
+    var urlProtocol: PostSource?
 
     var attachmentPhotoUrl: URL? {
         guard let image = attachments?.first(where: { $0.type == "photo" }),
@@ -104,8 +106,8 @@ struct News: Decodable {
 
     var isPressed: Bool = false
 
-    var rowsCounter: [NewsTypes] {
-        var rowsCounter = [NewsTypes]()
+    var rowsCounter: [FeedTypes] {
+        var rowsCounter = [FeedTypes]()
         let hasText = !(text?.isEmpty ?? true)
         let hasPhoto = attachmentPhotoUrl != nil
         let hasVideo = attachments?.contains(where: { $0.type == "video" }) ?? false
@@ -153,7 +155,7 @@ struct Attachment: Decodable {
     }
 }
 
-struct NewsComments: Codable {
+struct PostComments: Codable {
     var count: Int
 
     enum CodingKeys: String, CodingKey {

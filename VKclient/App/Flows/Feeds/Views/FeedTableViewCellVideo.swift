@@ -9,7 +9,7 @@
 import UIKit
 import WebKit
 
-final class NewsTableViewCellVideo: UITableViewCell {
+final class FeedTableViewCellVideo: UITableViewCell {
 
     private var webView: WKWebView = {
         let webView = WKWebView()
@@ -163,7 +163,7 @@ final class NewsTableViewCellVideo: UITableViewCell {
     }
 }
 
-extension NewsTableViewCellVideo: ReusableView {
+extension FeedTableViewCellVideo: ReusableView {
     static var identifier: String {
         return String(describing: self)
     }

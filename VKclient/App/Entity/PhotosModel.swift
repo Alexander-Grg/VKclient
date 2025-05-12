@@ -18,7 +18,7 @@ struct Response: Codable {
     var items: [PhotosObject]
 }
 
-struct PhotosObject: Codable, NewsSource {
+struct PhotosObject: Codable, PostSource {
     var name: String = ""
     var urlString: String { sizes["x"]! }
 
