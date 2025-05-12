@@ -12,7 +12,7 @@ struct Users: Codable {
     var items: [User]
 }
 
-struct User: Codable, NewsSource {
+struct User: Codable, PostSource {
     var name: String { "\(firstName) \(lastName)" }
     var urlString: String { avatar }
 

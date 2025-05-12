@@ -10,7 +10,7 @@ import UIKit
 import Combine
 import RealmSwift
 
-enum NewsTypes {
+enum FeedTypes {
     case photo
     case text
     case header
@@ -20,79 +20,109 @@ enum NewsTypes {
     func rowsToDisplay() -> UITableViewCell.Type {
         switch self {
         case .photo:
-            return NewsTableViewCellPhoto.self
+            return FeedTableViewCellPhoto.self
         case .text:
-            return NewsTableViewCellPost.self
+            return FeedTableViewCellText.self
         case .footer:
-            return NewsFooterSection.self
+            return FeedFooterSectionCell.self
         case .header:
-            return NewsHeaderSection.self
+            return FeedTableViewHeaderCell.self
         case .video:
-            return NewsTableViewCellVideo.self
+            return FeedTableViewCellVideo.self
         }
     }
     
     var cellIdentifiersForRows: String {
         switch self {
         case .photo:
-            return NewsTableViewCellPhoto.identifier
+            return FeedTableViewCellPhoto.identifier
         case .text:
-            return  NewsTableViewCellPost.identifier
+            return  FeedTableViewCellText.identifier
         case .footer:
-            return NewsFooterSection.identifier
+            return FeedFooterSectionCell.identifier
         case .header:
-            return NewsHeaderSection.identifier
+            return FeedTableViewHeaderCell.identifier
         case .video:
-            return NewsTableViewCellVideo.identifier
+            return FeedTableViewCellVideo.identifier
         }
     }
 }
 
-protocol NewsFlowViewInput {
+protocol FeedFlowInput {
     func updateTableView()
     func updateSpecificPost(at index: Int)
 }
 
-protocol NewsFlowViewOutput {
-    var newsPost: [News] { get set}
-    var newsVideos: [VideoItem] { get set }
+protocol FeedFlowOutput {
+    var feedPosts: [Post] { get set}
+    var feedVideos: [VideoItem] { get set }
     var nextNews: String { get set}
     var isLoading: Bool { get set }
-    func loadNews()
-    func loadNextData(startFrom: String, completion: @escaping ([News], String) -> Void)
+    func loadFeed()
+    func loadNextData(startFrom: String, completion: @escaping ([Post], String) -> Void)
     func setLike(itemID: String, ownerID: String)
     func removeLike(itemID: String, ownerID: String)
     func getVideos(ownIDvidIDkey: String, completion: @escaping (VideoItem?) -> Void)
 }
 
-final class NewsFlowPresenter {
+final class FeedFlowPresenter {
     @Injected(\.newsService) var newsService
     @Injected(\.likesService) var likesService
     @Injected(\.videosService) var videosService
+    @Injected(\.usersService) var usersService
     private var cancellable = Set<AnyCancellable>()
-    internal var newsPost: [News] = []
-    internal var newsVideos: [VideoItem] = []
+    internal var feedPosts: [Post] = []
+    internal var feedVideos: [VideoItem] = []
     internal var nextNews = ""
     internal var isLoading = false
     internal var likesCount = 0
-
-    weak var viewInput: (UIViewController & NewsFlowViewInput)?
+    private let userID: String?
+    weak var viewInput: (UIViewController & FeedFlowInput)?
     
-    private func loadData() {
-        newsService.getNews(startFrom: "", startTime: nil) { [weak self] news, nextFrom in
-            guard let self = self else { return }
-            DispatchQueue.main.async {
-                self.newsPost = news
-                self.nextNews = nextFrom
-                self.viewInput?.updateTableView()
+    init(userID: String? = nil) {
+         self.userID = userID
+     }
+
+    
+    private func loadPosts() {
+        if let userID = userID {
+            usersService.requestUserWall(id: userID)
+                .decode(type: PostResponse.self, decoder: JSONDecoder())
+                .receive(on: DispatchQueue.main)
+                .sink(receiveCompletion: { completion in
+                    switch completion {
+                    case .failure(let error):
+                        print("THERE IS NO DATA: \(error.localizedDescription)")
+                    case .finished:
+                        print("The data is received")
+                    }
+                }, receiveValue: { [weak self] value in
+                    guard let self = self else { return }
+                    self.feedPosts = value.response.items
+                    self.viewInput?.updateTableView()
+                }
+                )
+                .store(in: &cancellable)
+        } else {
+            newsService.getNews(startFrom: "", startTime: nil) { [weak self] news, nextFrom in
+                guard let self = self else { return }
+                DispatchQueue.main.async {
+                    self.feedPosts = news
+                    self.nextNews = nextFrom
+                    self.viewInput?.updateTableView()
+                }
             }
         }
     }
     
-    func loadNextData(startFrom: String, completion: @escaping ([News], String) -> Void) {
-        newsService.getNews(startFrom: startFrom, startTime: nil) { newNews, nextFrom in
-            DispatchQueue.main.async {
-                completion(newNews, nextFrom)
+    func loadNextData(startFrom: String, completion: @escaping ([Post], String) -> Void) {
+        if userID != nil {
+            return
+        } else {
+            newsService.getNews(startFrom: startFrom, startTime: nil) { newNews, nextFrom in
+                DispatchQueue.main.async {
+                    completion(newNews, nextFrom)
+                }
             }
         }
     }
@@ -113,8 +143,8 @@ final class NewsFlowPresenter {
                 self.likesCount = value.response.likes
                 if let postIndex = self.findPostIndex(itemID: itemID, ownerID: ownerID) {
                     DispatchQueue.main.async {
-                        let oldModel = self.newsPost[postIndex].likes
-                        self.newsPost[postIndex].likes = Likes(canLike: 0, count: value.response.likes, userLikes: oldModel?.userLikes, canPublish: oldModel?.canPublish, repostDisabled: oldModel?.repostDisabled)
+                        let oldModel = self.feedPosts[postIndex].likes
+                        self.feedPosts[postIndex].likes = Likes(canLike: 0, count: value.response.likes, userLikes: oldModel?.userLikes, canPublish: oldModel?.canPublish, repostDisabled: oldModel?.repostDisabled)
 
                         self.viewInput?.updateSpecificPost(at: postIndex)
                     }
@@ -138,8 +168,8 @@ final class NewsFlowPresenter {
                 self.likesCount = value.response.likes
                 if let postIndex = self.findPostIndex(itemID: itemID, ownerID: ownerID) {
                     DispatchQueue.main.async {
-                        let oldModel = self.newsPost[postIndex].likes
-                        self.newsPost[postIndex].likes = Likes(canLike: 1, count: value.response.likes, userLikes: oldModel?.userLikes, canPublish: oldModel?.canPublish, repostDisabled: oldModel?.repostDisabled)
+                        let oldModel = self.feedPosts[postIndex].likes
+                        self.feedPosts[postIndex].likes = Likes(canLike: 1, count: value.response.likes, userLikes: oldModel?.userLikes, canPublish: oldModel?.canPublish, repostDisabled: oldModel?.repostDisabled)
 
                         self.viewInput?.updateSpecificPost(at: postIndex)
                     }
@@ -148,7 +178,7 @@ final class NewsFlowPresenter {
     }
 
     private func findPostIndex(itemID: String, ownerID: String) -> Int? {
-        return newsPost.firstIndex { post in
+        return feedPosts.firstIndex { post in
             return post.postID == Int(itemID) && post.sourceId == Int(ownerID)
         }
     }
@@ -191,8 +221,8 @@ final class NewsFlowPresenter {
     }
 }
 
-extension NewsFlowPresenter: NewsFlowViewOutput {
-    func loadNews() {
-        self.loadData()
+extension FeedFlowPresenter: FeedFlowOutput {
+    func loadFeed() {
+        self.loadPosts()
     }
 }

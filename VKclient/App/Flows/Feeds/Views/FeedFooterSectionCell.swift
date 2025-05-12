@@ -9,10 +9,10 @@
 import UIKit
 
 protocol CommentControlDelegate: AnyObject {
-    func didTapComment(in cell: NewsFooterSection?)
+    func didTapComment(in cell: FeedFooterSectionCell?)
 }
 
-final class NewsFooterSection: UITableViewCell {
+final class FeedFooterSectionCell: UITableViewCell {
     weak var likeDelegate: LikePostDelegate?
     weak var commentDelegate: CommentControlDelegate?
     private(set) lazy var repostButton: UIButton = {
@@ -108,7 +108,7 @@ final class NewsFooterSection: UITableViewCell {
             commentDelegate?.didTapComment(in: self)
         }
 
-    func configureCell(_ data: News, currentLikeState: Likes?) {
+    func configureCell(_ data: Post, currentLikeState: Likes?) {
         guard let likes = data.likes,
               let view = data.views,
               let reposts = data.reposts,
@@ -125,7 +125,7 @@ final class NewsFooterSection: UITableViewCell {
     }
 }
 
-extension NewsFooterSection: ReusableView {
+extension FeedFooterSectionCell: ReusableView {
     static var identifier: String {
         return String(describing: self)
     }

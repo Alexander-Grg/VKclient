@@ -19,6 +19,7 @@ protocol UserProfileInput {
 
 protocol UserProfileOutput {
     var user: UserRealm? { get }
+    var friendID: String? { get }
     func viewDidLoad()
     func updatesForPhotos()
     func makeTransitionToThePhotos()
