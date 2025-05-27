@@ -245,18 +245,22 @@ extension FeedTableViewController: NewsTableViewCellPhotoDelegate {
 extension FeedTableViewController: LikePostDelegate {
 
     func didLike(in cell: FeedFooterSectionCell?) {
-         guard let cell = cell, let indexPath = tableView.indexPath(for: cell) else { return }
-         let news = presenter.feedPosts[indexPath.section]
+        guard let cell = cell,
+              let indexPath = tableView.indexPath(for: cell) else { return }
 
-         let currentOffset = tableView.contentOffset
+        let posts = presenter.feedPosts[indexPath.section]
+        let currentOffset = tableView.contentOffset
 
-         if news.likes?.canLike == 1 {
-             presenter.setLike(itemID: String(news.postID ?? 0), ownerID: String(news.sourceId ?? 0))
-         } else {
-             presenter.removeLike(itemID: String(news.postID ?? 0), ownerID: String(news.sourceId ?? 0))
-         }
-         tableView.setContentOffset(currentOffset, animated: false)
-     }
+        guard let itemID = posts.postID ?? posts.postWallId,
+              let ownerID = posts.sourceId ?? posts.fromID else { return }
+
+        if posts.likes?.canLike == 1 {
+            presenter.setLike(itemID: String(itemID), ownerID: String(ownerID))
+        } else {
+            presenter.removeLike(itemID: String(itemID), ownerID: String(ownerID))
+        }
+        tableView.setContentOffset(currentOffset, animated: false)
+    }
 }
 
 extension FeedTableViewController: CommentControlDelegate {
