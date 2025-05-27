@@ -8,7 +8,7 @@
 
 import UIKit
 
-final class NewsTableViewController: UIViewController {
+final class FeedTableViewController: UIViewController {
     private(set) lazy var tableView: UITableView = {
         let table = UITableView()
         table.separatorStyle = .singleLine
@@ -17,10 +17,10 @@ final class NewsTableViewController: UIViewController {
     }()
     private let textCellFont = UIFont(name: "Avenir-Light", size: 16.0) ?? UIFont.systemFont(ofSize: 16)
     private let defaultCellHeight: CGFloat = 130
-    private var presenter: NewsFlowViewOutput
+    private var presenter: FeedFlowOutput
     private var isPressedState: [IndexPath: Bool] = [:]
     
-    init(presenter: NewsFlowViewOutput) {
+    init(presenter: FeedFlowOutput) {
         self.presenter = presenter
         super.init(nibName: nil, bundle: nil)
     }
@@ -31,7 +31,7 @@ final class NewsTableViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.presenter.loadNews()
+        self.presenter.loadFeed()
         self.setupTableView()
         tableView.prefetchDataSource = self
         tableView.dataSource = self
@@ -39,11 +39,11 @@ final class NewsTableViewController: UIViewController {
         self.view.isUserInteractionEnabled = true
         configRefreshControl()
         
-        self.tableView.register(NewsHeaderSection.self, forCellReuseIdentifier: NewsHeaderSection.identifier)
-        self.tableView.register(NewsTableViewCellPost.self, forCellReuseIdentifier: NewsTableViewCellPost.identifier)
-        self.tableView.register(NewsTableViewCellPhoto.self, forCellReuseIdentifier: NewsTableViewCellPhoto.identifier)
-        self.tableView.register(NewsFooterSection.self, forCellReuseIdentifier: NewsFooterSection.identifier)
-        self.tableView.register(NewsTableViewCellVideo.self, forCellReuseIdentifier: NewsTableViewCellVideo.identifier)
+        self.tableView.register(FeedTableViewHeaderCell.self, forCellReuseIdentifier: FeedTableViewHeaderCell.identifier)
+        self.tableView.register(FeedTableViewCellText.self, forCellReuseIdentifier: FeedTableViewCellText.identifier)
+        self.tableView.register(FeedTableViewCellPhoto.self, forCellReuseIdentifier: FeedTableViewCellPhoto.identifier)
+        self.tableView.register(FeedFooterSectionCell.self, forCellReuseIdentifier: FeedFooterSectionCell.identifier)
+        self.tableView.register(FeedTableViewCellVideo.self, forCellReuseIdentifier: FeedTableViewCellVideo.identifier)
         
     }
     
@@ -57,8 +57,8 @@ final class NewsTableViewController: UIViewController {
     
     @objc private func didRefresh() {
         tableView.refreshControl?.beginRefreshing()
-        self.presenter.loadNews()
-        
+        self.presenter.loadFeed()
+
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
             self.tableView.refreshControl?.endRefreshing()
             self.tableView.reloadData()
@@ -76,24 +76,24 @@ final class NewsTableViewController: UIViewController {
     }
 }
 
-extension NewsTableViewController: UITableViewDataSource {
+extension FeedTableViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        self.presenter.newsPost[section].rowsCounter.count
+        self.presenter.feedPosts[section].rowsCounter.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let news = self.presenter.newsPost[indexPath.section]
+        let news = self.presenter.feedPosts[indexPath.section]
 
         switch news.rowsCounter[indexPath.row] {
         case .header:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: NewsHeaderSection.identifier) as? NewsHeaderSection else { return NewsHeaderSection() }
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: FeedTableViewHeaderCell.identifier) as? FeedTableViewHeaderCell else { return FeedTableViewHeaderCell() }
             cell.configureCell(news)
             
             return cell
         case .text:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: NewsTableViewCellPost.identifier) as? NewsTableViewCellPost,
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: FeedTableViewCellText.identifier) as? FeedTableViewCellText,
                   let text = news.text
-            else { return NewsTableViewCellPost() }
+            else { return FeedTableViewCellText() }
             
             let textHeight = text.heightWithConstrainedWidth(width: tableView.frame.width, font: textCellFont)
             
@@ -102,7 +102,7 @@ extension NewsTableViewController: UITableViewDataSource {
             
             return cell
         case .photo:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: NewsTableViewCellPhoto.identifier) as? NewsTableViewCellPhoto else { return NewsTableViewCellPhoto() }
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: FeedTableViewCellPhoto.identifier) as? FeedTableViewCellPhoto else { return FeedTableViewCellPhoto() }
             
             
             cell.configure(images: news.attachmentPhotos, index: 0)
@@ -110,15 +110,15 @@ extension NewsTableViewController: UITableViewDataSource {
             
             return cell
         case .footer:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: NewsFooterSection.identifier) as? NewsFooterSection
-            else { return NewsFooterSection() }
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: FeedFooterSectionCell.identifier) as? FeedFooterSectionCell
+            else { return FeedFooterSectionCell() }
             cell.configureCell(news, currentLikeState: news.likes)
             cell.likesButton.postDelegate = self
             cell.commentDelegate = self
             return cell
             
         case .video:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: NewsTableViewCellVideo.identifier) as? NewsTableViewCellVideo else { return NewsTableViewCellVideo() }
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: FeedTableViewCellVideo.identifier) as? FeedTableViewCellVideo else { return FeedTableViewCellVideo() }
             self.presenter.getVideos(ownIDvidIDkey: news.videoAccessString ?? "") { video in
                 cell.configure(video)
             }
@@ -128,18 +128,18 @@ extension NewsTableViewController: UITableViewDataSource {
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        self.presenter.newsPost.count
+        self.presenter.feedPosts.count
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        switch self.presenter.newsPost[indexPath.section].rowsCounter[indexPath.row] {
+        switch self.presenter.feedPosts[indexPath.section].rowsCounter[indexPath.row] {
         case .header:
             return 75
         case .footer:
             return 60
         case .photo:
             let tableWidth = tableView.bounds.width
-            let ratio = self.presenter.newsPost[indexPath.section].aspectRatio
+            let ratio = self.presenter.feedPosts[indexPath.section].aspectRatio
             let newsCGfloatRatio = CGFloat(ratio)
             return newsCGfloatRatio * tableWidth
         case .text:
@@ -147,36 +147,36 @@ extension NewsTableViewController: UITableViewDataSource {
             return isPressed ? UITableView.automaticDimension : defaultCellHeight
         case .video:
             let tableWidth = tableView.bounds.width
-            let ratio = self.presenter.newsPost[indexPath.section].videoAspectRatio
+            let ratio = self.presenter.feedPosts[indexPath.section].videoAspectRatio
             return ratio * tableWidth
         }
     }
 }
 
-extension NewsTableViewController: UITableViewDelegate {
+extension FeedTableViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
     }
 }
 
-extension NewsTableViewController: UITableViewDataSourcePrefetching {
+extension FeedTableViewController: UITableViewDataSourcePrefetching {
     
     func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
         guard let maxSections = indexPaths.map({ $0.section }).max() else { return }
         
-        if maxSections > self.presenter.newsPost.count - 3, !self.presenter.isLoading {
+        if maxSections > self.presenter.feedPosts.count - 3, !self.presenter.isLoading {
             self.presenter.isLoading = true
             
             self.presenter.loadNextData(startFrom: self.presenter.nextNews) { news, nextFrom in
                 DispatchQueue.main.async {
-                    let startingIndex = self.presenter.newsPost.count
+                    let startingIndex = self.presenter.feedPosts.count
                     let indexSet = IndexSet(integersIn: startingIndex ..< (startingIndex + news.count))
-                    self.presenter.newsPost.append(contentsOf: news)
+                    self.presenter.feedPosts.append(contentsOf: news)
                     self.presenter.nextNews = nextFrom
                     
-                    for section in startingIndex..<self.presenter.newsPost.count {
-                        for row in 0..<self.presenter.newsPost[section].rowsCounter.count {
+                    for section in startingIndex..<self.presenter.feedPosts.count {
+                        for row in 0..<self.presenter.feedPosts[section].rowsCounter.count {
                             let indexPath = IndexPath(row: row, section: section)
                             self.isPressedState[indexPath] = false
                         }
@@ -192,8 +192,8 @@ extension NewsTableViewController: UITableViewDataSourcePrefetching {
     }
 }
 
-extension NewsTableViewController: NewsDelegate {
-    func buttonTapped(cell: NewsTableViewCellPost) {
+extension FeedTableViewController: NewsDelegate {
+    func buttonTapped(cell: FeedTableViewCellText) {
         if let indexPath = tableView.indexPath(for: cell) {
             isPressedState[indexPath] = !(isPressedState[indexPath] ?? false)
             tableView.performBatchUpdates {
@@ -203,11 +203,11 @@ extension NewsTableViewController: NewsDelegate {
     }
 }
 
-extension NewsTableViewController: NewsFlowViewInput {
+extension FeedTableViewController: FeedFlowInput {
     func updateTableView() {
         var newState: [IndexPath: Bool] = [:]
-        for section in 0..<presenter.newsPost.count {
-            for row in 0..<presenter.newsPost[section].rowsCounter.count {
+        for section in 0..<presenter.feedPosts.count {
+            for row in 0..<presenter.feedPosts[section].rowsCounter.count {
                 let indexPath = IndexPath(row: row, section: section)
                 newState[indexPath] = isPressedState[indexPath] ?? false
             }
@@ -221,12 +221,12 @@ extension NewsTableViewController: NewsFlowViewInput {
          if index < self.tableView.numberOfSections {
              let currentOffset = self.tableView.contentOffset
 
-             let footerRow = presenter.newsPost[index].rowsCounter.firstIndex(of: .footer) ?? -1
+             let footerRow = presenter.feedPosts[index].rowsCounter.firstIndex(of: .footer) ?? -1
              if footerRow >= 0 {
                  let indexPath = IndexPath(row: footerRow, section: index)
 
-                 if let cell = self.tableView.cellForRow(at: indexPath) as? NewsFooterSection {
-                     cell.configureCell(presenter.newsPost[index], currentLikeState: presenter.newsPost[index].likes)
+                 if let cell = self.tableView.cellForRow(at: indexPath) as? FeedFooterSectionCell {
+                     cell.configureCell(presenter.feedPosts[index], currentLikeState: presenter.feedPosts[index].likes)
                  }
              }
              self.tableView.setContentOffset(currentOffset, animated: false)
@@ -235,42 +235,45 @@ extension NewsTableViewController: NewsFlowViewInput {
 }
 
 
-extension NewsTableViewController: NewsTableViewCellPhotoDelegate {
+extension FeedTableViewController: NewsTableViewCellPhotoDelegate {
     func didTapPhotoCell(images: [String], index: Int) {
         let vc = ExtendedPhotoViewController(arrayOfPhotosFromDB: images, indexOfSelectedPhoto: index)
         self.navigationController?.pushViewController(vc, animated: true)
     }
 }
 
-extension NewsTableViewController: LikePostDelegate {
+extension FeedTableViewController: LikePostDelegate {
 
-    func didLike(in cell: NewsFooterSection?) {
+    func didLike(in cell: FeedFooterSectionCell?) {
          guard let cell = cell, let indexPath = tableView.indexPath(for: cell) else { return }
-         let news = presenter.newsPost[indexPath.section]
+         let news = presenter.feedPosts[indexPath.section]
 
          let currentOffset = tableView.contentOffset
 
          if news.likes?.canLike == 1 {
-             presenter.setLike(itemID: String(news.postID ?? 0), ownerID: String(news.sourceId))
+             presenter.setLike(itemID: String(news.postID ?? 0), ownerID: String(news.sourceId ?? 0))
          } else {
-             presenter.removeLike(itemID: String(news.postID ?? 0), ownerID: String(news.sourceId))
+             presenter.removeLike(itemID: String(news.postID ?? 0), ownerID: String(news.sourceId ?? 0))
          }
          tableView.setContentOffset(currentOffset, animated: false)
      }
 }
 
-extension NewsTableViewController: CommentControlDelegate {
-    func didTapComment(in cell: NewsFooterSection?) {
+extension FeedTableViewController: CommentControlDelegate {
+    func didTapComment(in cell: FeedFooterSectionCell?) {
            guard let cell = cell,
                  let indexPath = tableView.indexPath(for: cell)
            else {
                print("Failed to get cell or indexPath")
                return
            }
-        let news = presenter.newsPost[indexPath.section]
-
-        let commentsVC = CommentsFlowViewBuilder.build(ownerID: news.sourceId, postID: news.postID ?? 0)
-           present(commentsVC, animated: true) {
-           }
+        let posts = presenter.feedPosts[indexPath.section]
+        if let userID = presenter.userID {
+            let commentsVC = CommentsFlowViewBuilder.build(ownerID: posts.fromID ?? 0, postID: posts.postWallId ?? 0)
+            present(commentsVC, animated: true)
+        } else {
+            let commentsVC = CommentsFlowViewBuilder.build(ownerID: posts.sourceId ?? 0, postID: posts.postID ?? 0)
+            present(commentsVC, animated: true)
+        }
        }
 }

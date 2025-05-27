@@ -9,7 +9,7 @@
 import UIKit
 import SDWebImage
 
-final class NewsHeaderSection: UITableViewCell {
+final class FeedTableViewHeaderCell: UITableViewCell {
 
     private(set) lazy var avatarView: UIImageView = {
         let avatar = UIImageView()
@@ -89,23 +89,23 @@ final class NewsHeaderSection: UITableViewCell {
             self.postTimeLabel.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: 0)
         ])
     }
-    func configureCell(_ news: News) {
+    func configureCell(_ news: Post) {
         if let exactNews = news.urlProtocol {
             avatarView.sd_setImage(with: exactNews.urlImage)
             userName.text = exactNews.name
         } else {
-            avatarView.sd_setImage(with: URL(string: "Error"))
-            userName.text = "Error, data not found"
+            avatarView.isHidden = true
+            userName.isHidden = true
         }
 
         let dateFormatter = DateFormatter()
         dateFormatter.timeStyle = .medium
-        let date = Date(timeIntervalSince1970: news.date)
+        let date = Date(timeIntervalSince1970: news.date ?? 0.0)
         postTimeLabel.text = dateFormatter.string(from: date)
     }
 }
 
-extension NewsHeaderSection: ReusableView {
+extension FeedTableViewHeaderCell: ReusableView {
     static var identifier: String {
         return String(describing: self)
     }
