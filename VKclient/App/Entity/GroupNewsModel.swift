@@ -16,7 +16,7 @@ struct PopularGroups: Codable {
     var items: [Community]
 }
 
-struct Community: NewsSource {
+struct Community: PostSource {
 var urlString: String { photo }
 var pictureUrl: URL? { URL(string: photo) }
 var id: Int

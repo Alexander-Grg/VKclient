@@ -13,7 +13,7 @@ protocol NewsTableViewCellPhotoDelegate: AnyObject {
     func didTapPhotoCell(images: [String], index: Int)
 }
 
-final class NewsTableViewCellPhoto: UITableViewCell {
+final class FeedTableViewCellPhoto: UITableViewCell {
     
     weak var delegate: NewsTableViewCellPhotoDelegate?
 
@@ -101,7 +101,7 @@ final class NewsTableViewCellPhoto: UITableViewCell {
     }
 }
 
-extension NewsTableViewCellPhoto: ReusableView {
+extension FeedTableViewCellPhoto: ReusableView {
     static var identifier: String {
         return String(describing: self)
     }

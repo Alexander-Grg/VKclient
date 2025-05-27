@@ -46,7 +46,7 @@ final class UserProfileView: UIView {
     private(set) lazy var albumLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 16, weight: .heavy)
-        label.text = "Photos"
+        label.text = "User's photos"
         return label
     }()
 

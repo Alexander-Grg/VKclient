@@ -9,10 +9,10 @@
 import UIKit
 
 protocol NewsDelegate: AnyObject {
-    func buttonTapped(cell: NewsTableViewCellPost)
+    func buttonTapped(cell: FeedTableViewCellText)
 }
 
-final class NewsTableViewCellPost: UITableViewCell {
+final class FeedTableViewCellText: UITableViewCell {
 
     var isPressed: Bool = false
     weak var delegate: NewsDelegate?
@@ -83,7 +83,7 @@ final class NewsTableViewCellPost: UITableViewCell {
         ])
     }
 
-    func configureCell(_ postText: News, isTapped: Bool, isButtonPressed: Bool) {
+    func configureCell(_ postText: Post, isTapped: Bool, isButtonPressed: Bool) {
         textForPost.text = postText.text
         if isTapped {
             self.isPressed = isButtonPressed
@@ -99,7 +99,7 @@ final class NewsTableViewCellPost: UITableViewCell {
     }
 }
 
-extension NewsTableViewCellPost: ReusableView {
+extension FeedTableViewCellText: ReusableView {
     static var identifier: String {
         return String(describing: self)
     }
