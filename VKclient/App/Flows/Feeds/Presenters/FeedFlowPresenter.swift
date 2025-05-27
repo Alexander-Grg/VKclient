@@ -55,6 +55,7 @@ protocol FeedFlowInput {
 
 protocol FeedFlowOutput {
     var feedPosts: [Post] { get set}
+    var userID: String? {get set}
     var feedVideos: [VideoItem] { get set }
     var nextNews: String { get set}
     var isLoading: Bool { get set }
@@ -76,7 +77,7 @@ final class FeedFlowPresenter {
     internal var nextNews = ""
     internal var isLoading = false
     internal var likesCount = 0
-    private let userID: String?
+    internal var userID: String?
     weak var viewInput: (UIViewController & FeedFlowInput)?
     
     init(userID: String? = nil) {

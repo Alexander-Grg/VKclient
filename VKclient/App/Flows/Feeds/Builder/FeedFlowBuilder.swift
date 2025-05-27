@@ -24,6 +24,14 @@ final class FeedFlowBuilder {
         
         return viewController
     }
+
+    static func buildGroupWall(id: String) -> (UIViewController & FeedFlowInput) {
+        let presenter = FeedFlowPresenter(userID: id)
+        let viewController = FeedTableViewController(presenter: presenter)
+        presenter.viewInput = viewController
+
+        return viewController
+    }
 }
 
 
