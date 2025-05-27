@@ -40,6 +40,8 @@ struct PostFeed: Decodable {
 struct Post: Decodable {
 
     var sourceId: Int?
+    var postWallId: Int?
+    var fromID: Int?
     var date: Double?
     var text: String?
     var attachments: [Attachment]?
@@ -140,6 +142,8 @@ struct Post: Decodable {
         case views
         case reposts
         case postID = "post_id"
+        case postWallId = "id"
+        case fromID = "from_id"
     }
 }
 

@@ -267,10 +267,13 @@ extension FeedTableViewController: CommentControlDelegate {
                print("Failed to get cell or indexPath")
                return
            }
-        let news = presenter.feedPosts[indexPath.section]
-
-        let commentsVC = CommentsFlowViewBuilder.build(ownerID: news.sourceId ?? 0, postID: news.postID ?? 0)
-           present(commentsVC, animated: true) {
-           }
+        let posts = presenter.feedPosts[indexPath.section]
+        if let userID = presenter.userID {
+            let commentsVC = CommentsFlowViewBuilder.build(ownerID: posts.fromID ?? 0, postID: posts.postWallId ?? 0)
+            present(commentsVC, animated: true)
+        } else {
+            let commentsVC = CommentsFlowViewBuilder.build(ownerID: posts.sourceId ?? 0, postID: posts.postID ?? 0)
+            present(commentsVC, animated: true)
+        }
        }
 }
