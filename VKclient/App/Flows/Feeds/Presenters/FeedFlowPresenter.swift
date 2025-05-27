@@ -179,8 +179,12 @@ final class FeedFlowPresenter {
     }
 
     private func findPostIndex(itemID: String, ownerID: String) -> Int? {
+        guard let targetItemID = Int(itemID), let targetOwnerID = Int(ownerID) else { return nil }
+
         return feedPosts.firstIndex { post in
-            return post.postID == Int(itemID) && post.sourceId == Int(ownerID)
+            let postID = post.postID ?? post.postWallId
+            let sourceID = post.sourceId ?? post.fromID
+            return postID == targetItemID && sourceID == targetOwnerID
         }
     }
 
