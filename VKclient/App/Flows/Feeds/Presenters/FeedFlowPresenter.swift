@@ -55,7 +55,7 @@ protocol FeedFlowInput {
 
 protocol FeedFlowOutput {
     var feedPosts: [Post] { get set}
-    var userID: String? {get set}
+    var user: UserRealm? { get }
     var feedVideos: [VideoItem] { get set }
     var nextNews: String { get set}
     var isLoading: Bool { get set }
@@ -77,17 +77,17 @@ final class FeedFlowPresenter {
     internal var nextNews = ""
     internal var isLoading = false
     internal var likesCount = 0
-    internal var userID: String?
+    internal var user: UserRealm?
     weak var viewInput: (UIViewController & FeedFlowInput)?
     
-    init(userID: String? = nil) {
-         self.userID = userID
+    init(user: UserRealm? = nil) {
+         self.user = user
      }
 
     
     private func loadPosts() {
-        if let userID = userID {
-            usersService.requestUserWall(id: userID)
+        if let userID = user?.id {
+            usersService.requestUserWall(id: String(userID))
                 .decode(type: PostResponse.self, decoder: JSONDecoder())
                 .receive(on: DispatchQueue.main)
                 .sink(receiveCompletion: { completion in
@@ -117,7 +117,7 @@ final class FeedFlowPresenter {
     }
     
     func loadNextData(startFrom: String, completion: @escaping ([Post], String) -> Void) {
-        if userID != nil {
+        if user?.id != nil {
             return
         } else {
             newsService.getNews(startFrom: startFrom, startTime: nil) { newNews, nextFrom in

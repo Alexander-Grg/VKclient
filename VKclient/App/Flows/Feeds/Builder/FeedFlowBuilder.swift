@@ -17,21 +17,21 @@ final class FeedFlowBuilder {
         return viewController
     }
 
-    static func buildUserWall(id: String) -> (UIViewController & FeedFlowInput) {
-        let presenter = FeedFlowPresenter(userID: id)
+    static func buildUserWall(user: UserRealm?) -> (UIViewController & FeedFlowInput) {
+        let presenter = FeedFlowPresenter(user: user)
         let viewController = FeedTableViewController(presenter: presenter)
         presenter.viewInput = viewController
         
         return viewController
     }
 
-    static func buildGroupWall(id: String) -> (UIViewController & FeedFlowInput) {
-        let presenter = FeedFlowPresenter(userID: id)
-        let viewController = FeedTableViewController(presenter: presenter)
-        presenter.viewInput = viewController
-
-        return viewController
-    }
+//    static func buildGroupWall(id: String) -> (UIViewController & FeedFlowInput) {
+//        let presenter = FeedFlowPresenter(userID: id)
+//        let viewController = FeedTableViewController(presenter: presenter)
+//        presenter.viewInput = viewController
+//
+//        return viewController
+//    }
 }
 
 
