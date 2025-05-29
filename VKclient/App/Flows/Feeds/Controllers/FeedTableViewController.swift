@@ -87,8 +87,8 @@ extension FeedTableViewController: UITableViewDataSource {
         switch news.rowsCounter[indexPath.row] {
         case .header:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: FeedTableViewHeaderCell.identifier) as? FeedTableViewHeaderCell else { return FeedTableViewHeaderCell() }
-            cell.configureCell(news)
-            
+            cell.configureCell(news, user: presenter.user)
+
             return cell
         case .text:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: FeedTableViewCellText.identifier) as? FeedTableViewCellText,
@@ -271,7 +271,7 @@ extension FeedTableViewController: CommentControlDelegate {
                return
            }
         let posts = presenter.feedPosts[indexPath.section]
-        if let userID = presenter.userID {
+        if (presenter.user?.id) != nil {
             let commentsVC = CommentsFlowViewBuilder.build(ownerID: posts.fromID ?? 0, postID: posts.postWallId ?? 0)
             present(commentsVC, animated: true)
         } else {

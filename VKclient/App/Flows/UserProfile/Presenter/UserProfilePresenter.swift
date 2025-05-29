@@ -19,7 +19,6 @@ protocol UserProfileInput {
 
 protocol UserProfileOutput {
     var user: UserRealm? { get }
-    var friendID: String? { get }
     func viewDidLoad()
     func updatesForPhotos()
     func makeTransitionToThePhotos()
@@ -34,7 +33,6 @@ final class UserProfilePresenter {
     let user: UserRealm?
     var photosForExtendedController: [String] = []
     var index: Int?
-    var friendID = try? Keychain().get("userID")
     var photosNotification: NotificationToken?
     var realmPhotos: Results<RealmPhotos>?
 
@@ -87,7 +85,7 @@ final class UserProfilePresenter {
     }
 
     private func fetchDataFromNetwork() {
-        photosService.requestPhotos(id: friendID ?? "")
+        photosService.requestPhotos(id: String(user?.id ?? 0))
             .decode(type: PhotosResponse.self, decoder: JSONDecoder())
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { error in
@@ -111,7 +109,7 @@ final class UserProfilePresenter {
     }
 
     private func loadDataFromRealm() {
-        guard let intFriendID = Int(friendID ?? "") else { return }
+        guard let intFriendID = user?.id else { return }
         do {
             self.realmPhotos = try self.realmService.get(type: RealmPhotos.self).filter(NSPredicate(format: "ownerID == %d", intFriendID))
             self.loadPhotosForExtendedVC()

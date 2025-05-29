@@ -105,24 +105,26 @@ final class UserProfileViewController: UIViewController {
     }
 
     private func setupEmbeddedFeed() {
-        let feedVC = FeedFlowBuilder.buildUserWall(id: presenter.friendID ?? "")
-        guard let feedTVC = feedVC as? FeedTableViewController else { return }
-        self.feedViewController = feedTVC
+        if let user = presenter.user {
+            let feedVC = FeedFlowBuilder.buildUserWall(user: user)
+            guard let feedTVC = feedVC as? FeedTableViewController else { return }
+            self.feedViewController = feedTVC
 
-        addChild(feedTVC)
-        view.addSubview(feedTVC.view)
-        feedTVC.view.translatesAutoresizingMaskIntoConstraints = false
+            addChild(feedTVC)
+            view.addSubview(feedTVC.view)
+            feedTVC.view.translatesAutoresizingMaskIntoConstraints = false
 
-        guard let titleLabel = self.titleLabel else { return }
+            guard let titleLabel = self.titleLabel else { return }
 
-        NSLayoutConstraint.activate([
-            feedTVC.view.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 12),
-            feedTVC.view.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            feedTVC.view.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            feedTVC.view.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
-        ])
+            NSLayoutConstraint.activate([
+                feedTVC.view.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 12),
+                feedTVC.view.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+                feedTVC.view.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+                feedTVC.view.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+            ])
 
-        feedTVC.didMove(toParent: self)
+            feedTVC.didMove(toParent: self)
+        }
     }
 
     func updatePhotoPreview(with photos: [String]) {
@@ -134,7 +136,7 @@ final class UserProfileViewController: UIViewController {
     }
 
     @objc private func presentFeedSheet() {
-        let sheetFeedVC = FeedFlowBuilder.buildUserWall(id: presenter.friendID ?? "")
+        let sheetFeedVC = FeedFlowBuilder.buildUserWall(user: presenter.user)
 
         if let sheet = sheetFeedVC.sheetPresentationController {
             sheet.detents = [.large()]
