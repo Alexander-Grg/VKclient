@@ -101,7 +101,7 @@ final class GroupsFlowPresenter {
     private func savingDataToRealm(_ data: [GroupsObjects]) {
           do {
               let dataRealm = data.map {GroupsRealm(groups: $0)}
-              try self.realmService.save(items: dataRealm, configuration: .defaultConfiguration, update: .modified)
+              try self.realmService.save(items: dataRealm, update: .modified)
           } catch {
               print("Saving to Realm failed")
           }
@@ -118,7 +118,7 @@ final class GroupsFlowPresenter {
 
     private func fetchAndFilterDataFromRealm() {
         do {
-            self.groupsfromRealm = try self.realmService.get(type: GroupsRealm.self, configuration: .defaultConfiguration)
+            self.groupsfromRealm = try self.realmService.get(type: GroupsRealm.self)
         } catch {
             print("Download from Realm failed")
         }

@@ -104,7 +104,7 @@ final class UserProfilePresenter {
     private func savingToRealm(_ value: [PhotosObject]) {
         do {
             let realm = value.map { RealmPhotos(photos: $0)}
-            try self.realmService.save(items: realm, configuration: .defaultConfiguration, update: .modified)
+            try self.realmService.save(items: realm, update: .modified)
         } catch {
             print("Saving to Realm failed")
         }
@@ -113,7 +113,7 @@ final class UserProfilePresenter {
     private func loadDataFromRealm() {
         guard let intFriendID = Int(friendID ?? "") else { return }
         do {
-            self.realmPhotos = try self.realmService.get(type: RealmPhotos.self, configuration: .defaultConfiguration).filter(NSPredicate(format: "ownerID == %d", intFriendID))
+            self.realmPhotos = try self.realmService.get(type: RealmPhotos.self).filter(NSPredicate(format: "ownerID == %d", intFriendID))
             self.loadPhotosForExtendedVC()
             DispatchQueue.main.async {
                 self.loadPhotosForPreview()
