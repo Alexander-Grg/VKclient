@@ -14,6 +14,9 @@ final class UserProfileViewController: UIViewController {
     var userProfileView = UserProfileView()
     var feedViewController: FeedTableViewController?
 
+    private var titleLabel: UILabel?
+    private var expandButton: UIButton?
+
     init(presenter: UserProfileOutput) {
         self.presenter = presenter
         super.init(nibName: nil, bundle: nil)
@@ -26,7 +29,7 @@ final class UserProfileViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         presenter.viewDidLoad()
-        self.configureUI()
+        configureUI()
         presenter.loadPhotosForPreview()
     }
 
@@ -36,25 +39,26 @@ final class UserProfileViewController: UIViewController {
     }
 
     private func configureUI() {
-        self.view.backgroundColor = .white
-        self.setupUserProfileView()
-        self.setupPhotoPreviewView()
-        self.setupFeedViewController()
+        view.backgroundColor = .white
+        setupUserProfileView()
+        setupPhotoPreviewView()
+        setupFeedSectionHeader()
+        setupEmbeddedFeed()
     }
 
     private func setupUserProfileView() {
-        self.view.addSubview(userProfileView)
-        self.userProfileView.translatesAutoresizingMaskIntoConstraints = false
-        let safeAreaInsets = self.view.safeAreaLayoutGuide
+        view.addSubview(userProfileView)
+        userProfileView.translatesAutoresizingMaskIntoConstraints = false
+        let safeArea = view.safeAreaLayoutGuide
         NSLayoutConstraint.activate([
-            self.userProfileView.topAnchor.constraint(equalTo: safeAreaInsets.topAnchor),
-            self.userProfileView.leadingAnchor.constraint(equalTo: safeAreaInsets.leadingAnchor),
-            self.userProfileView.trailingAnchor.constraint(equalTo: safeAreaInsets.trailingAnchor),
-            self.userProfileView.heightAnchor.constraint(equalToConstant: 200)
+            userProfileView.topAnchor.constraint(equalTo: safeArea.topAnchor),
+            userProfileView.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor),
+            userProfileView.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor),
+            userProfileView.heightAnchor.constraint(equalToConstant: 200)
         ])
     }
 
-    func setupPhotoPreviewView() {
+    private func setupPhotoPreviewView() {
         view.addSubview(photoPreviewView)
         photoPreviewView.translatesAutoresizingMaskIntoConstraints = false
         let safeArea = view.safeAreaLayoutGuide
@@ -65,46 +69,82 @@ final class UserProfileViewController: UIViewController {
             photoPreviewView.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor, constant: -20),
             photoPreviewView.heightAnchor.constraint(equalToConstant: 100)
         ])
+
         let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(pressPhotoHandler))
         photoPreviewView.addGestureRecognizer(gestureRecognizer)
-   }
+    }
 
-    private func setupFeedViewController() {
-        let titleLabel = UILabel()
-        titleLabel.text = "User's posts"
-        titleLabel.font = .systemFont(ofSize: 16, weight: .heavy)
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+    private func setupFeedSectionHeader() {
+        let headerStack = UIStackView()
+        headerStack.axis = .horizontal
+        headerStack.alignment = .center
+        headerStack.distribution = .equalSpacing
+        headerStack.spacing = 8
+        headerStack.translatesAutoresizingMaskIntoConstraints = false
 
-        let feedVC = FeedFlowBuilder.buildUserWall(id: presenter.friendID ?? "")
-        addChild(feedVC)
-        view.addSubview(titleLabel)
-        view.addSubview(feedVC.view)
-        feedViewController = feedVC as? FeedTableViewController
+        let title = UILabel()
+        title.text = "User's posts"
+        title.font = .systemFont(ofSize: 16, weight: .heavy)
+        self.titleLabel = title
 
-        feedVC.view.translatesAutoresizingMaskIntoConstraints = false
-        let safeArea = view.safeAreaLayoutGuide
+        let button = UIButton(type: .system)
+        button.setTitle("Expand", for: .normal)
+        button.titleLabel?.font = .systemFont(ofSize: 14, weight: .medium)
+        button.addTarget(self, action: #selector(presentFeedSheet), for: .touchUpInside)
+        self.expandButton = button
+
+        headerStack.addArrangedSubview(title)
+        headerStack.addArrangedSubview(button)
+        view.addSubview(headerStack)
+
         NSLayoutConstraint.activate([
-            titleLabel.topAnchor.constraint(equalTo: photoPreviewView.bottomAnchor, constant: 20),
-            titleLabel.centerXAnchor.constraint(equalTo: safeArea.centerXAnchor),
+            headerStack.topAnchor.constraint(equalTo: photoPreviewView.bottomAnchor, constant: 20),
+            headerStack.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
+            headerStack.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20)
+        ])
+    }
 
-            feedVC.view.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 8),
-            feedVC.view.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor),
-            feedVC.view.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor),
-            feedVC.view.bottomAnchor.constraint(equalTo: safeArea.bottomAnchor)
+    private func setupEmbeddedFeed() {
+        let feedVC = FeedFlowBuilder.buildUserWall(id: presenter.friendID ?? "")
+        guard let feedTVC = feedVC as? FeedTableViewController else { return }
+        self.feedViewController = feedTVC
+
+        addChild(feedTVC)
+        view.addSubview(feedTVC.view)
+        feedTVC.view.translatesAutoresizingMaskIntoConstraints = false
+
+        guard let titleLabel = self.titleLabel else { return }
+
+        NSLayoutConstraint.activate([
+            feedTVC.view.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 12),
+            feedTVC.view.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            feedTVC.view.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            feedTVC.view.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
 
-        feedVC.didMove(toParent: self)
+        feedTVC.didMove(toParent: self)
     }
 
     func updatePhotoPreview(with photos: [String]) {
         photoPreviewView.images = Array(photos.prefix(3))
     }
 
-    @objc func pressPhotoHandler() {
+    @objc private func pressPhotoHandler() {
         presenter.makeTransitionToThePhotos()
+    }
+
+    @objc private func presentFeedSheet() {
+        let sheetFeedVC = FeedFlowBuilder.buildUserWall(id: presenter.friendID ?? "")
+
+        if let sheet = sheetFeedVC.sheetPresentationController {
+            sheet.detents = [.large()]
+            sheet.prefersGrabberVisible = true
+            sheet.preferredCornerRadius = 16
+            sheet.prefersScrollingExpandsWhenScrolledToEdge = true
+        }
+
+        present(sheetFeedVC, animated: true)
     }
 }
 
-extension UserProfileViewController: UserProfileInput {
-
-}
+extension UserProfileViewController: UserProfileInput {}
