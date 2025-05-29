@@ -139,16 +139,15 @@ extension FeedTableViewController: UITableViewDataSource {
             return 60
         case .photo:
             let tableWidth = tableView.bounds.width
-            let ratio = self.presenter.feedPosts[indexPath.section].aspectRatio
-            let newsCGfloatRatio = CGFloat(ratio)
-            return newsCGfloatRatio * tableWidth
+            let ratio = CGFloat(self.presenter.feedPosts[indexPath.section].aspectRatio)
+            return (ratio > 0 && ratio.isFinite) ? (ratio * tableWidth) : 0
         case .text:
             let isPressed = isPressedState[indexPath] ?? false
             return isPressed ? UITableView.automaticDimension : defaultCellHeight
         case .video:
             let tableWidth = tableView.bounds.width
             let ratio = self.presenter.feedPosts[indexPath.section].videoAspectRatio
-            return ratio * tableWidth
+            return (ratio > 0 && ratio.isFinite) ? (ratio * tableWidth) : 0
         }
     }
 }
@@ -272,12 +271,18 @@ extension FeedTableViewController: CommentControlDelegate {
                return
            }
         let posts = presenter.feedPosts[indexPath.section]
-        if let userID = presenter.userID {
+        switch self.presenter.type {
+        case .friendFeed:
             let commentsVC = CommentsFlowViewBuilder.build(ownerID: posts.fromID ?? 0, postID: posts.postWallId ?? 0)
             present(commentsVC, animated: true)
-        } else {
+        case .groupFeed:
+            let commentsVC = CommentsFlowViewBuilder.build(ownerID: posts.fromID ?? 0, postID: posts.postWallId ?? 0)
+            present(commentsVC, animated: true)
+        case .newsFeed:
             let commentsVC = CommentsFlowViewBuilder.build(ownerID: posts.sourceId ?? 0, postID: posts.postID ?? 0)
             present(commentsVC, animated: true)
+        case .none:
+            break
         }
        }
 }

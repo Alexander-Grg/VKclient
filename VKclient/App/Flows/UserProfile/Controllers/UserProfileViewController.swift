@@ -75,7 +75,7 @@ final class UserProfileViewController: UIViewController {
         titleLabel.font = .systemFont(ofSize: 16, weight: .heavy)
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
 
-        let feedVC = FeedFlowBuilder.buildUserWall(id: presenter.friendID ?? "")
+        let feedVC = FeedFlowBuilder.buildUserWall(id: presenter.friendID ?? "", type: .none)
         addChild(feedVC)
         view.addSubview(titleLabel)
         view.addSubview(feedVC.view)

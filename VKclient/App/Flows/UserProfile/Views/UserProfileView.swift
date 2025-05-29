@@ -109,7 +109,6 @@ final class UserProfileView: UIView {
 
             self.albumLabel.topAnchor.constraint(equalTo: self.birthdayLabel.bottomAnchor, constant: 10),
             self.albumLabel.centerXAnchor.constraint(equalTo: safeArea.centerXAnchor)
-
         ])
     }
 }

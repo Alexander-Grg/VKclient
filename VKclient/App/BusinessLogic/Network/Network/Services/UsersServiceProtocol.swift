@@ -16,7 +16,7 @@ struct UsersServiceKey: InjectionKey {
 
 protocol UsersServiceProtocol: AnyObject {
     func requestUsers(Ids: [Int]) -> AnyPublisher<Data, Error>
-    func requestUserWall(id: String) -> AnyPublisher<Data, Error>
+    func requestFeed(id: String) -> AnyPublisher<Data, Error>
 }
 
 final class UsersService: UsersServiceProtocol {
@@ -28,8 +28,8 @@ final class UsersService: UsersServiceProtocol {
             .eraseToAnyPublisher()
     }
 
-    func requestUserWall(id: String) -> AnyPublisher<Data, Error> {
-        return apiProvider.getData(from: .getWall(userId: id))
+    func requestFeed(id: String) -> AnyPublisher<Data, Error> {
+        return apiProvider.getData(from: .getFeed(id: id))
             .eraseToAnyPublisher()
     }
 }

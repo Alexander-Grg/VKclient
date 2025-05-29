@@ -10,6 +10,13 @@ import UIKit
 import Combine
 import RealmSwift
 
+enum CurrentFeedType {
+    case friendFeed
+    case groupFeed
+    case newsFeed
+    case none
+}
+
 enum FeedTypes {
     case photo
     case text
@@ -59,6 +66,7 @@ protocol FeedFlowOutput {
     var feedVideos: [VideoItem] { get set }
     var nextNews: String { get set}
     var isLoading: Bool { get set }
+    var type: CurrentFeedType { get }
     func loadFeed()
     func loadNextData(startFrom: String, completion: @escaping ([Post], String) -> Void)
     func setLike(itemID: String, ownerID: String)
@@ -78,16 +86,23 @@ final class FeedFlowPresenter {
     internal var isLoading = false
     internal var likesCount = 0
     internal var userID: String?
+    internal var communityID: String?
+    var type: CurrentFeedType
     weak var viewInput: (UIViewController & FeedFlowInput)?
     
-    init(userID: String? = nil) {
+    init(userID: String? = nil, communityID: String? = nil, type: CurrentFeedType) {
          self.userID = userID
+         self.communityID = communityID
+         self.type = type
      }
 
-    
     private func loadPosts() {
-        if let userID = userID {
-            usersService.requestUserWall(id: userID)
+        switch self.type {
+        case .friendFeed:
+            guard let userID = userID, !userID.isEmpty else
+            { return print("There is no valid userID")}
+
+            usersService.requestFeed(id: userID)
                 .decode(type: PostResponse.self, decoder: JSONDecoder())
                 .receive(on: DispatchQueue.main)
                 .sink(receiveCompletion: { completion in
@@ -104,7 +119,28 @@ final class FeedFlowPresenter {
                 }
                 )
                 .store(in: &cancellable)
-        } else {
+        case .groupFeed:
+            guard let communityID = communityID, !communityID.isEmpty else
+            { return print("There is no valid communityID")}
+
+            usersService.requestFeed(id: communityID)
+                .decode(type: PostResponse.self, decoder: JSONDecoder())
+                .receive(on: DispatchQueue.main)
+                .sink(receiveCompletion: { completion in
+                    switch completion {
+                    case .failure(let error):
+                        print("THERE IS NO DATA: \(error.localizedDescription)")
+                    case .finished:
+                        print("The data is received")
+                    }
+                }, receiveValue: { [weak self] value in
+                    guard let self = self else { return }
+                    self.feedPosts = value.response.items
+                    self.viewInput?.updateTableView()
+                }
+                )
+                .store(in: &cancellable)
+        case .newsFeed:
             newsService.getNews(startFrom: "", startTime: nil) { [weak self] news, nextFrom in
                 guard let self = self else { return }
                 DispatchQueue.main.async {
@@ -113,6 +149,8 @@ final class FeedFlowPresenter {
                     self.viewInput?.updateTableView()
                 }
             }
+        case .none:
+            print("No feed type")
         }
     }
     

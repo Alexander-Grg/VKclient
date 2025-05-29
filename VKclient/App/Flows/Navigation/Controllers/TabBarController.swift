@@ -24,7 +24,7 @@ final class TabBarController: UITabBarController {
         tabTwo.title = "Groups"
         tabTwo.tabBarItem = UITabBarItem(title: "Groups", image: UIImage(systemName: "rectangle.3.group.bubble.left"), selectedImage: UIImage(systemName: "rectangle.3.group.bubble.left.fill"))
 
-        let tabThree = FeedFlowBuilder.buildNewsFeed()
+        let tabThree = FeedFlowBuilder.buildNewsFeed(type: .none)
         tabThree.title = "News"
         tabThree.tabBarItem = UITabBarItem(title: "News", image: UIImage(systemName: "newspaper"), selectedImage: UIImage(systemName: "newspaper.fill"))
 

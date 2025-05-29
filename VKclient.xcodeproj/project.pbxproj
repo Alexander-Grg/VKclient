@@ -316,6 +316,7 @@
 				62E8F54D274EC4250037A9A7 /* PostModel.swift */,
 				62074C5F2752766F005D0418 /* UserNewsModel.swift */,
 				62074C6127527993005D0418 /* GroupNewsModel.swift */,
+				6249009E271C57250060FAA6 /* Realm models */,
 			);
 			path = Entity;
 			sourceTree = "<group>";
@@ -558,7 +559,6 @@
 			isa = PBXGroup;
 			children = (
 				62317871271C96C700A42097 /* RealmService.swift */,
-				6249009E271C57250060FAA6 /* Realm models */,
 			);
 			path = Realm;
 			sourceTree = "<group>";

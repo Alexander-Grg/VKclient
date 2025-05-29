@@ -9,13 +9,13 @@
     
 enum UserEndpoint: EndpointProtocol {
     case getUsers(Ids: [Int])
-    case getWall(userId: String)
+    case getFeed(id: String)
 
     var absoluteURL: String {
         switch self {
         case .getUsers:
             return baseURL + "/method/users.get"
-        case .getWall:
+        case .getFeed:
             return baseURL + "/method/wall.get"
         }
     }
@@ -25,9 +25,9 @@ enum UserEndpoint: EndpointProtocol {
         case let .getUsers(Ids):
             return ["user_ids" : Ids.count == 1 ? String(Ids[0]) : Ids.map { String($0) }.joined(separator: ","),
                     "fields" : "education, has_photo, sex, city, education, country, occupation, relatives, connections, site, friends_count, followers_count, mutual_friends_count, about, photo_50, photo_100, photo_200, photo_400, photo_max, online, lists, activities, music, books, games, about, can_post, can_see_all_posts, is_closed, has_wall, contacts, education, verified, connections, relatives, site, status,"]
-        case let .getWall(Id):
+        case let .getFeed(id):
             return [
-                "domain" : Id,
+                "domain" : id,
                 "extended" : "1"
             ]
         }

@@ -9,24 +9,24 @@
 import UIKit
 
 final class FeedFlowBuilder {
-    static func buildNewsFeed() -> (UIViewController & FeedFlowInput) {
-        let presenter = FeedFlowPresenter()
+    static func buildNewsFeed(type: CurrentFeedType) -> (UIViewController & FeedFlowInput) {
+        let presenter = FeedFlowPresenter(type: .newsFeed)
         let viewController = FeedTableViewController(presenter: presenter)
         presenter.viewInput = viewController
         
         return viewController
     }
 
-    static func buildUserWall(id: String) -> (UIViewController & FeedFlowInput) {
-        let presenter = FeedFlowPresenter(userID: id)
+    static func buildUserWall(id: String, type: CurrentFeedType) -> (UIViewController & FeedFlowInput) {
+        let presenter = FeedFlowPresenter(userID: id, type: .friendFeed)
         let viewController = FeedTableViewController(presenter: presenter)
         presenter.viewInput = viewController
         
         return viewController
     }
 
-    static func buildGroupWall(id: String) -> (UIViewController & FeedFlowInput) {
-        let presenter = FeedFlowPresenter(userID: id)
+    static func buildGroupWall(id: String, type: CurrentFeedType) -> (UIViewController & FeedFlowInput) {
+        let presenter = FeedFlowPresenter(communityID: id, type: .groupFeed)
         let viewController = FeedTableViewController(presenter: presenter)
         presenter.viewInput = viewController
 
