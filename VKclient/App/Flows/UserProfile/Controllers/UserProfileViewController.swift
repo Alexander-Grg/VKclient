@@ -106,7 +106,10 @@ final class UserProfileViewController: UIViewController {
 
     private func setupEmbeddedFeed() {
         if let user = presenter.user {
-            let feedVC = FeedFlowBuilder.buildUserWall(user: user)
+            let feedVC = FeedFlowBuilder.buildUserWall(user: user) { [weak self] photoID in
+                self?.openPhoto(with: photoID)
+            }
+
             guard let feedTVC = feedVC as? FeedTableViewController else { return }
             self.feedViewController = feedTVC
 
@@ -131,21 +134,32 @@ final class UserProfileViewController: UIViewController {
         photoPreviewView.images = Array(photos.prefix(3))
     }
 
+    func openPhoto(with id: String) {
+        let photoVC = PhotosFlowBuilder.build()
+        navigationController?.pushViewController(photoVC, animated: true)
+    }
+
     @objc private func pressPhotoHandler() {
         presenter.makeTransitionToThePhotos()
     }
 
     @objc private func presentFeedSheet() {
-        let sheetFeedVC = FeedFlowBuilder.buildUserWall(user: presenter.user)
+        guard let user = presenter.user else { return }
 
-        if let sheet = sheetFeedVC.sheetPresentationController {
+        let sheetFeedVC = FeedFlowBuilder.buildUserWall(user: user) { [weak self] photoID in
+            self?.openPhoto(with: photoID)
+        }
+
+        let nav = UINavigationController(rootViewController: sheetFeedVC)
+
+        if let sheet = nav.sheetPresentationController {
             sheet.detents = [.large()]
             sheet.prefersGrabberVisible = true
             sheet.preferredCornerRadius = 16
             sheet.prefersScrollingExpandsWhenScrolledToEdge = true
         }
 
-        present(sheetFeedVC, animated: true)
+        present(nav, animated: true)
     }
 }
 

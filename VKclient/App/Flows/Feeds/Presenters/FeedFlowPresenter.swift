@@ -79,7 +79,8 @@ final class FeedFlowPresenter {
     internal var likesCount = 0
     internal var user: UserRealm?
     weak var viewInput: (UIViewController & FeedFlowInput)?
-    
+    var photoTapHandler: ((String) -> Void)?
+
     init(user: UserRealm? = nil) {
          self.user = user
      }
@@ -126,6 +127,10 @@ final class FeedFlowPresenter {
                 }
             }
         }
+    }
+
+    func didTapPhoto(with id: String) {
+        photoTapHandler?(id)
     }
 
     func setLike(itemID: String, ownerID: String) {
