@@ -17,8 +17,9 @@ final class FeedFlowBuilder {
         return viewController
     }
 
-    static func buildUserWall(user: UserRealm?) -> (UIViewController & FeedFlowInput) {
+    static func buildUserWall(user: UserRealm?, photoTapHandler: @escaping (String) -> Void) -> (UIViewController & FeedFlowInput) {
         let presenter = FeedFlowPresenter(user: user)
+        presenter.photoTapHandler = photoTapHandler
         let viewController = FeedTableViewController(presenter: presenter)
         presenter.viewInput = viewController
         
