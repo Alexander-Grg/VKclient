@@ -83,7 +83,7 @@ final class FriendsFlowPresenter {
     private func savingDataToRealm(_ data: [FriendObject]) {
         do {
             let dataRealm = data.map {UserRealm(user: $0)}
-            try realmService.save(items: dataRealm, configuration: .defaultConfiguration, update: .modified)
+            try realmService.save(items: dataRealm, update: .modified)
         } catch {
             print("Saving to Realm failed")
         }
@@ -91,7 +91,7 @@ final class FriendsFlowPresenter {
     
     private func loadDataFromRealm() {
         do {
-            self.friendsFromRealm = try realmService.get(type: UserRealm.self, configuration: .defaultConfiguration)
+            self.friendsFromRealm = try realmService.get(type: UserRealm.self)
         } catch {
             print("Download from Realm failed")
         }
