@@ -9,6 +9,7 @@
 import UIKit
 @preconcurrency import WebKit
 import KeychainAccess
+import RealmSwift
 
 final class VKLoginController: UIViewController, WKUIDelegate {
     private(set) lazy var webView: WKWebView = {

@@ -24,6 +24,8 @@ protocol RealmServiceProtocol {
     func delete<T: Object>(object: Results<T>) throws
 
     func get<T: Object>(type: T.Type) throws -> Results<T>
+
+    func deleteAll() throws
 }
 
 // MARK: - Implementation
@@ -64,6 +66,14 @@ final class RealmService: RealmServiceProtocol {
         try realm.write {
             realm.delete(object)
         }
+    }
+
+    func deleteAll() throws {
+        let realm = try Realm(configuration: defaultConfiguration)
+        try realm.write {
+            realm.deleteAll()
+        }
+        print("All Realm data deleted.")
     }
 
     func get<T: Object>(type: T.Type) throws -> Results<T> {
