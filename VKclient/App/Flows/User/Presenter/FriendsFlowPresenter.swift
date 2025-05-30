@@ -112,7 +112,16 @@ final class FriendsFlowPresenter {
             }
         }
     }
-    
+
+    private func clearRealmData() {
+        do {
+            try realmService.deleteAll()
+            print("Realm data cleared successfully.")
+        } catch {
+            print("Failed to clear Realm data: \(error.localizedDescription)")
+        }
+    }
+
     private  func filterFriends(with text: String) {
         guard !text.isEmpty else {
             usersFilteredFromRealm(with: self.friendsFromRealm)
@@ -143,6 +152,7 @@ final class FriendsFlowPresenter {
         let logoutAction = UIAlertAction(title: "Sign out VK account", style: .default) { action in
             do {
                 try Keychain().remove("token")
+                self.clearRealmData()
             } catch let error as NSError {
                 print("\(error.localizedDescription)")
             }
