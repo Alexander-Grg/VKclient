@@ -10,7 +10,7 @@ import UIKit
 
 final class FeedFlowBuilder {
     static func buildNewsFeed() -> (UIViewController & FeedFlowInput) {
-        let presenter = FeedFlowPresenter()
+        let presenter = FeedFlowPresenter(type: .newsFeed)
         let viewController = FeedTableViewController(presenter: presenter)
         presenter.viewInput = viewController
         
@@ -18,7 +18,7 @@ final class FeedFlowBuilder {
     }
 
     static func buildUserWall(user: UserRealm?, photoTapHandler: @escaping (String) -> Void) -> (UIViewController & FeedFlowInput) {
-        let presenter = FeedFlowPresenter(user: user)
+        let presenter = FeedFlowPresenter(user: user, type: .friendFeed)
         presenter.photoTapHandler = photoTapHandler
         let viewController = FeedTableViewController(presenter: presenter)
         presenter.viewInput = viewController
@@ -26,13 +26,12 @@ final class FeedFlowBuilder {
         return viewController
     }
 
-//    static func buildGroupWall(id: String) -> (UIViewController & FeedFlowInput) {
-//        let presenter = FeedFlowPresenter(userID: id)
-//        let viewController = FeedTableViewController(presenter: presenter)
-//        presenter.viewInput = viewController
-//
-//        return viewController
-//    }
+    static func buildGroupWall(id: String) -> (UIViewController & FeedFlowInput) {
+        let presenter = FeedFlowPresenter(communityID: "-"+id, type: .groupFeed)
+        let viewController = FeedTableViewController(presenter: presenter)
+        presenter.viewInput = viewController
+        return viewController
+    }
 }
 
 
