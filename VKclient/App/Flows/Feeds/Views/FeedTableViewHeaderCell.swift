@@ -89,19 +89,27 @@ final class FeedTableViewHeaderCell: UITableViewCell {
             self.postTimeLabel.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: 0)
         ])
     }
-    func configureCell(_ news: Post, user: UserRealm?) {
-        if let exactNews = news.urlProtocol {
-            avatarView.sd_setImage(with: exactNews.urlImage)
-            userName.text = exactNews.name
-        } else if let user = user {
-            let url = URL(string: user.avatar)
-            if let url = url {
-                avatarView.sd_setImage(with: url)
-            } else {
-                avatarView.isHidden = true
+    func configureCell(_ news: Post, user: UserRealm?, type: CurrentFeedType) {
+        switch type {
+        case .newsFeed:
+            if let exactNews = news.urlProtocol {
+                avatarView.sd_setImage(with: exactNews.urlImage)
+                userName.text = exactNews.name
             }
-            userName.text = user.firstName + " " + user.lastName
-        } else {
+        case .groupFeed:
+            avatarView.isHidden = true
+            userName.isHidden = true
+        case .friendFeed:
+            if let user = user {
+                let url = URL(string: user.avatar)
+                if let url = url {
+                    avatarView.sd_setImage(with: url)
+                } else {
+                    avatarView.isHidden = true
+                }
+                userName.text = user.firstName + " " + user.lastName
+            }
+        case .none:
             avatarView.isHidden = true
             userName.isHidden = true
         }
