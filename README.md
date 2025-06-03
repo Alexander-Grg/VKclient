@@ -8,7 +8,7 @@ Data source open VK API https://dev.vk.com
 Current functional:
 1) Authentification to the VK services via OAuth 2.0;
 2) Review friends added to the account;
-3) Review the user wall for every friend, check their comments, and set likes;
+3) Review the user or group wall, check new posts, and comments, and set likes;
 4) Review the photo album of each friend;
 5) Review groups where the user is participating;
 6) Find new groups;
