@@ -12,8 +12,10 @@ final class GroupDetailViewController: UIViewController {
 
     var groupsDetailView = GroupDetailView()
     var feedViewController: FeedTableViewController?
-    
+
     private let presenter: GroupsDetailOutput
+    private var titleLabel: UILabel?
+    private var expandButton: UIButton?
 
     init(presenter: GroupsDetailOutput) {
         self.presenter = presenter
@@ -30,7 +32,8 @@ final class GroupDetailViewController: UIViewController {
         groupsDetailView.groupDetaildelegate = self
         presenter.viewDidLoad()
         setupGroupProfileView()
-        setupFeedViewController()
+        setupFeedSectionHeader()
+        setupEmbeddedFeed()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -50,37 +53,73 @@ final class GroupDetailViewController: UIViewController {
         ])
     }
 
-    private func setupFeedViewController() {
-        let titleLabel = UILabel()
-        titleLabel.text = "Posts"
-        titleLabel.font = .systemFont(ofSize: 16, weight: .heavy)
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+    private func setupFeedSectionHeader() {
+        let headerStack = UIStackView()
+        headerStack.axis = .horizontal
+        headerStack.alignment = .center
+        headerStack.distribution = .equalSpacing
+        headerStack.spacing = 8
+        headerStack.translatesAutoresizingMaskIntoConstraints = false
+
+        let title = UILabel()
+        title.text = "Group's posts"
+        title.font = .systemFont(ofSize: 16, weight: .heavy)
+        self.titleLabel = title
+
+        let button = UIButton(type: .system)
+        button.setTitle("Expand", for: .normal)
+        button.titleLabel?.font = .systemFont(ofSize: 14, weight: .medium)
+        button.addTarget(self, action: #selector(presentFeedSheet), for: .touchUpInside)
+        self.expandButton = button
+
+        headerStack.addArrangedSubview(title)
+        headerStack.addArrangedSubview(button)
+        view.addSubview(headerStack)
+
+        NSLayoutConstraint.activate([
+            headerStack.topAnchor.constraint(equalTo: groupsDetailView.bottomAnchor, constant: 20),
+            headerStack.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
+            headerStack.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20)
+        ])
+    }
+
+    private func setupEmbeddedFeed() {
         let communityID = presenter.group?.id ?? 0
-//        TODO: Pass a source ID of the post
         let feedVC = FeedFlowBuilder.buildGroupWall(id: String(communityID))
         addChild(feedVC)
-        view.addSubview(titleLabel)
         view.addSubview(feedVC.view)
         feedViewController = feedVC as? FeedTableViewController
 
         feedVC.view.translatesAutoresizingMaskIntoConstraints = false
-        let safeArea = view.safeAreaLayoutGuide
-        NSLayoutConstraint.activate([
-            titleLabel.topAnchor.constraint(equalTo: groupsDetailView.bottomAnchor, constant: 20),
-            titleLabel.centerXAnchor.constraint(equalTo: safeArea.centerXAnchor),
+        guard let titleLabel = self.titleLabel else { return }
 
-            feedVC.view.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 8),
-            feedVC.view.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor),
-            feedVC.view.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor),
-            feedVC.view.bottomAnchor.constraint(equalTo: safeArea.bottomAnchor)
+        NSLayoutConstraint.activate([
+            feedVC.view.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 12),
+            feedVC.view.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            feedVC.view.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            feedVC.view.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
 
         feedVC.didMove(toParent: self)
     }
+
+    @objc private func presentFeedSheet() {
+        let communityID = presenter.group?.id ?? 0
+        let sheetFeedVC = FeedFlowBuilder.buildGroupWall(id: String(communityID))
+        let nav = UINavigationController(rootViewController: sheetFeedVC)
+
+        if let sheet = nav.sheetPresentationController {
+            sheet.detents = [.large()]
+            sheet.prefersGrabberVisible = true
+            sheet.preferredCornerRadius = 16
+            sheet.prefersScrollingExpandsWhenScrolledToEdge = true
+        }
+
+        present(nav, animated: true)
+    }
 }
 
-extension GroupDetailViewController: GroupsDetailInput {
-}
+extension GroupDetailViewController: GroupsDetailInput {}
 
 extension GroupDetailViewController: GroupDetailDelegate {
     func didGroupButtonTap(_ isTapped: Bool) {
