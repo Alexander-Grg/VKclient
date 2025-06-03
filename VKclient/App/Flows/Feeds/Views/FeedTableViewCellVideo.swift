@@ -8,6 +8,7 @@
 
 import UIKit
 import WebKit
+import SDWebImage
 
 final class FeedTableViewCellVideo: UITableViewCell {
 
@@ -114,7 +115,7 @@ final class FeedTableViewCellVideo: UITableViewCell {
 
         if let imageUrl = video?.image.last?.url,
            let url = URL(string: imageUrl) {
-            loadImage(from: url)
+            thumbnailImageView.sd_setImage(with: url, placeholderImage: UIImage(named: "video_placeholder"))
         }
 
         cleanupWebView()
@@ -139,27 +140,11 @@ final class FeedTableViewCellVideo: UITableViewCell {
         playButton.isHidden = false
     }
 
-    private func loadImage(from url: URL) {
-        DispatchQueue.global().async {
-            if let data = try? Data(contentsOf: url),
-               let image = UIImage(data: data) {
-                DispatchQueue.main.async {
-                    self.thumbnailImageView.image = image
-                    self.thumbnailImageView.isHidden = false
-                }
-            } else {
-                DispatchQueue.main.async {
-                    self.thumbnailImageView.image = UIImage(named: "video_placeholder")
-                }
-                print("Error loading thumbnail image from URL: \(url.absoluteString)")
-            }
-        }
-    }
-
     override func prepareForReuse() {
         super.prepareForReuse()
-        self.thumbnailImageView.image = nil
-        cleanupWebView()
+          thumbnailImageView.sd_cancelCurrentImageLoad()
+          thumbnailImageView.image = UIImage(named: "video_placeholder")
+          cleanupWebView()
     }
 }
 
