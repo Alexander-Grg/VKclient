@@ -87,7 +87,7 @@ extension FeedTableViewController: UITableViewDataSource {
         switch news.rowsCounter[indexPath.row] {
         case .header:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: FeedTableViewHeaderCell.identifier) as? FeedTableViewHeaderCell else { return FeedTableViewHeaderCell() }
-            cell.configureCell(news, user: presenter.user)
+            cell.configureCell(news, user: presenter.user, type: presenter.type)
 
             return cell
         case .text:
@@ -264,19 +264,25 @@ extension FeedTableViewController: LikePostDelegate {
 
 extension FeedTableViewController: CommentControlDelegate {
     func didTapComment(in cell: FeedFooterSectionCell?) {
-           guard let cell = cell,
-                 let indexPath = tableView.indexPath(for: cell)
-           else {
-               print("Failed to get cell or indexPath")
-               return
-           }
+        guard let cell = cell,
+              let indexPath = tableView.indexPath(for: cell)
+        else {
+            print("Failed to get cell or indexPath")
+            return
+        }
         let posts = presenter.feedPosts[indexPath.section]
-        if (presenter.user?.id) != nil {
+        switch self.presenter.type {
+        case .friendFeed:
             let commentsVC = CommentsFlowViewBuilder.build(ownerID: posts.fromID ?? 0, postID: posts.postWallId ?? 0)
             present(commentsVC, animated: true)
-        } else {
+        case .groupFeed:
+            let commentsVC = CommentsFlowViewBuilder.build(ownerID: posts.fromID ?? 0, postID: posts.postWallId ?? 0)
+            present(commentsVC, animated: true)
+        case .newsFeed:
             let commentsVC = CommentsFlowViewBuilder.build(ownerID: posts.sourceId ?? 0, postID: posts.postID ?? 0)
             present(commentsVC, animated: true)
+        case .none:
+            break
         }
-       }
+    }
 }
