@@ -144,14 +144,20 @@ final class UserProfileViewController: UIViewController {
     }
 
     @objc private func presentFeedSheet() {
-        guard let user = presenter.user else { return }
+        guard let user = presenter.user,
+              let table = feedViewController?.tableView,
+              let topIP = table.indexPathsForVisibleRows?.first
+        else { return }
 
-        let sheetFeedVC = FeedFlowBuilder.buildUserWall(user: user) { [weak self] photoID in
+        let sheetVC = FeedFlowBuilder.buildUserWall(user: user) { [weak self] photoID in
             self?.openPhoto(with: photoID)
         }
 
-        let nav = UINavigationController(rootViewController: sheetFeedVC)
+        if let sheetTVC = sheetVC as? FeedTableViewController {
+            sheetTVC.restoreScroll(to: topIP)
+        }
 
+        let nav = UINavigationController(rootViewController: sheetVC)
         if let sheet = nav.sheetPresentationController {
             sheet.detents = [.large()]
             sheet.prefersGrabberVisible = true

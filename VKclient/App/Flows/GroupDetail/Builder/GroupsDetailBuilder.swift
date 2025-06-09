@@ -9,8 +9,8 @@
 import UIKit
 
 final class GroupsDetailModuleBuilder {
-    static func build(_ group: GroupsRealm, joinGroupDelegate: JoinGroupDelegate, removeGroupDelegate: RemoveGroupDelegate ) -> (UIViewController & GroupsDetailInput) {
-        let presenter = GroupsDetailPresenter(group: group)
+    static func build(_ group: GroupsRealm, joinGroupDelegate: JoinGroupDelegate, removeGroupDelegate: RemoveGroupDelegate, type: GroupDetailType?) -> (UIViewController & GroupsDetailInput) {
+        let presenter = GroupsDetailPresenter(group: group, type: type)
         let viewController = GroupDetailViewController(presenter: presenter)
         presenter.viewInput = viewController
         presenter.joinGroupDelegate = joinGroupDelegate
@@ -19,8 +19,8 @@ final class GroupsDetailModuleBuilder {
         return viewController
     }
 
-    static func buildForNetworkGroups(_ group: GroupsObjects, joinGroupDelegate: JoinGroupDelegate, removeGroupDelegate: RemoveGroupDelegate) -> (UIViewController & GroupsDetailInput) {
-        let presenter = GroupsDetailPresenter(networkGroup: group)
+    static func buildForNetworkGroups(_ group: GroupsObjects, joinGroupDelegate: JoinGroupDelegate, removeGroupDelegate: RemoveGroupDelegate, type: GroupDetailType?) -> (UIViewController & GroupsDetailInput) {
+        let presenter = GroupsDetailPresenter(networkGroup: group, type: type)
         let viewController = GroupDetailViewController(presenter: presenter)
         presenter.viewInput = viewController
         presenter.joinGroupDelegate = joinGroupDelegate

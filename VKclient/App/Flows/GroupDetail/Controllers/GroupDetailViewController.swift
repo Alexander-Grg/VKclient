@@ -8,6 +8,11 @@
 
 import UIKit
 
+enum GroupDetailType {
+    case groupSearch
+    case groupMenu
+}
+
 final class GroupDetailViewController: UIViewController {
 
     var groupsDetailView = GroupDetailView()
@@ -16,6 +21,7 @@ final class GroupDetailViewController: UIViewController {
     private let presenter: GroupsDetailOutput
     private var titleLabel: UILabel?
     private var expandButton: UIButton?
+    private var emptyFeedStateView: UIView?
 
     init(presenter: GroupsDetailOutput) {
         self.presenter = presenter
@@ -33,6 +39,7 @@ final class GroupDetailViewController: UIViewController {
         presenter.viewDidLoad()
         setupGroupProfileView()
         setupFeedSectionHeader()
+        setupEmptyStateView()
         setupEmbeddedFeed()
     }
 
@@ -83,7 +90,48 @@ final class GroupDetailViewController: UIViewController {
         ])
     }
 
+    private func setupEmptyStateView() {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.isHidden = true
+
+        let label = UILabel()
+        presenter.isMember ? (label.text = "You're a group member, access the group from the groups menu to see the feed") : (label.text = "Join the group to view posts")
+        label.textAlignment = .center
+        label.textColor = .gray
+        label.font = .systemFont(ofSize: 16, weight: .medium)
+        label.numberOfLines = 0
+
+        view.addSubview(label)
+        label.translatesAutoresizingMaskIntoConstraints = false
+
+        NSLayoutConstraint.activate([
+            label.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            label.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            label.leadingAnchor.constraint(greaterThanOrEqualTo: view.leadingAnchor, constant: 20),
+            label.trailingAnchor.constraint(lessThanOrEqualTo: view.trailingAnchor, constant: -20)
+        ])
+
+        self.view.addSubview(view)
+
+        NSLayoutConstraint.activate([
+            view.topAnchor.constraint(equalTo: titleLabel?.bottomAnchor ?? groupsDetailView.bottomAnchor, constant: 20),
+            view.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor),
+            view.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor),
+            view.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor)
+        ])
+
+        self.emptyFeedStateView = view
+    }
+
     private func setupEmbeddedFeed() {
+        guard presenter.type == .groupMenu else {
+            emptyFeedStateView?.isHidden = false
+            return
+        }
+
+        emptyFeedStateView?.isHidden = true
+
         let communityID = presenter.group?.id ?? 0
         let feedVC = FeedFlowBuilder.buildGroupWall(id: String(communityID))
         addChild(feedVC)
@@ -105,9 +153,18 @@ final class GroupDetailViewController: UIViewController {
 
     @objc private func presentFeedSheet() {
         let communityID = presenter.group?.id ?? 0
-        let sheetFeedVC = FeedFlowBuilder.buildGroupWall(id: String(communityID))
-        let nav = UINavigationController(rootViewController: sheetFeedVC)
 
+        guard let table = feedViewController?.tableView,
+              let topIndexPath = table.indexPathsForVisibleRows?.first
+        else { return }
+
+        let sheetVC = FeedFlowBuilder.buildGroupWall(id: String(communityID))
+
+        if let sheetTVC = sheetVC as? FeedTableViewController {
+            sheetTVC.restoreScroll(to: topIndexPath)
+        }
+
+        let nav = UINavigationController(rootViewController: sheetVC)
         if let sheet = nav.sheetPresentationController {
             sheet.detents = [.large()]
             sheet.prefersGrabberVisible = true
@@ -123,10 +180,29 @@ extension GroupDetailViewController: GroupsDetailInput {}
 
 extension GroupDetailViewController: GroupDetailDelegate {
     func didGroupButtonTap(_ isTapped: Bool) {
-        if isTapped && presenter.isMember == true {
-            presenter.leaveGroup()
-        } else if isTapped && presenter.isMember == false {
-            presenter.joinGroup()
+        let updateUI: () -> Void = { [weak self] in
+            guard let self = self else { return }
+
+            self.groupsDetailView.setupJoinLeaveButton(isJoined: self.presenter.isMember)
+
+            if let feedVC = self.feedViewController {
+                feedVC.willMove(toParent: nil)
+                feedVC.view.removeFromSuperview()
+                feedVC.removeFromParent()
+                self.feedViewController = nil
+            }
+
+            self.emptyFeedStateView?.removeFromSuperview()
+            self.emptyFeedStateView = nil
+
+            self.setupEmptyStateView()
+            self.setupEmbeddedFeed()
+        }
+
+        if isTapped && presenter.isMember {
+            presenter.leaveGroup(completion: updateUI)
+        } else if isTapped && !presenter.isMember {
+            presenter.joinGroup(completion: updateUI)
         }
     }
 }
