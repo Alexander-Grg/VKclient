@@ -199,7 +199,7 @@ final class GroupsFlowPresenter {
     private func toTheExactGroup(index: IndexPath) {
         let firstLetter = self.firstLetters[index.section]
         if let groups = self.dictOfGroups[firstLetter] {
-            let nextVC = GroupsDetailModuleBuilder.build(groups[index.row], joinGroupDelegate: self, removeGroupDelegate: self)
+            let nextVC = GroupsDetailModuleBuilder.build(groups[index.row], joinGroupDelegate: self, removeGroupDelegate: self, type: .groupMenu)
 
             self.viewInput?.navigationController?.pushViewController(nextVC, animated: true)
         }

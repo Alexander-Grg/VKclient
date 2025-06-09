@@ -19,7 +19,9 @@ final class FeedTableViewController: UIViewController {
     private let defaultCellHeight: CGFloat = 130
     private var presenter: FeedFlowOutput
     private var isPressedState: [IndexPath: Bool] = [:]
-    
+    private var pendingIndexPath: IndexPath?
+    private var loadingIndicator: UIActivityIndicatorView?
+
     init(presenter: FeedFlowOutput) {
         self.presenter = presenter
         super.init(nibName: nil, bundle: nil)
@@ -38,7 +40,8 @@ final class FeedTableViewController: UIViewController {
         tableView.delegate = self
         self.view.isUserInteractionEnabled = true
         configRefreshControl()
-        
+        showLoadingIndicator()
+
         self.tableView.register(FeedTableViewHeaderCell.self, forCellReuseIdentifier: FeedTableViewHeaderCell.identifier)
         self.tableView.register(FeedTableViewCellText.self, forCellReuseIdentifier: FeedTableViewCellText.identifier)
         self.tableView.register(FeedTableViewCellPhoto.self, forCellReuseIdentifier: FeedTableViewCellPhoto.identifier)
@@ -46,7 +49,25 @@ final class FeedTableViewController: UIViewController {
         self.tableView.register(FeedTableViewCellVideo.self, forCellReuseIdentifier: FeedTableViewCellVideo.identifier)
         
     }
-    
+
+    func restoreScroll(to indexPath: IndexPath) {
+        pendingIndexPath = indexPath
+    }
+
+    private func showLoadingIndicator() {
+        let indicator = UIActivityIndicatorView(style: .large)
+        indicator.center = self.view.center
+        indicator.startAnimating()
+        self.view.addSubview(indicator)
+        loadingIndicator = indicator
+    }
+
+    private func hideLoadingIndicator() {
+        loadingIndicator?.stopAnimating()
+        loadingIndicator?.removeFromSuperview()
+        loadingIndicator = nil
+    }
+
     private func configRefreshControl() {
         let refresh = UIRefreshControl()
         refresh.addTarget(self,
@@ -163,30 +184,56 @@ extension FeedTableViewController: UITableViewDataSourcePrefetching {
     
     func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
         guard let maxSections = indexPaths.map({ $0.section }).max() else { return }
-        
-        if maxSections > self.presenter.feedPosts.count - 3, !self.presenter.isLoading {
-            self.presenter.isLoading = true
-            
-            self.presenter.loadNextData(startFrom: self.presenter.nextNews) { news, nextFrom in
-                DispatchQueue.main.async {
-                    let startingIndex = self.presenter.feedPosts.count
-                    let indexSet = IndexSet(integersIn: startingIndex ..< (startingIndex + news.count))
-                    self.presenter.feedPosts.append(contentsOf: news)
-                    self.presenter.nextNews = nextFrom
-                    
-                    for section in startingIndex..<self.presenter.feedPosts.count {
-                        for row in 0..<self.presenter.feedPosts[section].rowsCounter.count {
-                            let indexPath = IndexPath(row: row, section: section)
-                            self.isPressedState[indexPath] = false
+
+        switch presenter.type {
+        case .newsFeed:
+            if maxSections > self.presenter.feedPosts.count - 3 {
+                self.presenter.loadNextData(startFrom: self.presenter.nextNews) { news, nextFrom in
+                    DispatchQueue.main.async {
+                        let startingIndex = self.presenter.feedPosts.count
+                        let indexSet = IndexSet(integersIn: startingIndex ..< (startingIndex + news.count))
+                        self.presenter.feedPosts.append(contentsOf: news)
+                        self.presenter.nextNews = nextFrom
+
+                        for section in startingIndex..<self.presenter.feedPosts.count {
+                            for row in 0..<self.presenter.feedPosts[section].rowsCounter.count {
+                                let indexPath = IndexPath(row: row, section: section)
+                                self.isPressedState[indexPath] = false
+                            }
+                        }
+
+                        tableView.performBatchUpdates {
+                            tableView.insertSections(indexSet, with: .automatic)
                         }
                     }
-                    
-                    tableView.performBatchUpdates {
-                        tableView.insertSections(indexSet, with: .automatic)
-                    }
-                    self.presenter.isLoading = false
                 }
             }
+        case .groupFeed:
+            if maxSections > presenter.feedPosts.count - 3 {
+
+                presenter.loadNextData(startFrom: "") { posts, _ in
+                    DispatchQueue.main.async {
+                        let startingIndex = self.presenter.feedPosts.count
+                        let indexSet = IndexSet(integersIn: startingIndex ..< (startingIndex + posts.count))
+                        self.presenter.feedPosts.append(contentsOf: posts)
+
+                        for section in startingIndex..<self.presenter.feedPosts.count {
+                            for row in 0..<self.presenter.feedPosts[section].rowsCounter.count {
+                                let indexPath = IndexPath(row: row, section: section)
+                                self.isPressedState[indexPath] = false
+                            }
+                        }
+
+                        tableView.performBatchUpdates {
+                            tableView.insertSections(indexSet, with: .automatic)
+                        }
+                    }
+                }
+            }
+        case .friendFeed:
+            break
+        case .none:
+            break
         }
     }
 }
@@ -204,17 +251,29 @@ extension FeedTableViewController: NewsDelegate {
 
 extension FeedTableViewController: FeedFlowInput {
     func updateTableView() {
-        var newState: [IndexPath: Bool] = [:]
-        for section in 0..<presenter.feedPosts.count {
-            for row in 0..<presenter.feedPosts[section].rowsCounter.count {
-                let indexPath = IndexPath(row: row, section: section)
-                newState[indexPath] = isPressedState[indexPath] ?? false
+            hideLoadingIndicator()
+
+            var newState: [IndexPath: Bool] = [:]
+            for section in 0..<presenter.feedPosts.count {
+                for row in 0..<presenter.feedPosts[section].rowsCounter.count {
+                    let ip = IndexPath(row: row, section: section)
+                    newState[ip] = isPressedState[ip] ?? false
+                }
+            }
+            isPressedState = newState
+
+            print("Reloading entire table view")
+            tableView.reloadData()
+
+            if let ip = pendingIndexPath {
+                let validSection = min(ip.section, presenter.feedPosts.count - 1)
+                let rowsCount = presenter.feedPosts[validSection].rowsCounter.count
+                let validRow = min(ip.row, rowsCount - 1)
+                let target = IndexPath(row: validRow, section: validSection)
+                tableView.scrollToRow(at: target, at: .top, animated: false)
+                pendingIndexPath = nil
             }
         }
-        isPressedState = newState
-        print("Reloading entire table view")
-        tableView.reloadData()
-    }
 
     func updateSpecificPost(at index: Int) {
          if index < self.tableView.numberOfSections {
@@ -286,3 +345,6 @@ extension FeedTableViewController: CommentControlDelegate {
         }
     }
 }
+
+
+

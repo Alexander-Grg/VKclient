@@ -58,7 +58,7 @@ final class SearchGroupsFlowPresenter {
     
     private func toTheExactGroup(index: IndexPath) {
         let groups = self.groupsHolder[index.row]
-        let nextVC = GroupsDetailModuleBuilder.buildForNetworkGroups(groups, joinGroupDelegate: self.updateDelegate as! JoinGroupDelegate, removeGroupDelegate: self.updateDelegate as! RemoveGroupDelegate)
+        let nextVC = GroupsDetailModuleBuilder.buildForNetworkGroups(groups, joinGroupDelegate: self.updateDelegate as! JoinGroupDelegate, removeGroupDelegate: self.updateDelegate as! RemoveGroupDelegate, type: .groupSearch)
         self.viewInput?.navigationController?.pushViewController(nextVC, animated: true)
     }
 }

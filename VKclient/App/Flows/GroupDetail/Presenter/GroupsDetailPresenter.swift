@@ -28,10 +28,11 @@ protocol GroupsDetailInput: AnyObject {
 
 protocol GroupsDetailOutput: AnyObject {
     var isMember: Bool { get }
+    var type: GroupDetailType? { get }
     var group: GroupsRealm? { get }
     func viewDidLoad()
-    func joinGroup()
-    func leaveGroup()
+    func joinGroup(completion: @escaping () -> Void)
+    func leaveGroup(completion: @escaping () -> Void)
 }
 
 final class GroupsDetailPresenter {
@@ -43,6 +44,7 @@ final class GroupsDetailPresenter {
     private var cancellable = Set<AnyCancellable>()
     weak var viewInput: (UIViewController & GroupsDetailInput)?
     var isNetwork = false
+    var type: GroupDetailType?
     var isMember: Bool {
         let status = (isNetwork ? networkGroup?.isMember : group?.isMemberStatus) ?? 0
         switch status {
@@ -60,13 +62,17 @@ final class GroupsDetailPresenter {
     var networkGroup: GroupsObjects? = nil
     var group: GroupsRealm? = nil
 
-    convenience init(group: GroupsRealm?) {
-        self.init()
+    init (type: GroupDetailType?) {
+        self.type = type
+    }
+
+    convenience init(group: GroupsRealm?, type: GroupDetailType?) {
+        self.init(type: type)
         self.group = group
     }
 
-    convenience init(networkGroup: GroupsObjects?) {
-        self.init()
+    convenience init(networkGroup: GroupsObjects?, type: GroupDetailType?) {
+        self.init(type: type)
         self.isNetwork = true
         self.networkGroup = networkGroup
     }
@@ -99,19 +105,19 @@ final class GroupsDetailPresenter {
         }
     }
 
-    private func leaveGroupRequest() {
+    private func leaveGroupRequest(completion: @escaping () -> Void) {
         let id = (isNetwork ? networkGroup?.id : group?.id) ?? 0
         groupActionsService.requestGroupsLeave(id: id)
             .decode(type: GroupsActionsResponse.self, decoder: JSONDecoder())
             .receive(on: DispatchQueue.main)
-            .sink(receiveCompletion: { completion in
-                switch completion {
+            .sink(receiveCompletion: { completionResult in
+                switch completionResult {
                 case .finished:
                     print("The process of leaving group is finished")
                 case .failure(let error):
                     print("The leave group process failed: \(String(describing: error))")
                 }
-            }, receiveValue: { (result) in
+            }, receiveValue: { result in
                 if result.response == 1 {
                     if self.isNetwork {
                         self.networkGroup?.isMember = 0
@@ -120,19 +126,21 @@ final class GroupsDetailPresenter {
                         self.removeGroupDelegate?.removeGroup(self.group?.id)
                     }
                     self.viewInput?.navigationController?.popViewController(animated: true)
+                    self.group = nil
+                    completion()
                 }
             })
             .store(in: &cancellable)
     }
 
-    private func joinGroupRequest() {
+    private func joinGroupRequest(completion: @escaping () -> Void) {
         let id = (isNetwork ? networkGroup?.id : group?.id) ?? 0
         groupActionsService.requestGroupsJoin(id: id)
             .decode(type: GroupsActionsResponse.self, decoder: JSONDecoder())
             .receive(on: DispatchQueue.main)
-            .sink(receiveCompletion: { (error) in
+            .sink(receiveCompletion: { error in
                 print("Join group request is failed: \(String(describing: error))")
-            }, receiveValue: { (result) in
+            }, receiveValue: { result in
                 if result.response == 1 {
                     print("Join group is successful")
                     self.alertOfJoinStatus()
@@ -142,6 +150,7 @@ final class GroupsDetailPresenter {
                     } else {
                         self.group?.isMemberStatus = 1
                     }
+                    completion()
                 }
             })
             .store(in: &cancellable)
@@ -160,16 +169,17 @@ final class GroupsDetailPresenter {
 }
 
 extension GroupsDetailPresenter: GroupsDetailOutput {
+    
     func viewDidLoad() {
         self.configureView()
     }
     
-    func joinGroup() {
-        self.joinGroupRequest()
+    func joinGroup(completion: @escaping () -> Void) {
+        joinGroupRequest(completion: completion)
     }
 
-    func leaveGroup() {
-        self.leaveGroupRequest()
+    func leaveGroup(completion: @escaping () -> Void) {
+        leaveGroupRequest(completion: completion)
     }
 }
 
