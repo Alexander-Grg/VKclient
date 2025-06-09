@@ -58,13 +58,12 @@ final class FeedTableViewController: UIViewController {
         let indicator = UIActivityIndicatorView(style: .large)
         indicator.center = self.view.center
         indicator.startAnimating()
-        self.view.addSubview(indicator)
+        tableView.backgroundView = indicator
         loadingIndicator = indicator
     }
 
     private func hideLoadingIndicator() {
-        loadingIndicator?.stopAnimating()
-        loadingIndicator?.removeFromSuperview()
+        tableView.backgroundView = nil
         loadingIndicator = nil
     }
 
